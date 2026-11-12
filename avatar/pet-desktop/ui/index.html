@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bulb AI Pet</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent !important;
+      background-color: rgba(0, 0, 0, 0) !important;
+    }
+
+    #pet-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent !important;
+      background-color: rgba(0, 0, 0, 0) !important;
+      cursor: grab;
+    }
+
+    #pet-stage:active {
+      cursor: grabbing;
+    }
+
+    #pet-gif {
+      width: 280px;
+      height: 280px;
+      transform: translateY(-9px);
+      pointer-events: none;
+      background: transparent !important;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="pet-stage" title="Drag to move Bulb · Press Esc to close">
+    <img id="pet-gif" alt="Bulb Jumping" />
+  </div>
+
+  <script>
+    const isWindows = navigator.userAgent.includes('Windows');
+    const protoPrefix = isWindows ? 'http://pet.localhost/' : 'pet://localhost/';
+    const petGif = document.getElementById('pet-gif');
+    petGif.src = protoPrefix + 'bulb-jumping.gif';
+
+    function sendIpc(payload) {
+      if (window.ipc && window.ipc.postMessage) {
+        window.ipc.postMessage(JSON.stringify(payload));
+      }
+    }
+
+    window.onPetStateResolved = function() {};
+
+    const stage = document.getElementById('pet-stage');
+    stage.addEventListener('mousedown', (e) => {
+      if (e.button === 0) {
+        sendIpc({ cmd: 'drag_window' });
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        sendIpc({ cmd: 'quit' });
+      }
+    });
+
+    sendIpc({ cmd: 'ready' });
+  </script>
+</body>
+</html>
