@@ -4,7 +4,7 @@ members = [
     "crates/avatar-runtime",
     "avatar/pet-desktop",
     "crates/avrig-harness",
-    "crates/avrig-sdlc",
+    "crates/avrig-sdlc", "test",
 ]
 
 [workspace.package]
