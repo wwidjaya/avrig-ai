@@ -4,7 +4,7 @@ members = [
     "crates/avatar-runtime",
     "avatar/pet-desktop",
     "crates/avrig-harness",
-    "crates/avrig-sdlc", "test", "gateway", "claude",
+    "crates/avrig-sdlc", "test", "claude",
     "apps/desktop/src-tauri",
 ]
 
