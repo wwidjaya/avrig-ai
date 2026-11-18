@@ -118,16 +118,32 @@ $releaseMessage = if ($Message) { $Message } else { "chore(release): avrig $new"
 
 $results = @()
 
+function Invoke-Git {
+    param(
+        [Parameter(Mandatory = $true)][string]$RepoPath,
+        [Parameter(ValueFromRemainingArguments = $true)][string[]]$GitArgs
+    )
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    $output = & git -C $RepoPath @GitArgs 2>&1
+    $code = $LASTEXITCODE
+    $ErrorActionPreference = $previous
+    if ($code -ne 0) {
+        throw ("git " + ($GitArgs -join " ") + " failed in $RepoPath (exit $code): " + (($output | Out-String).Trim()))
+    }
+    return $output
+}
+
 foreach ($name in $RepoOrder) {
     $path = $Repos[$name]
     Write-Host ""
     Write-Host "=== $name ===" -ForegroundColor Cyan
 
-    git -C $path add -A | Out-Null
-    $staged = git -C $path diff --cached --name-only
+    Invoke-Git $path add -A | Out-Null
+    $staged = Invoke-Git $path diff --cached --name-only
 
     if ($staged) {
-        $patchText = git -C $path diff --cached
+        $patchText = (Invoke-Git $path diff --cached) -join "`n"
         $hits = @()
         foreach ($pattern in $secretPatterns) {
             if ($patchText -match $pattern) { $hits += $pattern }
@@ -136,31 +152,31 @@ foreach ($name in $RepoOrder) {
             throw "Aborting release: staged content in $name matches credential patterns ($($hits -join ', ')). Review the staged diff, add the files to .gitignore, or re-run with -Force."
         }
 
-        git -C $path commit -m $releaseMessage | Out-Null
+        Invoke-Git $path commit -m $releaseMessage | Out-Null
         Write-Host "Committed $(($staged | Measure-Object).Count) files"
     } else {
         Write-Host "No pending changes, tagging current HEAD"
     }
 
-    $existing = git -C $path tag --list $new
+    $existing = Invoke-Git $path tag --list $new
     if ($existing) {
         Write-Host "Tag $new already exists locally, reusing"
     } else {
-        git -C $path tag -a $new -m "avrig $new" | Out-Null
+        Invoke-Git $path tag -a $new -m "avrig $new" | Out-Null
         Write-Host "Created annotated tag $new"
     }
 
     if ($NoPush) {
         Write-Host "Skipping push (-NoPush)"
     } else {
-        $branch = git -C $path rev-parse --abbrev-ref HEAD
-        git -C $path push origin $branch 2>&1 | Out-Null
-        git -C $path push origin $new 2>&1 | Out-Null
+        $branch = Invoke-Git $path rev-parse --abbrev-ref HEAD
+        Invoke-Git $path push origin $branch | Out-Null
+        Invoke-Git $path push origin $new | Out-Null
         Write-Host "Pushed $branch and tag $new"
     }
 
-    $sha = git -C $path rev-parse --short HEAD
-    $branchName = git -C $path rev-parse --abbrev-ref HEAD
+    $sha = Invoke-Git $path rev-parse --short HEAD
+    $branchName = Invoke-Git $path rev-parse --abbrev-ref HEAD
     $results += [pscustomobject]@{
         Repo   = $name
         Branch = $branchName
@@ -176,7 +192,7 @@ $results | Format-Table -AutoSize
 if (-not $NoPush) {
     Write-Host "Verifying tags on remotes..."
     foreach ($name in $RepoOrder) {
-        $remoteTags = git -C $Repos[$name] ls-remote --tags origin $new
+        $remoteTags = Invoke-Git $Repos[$name] ls-remote --tags origin $new
         if ($remoteTags) {
             Write-Host ("  {0}: tag {1} present on origin" -f $name, $new)
         } else {
