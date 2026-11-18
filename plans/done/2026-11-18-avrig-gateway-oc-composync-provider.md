@@ -1,9 +1,10 @@
 # Avrig Gateway: `oc-composync` on OpenCode Go, session passthrough, legacy gateway removal
 
-Status: proposed
+Status: completed
 Owner: plan
 Created: 2026-11-18
 Revised: 2026-11-18 (Go endpoint, session passthrough, removal of `avrig-ai/gateway`)
+Released: 0.3.0
 
 ## Goals and Objectives
 
