@@ -1,5 +1,6 @@
 ---
-status: planned
+status: done
+completed: 2026-11-18
 created: 2026-11-18
 assignees: [analyst, tester, edm, be, fe, build, Infra, km]
 parallel_streams: true

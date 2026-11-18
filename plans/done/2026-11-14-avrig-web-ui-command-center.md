@@ -1,14 +1,15 @@
 ---
 title: "Plan: avrig Web UI Command Center with Universal OIDC and Runtime Configuration"
 type: canonical
-status: active
+status: done
+completed: 2026-11-18
 source-of-truth: true
 domain: engineering
 subdomain: architecture
 category: implementation-plan
 topic: web-command-center
 created: 2026-11-14
-updated: 2026-11-14
+updated: 2026-11-18
 author: avrig-ai
 tags:
   - plan

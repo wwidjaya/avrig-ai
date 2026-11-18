@@ -1,6 +1,7 @@
 ---
 title: "Implement Stream Token Usage Across All Gateway Providers with DRY Design"
-status: planned
+status: done
+completed: 2026-11-18
 date: 2026-11-17
 author: Plan Agent
 assignee: be

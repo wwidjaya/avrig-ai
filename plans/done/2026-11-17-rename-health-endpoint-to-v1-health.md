@@ -1,6 +1,7 @@
 ---
 title: "Plan: Standardize and Expose /v1/health and /v1/documents/search Endpoints"
-status: planned
+status: done
+completed: 2026-11-18
 created: 2026-11-17
 author: avrig-ai
 tags:

@@ -1,6 +1,7 @@
 ---
 title: "Plan: Configure Knowledge Answer Model and No-Information Response"
-status: active
+status: done
+completed: 2026-11-18
 created: 2026-11-17
 author: avrig-ai
 tags:
