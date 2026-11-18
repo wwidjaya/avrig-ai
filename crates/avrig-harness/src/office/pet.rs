@@ -38,7 +38,13 @@ impl PetStatusSync {
         }
     }
 
-    pub fn working_on_task(pet_id: Uuid, office_id: Uuid, project_id: Uuid, stage_id: String, task_name: String) -> Self {
+    pub fn working_on_task(
+        pet_id: Uuid,
+        office_id: Uuid,
+        project_id: Uuid,
+        stage_id: String,
+        task_name: String,
+    ) -> Self {
         Self {
             pet_id,
             office_id,
@@ -50,7 +56,13 @@ impl PetStatusSync {
         }
     }
 
-    pub fn waiting_for_approval(pet_id: Uuid, office_id: Uuid, project_id: Uuid, stage_id: String, decision_id: Uuid) -> Self {
+    pub fn waiting_for_approval(
+        pet_id: Uuid,
+        office_id: Uuid,
+        project_id: Uuid,
+        stage_id: String,
+        decision_id: Uuid,
+    ) -> Self {
         Self {
             pet_id,
             office_id,
@@ -62,7 +74,12 @@ impl PetStatusSync {
         }
     }
 
-    pub fn task_completed(pet_id: Uuid, office_id: Uuid, project_id: Uuid, stage_id: String) -> Self {
+    pub fn task_completed(
+        pet_id: Uuid,
+        office_id: Uuid,
+        project_id: Uuid,
+        stage_id: String,
+    ) -> Self {
         Self {
             pet_id,
             office_id,

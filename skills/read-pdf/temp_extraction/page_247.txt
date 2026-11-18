@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 240 
+ 
+Timing Periods 
+Zachman Framework column name, matches When. 
+ 
+Timing Representation 
+Zachman Framework cell name, intersection of When/Timing Periods and System Logic/Architects 
+as Designers. 
+ 
+Timing Specification 
+Zachman Framework cell name, intersection of When/Timing Periods and Technology 
+Physics/Engineers as Builders. 
+ 
+tipping point 
+A term coined by Malcolm Gladwell describing the point at which a previously rare phenomenon 
+begins to occur at an epidemic rate. 
+ 
+title 
+1. An identification assigned to an object. 
+2. DCMI element in element set Content: the name of a resource. SEE ALSO Dublin Core Metadata 
+Initiative. 
+ 
+token 
+1. A discrete collection of identifying information. 
+2. In operating systems, a container for security information about a user. 
+ 
+topology 
+The spatial layout and interconnections of any network. 
+ 
+Total Cost of Ownership (TCO) 
+The cost to own, implement and maintain a product throughout its life.  
+ 
+Total Quality Management (TQM) 
+Techniques, methods and management principles for continuous improvement, based on the work 
+of Deming, Juran, Crosby and others.  
+ 
+traceable 
+Adjective. Capable of being related to steps in a process. 
+ 
+traffic 
+In a networked system, the number of packets traversing a network segment. 
+ 
+training set 
+A collection of data whose purpose is to be analyzed to discover patterns that can then be applied to 
+other data sets. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

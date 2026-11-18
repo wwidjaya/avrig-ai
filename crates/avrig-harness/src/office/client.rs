@@ -1,5 +1,5 @@
-use tokio::sync::broadcast;
 use crate::office::event::DesktopEventEnvelope;
+use tokio::sync::broadcast;
 
 pub struct DesktopEventBus {
     sender: broadcast::Sender<DesktopEventEnvelope>,
@@ -15,7 +15,10 @@ impl DesktopEventBus {
         self.sender.subscribe()
     }
 
-    pub fn publish(&self, event: DesktopEventEnvelope) -> Result<usize, broadcast::error::SendError<DesktopEventEnvelope>> {
+    pub fn publish(
+        &self,
+        event: DesktopEventEnvelope,
+    ) -> Result<usize, broadcast::error::SendError<DesktopEventEnvelope>> {
         self.sender.send(event)
     }
 }

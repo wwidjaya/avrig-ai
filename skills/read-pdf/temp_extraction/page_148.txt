@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 141 
+ 
+Information System (IS) 
+1. Generally, an automated or manual organized process for collecting, manipulating, transmitting, and 
+disseminating information. SEE ALSO application. 
+2. In data management, a system that supports decision-making concerning some piece of reality (the 
+object system) by giving decision-makers access to information concerning relevant aspects of the 
+object system and its environment. 
+ 
+Information Systems (IS) 
+SEE Information Technology. 
+ 
+information systems architecture 
+SEE architecture, information systems 
+ 
+Information Systems Planning (ISP) 
+The first phase in an Information Engineering methodology. The goal of an ISP is to define an 
+enterprise architecture. ISP is usually performed as a separate project, defining several subsequent 
+projects. SEE ALSO Business Systems Planning. 
+ 
+Information Technology (IT) 
+1. A broad subject concerned with technology and other aspects of managing and processing 
+information, especially in large organizations. IT deals with the use of electronic computers and 
+computer software to convert, store, protect, process, transmit, and retrieve information. 
+2. The department of an organization that deals with computer hardware, application software systems, 
+and data. SEE ALSO Management Information Systems. 
+ 
+Information Technology Infrastructure Library (ITIL) 
+A framework of supplier independent best practice management procedures for delivery of high 
+quality IT services. 
+ 
+information value chain analysis 
+A process to link conceptual and logical data models to process models, applications, organizations, 
+roles and/or goals, to provide context, relevance, and timeframes.  
+ 
+information warehouse  
+IBM's approach to data warehousing that supports the implementation of either central, functional, 
+or decentralized warehouses. It may provide information, but it does not contain information by 
+itself. SEE ALSO Data Warehouse. 
+ 
+infrastructure 
+The underlying foundation of a system or organization. SEE ALSO infrastructure, IT.  
+ 
+infrastructure, data warehouse 
+A combination of technologies and the interaction of technologies that support a Data Warehousing 
+environment. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

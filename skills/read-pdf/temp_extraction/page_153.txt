@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 146 
+ 
+International Organization for Standardization (ISO) 
+A global network that identifies what international standards are required by business, government, 
+and society, develops them in partnership with the sectors that will put them to use, and delivers 
+them to be implemented worldwide. ISO is the world’s leading developer of international standards. 
+ISO is a network of the national standards institutes of 163 countries, one member per country, with 
+a Central Secretariat in Geneva, Switzerland, that coordinates the system. Some 50,000 experts 
+contribute annually to a portfolio of over 15,000 standards. In collaboration with its partners the 
+International Electrotechnical Commission (IEC) and the International Telecommunication Union 
+(ITU-T), ISO established the World Standards Cooperation (WSC) effort as the focus for standards 
+in the field of information technology. 
+ 
+International Standard Book Number (ISBN) 
+A unique commercial book identification number based on the Standard Book Numbering code that 
+is applied to books and book-like products that are published internationally. 
+ 
+International Telecommunications Union (ITU) 
+International Telecommunications Union (formerly CCITT), a branch of the United Nations that 
+sets and manages the representation of phone numbers (among other things in the industry). It 
+specifies that the universal representation of phone numbers shall only use dots (periods) as a 
+separator, and be in the form of nnn.nnn.nnnn within each country. That number is then preceded 
+by numeric country and region codes. Hyphens and parentheses are to be discontinued. 
+ 
+internet archive 
+A non-profit digital library offering free access to uploaded books, music, and archived web pages. 
+ 
+internet bookmark 
+The address to an Internet site that has been saved with a name or a tag. 
+ 
+Internet Protocol (IP) 
+A set of standard mechanisms for routing and communication used for transmitting data across 
+networks. 
+ 
+internet tagging 
+The process of adding attributes to sites on the internet in order to enable grouping or filtering. 
+ 
+Internet, The 
+The global set of computers linked over public networks addressing each other through DNSs and 
+URL addresses, using HTTP for their primary access protocol and HTML to display information. 
+ 
+interoperability  
+The ability of various types of computers and programs to work together and share data across 
+different platforms. 
+ 
+interpolation 
+The use of a formula to estimate an intermediate data value. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

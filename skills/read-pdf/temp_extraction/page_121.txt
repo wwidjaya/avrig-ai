@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 114 
+ 
+enterprise process architecture  
+Process models of the entire enterprise at the contextual and conceptual level, typically including  
+a) a functional decomposition,  
+b) process flow diagrams,  
+c) business process modeling (BPM) diagrams and  
+d) value chain analysis linking processes to data (subject areas or entities), organizations, roles, 
+goals, existing and planned applications and/or implementation projects and programs.  
+ 
+enterprise reporting 
+1. The process of producing reports using unified views of enterprise data. 
+2. A category of software tools used to produce reports; a term for what were simply known as 
+reporting tools. 
+ 
+Enterprise Resource Planning (ERP) 
+Systems that tie together many of an enterprise's functions, including finance, manufacturing, sales 
+and human resources. ERP systems enable analysis of integrated data to plan production, forecast 
+sales, and analyze product and process quality. Many organizations extend the ERP architecture 
+through Data Warehousing to support of more advanced reporting, analytical and decision support 
+capabilities. 
+ 
+Enterprise Risk Management (ERM) 
+The process of planning, organizing, leading, and controlling the activities of an organization in order 
+to minimize the effects of risk on its capital and earnings. ERM includes not only risks associated 
+with accidental losses, but also financial, strategic, operational, and other risks. 
+ 
+Enterprise Service Bus (ESB) 
+A software layer that provides data between services on an event-driven basis, using standards for 
+data transmission between the services. 
+ 
+enterprise storage 
+Storage designed for large-scale, high availability environments. 
+entity 
+1. Any concrete or abstract thing that exists, did exist, or might exist, including associations among 
+these things e.g. a person, object, event, idea, process, etc. 
+2. In mathematics, is a single existent, such as an employee John J. Smith. (Brackett 2011) 
+ 
+Entity Attribute Relationship (EAR) 
+The presentation of a data model diagram which shows Entities, Relationships between (among) 
+entities, and Attributes of entities, hence EAR. 
+ 
+entity extraction 
+The process of scanning unstructured documents to find identifiable entities, based on contextual 
+clues. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

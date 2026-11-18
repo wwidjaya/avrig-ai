@@ -1,0 +1,50 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 237 
+ 
+Terabyte (Tb) 
+A trillion bytes of storage; a thousand Gigabytes. 
+ 
+terminology analysis 
+The process of gathering terms in common use which will become the basis of a conceptual model 
+or vocabulary. 
+ 
+ternary 
+Adjective. Consisting of three components or values. 
+ 
+ternary relationship 
+SEE relationship, ternary. 
+ 
+test 
+Generally, a validation process that compares in an organized fashion the functionality or content of 
+a thing or process against pre-established requirements for that thing or process. 
+ 
+test data 
+A data set that has been specifically created to enable testing of some process using the data set as a 
+standard input. 
+ 
+test, beta 
+The process of testing a beta release. 
+ 
+test, integration 
+A validation process that evaluates functionality between individual components or modules. 
+ 
+test, performance 
+A validation process that evaluates the time of system performance during specific activities 
+compared to expected performance parameters. 
+ 
+test, regression 
+Retesting existing code using passed test cases to verify that nothing changed. 
+ 
+test, system 
+A validation process that evaluates hardware and/or software on a complete integrated platform to 
+evaluate compliance with requirements. 
+ 
+test, unit 
+A validation process that evaluates functionality of individual code sets or modules independent of 
+any other code set or module, using a defined set of data. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

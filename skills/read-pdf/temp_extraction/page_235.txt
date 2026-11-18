@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 228 
+ 
+static query  
+A stored, precompiled SQL query, optimized for access against a particular database design. 
+ 
+statistical analysis 
+The examination of data to see patterns of probability or effects from causes. 
+ 
+Statistical Data and Metadata eXchange (SDMX) 
+A set of technical standards and content-oriented guidelines, together with an IT architecture and 
+tools, to be used for the efficient exchange and sharing of statistical data and meta-data. SDMX is a 
+committee sponsored by multiple global financial institutions. 
+ 
+Statistical Quality Control (SQC) 
+Procedures and methods for measuring process quality, identifying unacceptable performance, 
+variance and taking corrective action. 
+ 
+steward 
+Originally from the old English term sty ward; a person who was the ward of the sty. These people 
+watched over the stock and were responsible for the welfare of the stock, particularly at night when 
+the risks to the welfare of the stock were high. (Brackett 2011) 
+ 
+stewardship 
+The careful, responsible management of something entrusted to one’s care on behalf of others. SEE 
+ALSO data stewardship. 
+ 
+stochastic 
+Adjective. Involving some chance, randomness, or uncertainty. For example, stochastic analysis. 
+ 
+stock and flow diagram 
+SEE chart, stock and flow. 
+ 
+Stock-Keeping Unit (SKU) 
+A detailed and specific product type used by inventory control systems. 
+ 
+stop-lighting  
+A technique using colored circles to identify the content of a data attribute. The colors are defined by 
+a set of predefined thresholds. SEE ALSO scorecard. 
+ 
+Storage Area Network (SAN) 
+A network system that stores data within the network, but separate from exterior networks that allow 
+attachment by application servers. 
+ 
+Storage Networking Industry Association (SNIA) 
+An alliance of institutions that focuses on promoting storage network industry standards. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

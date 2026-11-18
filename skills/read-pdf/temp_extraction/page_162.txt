@@ -1,0 +1,1 @@
+**SEE data mining.**: Knowledge Interchange Format (KIF) A standard format for exchanging rules between artificial intelligence (AI) systems.

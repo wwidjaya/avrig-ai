@@ -2,7 +2,9 @@
 mod tests {
     use super::super::client::{SiwcClient, parse_model_slugs};
     use super::super::types::StoredCredentials;
-    use crate::antigravity::types::{ChatMessage, ChatRequest, FunctionCallData, FunctionDefinition, Tool, ToolCall};
+    use crate::antigravity::types::{
+        ChatMessage, ChatRequest, FunctionCallData, FunctionDefinition, Tool, ToolCall,
+    };
     use crate::server::{GatewayState, build_gateway_router, is_siwc_model};
     use axum::body::to_bytes;
     use axum::extract::connect_info::MockConnectInfo;
@@ -215,5 +217,80 @@ mod tests {
             }),
             "enumerated model IDs should carry their provider prefix"
         );
+
+        // Test static asset serving and route precedence
+        // 1. Root / serves index.html
+        let req_root = Request::builder()
+            .uri("/")
+            .body(axum::body::Body::empty())
+            .unwrap();
+        let resp_root = app.clone().oneshot(req_root).await.unwrap();
+        assert_eq!(resp_root.status(), StatusCode::OK);
+        assert_eq!(
+            resp_root.headers().get("content-type").unwrap(),
+            "text/html"
+        );
+        assert_eq!(
+            resp_root.headers().get("cache-control").unwrap(),
+            "no-cache, no-store, must-revalidate"
+        );
+
+        // 2. SPA Route Fallback (e.g. /dashboard or /knowledge/chat) serves index.html
+        let req_spa = Request::builder()
+            .uri("/dashboard")
+            .body(axum::body::Body::empty())
+            .unwrap();
+        let resp_spa = app.clone().oneshot(req_spa).await.unwrap();
+        assert_eq!(resp_spa.status(), StatusCode::OK);
+        assert_eq!(
+            resp_spa.headers().get("content-type").unwrap(),
+            "text/html; charset=utf-8"
+        );
+        assert_eq!(
+            resp_spa.headers().get("cache-control").unwrap(),
+            "no-cache, no-store, must-revalidate"
+        );
+
+        // 3. Static Assets under assets/* have immutable cache control
+        let req_asset = Request::builder()
+            .uri("/assets/index-iqYr2Vql.js")
+            .body(axum::body::Body::empty())
+            .unwrap();
+        let resp_asset = app.clone().oneshot(req_asset).await.unwrap();
+        assert_eq!(resp_asset.status(), StatusCode::OK);
+        assert_eq!(
+            resp_asset.headers().get("cache-control").unwrap(),
+            "public, max-age=31536000, immutable"
+        );
+
+        // 4. API Precedence: /api/health and /health take precedence over static fallback
+        let req_api_health = Request::builder()
+            .uri("/api/health")
+            .extension(MockConnectInfo(loopback_addr))
+            .body(axum::body::Body::empty())
+            .unwrap();
+        let resp_api_health = app.clone().oneshot(req_api_health).await.unwrap();
+        assert_eq!(resp_api_health.status(), StatusCode::OK);
+        let bytes_h = to_bytes(resp_api_health.into_body(), 1024).await.unwrap();
+        let json_h: serde_json::Value = serde_json::from_slice(&bytes_h).unwrap();
+        assert_eq!(json_h["ok"], true);
+        assert_eq!(json_h["version"], "0.1.0");
+
+        // 5. Version API: /api/v1/version and /version return VersionInfo
+        let req_ver = Request::builder()
+            .uri("/api/v1/version")
+            .body(axum::body::Body::empty())
+            .unwrap();
+        let resp_ver = app.clone().oneshot(req_ver).await.unwrap();
+        assert_eq!(resp_ver.status(), StatusCode::OK);
+        let bytes_v = to_bytes(resp_ver.into_body(), 1024).await.unwrap();
+        let json_v: serde_json::Value = serde_json::from_slice(&bytes_v).unwrap();
+        assert_eq!(json_v["semver"], "0.1.0");
+        assert_eq!(json_v["major"], 0);
+        assert_eq!(json_v["minor"], 1);
+        assert_eq!(json_v["patch"], 0);
+        assert!(json_v.get("commit_sha").is_some());
+        assert!(json_v.get("target_triple").is_some());
+        assert!(json_v.get("build_timestamp").is_some());
     }
 }

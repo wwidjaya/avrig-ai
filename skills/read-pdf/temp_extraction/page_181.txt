@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 174 
+ 
+Network File Share (NFS) 
+A folder (directory) on a server that is shared out to users on a local area network (LAN) or intranet. 
+Users attach to this file share and can drag and drop files/folders or modify the files/folder within 
+the file share. A file share is typically mapped to a user’s local computer as a logical drive, such as X:. 
+It is accessed just like the other drives on your computer, such as the A: or C: drives. File shares are a 
+fast and secure method for managing content on a remote server. 
+ 
+Network Identification 
+Zachman Framework cell name, intersection of Where/Network Nodes and Scope 
+Contexts/Strategists as Theorists. 
+ 
+Network Instantiation 
+Zachman Framework cell name, intersection of Where/Network Nodes and Operations Instance 
+Classes/Workers as Participants. 
+ 
+network node 
+1. An addressable device or connection point attached to a network. 
+2. Zachman Framework column name, matches Where. 
+ 
+Network Representation 
+Zachman Framework cell name, intersection of Where/Network Nodes and System 
+Logic/Architects as Designers. 
+ 
+Network Specification 
+Zachman Framework cell name, intersection of Where/Network Nodes and Technology 
+Physics/Engineers as Builders. 
+ 
+network taxonomy 
+SEE taxonomy, network. 
+ 
+Network-Attached Storage (NAS) 
+A form of storage that attaches to a network but does not provide server functions such as file 
+management. 
+ 
+niche marketing  
+A marketing segmentation strategy in which the firm focuses on serving one segment of the market. 
+Similar to segmented marketing, but a niche is a small distinguishable segment that can be uniquely 
+served. 
+ 
+Nijssens Information Analysis Method (NIAM) 
+A data modeling technique, the predecessor to object role modeling. Has also been called “Natural 
+Information Analysis Method”. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

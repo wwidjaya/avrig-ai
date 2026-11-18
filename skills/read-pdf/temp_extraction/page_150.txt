@@ -1,0 +1,38 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 143 
+ 
+Institute for Certification of Computing Professionals (ICCP) 
+A nonprofit consortium of professional associations (including DAMA International) with the 
+common goal of assessing, credentialing, and improving the skills and standards of students and 
+individuals employed in the Business, Computer, Information, and Communications Technology 
+industries. The ICCP handles exam administration and delivery of the CDMP exams and 
+recertification. 
+ 
+Institute for Electric and Electronic Engineers (IEEE) 
+A professional organization for engineers, including software engineers.  
+ 
+institutional mandate 
+Set of rules or other formal set of instructions assigning responsibility as well as the authority to an 
+organization for the collection, processing, and dissemination of information 
+ 
+intangible asset 
+SEE asset, intangible. 
+ 
+integer 
+A natural whole number (positive or negative) or zero. From the Latin integer for “intact, untouched”. 
+Contrast with real number. 
+ 
+integrate 
+Verb. To form or blend into a whole; to unite with something else; to incorporate into a larger unit; 
+to bring into common organization. (Brackett 2011) 
+ 
+integrated data resource 
+A data resource that is fully integrated within a single, organization-wide, common data architecture 
+and is deployed as necessary to meet the business information demand. It contains one version of 
+truth about the business(Brackett 2011) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

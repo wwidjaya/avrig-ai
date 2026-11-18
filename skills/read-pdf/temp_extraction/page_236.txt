@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 229 
+ 
+stored procedure 
+A precompiled code routine stored within a Database Management System. 
+ 
+Strategic Business Intelligence 
+Alternate form: Strategic BI 
+The application of BI tools to provide metrics to executives, often in conjunction with some formal 
+method of business performance management, to help determine if a corporation is on target for 
+meeting its goals and objectives. Used to support long-term corporate goals and objectives. (DAMA-
+DMBOK Guide, 1st edition, pg. 208.) 
+ 
+strategic data steward 
+A role accountable for data quality within a major subject area, resolution of business rule and data 
+quality issues, and identification of coordinating and operational data stewards. A member of the 
+Data Governance Council. SEE ALSO executive data steward.  
+ 
+Strategists as Theorists 
+Zachman Framework row name, matches Scope Contexts. 
+ 
+strategy 
+A set of decisions that set a direction and define an approach to solving a problem or achieving a 
+goal. 
+ 
+strategy canvas 
+SEE chart, parallel coordinates. 
+ 
+strategy map 
+SEE chart, strategy map. 
+ 
+Strengths, Weaknesses, Opportunities, and Threats (SWOT) 
+A type of analysis that provides companies with both internal and external factors that could affect 
+the long-term success of the company. 
+ 
+structural meta-data 
+SEE meta-data, structural. 
+ 
+structure 
+A hierarchical classification for identifying relationships between categories. 
+ 
+structure, hierarchical 
+A data structure made up of hierarchical relationships between entity types. A hierarchical structure is 
+not a tree structure since the parent entity type and child entity type in any hierarchical relationship 
+need not be from the same population (not homogeneous).  
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 47 
+ 
+chart, performance charting 
+A form of visualization using a series of horizontal lines, each representing an evaluation range of a 
+specific quality. A set of processes or performances are evaluated against the lines, and the points of 
+the evaluations are connected into a line for each process or performance. 
+ 
+chart, perspectives  
+A form of visualization resembling looking down into a box, with the floor of the box being the 
+main topic, the left and right sides representing positive and negative input or experiences, the lower 
+side representing prior knowledge or experience, and the top side representing open questions or 
+issues. 
+ 
+chart, petri net 
+Alternate form: place/transition net, P/T net 
+A form of visualization for distributed systems, using bars and circles to represent events and 
+conditions respectively. Directed arrows show the path between the events and conditions in the 
+system. 
+ 
+chart, pie 
+A chart that shows percentages as sectors (slices) of a circle, resembling a pie. 
+ 
+chart, polar area 
+A chart showing a circle with sectors, using radius length of sectors to show relative differences. May 
+have multiple sections to each sector to compare multiple values. 
+ 
+chart, Porter's five forces  
+A framework for evaluating strategic positions, suing five forces: threat from competitors, threat of 
+substitute products or services, bargaining power of customers, bargaining power of suppliers, and 
+barriers to entry. Named for Michael Porter. 
+ 
+chart, portfolio 
+A quartered plot chart used most frequently to determine priorities in business, using growth rate on 
+one axis and market share as the other. Creates four categories: stars (high growth and market share), 
+cash cows (low growth, high market share), dogs (low growth and market share), and question marks 
+(high growth and low market share). 
+ 
+chart, process flow 
+A visual representation of how control moves between logical processes (how the end state of a 
+process serves as the start state for other processes). 
+ 
+chart, radar 
+A chart representing three or more quantitative values represented on radial axes of a circle. 
+ 
+chart, rich picture 
+A form of visualization that represents complex or ill-defined topics by using diagrams, images, 
+sketches, metaphors, icons, or other pictorial representations and linking them to each other and to 
+short text descriptions to show understanding of a topic. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 74 
+ 
+data entity 
+A classification of objects found in the real world described by the Noun part of speech -- persons, 
+places, things, concepts, and events – of interest to the enterprise. Usually expressed in singular form. 
+ 
+data entity, associative 
+An entity or table that resolves a many-to-many relationship between two other related entities or 
+tables.  
+ 
+data entity, dependent 
+In a relational model, a child entity of another parent entity that cannot exist on its own. 
+ 
+data entity-relation diagram 
+A diagram that shows the arrangement and relationships between data entities. It contains only data 
+entities and the data relations between those data entities. It does not contain any of the data 
+attributes in those data entities, nor does it contain any roles played by the data attributes. (Brackett 
+2011) 
+ 
+data error 
+A data value that provides incorrect or false knowledge about the business, or about business objects 
+and events that are important to the business. (Brackett 2011) 
+ 
+data escrow 
+In Software-as-a-Service, the practice of keeping a set of data with an independent third party to 
+prevent data loss. 
+ 
+data exchange 
+The process of sending and receiving data. 
+ 
+data exploration 
+The process of examining data in order to determine ranges and patterns within the data. 
+ 
+data export 
+1. The process of extracting information from a database into a file. 
+2. The result data set from the export process. 
+ 
+data extract 
+1. A snapshot copy of data from a source database used to update data in a target database, or for use 
+in an application. 
+2. Verb. To copy data from a source for data movement and data transformation. 
+ 
+data extract date  
+The date data was extracted from a source database. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

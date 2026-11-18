@@ -1,19 +1,29 @@
 use anyhow::Result;
 use clap::Parser;
 use gateway::antigravity::oauth::{env_or, load_credentials};
-use gateway::antigravity::types::{DEFAULT_CLIENT_ID, DEFAULT_CLIENT_SECRET};
 use gateway::antigravity::state::AppState as AntigravityState;
+use gateway::antigravity::types::{DEFAULT_CLIENT_ID, DEFAULT_CLIENT_SECRET};
 use gateway::server::{GatewayState, build_gateway_router};
 use gateway::siwc::client::SiwcClient;
 use gateway::siwc::oauth::load_credentials as load_siwc_credentials;
+use gateway::version::VersionInfo;
 use std::net::SocketAddr;
 use std::path::{Path, PathBuf};
 use tracing::{info, warn};
 
 #[derive(Parser, Debug)]
-#[command(name = "gateway", about = "Avrig Unified AI Gateway with Antigravity and SIWC ChatGPT support")]
+#[command(
+    name = "gateway",
+    about = "Avrig Unified AI Gateway with Antigravity and SIWC ChatGPT support",
+    version = env!("AVRIG_PKG_VERSION")
+)]
 pub struct CliArgs {
-    #[arg(short, long, default_value = "127.0.0.1:8085", help = "local OpenAI-compatible listen address")]
+    #[arg(
+        short,
+        long,
+        default_value = "127.0.0.1:8085",
+        help = "local OpenAI-compatible listen address"
+    )]
     pub listen: String,
 
     #[arg(short = 'a', long, help = "Antigravity OAuth credentials file")]
@@ -22,11 +32,18 @@ pub struct CliArgs {
     #[arg(short = 'c', long, help = "ChatGPT SIWC OAuth credentials file")]
     pub chatgpt_credentials: Option<PathBuf>,
 
-    #[arg(long, default_value_t = false, help = "Disable Google Antigravity provider")]
+    #[arg(
+        long,
+        default_value_t = false,
+        help = "Disable Google Antigravity provider"
+    )]
     pub no_antigravity: bool,
 
     #[arg(long, default_value_t = false, help = "Disable ChatGPT SIWC provider")]
     pub no_siwc: bool,
+
+    #[arg(long, default_value_t = false, help = "Print verbose build and version information and exit")]
+    pub verbose_version: bool,
 }
 
 fn find_existing_path(candidates: &[&str]) -> Option<PathBuf> {
@@ -44,6 +61,12 @@ async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
     let args = CliArgs::parse();
+
+    if args.verbose_version {
+        println!("{}", VersionInfo::current().verbose_string());
+        return Ok(());
+    }
+
     let listen_addr: SocketAddr = args.listen.parse()?;
 
     // 1. Antigravity State Setup
@@ -65,10 +88,18 @@ async fn main() -> Result<()> {
         match load_credentials(&creds_file) {
             Ok(creds) => {
                 info!("Loaded Antigravity credentials from {:?}", creds_file);
-                Some(AntigravityState::new(creds_file, client_id, client_secret, creds))
+                Some(AntigravityState::new(
+                    creds_file,
+                    client_id,
+                    client_secret,
+                    creds,
+                ))
             }
             Err(err) => {
-                warn!("Could not load Antigravity credentials from {:?}: {}", creds_file, err);
+                warn!(
+                    "Could not load Antigravity credentials from {:?}: {}",
+                    creds_file, err
+                );
                 None
             }
         }
@@ -93,7 +124,10 @@ async fn main() -> Result<()> {
                 Some(SiwcClient::new(creds_file, None, creds))
             }
             Err(err) => {
-                warn!("Could not load SIWC ChatGPT credentials from {:?}: {}", creds_file, err);
+                warn!(
+                    "Could not load SIWC ChatGPT credentials from {:?}: {}",
+                    creds_file, err
+                );
                 None
             }
         }
@@ -110,7 +144,10 @@ async fn main() -> Result<()> {
 
     info!("Unified Gateway listening at http://{}/v1", listen_addr);
     info!("Models endpoint: http://{}/v1/models", listen_addr);
-    info!("Chat completions: http://{}/v1/chat/completions", listen_addr);
+    info!(
+        "Chat completions: http://{}/v1/chat/completions",
+        listen_addr
+    );
 
     let listener = tokio::net::TcpListener::bind(&listen_addr).await?;
     axum::serve(

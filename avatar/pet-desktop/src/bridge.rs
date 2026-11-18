@@ -1,7 +1,7 @@
-use std::sync::{Arc, Mutex};
-use std::sync::mpsc::{channel, Receiver, Sender};
 use avrig_harness::office::event::HarnessDesktopEvent;
 use avrig_harness::office::pet::PetVisualStatus;
+use std::sync::mpsc::{Receiver, Sender, channel};
+use std::sync::{Arc, Mutex};
 
 #[allow(dead_code)]
 pub struct HarnessBridge {

@@ -1,0 +1,55 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 205 
+ 
+readiness assessment 
+A process of reviewing environmental, resource and work effort measurements in order to predict 
+success of an implementation. 
+ 
+Read-Only Memory (ROM) 
+A form of data storage that uses integrated circuits that is written to once, and then static afterwards. 
+Usually mass-produced in a factory as a secure distribution method for code and/or data. 
+ 
+real number 
+A number that contains no imaginary components, of unspecified precision. Almost always displayed 
+with decimal points. Contrast with integer. 
+ 
+real time  
+Alternate form: real-time 
+1. Adjective. Refers to the utmost level of timeliness regarding the use of information. Commonly 
+defined as instantly or instantaneous, although not strictly the same.  
+2. The condition in which the time to process and respond to a request for information (processing) is 
+less than the time in which it is needed in the environment (the source of the request) to make a 
+difference.  
+ 
+real time data  
+Alternate form: real-time data 
+Up-to-the-second, detailed data used to run the business and accessed in read/write mode, usually 
+through predefined transactions.  
+ 
+real time data warehousing 
+Alternate form: real-time data warehousing 
+SEE Data Warehouse, active. 
+ 
+Real Time OLAP (RTOLAP) 
+Alternate form: Real-Time OLAP 
+SEE OnLine Analytical Processing, Real Time. 
+ 
+reasonableness 
+Expectations within specific operational contexts. (DAMA-DMBOK Guide, 1st edition, pg. 297.) 
+ 
+record 
+1. Generally, evidence of an organization's activities. These activities can be events, transactions, 
+contracts, correspondence, policies, decisions, procedures, operations, personnel files, and financial 
+statements. Records can be physical documents, electronic files and messages, or database contents. 
+2. In data management, the physical representation of data about an instance. A collection of fields 
+about an instance generally representing the information pertaining to an instance of a member of 
+the type population. 
+ 
+record-based data modeling scheme 
+SEE data modeling scheme, record-based. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

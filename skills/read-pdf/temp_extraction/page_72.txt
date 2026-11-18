@@ -1,0 +1,37 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 65 
+ 
+Customer Relationship Management (CRM) 
+Establishing relationships with individual customers and then using that information to treat 
+different customers differently. Customer buying profiles and churn analysis are examples of decision 
+support activities that can affect the success of customer relationships. Effective CRM is dependent 
+on high quality master data about individuals and organizations (customer data integration). SEE 
+ALSO Citizen Relationship Management. 
+ 
+cyber marketing  
+Any type of Internet-based promotion through web sites, targeted e-mail, Internet bulletin boards, e-
+commerce, and online social networking mechanisms. 
+ 
+cyberspace 
+A metaphoric abstraction for a virtual reality existing inside computers and on computer networks. 
+The de facto term for the Internet during the 1990s, coined by science fiction writer William Gibson, 
+who referred to it as “a consensual hallucination experienced daily by billions of legitimate operators 
+in every nation”. While cyberspace should not be confused with the real internet, a web site might be 
+said to “exist in cyberspace.” According to this interpretation, events taking place on the Internet are 
+not therefore happening in the countries where the participants or the servers are physically located, 
+but instead are happening “in cyberspace”. 
+ 
+cycle graph 
+SEE chart, cycle graph. 
+ 
+cycle time 
+The time required to execute a process from start to finish. 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

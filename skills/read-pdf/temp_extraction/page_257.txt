@@ -1,0 +1,2 @@
+**W**: wallet share The percentage of a customer’s requirements that are filled by a particular brand of product or service. warehouse
+**SEE Data Warehouse.**: warehouse business directory

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 95 
+ 
+DataBase Management System, Relational (RDBMS) 
+Database management software controlling the creation, storage, manipulation, access, and 
+performance of relational databases.  
+ 
+database marketing  
+The use of information about customers and prospects to strengthen customer relationships by 
+identifying new opportunities and improving customer service. Uses methods for creating, testing, 
+and executing marketing strategies based on analysis of customer data. Includes the mass 
+customization of marketing campaigns to decrease costs, improve response, build customer loyalty, 
+reduce attrition, and increase customer satisfaction. 
+ 
+database reorganization 
+The process of rearranging physical storage for a database in order to optimize performance. 
+ 
+database schema 
+SEE schema, database. 
+ 
+database server 
+In a distributed application architecture, the DBMS software, related data integration and access 
+services and associated hardware supporting access and manipulation of data, separate from 
+application logic and user interfaces. 
+ 
+database transaction  
+A unit of work; a set of statements to read, create, modify, or delete business data, which the 
+Database Management System must complete performance of all the statements or reverse the 
+changes. 
+ 
+database, archival 
+An exact copy of a database, along with any specific software necessary for managing that database, 
+saved for purposes of historical research, recovery, or restoration. 
+ 
+database, columnar 
+A database structure that serialized values by columns then by rows, rather than conventional 
+databases which serialize values by rows and then by columns. 
+ 
+database, column-oriented 
+A Database Management System that stores its content by column rather than by row.  
+ 
+database, correlation 
+A Database Management System that is data model independent and designed to efficiently handle 
+unplanned, ad hoc queries in an analytical system environment. Unlike relational database 
+management systems (records-based storage) or column-oriented databases (column-based storage), 
+a correlation database uses a value-based storage architecture in which each unique data value is 
+stored only once and an auto-generated indexing system maintains the context for all values. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

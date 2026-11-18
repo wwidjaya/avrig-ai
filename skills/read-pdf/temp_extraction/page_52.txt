@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 45 
+ 
+chart, funnel 
+A form of visualization where inputs are drawn entering through the large end of a funnel, and 
+outputs are drawn leaving the small end. 
+ 
+chart, Gantt 
+A horizontal bar chart used in project management; a graphical illustration of a schedule that helps to 
+plan, coordinate, and track specific tasks in a project. Named for Henry Gantt. 
+ 
+chart, heat map 
+A chart where one set of values is represented by areas of rectangles, and other sets of values are 
+represented by colors. invented by Professor Ben Shneiderman at the University of Maryland. Used 
+to look at large, fast-changing sets of structured data. In this chart, the size of a rectangle reflects its 
+importance, and color conveys the speed of change. Heat maps are often used in applications to 
+monitor and analyze changes in stock market and portfolio data in financial services applications. 
+SEE ALSO chart, tree map. 
+ 
+chart, heaven and hell 
+A graphic way to show positive and negative effects of some system or action, by illustrating the 
+positive items at the top as 'heaven', and the negative at the bottom as 'hell', and neutral items in the 
+center. 
+ 
+chart, house of quality 
+A form of visualization that resembles a house, showing interactions between 'whats' and 'hows', 
+including 'hows vs. hows' as the triangular roof. Each comparison is a cell containing an evaluation as 
+positive, neutral, or negative. Additional annexes on sides and bottom may include whys, how 
+muches, etc. 
+ 
+chart, hype-cycle 
+A form of visualization that divides the process of adoption of something into five cycles: Trigger, 
+Peak, Trough, Slope, and Plateau. 
+ 
+chart, hyperbolic tree 
+Alternate form: hypertree 
+A form of visualization where a tree is displayed as a node-link diagram in a circular manner radiating 
+out from the root rather than only descending.  
+ 
+chart, iceberg diagram 
+A form of visualization that has a medial line dividing attributes into two categories: visible, and 
+invisible (or hidden). The visible attributes are listed above the line (the visible part of the iceberg); 
+the invisible attributes are listed below the line. 
+ 
+chart, Kagi 
+A chart showing movement of a value regardless of time, based solely on some time-independent 
+criteria. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,46 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 78 
+ 
+data latency  
+The time delay for data to be updated in a system compared to the real world. When data is displayed 
+in real time, data latency is eliminated. 
+ 
+data lifecycle 
+A conceptualization of how data is created and used which attempts to define a “birth-to-death” 
+value chain for data, including acquisition, storage and maintenance, use, movement to archive, and 
+destruction. (DAMA-DMBOK Guide, 1st edition, pg. 3.) 
+ 
+data lineage 
+A description of the pathway from the data source to their current location and the alterations made 
+to the data along that pathway. (Brackett 2011) 
+ 
+data loading 
+The process of populating more than one row at time into database, typically a Data Warehouse. 
+ 
+Data Management (DM) 
+1. The business function that develops and executes plans, policies, practices, and projects that acquire, 
+control, protect, deliver, and enhance the value of data. 
+2. A program for implementation and performance of the data management function. 
+3. The field of disciplines required to perform the data management function. 
+4. The profession of individuals who perform data management disciplines. 
+5. In some cases, a synonym for a Data Management Services organization that performs data 
+management activities. 
+ 
+Data Management Association, The (DAMA) 
+SEE DAMA International. 
+ 
+Data Management Body of Knowledge (DAMA-DMBOK) 
+SEE Body of Knowledge, Data Management. 
+ 
+data management center of excellence 
+SEE Center of Excellence, Data Management. 
+ 
+data management community of interest  
+All the data management professionals, data stewards and other stakeholders with an active interest 
+and role in data management. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

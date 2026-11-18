@@ -1,0 +1,38 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 120 
+ 
+extensional 
+Adjective. Defined by a specific and finite list of values, not by conformity to any rule or requirement. 
+Opposite of intensional. 
+ 
+external data tracking 
+The process of monitoring the flow of data between data sites in different organization. (Brackett 
+2011) 
+ 
+Extract-Transform-Load (ETL) 
+1. Generally, an approach to data integration from multiple source databases to integrated target 
+databases (Operational Data Stores, Data Warehouses, or Data Marts).  
+2. Commonly, a software product or tool that extracts data from a data source, converts data to a new 
+format, and loads the data to a target database. SEE ALSO data integration. 
+ 
+extranet 
+An internal network or intranet opened to selected business partners. Suppliers, distributors, and 
+other authorized users can connect to a company’s network over the Internet or through private 
+networks. 
+ 
+eXtreme Programming (XP) 
+An updated approach to Rapid Application Development using object-oriented techniques and a 
+minimum of specifications. 
+ 
+extrinsic 
+Adjective. Describes a property that is nonspecific and unessential to a thing or event. 
+ 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

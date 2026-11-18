@@ -1,0 +1,34 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 243 
+ 
+type 
+1. Generally, a subdivision or category. 
+2. In data management, a population of instances defined by a common schema.  
+3. DCMI element in element set Content: the classification of a resource. SEE ALSO Dublin Core 
+Metadata Initiative. 
+ 
+type 0 
+SEE dimension, type 0. 
+ 
+type 1 
+SEE data attribute, type 1; dimension, type 1. 
+ 
+type 2 
+SEE data attribute, type 2; dimension, type 2. 
+ 
+type 3 
+SEE data attribute, type 3; dimension, type 3. 
+type 4 
+SEE dimension, type 4. 
+ 
+type 6 
+SEE dimension, type 6. 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

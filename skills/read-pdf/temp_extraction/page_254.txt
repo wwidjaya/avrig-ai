@@ -1,0 +1,2 @@
+**V**: valid time
+**SEE time, valid.**: validation Determining and confirming that something satisfies or conforms to defined rules, business rules, integrity constraints, defined standards, etc. The system cannot perform any validating unless it first has a definition of the way things should be validity The degree to which data conforms to domain values and defined business rules. (Larry English,

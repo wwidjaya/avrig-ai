@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 186 
+ 
+Organization Definition 
+Zachman Framework cell name, intersection of Who/Organization Groups and Business 
+Concepts/Executive Leaders as Owners. 
+ 
+Organization for the Advancement of Structured Information (OASIS) 
+A non-for-profit consortium that advances e-business by promoting open, collaborative 
+development of interoperability specifications. 
+ 
+Organization Groups 
+Zachman Framework column name, matches Who. 
+ 
+Organization Identification 
+Zachman Framework cell name, intersection of Who/Organization Groups and Scope 
+Contexts/Strategists as Theorists. 
+ 
+Organization Instantiation 
+Zachman Framework cell name, intersection of Who/Organization Groups and Operations Instance 
+Classes/Workers as Participants. 
+ 
+Organization Representation 
+Zachman Framework cell name, intersection of Who/Organization Groups and System 
+Logic/Architects as Designers. 
+ 
+Organization Specification 
+Zachman Framework cell name, intersection of Who/Organization Groups and Technology 
+Physics/Engineers as Builders. 
+ 
+organizational intelligence  
+The collected data of the enterprise about itself and its environment, in current context.  
+ 
+organizational knowledge 
+Information that is of significance to the organization, is combined with experience and 
+understanding, and is retained. It is information in context with respect to understanding what is 
+relevant and significant to a business issue or business topic-what is meaningful to the business. 
+(Brackett 2011) 
+ 
+organizational model 
+A model showing the organization of a particular system or company. 
+ 
+orthogonal 
+Adjective. Literally, to be at right angles. Typically refers to characteristics that are as independent of 
+each other as possible. For example, data and processes are considered orthogonal to each other. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

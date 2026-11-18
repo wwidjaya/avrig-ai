@@ -1,0 +1,50 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 105 
+ 
+dimension, type 4 
+A dimension table where the data is physically split into two tables, one with the current value rows, 
+and the other with only historical value rows. 
+ 
+dimension, type 6 
+A dimension table which combines the attributes of types 1, 2 and 3 (1+2+3=6). 
+ 
+dimensional aggregate 
+A computed value derived from the calculation of a fact measure at the intersection of one or more 
+dimensions at non-granular levels.  
+ 
+dimensional model  
+A specialized type of physical data model particular to a retrieval-only database design, commonly 
+used in Data Warehouses and data marts, where de-normalized fact tables are linked to dimension 
+tables. Star schemas and snowflake schemas are examples of dimensional models. 
+ 
+direct access file system 
+A protocol for data access across systems using data files instead of blocks. 
+ 
+Direct Access Storage Device (DASD) 
+A type of storage device where access is directly to the device, rather than through a cache or other 
+interface. 
+ 
+Direct Attached Storage (DAS) 
+A storage device attached to a server or workstation without the use of a storage network. 
+ 
+Direct Marketing Association (DMA) 
+The largest and oldest international trade association that seeks to advance the efficacy of all forms 
+of direct marketing. 
+ 
+directory  
+1. Generally, information heavily optimized for searching and reading. 
+2. In data storage, a table, index or folder containing addresses and locations of data or relationships 
+between data objects. 
+3. In operating systems, a synonym for a folder in Windows and other operating systems, used to 
+organize stored files and other folders. 
+4. A type of meta-data store that limits the meta-data to the location or source of data in the enterprise. 
+(DAMA-DMBOK 1st edition, pg. 282.) 
+ 
+dirty data  
+Data with a high degree of inaccuracy, incompleteness, inconsistency, or that fail some edit criteria. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

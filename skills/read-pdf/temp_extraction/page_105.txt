@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 98 
+ 
+deadlock 
+A scenario where a set of multiple simultaneous actions within a set wait for others within the set to 
+complete and release the resources being held. The waiting processes are “locked out” from the 
+resources held by the other processes. A true deadlock lasts forever, is never resolved.  
+ 
+decision rights 
+In Data Governance, information about the who, when and how a data-related decision is made. 
+ 
+decision support 
+SEE Business Intelligence. 
+ 
+Decision Support System (DSS) 
+An application that uses data to support managerial decisions through ad hoc query, summarization, 
+drill-down analysis, trend analysis, exception identification and “what if” scenario modeling. SEE 
+ALSO Business Intelligence. 
+ 
+decision tree  
+SEE chart, decision tree. 
+ 
+declarative 
+Adjective. Describes a type of programming language in which the programmer does not define the 
+flow of control at execution time. 
+ 
+decryption 
+The process of reversing encryption; decoding back into original format. 
+deduction 
+1. The process of reasoning from one state to another, such as from cause to effect, or from general to 
+specific. 
+2. Subtraction. 
+ 
+deduplication 
+The process of elimination of redundant copies of data from storage or during a merge of multiple 
+datasets. 
+ 
+default data value 
+Alternate term: default value 
+A data value that is automatically assigned when no other data values are selected or applied. 
+ 
+defect 
+A data value that does not conform to its quality requirements. SEE ALSO error. 
+ 
+defect prevention 
+Improving systems to eliminate or minimize data errors in a database or information product. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

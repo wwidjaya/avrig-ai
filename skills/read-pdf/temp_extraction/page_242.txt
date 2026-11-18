@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 235 
+ 
+Tactical Business Intelligence 
+Alternate form: Tactical BI 
+The application of BI tools to analyze business trends by comparing a metric to the same metric 
+from a previous month or year, or to analyze historical data to discover trends that need attention. 
+Used to support short-term business decisions. (DAMA-DMBOK Guide, 1st edition, pg. 208.) 
+ 
+tactical data steward 
+A person who acts as liaison between the strategic data stewards and the detail data stewards to 
+ensure that all business and data concerns are addressed. (Brackett 2011) 
+ 
+tactical data warehouse development  
+The process of implementing a portion of an Enterprise Data Warehouse. 
+ 
+tag 
+Delimiters in a markup language than also contain information. Matched tags are used in pairs, 
+preceding and following text. 
+ 
+Tagged Image File Format (TIFF) 
+A file format for storing images as electronic files. 
+ 
+tangible asset 
+SEE asset, tangible. 
+ 
+target database  
+SEE database, target. 
+ 
+taxonomy 
+1. Generally, a collection of controlled vocabulary terms organized into a structure of parent-child 
+relationships. Each term is in at least one relationship with another term in the taxonomy. Each 
+parent's relationship with all of its children are of only one type (whole-part, genus-species, or type-
+instance). The addition of associative relationships creates a thesaurus. 
+2. In content management, a vocabulary (the list of terms in a dialect of an organization or community) 
+organized into a hierarchy, generally to find terms easily. 
+3. The hierarchical structure for outlining topics. The Dewey Decimal System is an example of a 
+taxonomy. (DAMA-DMBOK Guide, 1st edition, pg. 80.) 
+ 
+taxonomy, facet 
+A taxonomy with a relationship between the center nodes and all other nodes. Facets are attributes of 
+the object in the center. An example is meta-data, where each attribute (creator, title, access rights, 
+key words, version, etc.) is a facet of a content object. (DAMA-DMBOK Guide, 1st edition, pg. 249.) 
+ 
+taxonomy, flat 
+A taxonomy with no relationship between equal categories. An example is a list of countries. 
+(DAMA-DMBOK Guide, 1st edition, pg. 249.) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 46 
+ 
+chart, layer 
+Shows the decomposition of some object or system by exposing internal layers sequentially. 
+ 
+chart, lifecycle diagram 
+A form of visualization of a process or system over time compared to value at each point in time, 
+grouped into four stages: R&D/initiation, ascent, maturity, and decline. 
+ 
+chart, line 
+A chart that shows ordered points connected by a line to show trends. 
+ 
+chart, Magic Quadrant (MQ) 
+A form of visualization that uses a quartered chart comparing companies selling similar products 
+according to their completeness of vision and ability to execute on that vision. The quarters are 
+Leaders (high on vision and execution), Challengers (high on execution, low on vision), Visionaries 
+(high on vision, low on execution), and niche players (low on both vision and execution). Developed 
+by Gartner, Inc. to evaluate vendors in specific market segments. 
+ 
+chart, marimekko 
+Alternate form: mekko chart, matrix chart, eikosogram 
+A chart with the X-axis showing a list of values within a category (such as a list of business units) 
+where the width is each bar's relative magnitude compared to the others and the Y-axis showing 
+percentages or ratios. Each value is then a stacked area chart with each area shown as a percentage of 
+the total for that X value. 
+ 
+chart, metro map 
+A form of visualization showing the progression of a topic, showing points of interest as subway or 
+bus stops on a route to a current state. 
+ 
+chart, Open-High-Low-Close (OHLC) 
+A chart showing movements in a value over time at different points within each time grain, using 
+both lines and bars. This chart shows values for high and low separate from those for start and end 
+of each time period point on the chart.  
+ 
+chart, organization 
+A form of visualization showing the structure of an organization using trees and levels to show 
+relative hierarchies of teams or individuals. 
+ 
+chart, parallel coordinates  
+A form of visualization showing a series of vertical parallel lines representing dimensions or axes, and 
+horizontally oriented lines intersecting points on those exes. During development, the ordering of the 
+vertical axes may need to be shifted to better show patterns in the coordinates. 
+ 
+chart, Pareto 
+A chart showing both bars and a line, where the line shows the cumulative total of the individual bars 
+going left to right. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 230 
+ 
+structure, tree 
+Alternate form: tree-based structure 
+A hierarchy of things from the same population. The things could be  
+a) instances from a population represented by a single type icon representing the population of 
+instances, and a reflexive relationship on that type, or  
+b) types from the set of types defined in a database represented by a tree structure where each 
+node of the tree is a population of instances of the same type.  
+In the first case, it is the instances that form a tree structure, and in the second, it is the types that 
+form a tree structure. The latter is called a hierarchical data structure.  
+ 
+structured 
+Adjective. Arranged in a definite pattern of organization; manner of construction; the arrangement of 
+particles or parts in a substrate or body, arrangement or interrelation of parts as dominated by the 
+general character of the whole; the aggregate of attributes of an entity in their relationships to each 
+other, the composition of conscious experience with its attributes and their combination. (Brackett 
+2011) 
+ 
+structured data  
+SEE data, structured. 
+ 
+Structured Query Language (SQL) 
+A standard language for accessing relational, Open DataBase Connectivity, Distributed Relational 
+Database Architecture, or non-relational compliant database systems. The dominant database 
+language, used to define, control, manipulate and access relational data. Originally just an 
+abbreviation for SEQUEL, but later acquired the acronym of “Structured Query Language” (when 
+IBM could not trademark the name SEQUEL), explaining why is it still pronounced 'sequel' today. 
+ 
+style sheet 
+A set of structured hints to be applied to a family of documents to create a particular type of display. 
+ 
+subject 
+1. A topic or central idea. 
+2. DCMI element in element set Content: the area of focus of a resource. SEE ALSO Dublin Core 
+Metadata Initiative. 
+ 
+subject area 
+1. Generally, a discipline or branch of knowledge. 
+2. In data modeling, a group of related entities or tables, logically grouped for presentation and analysis 
+as a view to part of a data model. 
+ 
+Subject Matter Expert (SME) 
+A person with significant experience and knowledge of a given topic or function. 
+ 
+subject-oriented data resource 
+A data resource that is built from data subjects that represent business objects and events in the real 
+world that are of interest to the organization. (Brackett 2011) 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

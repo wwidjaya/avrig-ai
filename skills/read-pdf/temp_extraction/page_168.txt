@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 161 
+ 
+Managed Meta-data Environment (MME) 
+The operational implementation of a meta-data architecture, including a meta-data repository, meta-
+data sources, integration procedures, management processes, delivery procedures to meta marts, and 
+access interfaces.  
+ 
+managed replication 
+Planning for and control of replicated data, ensuring there is a master record and that copies of that 
+record are consistent, and that minimal redundant and non-productive replication occurs. 
+ 
+Management Information System (MIS) 
+A reporting or Business Intelligence system. SEE ALSO Information System. 
+ 
+Management of Information Systems (MIS) 
+SEE Information Technology. 
+ 
+mandatory 
+1. Adjective. Required, not optional. A dependency must be fulfilled. 
+2. In SQL, and many DBMSs, mandatory equates to “NOT NULL” or “NOT NULLABLE” 
+constraints. 
+ 
+mandatory relationship 
+SEE relationship, mandatory. 
+ 
+Many-to-Many (M:N) 
+Alternate form: M-N, M-M 
+The characteristic of a relationship in which a member of one population can be related to multiple 
+members of the other population, and vice versa. (Everest 2010) SEE ALSO cardinality; relationship. 
+ 
+Many-to-one (M:1) 
+The reverse of one-to-zero-or-Many or one-to-one-or-Many. 
+ 
+map 
+Verb. To associate mathematically every member in a given set with at least one member of another 
+set. 
+ 
+mapping 
+A list of source and target entities and attributes linked by a set of instructions. 
+ 
+marimekko chart 
+SEE chart, marimekko. 
+ 
+Mario chart 
+SEE chart, waterfall. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

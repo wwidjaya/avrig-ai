@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 139 
+ 
+Information Awareness Office (IAO) 
+Established by the U.S. DARPA to collect and integrate personal information of U.S. citizens and 
+residents, primarily targeted for data mining to detect threats to the country. 
+ 
+information chaos 
+Chaos in information that may be relevant and timely, but is interpreted incorrectly, inconsistently, or 
+incompletely. 
+ 
+information consumer 
+A person or group that receives data and uses it to create information. A more descriptive term for a 
+data consumer, since the consumer creates and uses information by interpreting data in context. 
+ 
+information directory 
+A collection of the meta-data that relates to Data Warehouse and Business Intelligence systems 
+within an organization, providing some context to the meta-data to make it usable and searchable by 
+business professionals in natural language terms. The directory includes business meta-data including 
+definitions, domains, examples, relationships, functions, rules, advisories, and equivalents in other 
+environments. It also may include technical meta-data about datatypes, lengths, number of distinct 
+values, transformation rules, and replication schedules.   
+ 
+Information Engineering (IE) 
+In data modeling, a record-based data modeling scheme and notation developed by Clive Finkelstein 
+in the 1970s and popularized by James Martin.  
+ 
+information engineering objective 
+To get the right data, to the right people, in the right place, at the right time, in the right form, at the 
+right cost, so they can make the right decisions, and take the right actions. The operative term is the 
+right data. (Brackett 2011) 
+ 
+information flow modeling 
+Depicts the complete flow of information from source to target. In Data Warehousing, shows the 
+flow of data from all sources through intermediate structures into final targets where the data is 
+turned into information. 
+ 
+Information Lifecycle Management (ILM) 
+An approach to manage the flow of a system's information from creation through usage to purge. 
+ 
+Information Management (IM) 
+The management of data in context, with relevance and timeframes, for business benefit. 
+ 
+information mapping 
+A technique of dividing and categorizing information for ease of comprehension and recall. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

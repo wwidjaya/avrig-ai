@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 40 
+ 
+causal loop diagram 
+SEE chart, causal loop diagram. 
+ 
+cause-effect chains 
+SEE chart, cause-and-effect diagram. 
+ 
+cell  
+1. Generally, any small compartment. 
+2. In multi-dimensional design, a data point defined by one member of each dimension of a multi-
+dimensional structure. Often cells in multi-dimensional structures are empty, leading to 'sparse' 
+storage.  
+ 
+Center Of Excellence (COE) 
+A team of people that promote collaboration and using best practices around a specific focus area to 
+drive business results. 
+ 
+Center of Excellence, Data Management 
+A centralized Data Management Services organization of data management professionals.  
+ 
+Central Processing Unit (CPU) 
+The part of a computer that reads, interprets, and performs instructions. 
+ 
+central-point cartogram 
+SEE chart, distance cartogram. 
+ 
+certificate 
+1. A token of authorization or authentication. 
+2. In data security, a computer data security object that includes identity information, validity 
+specification, and a key. 
+ 
+certification 
+The process of reviewing something to verify it meets established standards. 
+ 
+Certified Business Intelligence Professional (CBIP) 
+A professional designation offered by The Data Warehouse Institute, using examinations developed 
+and delivered by the Institute for Certification of Computing Professionals. 
+ 
+certified data 
+Passed data quality review, certifying it meets established standards. 
+ 
+Certified Data Management Professional (CDMP) 
+A professional certification program offered by DAMA International, using examinations developed 
+by DAMA and the ICCP. Exam administration and delivery is handled by the ICCP. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

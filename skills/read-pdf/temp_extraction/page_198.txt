@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 191 
+ 
+performance test 
+SEE test, performance. 
+ 
+period 
+1. Generally, the interval of single repetition of a varying quantity or a motion, or phenomenon that 
+repeats itself regularly. 
+2. Specifically, a quantity of time. 
+ 
+periodicity 
+Refers to the frequency of compilation of the data (e.g., a time series could be available at annual 
+frequency but the underlying data are compiled monthly, thus have a monthly periodicity). 
+ 
+persistence 
+A state or status that lasts beyond the process that created it. 
+ 
+persistent data  
+Data that outlasts the execution of a particular program, stored in the records of the enterprise and 
+available for reuse. 
+ 
+Personal Health Information (PHI) 
+The Privacy Rule, a Federal law, gives individuals rights over their health information and sets rules 
+and limits on who can look at and receive your health information. The Privacy Rule applies to all 
+forms of individuals' protected health information, whether electronic, written, or oral. The Security 
+Rule, a Federal law that protects health information in electronic form, requires entities covered by 
+HIPAA to ensure that electronic protected health information is secure. (www.hhs.gov) 
+ 
+Personal Identifying Information (PII) 
+Information that refers to a specific individual. Includes name, address, telephone number, 
+Governmental ID numbers, U.S. Social Security Numbers, etc. 
+ 
+Personal Software Process Body of Knowledge (PSPBOK) 
+SEE Body of Knowledge, Personal Software Process. 
+ 
+perspectives chart 
+SEE chart, perspectives. 
+ 
+pervasive computing  
+A ubiquitous, wireless, always-on, networked world. 
+ 
+Petabyte (Pb) 
+One thousand Terabytes. 
+ 
+petri net 
+SEE chart, petri net. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

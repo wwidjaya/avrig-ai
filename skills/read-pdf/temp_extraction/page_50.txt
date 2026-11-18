@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 43 
+ 
+chart, causal loop diagram 
+A visual representation of a system's feedback loops, where positive loops cycle clockwise, and 
+negative loops cycle counter-clockwise. 
+ 
+chart, cause-and-effect diagram 
+A chart that links an outcome to chains of possible contributing factors as tree structure working 
+backwards from an event to determine possible root causes, drawn sideways so that it resembles the 
+skeleton of a fish. Because the chart resembles the skeleton of a fish, it is often called a fishbone 
+diagram. A quality improvement concept invented by the Japanese statistician Dr. Karu Ishakawa. 
+ 
+chart, class diagram 
+A type of diagram that shows a system's classes, contents, attributes, and relationships, including 
+inheritance. UML is a common format for a class diagram. 
+ 
+chart, collaboration diagram 
+A representation of objects and their links to each other, sometimes including time and/or sequence 
+of relationships. Numbers show the sequence of activities or messages. 
+ 
+chart, component diagram 
+A visual representation of the parts of a whole, usually a system, with sequences of dependencies 
+between components shown. 
+ 
+chart, concentric circles 
+A form of visualization showing nested subsets of a set as circles within other circles, such as cities in 
+states in countries in a total population, each level represented as the area of one of the circles. 
+ 
+chart, concept fan 
+A form of visualization where a concept is decomposed into components to the right, 'fanning' out 
+levels. 
+ 
+chart, concept map 
+A form of visualization showing relationships among concepts as arrows between labeled boxes, 
+usually in a downward branching hierarchy. SEE ALSO data model, conceptual. 
+ 
+chart, cone tree 
+A form of visualization that takes a tree diagram and turns it into a three-dimensional circle of 
+attributes radiating from a parent. 
+ 
+chart, control 
+A graphical device for tracking process performance over time. 
+ 
+chart, coxcomb 
+SEE chart, polar area. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

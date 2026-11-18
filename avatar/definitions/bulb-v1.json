@@ -1,0 +1,144 @@
+{
+  "avatar_id": "AV-01",
+  "slug": "bulb",
+  "name": "Bulb",
+  "version": 1,
+  "author": "avrig-ai",
+  "license": "MIT",
+  "minimum_renderer_version": "0.1.0",
+  "description": "Rounded bulb-shaped PET character with luminous filament and expressive eyes.",
+  "connection_outfit_mapping": {
+    "not_connected": "base",
+    "connecting": "base",
+    "connected": "connected",
+    "connection_lost": "base",
+    "unknown": "base"
+  },
+  "outfits": {
+    "base": {
+      "description": "Cream T-shirt, blue jeans, and white sneakers without jacket or badge (Not Connected).",
+      "has_jacket": false,
+      "has_badge": false
+    },
+    "connected": {
+      "description": "Base outfit plus navy hoodie jacket and glowing blue shared connection chest badge (Connected).",
+      "has_jacket": true,
+      "has_badge": true
+    }
+  },
+  "states": {
+    "base": {
+      "idle": {
+        "file": "bulb/bulb-base-idle-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "8bf0ed2ed9e6027044a015f64aafdaa8407d6a581a41e07da112754643354fd8",
+        "source": "concepts/bulb-base-idle-v1.jpg"
+      },
+      "listening": {
+        "file": "bulb/bulb-base-listening-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "384493d534d15e554c3c7f396c17f00a1ed40a21478165e9b4d35f1ed4995eef",
+        "source": "concepts/bulb-base-listening-v1.jpg"
+      },
+      "thinking": {
+        "file": "bulb/bulb-base-thinking-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "e6033c184f7fd1bc51d58c0cf1bf77b315d20357c8a7793112a3509fe54c6574",
+        "source": "concepts/bulb-base-thinking-v1.jpg"
+      },
+      "working": {
+        "file": "bulb/bulb-base-working-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "2db8a1e34b3170d42b1cecdbf8f443b46c8e7881334e16a51bf91c0b2a88eb6b",
+        "source": "concepts/bulb-base-working-v1.jpg"
+      },
+      "waiting_for_user": {
+        "file": "bulb/bulb-base-waiting-for-user-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "15878930619109b9e2503b94ba6914f222beae028d9bcf0a542c411aa44ea170",
+        "source": "concepts/bulb-base-waiting-for-user-v1.jpg"
+      },
+      "error": {
+        "file": "bulb/bulb-base-needs-attention-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "4c7829f738f2241ec9a5a5a67280501fbcc96bd973f487d676e86198636fbfd4",
+        "source": "concepts/bulb-base-needs-attention-v1.jpg"
+      }
+    },
+    "connected": {
+      "idle": {
+        "file": "bulb/bulb-connected-idle-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "1f4cc92b07a132c7287aa9ccd1c1e1dbc9df98430602ec2b41b998cdfbb91f7d",
+        "source": "concepts/bulb-connected-idle-v1.jpg"
+      },
+      "listening": {
+        "file": "bulb/bulb-connected-listening-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "573a4bf7912ea6862538346daa449e280f5c41a93617686f3d42095b29562260",
+        "source": "concepts/bulb-connected-listening-v1.jpg"
+      },
+      "thinking": {
+        "file": "bulb/bulb-connected-thinking-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "6acebee9b850ae92df7285655f295d0e75ec1cd6aa1a0a0484e15e9d518d2150",
+        "source": "concepts/bulb-connected-thinking-v1.jpg"
+      },
+      "working": {
+        "file": "bulb/bulb-connected-working-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "64f1e90538213d304b72f396096001e8d673b266ec0e62912752d954f3548fd9",
+        "source": "concepts/bulb-connected-working-v1.jpg"
+      },
+      "waiting_for_user": {
+        "file": "bulb/bulb-connected-waiting-for-user-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "895d177f2702c7f791f9b5dc25575859120dd446fd8b6ab437af0c3dd8de0418",
+        "source": "concepts/bulb-connected-waiting-for-user-v1.jpg"
+      },
+      "error": {
+        "file": "bulb/bulb-connected-needs-attention-v1.png",
+        "width": 542,
+        "height": 726,
+        "format": "png",
+        "sha256": "9f77b4b7fc69f3994c31a62e5eb2e74694d2483a38316f2c2aafe2e8d25a520b",
+        "source": "concepts/bulb-connected-needs-attention-v1.jpg"
+      }
+    }
+  },
+  "animations": {
+    "wave": {
+      "outfit": "base",
+      "file": "bulb/bulb-base-wave-strip-v1.png",
+      "frame_count": 8,
+      "frame_width": 384,
+      "frame_height": 480,
+      "fps": 10,
+      "loop": false,
+      "sha256": "607c4f8fe29ed785c9f00a1be89c0444caa03a7b2df01b73b22c7c2423782690",
+      "source": "animation/bulb-wave-natural-frames-v1.png"
+    }
+  }
+}

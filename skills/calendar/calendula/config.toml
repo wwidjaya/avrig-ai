@@ -1,0 +1,17 @@
+[accounts.calendar]
+
+# Google Calendar over CalDAV (v2). Google's CalDAV only takes OAuth bearer
+# tokens; `ortie token show` supplies a live one (auto-refreshed).
+#
+# NOTE: the Thunderbird OAuth client cannot enable the Google "Calendar API"
+# project, so calendula's native `gcal` REST backend stays 403. CalDAV covers
+# event CRUD + listing. To use the full gcal backend instead, register your own
+# Google Cloud OAuth client (enable Calendar API) and point gcal.auth.token at it.
+caldav.home = "https://apidata.googleusercontent.com/caldav/v2"
+caldav.auth.bearer.token.command = ["ortie", "token", "show", "-a", "calendar"]
+
+# Primary calendar id. Google CalDAV addresses each calendar by "<id>/events";
+# the primary one is your own email address. Secondary ids are not enumerable
+# over CalDAV — take them from the Google Calendar web UI (settings → calendar
+# → "Calendar ID") and pin them here or pass -k <id>/events.
+calendar.default = "wwidjaya@gmail.com/events"

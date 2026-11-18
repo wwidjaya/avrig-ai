@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 103 
+ 
+dice 
+A slice operation on more than two dimensions of a data cube, or more than two consecutive slices. 
+(DAMA-DMBOK Guide, 1st edition, pg. 236.) SEE ALSO slice. 
+ 
+dictionary  
+A collection of definitions for words, terms, and phrases that differentiate closely related words. SEE 
+ALSO data dictionary. 
+ 
+Digital Elevation Model (DEM) 
+A digital representation of a topography or terrain, using regular shapes (squares or triangles) to 
+approximate roughness of a surface. 
+ 
+digital preservation 
+The management of data on digital media over time. As digital media storage mediums and storage 
+applications change, either data must be moved to new media, or old storage retrieval mechanisms 
+and applications must be kept operational. 
+ 
+digital rights management 
+A generic term for technologies that can be used to impose limitations on usage of digital content 
+and/or devices. 
+ 
+Digital Terrain Model (DTM) 
+SEE digital elevation model. 
+ 
+digitize 
+Verb. To convert something into a binary representation for computer storage and/or use. 
+ 
+dimension  
+1. Generally, an axis from which you can regard or summarize something. 
+2. In architecture, one of a series of properties that together are used to uniquely identify a location or a 
+component of a system. 
+3. In Business Intelligence, a category for summarizing or viewing data (e.g., time period, product, 
+product line, geographic area, organization). 
+4. In dimensional modeling, a type of table, or a structural attribute of a data cube containing a list of 
+members, all of which are of a similar type in the user's perception of the data. For example, all 
+months, quarters, years, etc., make up a time dimension; likewise all cities, regions, countries, etc., 
+make up a geography dimension. A dimension acts as an index for identifying values within a multi-
+dimensional array. Dimensions offer a very concise, intuitive way of organizing and selecting data for 
+retrieval, exploration, and analysis. 
+ 
+dimension table  
+In dimensional modeling, a table containing a row for each occurrence of a dimension list, linked to 
+one or more fact tables through use of the dimension table key as a foreign key in each related fact 
+table. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

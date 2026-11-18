@@ -1,0 +1,48 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 48 
+ 
+chart, scatter plot 
+A two-dimensional representation of values of a data set. Usually used to show dependency of one 
+uncontrolled variable vs. another controlled variable. 
+ 
+chart, semantic network 
+A form of visualization consisting of vertices (concepts) and directed or undirected edges 
+(relationships). 
+ 
+chart, sequence  
+A representation of the time sequence of objects participating in a process over time. Swim lane 
+diagrams are a form of sequence diagram. 
+ 
+chart, snaky  
+A specific type of flow diagram in which the width of arrows is proportionate to the flow quantity or 
+size. 
+ 
+chart, spark line 
+A chart showing trends and variations of multiple measurements over time in one chart. 
+ 
+chart, spectrogram 
+A form of visualization using time-varying image that shows the spectral density of a signal over 
+time, using horizontal axis as time, vertical axis as frequency, and hue of the representation as 
+amplitude. 
+ 
+chart, stakeholder map 
+A form of visualization where a project is in the center, and stakeholders are illustrated in terms of 
+proximity of responsibility to the project. Internal stakeholders are above a central line through the 
+project, external stakeholders below the line. 
+ 
+chart, stakeholder rating map 
+A form of visualization using a quartered chart to show stakeholders in terms of importance and 
+influence. 
+ 
+chart, stock and flow 
+A visual representation of a system where quantities of something travel through the system from 
+point to point over time. 
+ 
+chart, strategy map 
+A form of visualization used to document strategic goals from multiple perspectives. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -4,6 +4,7 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
+build = "build.rs"
 
 [dependencies]
 tokio = { workspace = true }
@@ -26,3 +27,6 @@ clap = { version = "4.5", features = ["derive"] }
 tracing = { workspace = true }
 tracing-subscriber = "0.3"
 tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.5", features = ["cors"] }
+rust-embed = { version = "8.5", features = ["interpolate-folder-path"] }
+mime_guess = "2.0"

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 55 
+ 
+commit 
+The SQL statement that concludes a unit of work (database transaction). 
+ 
+Common Body of Knowledge (CBK) 
+SEE Body of Knowledge, Common. 
+ 
+Common Data Architecture (CDI) 
+A single, formal, comprehensive, organization-wide, data architecture that provides a common 
+context within which all data are understood, documented, integrated, and managed. It transcends all 
+data at the organization's disposal, includes primitive and derived data; atomic and combined data; 
+fundamental and specific data; automated and non-automated (manual) data; current and historical 
+data; data within and without the organization; high-level and low-level data; and disparate and 
+similar data. It includes data in purchased software, custom-built application databases, programs, 
+screens, reports, and documents. It includes all data used by traditional information systems, expert 
+systems, executive information systems, geographic information systems, Data Warehouses, object 
+oriented systems, and so on. It includes centralized and decentralized data regardless of where they 
+reside, who uses them, or how they are used. (Brackett 2011) 
+ 
+common data architecture 
+A representative of an actual common data architecture built by an organization for their data 
+resource, based on the concepts, principles, and techniques of the Common Data Architecture. The 
+term Common Data Architecture (capitalized) represents the vision, construct, and the concepts, 
+principles, and techniques for developing and managing an organization's data resource. (Brackett 
+2011) 
+ 
+Common Gateway Interface (CGI) 
+A standard protocol that defines web server delegation of webpage generation to console 
+applications, known as CGI scripts. 
+ 
+Common Object Model (COM) 
+Microsoft’s programming specification for object interoperability through sets of predefined routines 
+called interfaces. 
+ 
+Common Object Request Broker Architecture (CORBA) 
+The Object Management Group vendor-independent architecture and infrastructure for object-based 
+programming interoperability. SEE ALSO Common Object Model. 
+ 
+common word 
+A word that has consistent meaning whenever it is used in a data name. (Brackett 2011) 
+ 
+communication diagram 
+A form of UML diagram that shows the interactions between objects or parts in terms of sequenced 
+messages. Each message is numbered regardless of its placement on the diagram, so that the reader 
+can follow the path by following the numbers sequentially. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

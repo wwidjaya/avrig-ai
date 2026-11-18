@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 35 
+ 
+Business Process Management (BPM) 
+The design, monitoring, and control of complex interactions between people, applications, and 
+technologies designed to create customer value. 
+ 
+Business Process Management Common Body of Knowledge (BPM CBOK®) 
+SEE Body of Knowledge, Business Process Management Common. 
+ 
+Business Process Maturity Model (BPMM) 
+Developed by the Object Management Group, defines maturity levels for business processing from 
+Initial through Managed, Standardized, and Predictable, to Innovating. 
+ 
+Business Process Model (BPM) 
+A model of the functions, activities, and procedures performed in any organization. A business 
+process model may consist of:  
+1. A context diagram showing the relationship of the overall process to those outside the 
+model’s scope, along with the inputs to and outputs from the overall process,  
+2. One or more functional decomposition diagram showing how the overall process is made up 
+of contributing processes at lower levels (a “vertical view”),  
+3. One or more process flow diagrams showing how the outputs of one process serve as the 
+inputs to other process (a “horizontal view”). The process flow may be cross-functional or 
+within a single function,  
+4. One or more business process model diagrams, each depicting the inputs, outputs, start and 
+end events, component activities, roles, and metrics of a single process,  
+5. The business definition of each process, and 
+6. The value chain analysis of the process, identifying relationships to data, organizations, roles, 
+and systems. 
+ 
+business process model diagram 
+Alternate form: BPM diagram 
+A stylized approach to graphically documenting the definition, objectives, start and end events, 
+inputs, outputs, component activities, roles and metrics of a single process. Sometimes referred to as 
+a context diagram, but a BPM diagram includes more information than a traditional context diagram. 
+ 
+Business Process Modeling Notation (BPMN) 
+A standard for graphical representation of business processes maintained by the Object Management 
+Group. 
+ 
+Business Process Outsourcing (BPO) 
+A form of outsourcing that involves transferring responsibilities for entire specific business functions 
+or processes to a third party provider. 
+ 
+Business Process Re-engineering (BPR) 
+The process of analyzing and radically transforming existing business activities, eliminating or 
+minimizing costs and maximizing value in order to achieve breakthrough levels of performance 
+improvement. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

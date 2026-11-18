@@ -1,0 +1,20 @@
+{
+  "title": "External Identifier Management",
+  "sections": [
+    {"heading": {"level": 1, "text": "External Identifier Management"}},
+    {"paragraph": "This feature group manages the assignment, validation, and tracking of external identifiers across the platform."},
+    {"heading": {"level": 2, "text": "Purpose"}},
+    {"paragraph": "Ensure every record can be reliably matched to upstream identifiers, avoiding duplicates and enabling reconciliation."},
+    {"heading": {"level": 2, "text": "Capabilities"}},
+    {"table": {
+      "columns": ["Capability", "Description"],
+      "rows": [
+        ["Identifier Assignment", "Assigns external identifiers to records"],
+        ["Identifier Validation", "Validates format and uniqueness"],
+        ["Reconciliation", "Matches records against upstream sources"]
+      ]
+    }},
+    {"heading": {"level": 2, "text": "Updated"}},
+    {"paragraph": "As of the latest release, validation now runs asynchronously. See **release notes**."}
+  ]
+}

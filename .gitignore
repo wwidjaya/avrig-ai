@@ -1,5 +1,33 @@
 /target
 **/*.rs.bk
-Cargo.lock
 *.exe
+
+# Node / JS
+node_modules/
+**/node_modules/
+apps/web/dist/
+
+# Build and analysis outputs
+graphify-out/
+logs/
+data/
+*.log
+
+# Secrets and local environment
+.secrets/
+.env
+.env.*
+cookie.txt
+$resultPath
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+.opencode/
+
+# Skill-local credentials
+skills/**/*.env
+skills/**/.env
+**/confluence.env
 

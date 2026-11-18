@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 69 
+ 
+data assimilation 
+Most prevalently used in geosciences, this is the process of combining data samples having specific 
+sample criteria with projected data from a model to create and improve a unified consistent physical 
+system definition. 
+ 
+data attribute 
+1. An inherent fact, property, or characteristic describing an entity or object; the logical representation 
+of a physical field or relational table column. A given attribute has the same format, interpretation, 
+and domain for all occurrences of an entity. Attributes may contain adjective values (red, round, 
+active, etc.). 
+2. A unit of data for which the definition, identification, representation, and permissible values are 
+specified by means of a set of characteristics. 
+3. A representation of a data characteristic variation in the logical or physical data model. A data 
+attribute may or may not be atomic. SEE ALSO attribute. 
+ 
+data attribute domain 
+The set of possible values for an attribute. The values must conform to the definition of the attribute 
+(such as type or size), and may be expressed by enumeration, or by any combination of ranges and 
+individual values, including values and ranges that are excluded from the set.  
+ 
+data attribute value 
+An instance of an attribute type or domain. 
+ 
+data attribute, composite 
+A composite attribute is one that is composed from the concatenation of other attributes. 
+ 
+data attribute, derived 
+An attribute created via calculation from some other attribute(s), either within the same object, or 
+within a linked or referenced object. SEE ALSO data, derived. 
+ 
+data attribute, multi-valued 
+An attribute or data item which can have multiple values (instances) for an instance of the entity of 
+which it is an attribute. Such an arrangement forms a many-to-many relationship between the entity 
+type and the attribute type, unless each unique value of the attribute can only be associated with at 
+most one instance of the entity, in which case it forms a hierarchical relationship (1:M). (Everest 
+2010) 
+ 
+data attribute, type 1 
+An attribute where history is not preserved - all changes overwrite the attribute at the time of the 
+change. 
+ 
+data attribute, type 2 
+An attribute where all history is preserved by requiring new rows be written that include the new 
+data. The row with the old data is untouched except to update an expiration date or current row 
+indicator. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

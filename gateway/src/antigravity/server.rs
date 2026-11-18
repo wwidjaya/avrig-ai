@@ -1,6 +1,6 @@
 use super::converter::{
     finish_reason, message_character_count, normalize_model_id, random_id, requested_max_tokens,
-    to_antigravity_request,
+    response_tool_call_id, to_antigravity_request, validate_tool_history,
 };
 use super::quota::{clamp_fraction, fetch_gemini_cli_quota, quota_group};
 use super::state::AppState;
@@ -116,10 +116,17 @@ pub async fn handle_health(State(state): State<AppState>) -> impl IntoResponse {
 }
 
 pub async fn handle_models(State(state): State<AppState>) -> Response {
-    let models = match tokio::time::timeout(Duration::from_secs(30), available_models(&state)).await {
+    let models = match tokio::time::timeout(Duration::from_secs(30), available_models(&state)).await
+    {
         Ok(Ok(m)) => m,
         Ok(Err(e)) => return api_error(StatusCode::BAD_GATEWAY, "model_discovery_failed", &e),
-        Err(_) => return api_error(StatusCode::GATEWAY_TIMEOUT, "model_discovery_timeout", "timeout fetching models"),
+        Err(_) => {
+            return api_error(
+                StatusCode::GATEWAY_TIMEOUT,
+                "model_discovery_timeout",
+                "timeout fetching models",
+            );
+        }
     };
 
     let data: Vec<Value> = models
@@ -149,7 +156,11 @@ pub async fn handle_quota(State(state): State<AppState>) -> Response {
     }
 
     if let Err(_e) = tokio::time::timeout(Duration::from_secs(15), available_models(&state)).await {
-        return api_error(StatusCode::GATEWAY_TIMEOUT, "quota_fetch_timeout", "timeout fetching available models");
+        return api_error(
+            StatusCode::GATEWAY_TIMEOUT,
+            "quota_fetch_timeout",
+            "timeout fetching available models",
+        );
     }
 
     let (model_info, project) = {
@@ -177,7 +188,10 @@ pub async fn handle_quota(State(state): State<AppState>) -> Response {
             })
         });
 
-        let current_count = entry.get("modelCount").and_then(|c| c.as_i64()).unwrap_or(0);
+        let current_count = entry
+            .get("modelCount")
+            .and_then(|c| c.as_i64())
+            .unwrap_or(0);
         entry["modelCount"] = json!(current_count + 1);
 
         if let Some(quota) = &model.quota_info {
@@ -228,6 +242,14 @@ pub async fn handle_chat_completions(
 ) -> Response {
     input.model = normalize_model_id(&input.model);
 
+    if let Err(e) = validate_tool_history(&input.messages) {
+        return api_error(
+            StatusCode::BAD_REQUEST,
+            "invalid_request_error",
+            &e.to_string(),
+        );
+    }
+
     if input.stream {
         return stream_chat_completion(state, input).await;
     }
@@ -263,7 +285,13 @@ pub async fn handle_chat_completions(
 
     let payload = match to_antigravity_request(&state, &input, &project).await {
         Ok(p) => p,
-        Err(e) => return api_error(StatusCode::BAD_REQUEST, "invalid_request_error", &e.to_string()),
+        Err(e) => {
+            return api_error(
+                StatusCode::BAD_REQUEST,
+                "invalid_request_error",
+                &e.to_string(),
+            );
+        }
     };
 
     let upstream_resp = match tokio::time::timeout(
@@ -322,7 +350,10 @@ pub async fn handle_chat_completions(
         .and_then(|p| p.as_array())
     {
         for part in parts {
-            let is_thought = part.get("thought").and_then(|t| t.as_bool()).unwrap_or(false);
+            let is_thought = part
+                .get("thought")
+                .and_then(|t| t.as_bool())
+                .unwrap_or(false);
             let text = part.get("text").and_then(|t| t.as_str()).unwrap_or("");
             if is_thought {
                 reasoning_builder.push_str(text);
@@ -331,11 +362,12 @@ pub async fn handle_chat_completions(
             }
 
             if let Some(fc) = part.get("functionCall") {
-                let name = fc.get("name").and_then(|n| n.as_str()).unwrap_or("").to_string();
-                let mut id = fc.get("id").and_then(|i| i.as_str()).unwrap_or("").to_string();
-                if id.is_empty() {
-                    id = format!("call_{}", random_id());
-                }
+                let name = fc
+                    .get("name")
+                    .and_then(|n| n.as_str())
+                    .unwrap_or("")
+                    .to_string();
+                let id = response_tool_call_id(fc.get("id").and_then(|i| i.as_str()));
                 let sig = part
                     .get("thoughtSignature")
                     .and_then(|s| s.as_str())
@@ -343,7 +375,8 @@ pub async fn handle_chat_completions(
                 state.set_call_info(&id, &name, sig).await;
 
                 let args_val = fc.get("args").cloned().unwrap_or(json!({}));
-                let args_str = serde_json::to_string(&args_val).unwrap_or_else(|_| "{}".to_string());
+                let args_str =
+                    serde_json::to_string(&args_val).unwrap_or_else(|_| "{}".to_string());
 
                 let tc_index = tool_calls.len();
                 tool_calls.push(ToolCall {
@@ -419,6 +452,14 @@ pub async fn handle_chat_completions(
 }
 
 pub async fn stream_chat_completion(state: AppState, input: ChatRequest) -> Response {
+    if let Err(e) = validate_tool_history(&input.messages) {
+        return api_error(
+            StatusCode::BAD_REQUEST,
+            "invalid_request_error",
+            &e.to_string(),
+        );
+    }
+
     if input.model.is_empty() || input.messages.is_empty() {
         return api_error(
             StatusCode::BAD_REQUEST,
@@ -450,7 +491,13 @@ pub async fn stream_chat_completion(state: AppState, input: ChatRequest) -> Resp
 
     let payload = match to_antigravity_request(&state, &input, &project).await {
         Ok(p) => p,
-        Err(e) => return api_error(StatusCode::BAD_REQUEST, "invalid_request_error", &e.to_string()),
+        Err(e) => {
+            return api_error(
+                StatusCode::BAD_REQUEST,
+                "invalid_request_error",
+                &e.to_string(),
+            );
+        }
     };
 
     if let Err(e) = state.refresh_token().await {
@@ -625,7 +672,10 @@ pub async fn stream_chat_completion(state: AppState, input: ChatRequest) -> Resp
                     .and_then(|p| p.as_array())
                 {
                     for part in parts {
-                        let is_thought = part.get("thought").and_then(|t| t.as_bool()).unwrap_or(false);
+                        let is_thought = part
+                            .get("thought")
+                            .and_then(|t| t.as_bool())
+                            .unwrap_or(false);
                         let text = part.get("text").and_then(|t| t.as_str()).unwrap_or("");
                         if is_thought && !text.is_empty() {
                             let msg = write_chunk(
@@ -637,11 +687,7 @@ pub async fn stream_chat_completion(state: AppState, input: ChatRequest) -> Resp
                                 return;
                             }
                         } else if !text.is_empty() {
-                            let msg = write_chunk(
-                                json!({ "content": text }),
-                                None,
-                                &current_model,
-                            );
+                            let msg = write_chunk(json!({ "content": text }), None, &current_model);
                             if tx.send(Ok(msg)).await.is_err() {
                                 return;
                             }
@@ -649,11 +695,12 @@ pub async fn stream_chat_completion(state: AppState, input: ChatRequest) -> Resp
 
                         if let Some(fc) = part.get("functionCall") {
                             had_tool_calls = true;
-                            let name = fc.get("name").and_then(|n| n.as_str()).unwrap_or("").to_string();
-                            let mut id = fc.get("id").and_then(|i| i.as_str()).unwrap_or("").to_string();
-                            if id.is_empty() {
-                                id = format!("call_{}", random_id());
-                            }
+                            let name = fc
+                                .get("name")
+                                .and_then(|n| n.as_str())
+                                .unwrap_or("")
+                                .to_string();
+                            let id = response_tool_call_id(fc.get("id").and_then(|i| i.as_str()));
                             let sig = part
                                 .get("thoughtSignature")
                                 .and_then(|s| s.as_str())
@@ -661,7 +708,8 @@ pub async fn stream_chat_completion(state: AppState, input: ChatRequest) -> Resp
                             state.set_call_info(&id, &name, sig).await;
 
                             let args_val = fc.get("args").cloned().unwrap_or(json!({}));
-                            let args_str = serde_json::to_string(&args_val).unwrap_or_else(|_| "{}".to_string());
+                            let args_str = serde_json::to_string(&args_val)
+                                .unwrap_or_else(|_| "{}".to_string());
 
                             let tc_delta = json!([{
                                 "index": tool_call_index,

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 60 
+ 
+constraint 
+1. Generally, a restriction on a business action and the resulting data. For example, “only wholesale 
+customers may place wholesale orders.” 
+2. In data management, a specification of what may be contained in a data or meta-data set in terms of 
+the content or, for data only, in terms of the set of key combinations to which specific attributes 
+(defined by the data structure) may be attached, and how. Examples of how include dependency 
+(must have at least one), exclusivity (at most one; non-overlapping), subset, or equality. 
+ 
+constraint, domain 
+A type of constraint on an attribute that defines the values that may be assigned, through limits, lists, 
+or ranges. 
+ 
+constraint, key 
+A type of constraint on a data set that restricts the combinations of attribute values according to 
+certain rules (uniqueness, etc.) 
+ 
+content 
+1. The information contained within documents and web pages. 
+2. The name of a DCMI element set (Coverage, Description, Type, Relation, Source, Subject, Title). 
+SEE ALSO Dublin Core Metadata Initiative. 
+ 
+content management  
+The processes, techniques, and technologies for organizing, categorizing, and structuring of 
+information resources so that they can be stored, published, and reused in multiple ways. Content 
+management is a critical data management discipline for data found in text, graphics, images, and 
+video or audio recordings. 
+ 
+content management system 
+A system used to collect, manage, and publish information content, storing it as components or 
+whole documents, while maintaining the links between components. It may also provide for content 
+revision control.  
+ 
+content mashup 
+SEE mashup, content. 
+ 
+content neutrality 
+Alternate form: vendor neutral 
+A DAMA policy stating its intention to avoid reference to specific technology vendor firms and their 
+products. 
+ 
+context 
+1. Generally, facts or circumstances that relate to a situation or event. 
+2. In software design, the minimal set of data required for a task that allows interruption and 
+resumption of the task without error. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

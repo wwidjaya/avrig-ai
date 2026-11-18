@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 211 
+ 
+release management 
+The process responsible for planning, scheduling and controlling the movement of Releases to test 
+and live environments. The primary objective of Release Management is to ensure that the integrity 
+of the live environment is protected and that the correct components are released. SEE ALSO ITIL. 
+ 
+reliability  
+1. Generally, closeness of the initial estimated value to the subsequent estimated value. 
+2. In data management, the ability for a technology component (server, application, database, etc.) or 
+group of components to consistently perform its functions within stated timeframes. 
+ 
+Remote Method Invocation (RMI) 
+A technique used to create, distribute and use Java objects.  
+ 
+Remote Procedure Call (RPC) 
+A mechanism for invoking a service on another platform, or the communication using that 
+mechanism that invokes execution of a subroutine or process on a different system. 
+ 
+repeating group 
+A group of data items that together describe something; an attribute with multiple values within an 
+instance of its parent entity. When related to some other entity in a “something-to-many” 
+relationship, and stored in the related entity type, it becomes a “sub-entity” within that “parent” 
+entity. (Everest 2010) Also called a nested relation. 
+ 
+replication  
+1. Generally, the process of making copies of something. 
+2. In data management, the copying of data from a data source to one or more target environments 
+based on rules. 
+ 
+replication transparency 
+In data management, the state when data is replicated but users cannot see which one of the 
+duplicated systems is fulfilling the data request. 
+ 
+reporting  
+An automated business process or related functionality that provides a detailed, formal account of 
+relevant or requested information.  
+ 
+repository 
+1. SEE meta-data repository. 
+2. Loosely used, any database or file (not recommended for use). 
+ 
+repository environment  
+SEE meta-data repository; managed meta-data environment. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

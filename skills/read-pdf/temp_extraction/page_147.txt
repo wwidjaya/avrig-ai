@@ -1,0 +1,50 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 140 
+ 
+information model  
+A model showing information structure, usually at a conceptual or logical level. 
+ 
+information needs analysis  
+The identification and study of the information needs required to satisfy a particular business driver. 
+ 
+information overload 
+The state where the rate or amount of input to a system or person outstrips the capacity or speed of 
+processing that input successfully. 
+ 
+information policy 
+A statement of principles and guidelines for information management. 
+ 
+Information Quality (IQ) 
+1. The degree to which information consistently meets the requirements and expectations of knowledge 
+workers in performing their jobs. Larry English, Improving Data Warehouse and Business 
+Information Quality, p. 478. 
+2. In the context of a specific use, the degree to which information, as prepared from the data, meets 
+the requirements and expectations for that use. 
+ 
+information quality decay rate 
+The rate that information loses relevance over time if not refreshed and reviewed.  
+ 
+information quality management 
+A form of data quality management, although with an added emphasis on managing the quality of the 
+context in which data appears as well as the quality of the data itself. 
+ 
+Information Resource Management (IRM) 
+SEE information management. 
+ 
+Information Services (IS) 
+SEE Information Technology. 
+ 
+information stewardship 
+SEE data stewardship. 
+ 
+Information Supply Chain (ISC) 
+The full set of data and processes - technical, procedural, and organizational - that  
+a) collect,  
+b) transform, and  
+c) distribute information appropriately. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

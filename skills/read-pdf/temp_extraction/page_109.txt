@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 102 
+ 
+design 
+1. A deliberate, purposeful plan, layout, delineation, arrangement, and specification of the component 
+parts and interfaces of a product or system. A logical design is an abstract design for fulfilling 
+requirements without consideration for physical constraints. A physical design considers the 
+requirements along with physical constraints. 
+2. Verb. To conceive, plan, define, arrange, and specify a product or system. 
+ 
+Design For Six Sigma (DFSS) 
+SEE Define-Measure-Analyze-Design-Verify. 
+ 
+design review 
+A process where all aspects of a system design are reviewed publicly before code construction starts. 
+ 
+Desktop OLAP (DOLAP) 
+SEE OnLine Analytical Processing, Desktop. 
+ 
+determinant 
+The entity domain that determines the value of an attribute. SEE ALSO dependency, functional. 
+ 
+deterministic matching 
+A type of matching that relies on defined patterns and rules for assigning weights and scores for 
+determining similarity. (DAMA-DMBOK Guide, 1st edition, pg. 310.) 
+ 
+developer 
+A person who designs, codes and/or tests software. Different types are known as software 
+developer, systems developer, application developer, software engineer, or application engineer. 
+ 
+development activity 
+In the DAMA-DMBOK Functional Framework, an activity undertaken with projects and recognized 
+as part of the Systems Development LifeCycle, creating data deliverables through analysis, design, 
+building, testing, and deployment. SEE ALSO activity group. 
+ 
+deviation 
+The measure of difference between expected and observed values, or more generally, between any 
+two values. 
+ 
+diagram 
+A visual representation of relationships between multiple things, i.e., how a system works, how parts 
+are related to the whole. SEE ALSO chart. 
+ 
+dialect 
+A subset of language used or agreed to by a group of people. An ontology defines the precise 
+meaning of the vocabulary in a dialect and the relationship between these terms. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

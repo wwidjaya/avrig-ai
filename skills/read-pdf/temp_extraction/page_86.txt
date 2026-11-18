@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 79 
+ 
+data management function 
+One of the ten business processes within data management, according to the functional 
+decomposition in the DAMA-DMBOK Functional Framework:  
+·    Data Governance 
+·    Data Architecture 
+·    Data Development 
+·    Data Operations Management  
+·    Data Security Management 
+·    Data Quality Management 
+·    Reference & Master Data Management 
+·    Data Warehousing & Business Intelligence Management 
+·    Document and Content management 
+·    Meta-data Management  
+DAMA-DMBOK Guide, 1st edition, pg. 6.) 
+ 
+data management leader 
+Alternate form: DM Leader 
+A generic term used in the DAMA-DMBOK Guide for the highest-level manager of Data 
+Management Services organizations. The DM Leader is the manager most directly responsible for 
+data management, including coordinating data governance and data stewardship activity, overseeing 
+data management projects, and supervising data management professionals. May be a manager, 
+director, Associate VP, or VP.  
+ 
+data management professional 
+A professional specializing in one or more data management functions, and may or may not be part 
+of IT organizations. 
+ 
+data management services (DMS) 
+An organization of data management professionals performing data management functions. One or 
+more units of data management professionals responsible for data management within an 
+organization. A centralized DMS organization is sometimes known as a Data Management Center of 
+Excellence. 
+ 
+data management strategy 
+Selected courses of actions setting the direction for data management within the enterprise, including 
+vision, mission, goals, principles, policies, and projects. 
+ 
+Data Manipulation Language (DML) 
+A language used to insert, retrieve, update, delete, and otherwise manipulate data in a database. The 
+SELECT statement in SQL is an example of a retrieval operation. (Everest 2010) 
+ 
+data map 
+SEE chart, data map. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

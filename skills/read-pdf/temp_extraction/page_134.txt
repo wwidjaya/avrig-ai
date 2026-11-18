@@ -1,0 +1,2 @@
+**G**: 
+**SEE chart, Gantt.**: gap analysis An assessment of a system in comparison with another system or a set of requirements, listing those items that are not common between them.

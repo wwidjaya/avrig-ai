@@ -1,0 +1,33 @@
+{
+  "title": "Composync Coding Principle",
+  "titles": {
+    "01-Composync-Coding-Principle-Go": "Coding Principles: Go",
+    "01-Composync-Coding-Principle-React": "Coding Principles: React",
+    "01-Composync-Coding-Principle-Flutter": "Coding Principles: Flutter",
+    "01-Composync-Coding-Principle-Python": "Coding Principles: Python",
+    "01-Composync-Coding-Principle-Rust": "Composync Coding Principles: Rust",
+    "Composync-Coding-Standards": "Coding Standards Document (CSD)"
+  },
+  "links": {
+    "01-Composync-Coding-Principle-Go": "https://massiveinonvasi.atlassian.net/wiki/spaces/Composync/pages/1052704791",
+    "01-Composync-Coding-Principle-React": "https://massiveinonvasi.atlassian.net/wiki/spaces/Composync/pages/1053130754",
+    "01-Composync-Coding-Principle-Flutter": "https://massiveinonvasi.atlassian.net/wiki/spaces/Composync/pages/1051557927",
+    "01-Composync-Coding-Principle-Python": "https://massiveinonvasi.atlassian.net/wiki/spaces/Composync/pages/1051918341",
+    "01-Composync-Coding-Principle-Rust": "https://massiveinonvasi.atlassian.net/wiki/spaces/Composync/pages/1052180508",
+    "Composync-Coding-Standards": "https://massiveinonvasi.atlassian.net/wiki/spaces/Composync/pages/370573405"
+  },
+  "sections": [
+    {"heading": {"level": 2, "text": "Language-Specific Application"}},
+    {"paragraph": "Each language has a dedicated principle note that (A) maps these 10 general principles to that language's idioms and (B) defines language-specific principles:"},
+    {"table": {
+      "columns": ["Language", "Note"],
+      "rows": [
+        ["Go (`composync-api`)", "[[01-Composync-Coding-Principle-Go]]"],
+        ["React/TS (`composync-web`)", "[[01-Composync-Coding-Principle-React]]"],
+        ["Flutter (`composync-mobile`)", "[[01-Composync-Coding-Principle-Flutter]]"],
+        ["Python (`composync-ai`)", "[[01-Composync-Coding-Principle-Python]]"],
+        ["Rust", "[[01-Composync-Coding-Principle-Rust]]"]
+      ]
+    }}
+  ]
+}

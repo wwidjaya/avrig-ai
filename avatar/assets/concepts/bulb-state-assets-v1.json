@@ -1,0 +1,27 @@
+{
+  "avatar": "bulb",
+  "version": 1,
+  "description": "Single-image full-body JPEG assets for each activity and connection outfit.",
+  "connection_outfit_mapping": {
+    "not_connected": "base",
+    "connecting": "base",
+    "connected": "connected",
+    "connection_lost": "base",
+    "unknown": "base"
+  },
+  "activities": {
+    "idle": "bulb-{outfit}-idle-v1.jpg",
+    "listening": "bulb-{outfit}-listening-v1.jpg",
+    "thinking": "bulb-{outfit}-thinking-v1.jpg",
+    "working": "bulb-{outfit}-working-v1.jpg",
+    "waiting_for_user": "bulb-{outfit}-waiting-for-user-v1.jpg",
+    "error": "bulb-{outfit}-needs-attention-v1.jpg"
+  },
+  "outfits": ["base", "connected"],
+  "notes": [
+    "The base outfit is the cream T-shirt, jeans, and sneakers with no connected jacket or badge.",
+    "The connected outfit adds the navy jacket and shared chest badge.",
+    "Needs-attention assets carry a tablet with a simple alert icon.",
+    "Connection state labels should be supplied by the application; static art does not establish connectivity."
+  ]
+}

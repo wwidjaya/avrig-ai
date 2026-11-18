@@ -1,0 +1,3 @@
+**MINUS**: 
+**SEE EXCEPT.**: 
+**MIP-o-suction**: The consumption of a high percentage of CPU cycles by a database query. mirror

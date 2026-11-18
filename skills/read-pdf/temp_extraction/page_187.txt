@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 180 
+ 
+objective 
+A specific, quantified target of achievement against which progress towards attainment can be 
+measured. Achieving an objective contributes to achievement of a more general goal. A good 
+objective is “SMART” (simple, measurable, attainable, realistic, and timely). 
+ 
+objectivity 
+The practice of not including personal biases or preferences during an evaluation; evaluating on the 
+agreed-to standards and facts alone. 
+ 
+Object-Oriented (OO) 
+1. Adjective. Generally, a form of design organized around objects (instances) where objects can be built 
+(re)using other similar objects. For efficiency, the notion of object class was added to define a set of 
+objects only once. SEE ALSO object. 
+2. Adjective. In data management, a style of software development (analysis, design, programming and 
+testing) organized around classes of objects in which the code encapsulates the data. Object-oriented 
+approaches promote data hiding, cohesion, class inheritance, and reuse. 
+ 
+Object-Oriented DataBase (OODB) 
+SEE database, object-oriented. 
+ 
+Object-Oriented DataBase Management System (OODBMS, ODBMS) 
+SEE DataBase Management System, Object-Oriented.  
+ 
+Object-Oriented Programming System (OOPS) 
+A development environment for design, building, and testing software using object-oriented 
+languages and techniques. 
+ 
+occurrence 
+1. Generally, an event; the fact that an event happened. 
+2. In data management, a physical record, row or document representing an entity instance. 
+ 
+occurrence group 
+In the data resource, a set of entities in mathematics. (Brackett 2011) 
+ 
+occurrence of record 
+A specific record selected from a set of redundant records as the authoritative record, into which 
+data from the other records can be consolidated.  
+ 
+octal 
+A numbering system using a base of 8. 
+ 
+one-to-Many (1:M) 
+SEE one-to-zero-or-Many; one-to-one-or-Many. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

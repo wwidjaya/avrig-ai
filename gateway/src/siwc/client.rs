@@ -256,7 +256,11 @@ impl SiwcClient {
         }
     }
 
-    async fn stream_sse(&self, upstream_resp: reqwest::Response, requested_model: String) -> Response {
+    async fn stream_sse(
+        &self,
+        upstream_resp: reqwest::Response,
+        requested_model: String,
+    ) -> Response {
         let completion_id = format!("chatcmpl-{}", random_id());
         let created = Utc::now().timestamp();
 
@@ -349,16 +353,32 @@ impl SiwcClient {
                         }
                         "response.output_item.added" => {
                             if let Some(item) = event.get("item") {
-                                let item_type = item.get("type").and_then(|t| t.as_str()).unwrap_or("");
+                                let item_type =
+                                    item.get("type").and_then(|t| t.as_str()).unwrap_or("");
                                 if item_type == "function_call" {
                                     had_tool_calls = true;
-                                    let out_idx = event.get("output_index").and_then(|i| i.as_u64()).unwrap_or(0) as usize;
-                                    let call_id = item.get("call_id").and_then(|i| i.as_str()).unwrap_or("").to_string();
-                                    let name = item.get("name").and_then(|n| n.as_str()).unwrap_or("").to_string();
-                                    
+                                    let out_idx = event
+                                        .get("output_index")
+                                        .and_then(|i| i.as_u64())
+                                        .unwrap_or(0)
+                                        as usize;
+                                    let call_id = item
+                                        .get("call_id")
+                                        .and_then(|i| i.as_str())
+                                        .unwrap_or("")
+                                        .to_string();
+                                    let name = item
+                                        .get("name")
+                                        .and_then(|n| n.as_str())
+                                        .unwrap_or("")
+                                        .to_string();
+
                                     let client_index = next_tool_index;
                                     next_tool_index += 1;
-                                    tool_index_map.insert(out_idx, (call_id.clone(), name.clone(), client_index));
+                                    tool_index_map.insert(
+                                        out_idx,
+                                        (call_id.clone(), name.clone(), client_index),
+                                    );
 
                                     let chunk = write_chunk(
                                         json!({
@@ -382,9 +402,15 @@ impl SiwcClient {
                             }
                         }
                         "response.function_call_arguments.delta" => {
-                            let out_idx = event.get("output_index").and_then(|i| i.as_u64()).unwrap_or(0) as usize;
+                            let out_idx = event
+                                .get("output_index")
+                                .and_then(|i| i.as_u64())
+                                .unwrap_or(0) as usize;
                             if let Some(delta) = event.get("delta").and_then(|d| d.as_str()) {
-                                let client_index = tool_index_map.get(&out_idx).map(|(_, _, idx)| *idx).unwrap_or(0);
+                                let client_index = tool_index_map
+                                    .get(&out_idx)
+                                    .map(|(_, _, idx)| *idx)
+                                    .unwrap_or(0);
                                 let chunk = write_chunk(
                                     json!({
                                         "tool_calls": [{
@@ -410,9 +436,16 @@ impl SiwcClient {
                                     }
                                 }
                                 if let Some(u) = resp_obj.get("usage") {
-                                    let input_toks = u.get("input_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
-                                    let output_toks = u.get("output_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
-                                    let total_toks = u.get("total_tokens").and_then(|i| i.as_i64()).unwrap_or(input_toks + output_toks);
+                                    let input_toks =
+                                        u.get("input_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
+                                    let output_toks = u
+                                        .get("output_tokens")
+                                        .and_then(|i| i.as_i64())
+                                        .unwrap_or(0);
+                                    let total_toks = u
+                                        .get("total_tokens")
+                                        .and_then(|i| i.as_i64())
+                                        .unwrap_or(input_toks + output_toks);
                                     usage = OpenAIUsage {
                                         prompt_tokens: input_toks,
                                         completion_tokens: output_toks,
@@ -549,15 +582,30 @@ impl SiwcClient {
                         if let Some(item) = event.get("item") {
                             let item_type = item.get("type").and_then(|t| t.as_str()).unwrap_or("");
                             if item_type == "function_call" {
-                                let out_idx = event.get("output_index").and_then(|i| i.as_u64()).unwrap_or(0) as usize;
-                                let call_id = item.get("call_id").and_then(|i| i.as_str()).unwrap_or("").to_string();
-                                let name = item.get("name").and_then(|n| n.as_str()).unwrap_or("").to_string();
+                                let out_idx = event
+                                    .get("output_index")
+                                    .and_then(|i| i.as_u64())
+                                    .unwrap_or(0)
+                                    as usize;
+                                let call_id = item
+                                    .get("call_id")
+                                    .and_then(|i| i.as_str())
+                                    .unwrap_or("")
+                                    .to_string();
+                                let name = item
+                                    .get("name")
+                                    .and_then(|n| n.as_str())
+                                    .unwrap_or("")
+                                    .to_string();
                                 tool_args_map.insert(out_idx, (call_id, name, String::new()));
                             }
                         }
                     }
                     "response.function_call_arguments.delta" => {
-                        let out_idx = event.get("output_index").and_then(|i| i.as_u64()).unwrap_or(0) as usize;
+                        let out_idx = event
+                            .get("output_index")
+                            .and_then(|i| i.as_u64())
+                            .unwrap_or(0) as usize;
                         if let Some(delta) = event.get("delta").and_then(|d| d.as_str()) {
                             if let Some(entry) = tool_args_map.get_mut(&out_idx) {
                                 entry.2.push_str(delta);
@@ -565,7 +613,10 @@ impl SiwcClient {
                         }
                     }
                     "response.function_call_arguments.done" => {
-                        let out_idx = event.get("output_index").and_then(|i| i.as_u64()).unwrap_or(0) as usize;
+                        let out_idx = event
+                            .get("output_index")
+                            .and_then(|i| i.as_u64())
+                            .unwrap_or(0) as usize;
                         if let Some(args) = event.get("arguments").and_then(|a| a.as_str()) {
                             if let Some(entry) = tool_args_map.get_mut(&out_idx) {
                                 entry.2 = args.to_string();
@@ -580,9 +631,14 @@ impl SiwcClient {
                                 }
                             }
                             if let Some(u) = resp_obj.get("usage") {
-                                let input_toks = u.get("input_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
-                                let output_toks = u.get("output_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
-                                let total_toks = u.get("total_tokens").and_then(|i| i.as_i64()).unwrap_or(input_toks + output_toks);
+                                let input_toks =
+                                    u.get("input_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
+                                let output_toks =
+                                    u.get("output_tokens").and_then(|i| i.as_i64()).unwrap_or(0);
+                                let total_toks = u
+                                    .get("total_tokens")
+                                    .and_then(|i| i.as_i64())
+                                    .unwrap_or(input_toks + output_toks);
                                 usage = OpenAIUsage {
                                     prompt_tokens: input_toks,
                                     completion_tokens: output_toks,

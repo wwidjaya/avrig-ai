@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 125 
+ 
+formula 
+Alternate form: formulae 
+A set of rules or instructions that, when applied to a specific input, will provide an expected output. 
+ 
+forward engineering 
+The process of generating physical structures from concepts and logical descriptions. SEE ALSO 
+reverse engineering. 
+ 
+Fourth Generation Language (4GL) 
+A high-level language for manipulating a database, characterized by operations on sets of instances, 
+that is, multiple records at a time. Contrast with low-level, one-record-at-a-time languages such as 
+COBOL and Fortran, which are 3GL. 
+ 
+fourth Normal Form (4NF) 
+SEE normal form, fourth. 
+ 
+framework 
+1. Generally, a basic skeletal structure. 
+2. Conceptually, a classification scheme used to better understand a topic; a defined and documented 
+paradigm, used as a lens to view a complex problem. 
+3. In software development, a reusable object-oriented design, including a library of reusable classes and 
+other components, along with standards for designing additional components and how they interact. 
+ 
+fraud detection  
+The process of detecting patterns, trends, or correlations in consumer or corporate behavior that 
+might indicate that fraudulent activity is taking place; e.g., identifying potential or existing fraud 
+through analysis and comparison of standard and aberrant behaviors. SEE ALSO data mining. 
+ 
+frequency distribution 
+A tabulation of values output from a function given a set of inputs. 
+ 
+Frequently-Asked Questions (FAQ) 
+A list of questions and answers that are commonly seen regarding a topic. 
+ 
+Friend of a Friend (FOAF) 
+FOAF is describes social networks - people including activities and relationships between them. 
+FOAF is a descriptive vocabulary using the RDF and the OWL. Computers use these FOAF profiles 
+to find, for example, all people living in Illinois, or to list people both you and a friend of yours have 
+in common, by defining relationships between people. Each profile has a unique identifier used to 
+define relationships. 
+ 
+full duplex 
+Adjective. Describes a system that allows communication between two endpoints simultaneously. SEE 
+ALSO half duplex; simplex. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

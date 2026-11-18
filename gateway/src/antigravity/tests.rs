@@ -1,9 +1,10 @@
 use super::converter::{
-    finish_reason, message_text, normalize_model_id, sanitize_gemini_schema,
-    to_antigravity_request,
+    finish_reason, message_text, normalize_model_id, response_tool_call_id, sanitize_gemini_schema,
+    to_antigravity_request, validate_tool_history,
 };
 use super::quota::{clamp_fraction, quota_group};
 use super::state::AppState;
+use super::types::ToolCall;
 use super::types::{ChatMessage, ChatRequest, Credentials, GoogleUsage};
 use chrono::Utc;
 use serde_json::json;
@@ -24,6 +25,126 @@ fn create_test_state() -> AppState {
             expires_at: Utc::now() + chrono::Duration::hours(1),
         },
     )
+}
+
+fn history_call(id: &str) -> ChatMessage {
+    ChatMessage {
+        role: "assistant".to_string(),
+        content: None,
+        name: None,
+        tool_calls: Some(vec![ToolCall {
+            index: None,
+            id: id.to_string(),
+            tool_type: "function".to_string(),
+            function: super::types::FunctionCallData {
+                name: "lookup".to_string(),
+                arguments: "{}".to_string(),
+            },
+        }]),
+        tool_call_id: None,
+        reasoning_content: None,
+    }
+}
+
+fn history_result(id: Option<&str>) -> ChatMessage {
+    ChatMessage {
+        role: "tool".to_string(),
+        content: Some(json!("ok")),
+        name: Some("lookup".to_string()),
+        tool_calls: None,
+        tool_call_id: id.map(str::to_string),
+        reasoning_content: None,
+    }
+}
+
+#[test]
+fn tool_history_requires_complete_unique_id_pairs() {
+    let valid = vec![
+        history_call("call-a"),
+        history_result(Some("call-a")),
+        history_call("call-b"),
+        history_result(Some("call-b")),
+    ];
+    validate_tool_history(&valid).expect("valid multi-turn history");
+
+    assert!(validate_tool_history(&[history_call("")]).is_err());
+    assert!(validate_tool_history(&[history_call("call-a"), history_result(None)]).is_err());
+    assert!(
+        validate_tool_history(&[history_call("call-a"), history_result(Some("call-b"))]).is_err()
+    );
+    assert!(validate_tool_history(&[history_result(Some("orphan"))]).is_err());
+    assert!(
+        validate_tool_history(&[
+            history_call("same"),
+            history_result(Some("same")),
+            history_call("same"),
+            history_result(Some("same")),
+        ])
+        .is_err()
+    );
+    let mut parallel_calls = history_call("parallel-a");
+    parallel_calls
+        .tool_calls
+        .as_mut()
+        .expect("tool calls")
+        .push(ToolCall {
+            index: Some(1),
+            id: "parallel-b".to_string(),
+            tool_type: "function".to_string(),
+            function: super::types::FunctionCallData {
+                name: "lookup".to_string(),
+                arguments: "{}".to_string(),
+            },
+        });
+    assert!(
+        validate_tool_history(&[
+            parallel_calls,
+            history_result(Some("parallel-b")),
+            history_result(Some("parallel-a")),
+        ])
+        .is_ok()
+    );
+    assert!(
+        validate_tool_history(&[history_call("unreturned")])
+            .unwrap_err()
+            .to_string()
+            .contains("no matching tool result")
+    );
+}
+
+#[test]
+fn response_tool_call_id_is_preserved_or_safely_generated() {
+    assert_eq!(response_tool_call_id(Some("provider-id")), "provider-id");
+    let generated = response_tool_call_id(None);
+    assert!(!generated.trim().is_empty());
+    assert!(generated.starts_with("call_"));
+    let generated_empty = response_tool_call_id(Some(""));
+    assert!(!generated_empty.trim().is_empty());
+    assert!(generated_empty.starts_with("call_"));
+}
+
+#[test]
+fn missing_tool_call_id_deserializes_as_empty_for_validation() {
+    let call: ToolCall = serde_json::from_value(json!({
+        "type": "function",
+        "function": { "name": "lookup", "arguments": "{}" }
+    }))
+    .expect("tool call deserialization");
+    assert!(call.id.is_empty());
+    let message = ChatMessage {
+        role: "assistant".to_string(),
+        content: None,
+        name: None,
+        tool_calls: Some(vec![call]),
+        tool_call_id: None,
+        reasoning_content: None,
+    };
+    assert!(
+        validate_tool_history(&[message])
+            .unwrap_err()
+            .to_string()
+            .contains("empty ID")
+    );
 }
 
 #[tokio::test]
@@ -168,14 +289,8 @@ fn test_google_usage_openai_includes_thought_tokens() {
 fn test_normalize_model_id() {
     assert_eq!(normalize_model_id("default"), "gemini-3.8-flash-tiered");
     assert_eq!(normalize_model_id(""), "gemini-3.8-flash-tiered");
-    assert_eq!(
-        normalize_model_id("provider/model-name"),
-        "model-name"
-    );
-    assert_eq!(
-        normalize_model_id("gemini-2.5-pro"),
-        "gemini-2.5-pro"
-    );
+    assert_eq!(normalize_model_id("provider/model-name"), "model-name");
+    assert_eq!(normalize_model_id("gemini-2.5-pro"), "gemini-2.5-pro");
 }
 
 #[test]
@@ -262,15 +377,26 @@ async fn test_tool_calls_and_responses_conversion() {
                 role: "assistant".to_string(),
                 content: None,
                 name: None,
-                tool_calls: Some(vec![super::types::ToolCall {
-                    index: Some(0),
-                    id: "call_tokyo_123".to_string(),
-                    tool_type: "function".to_string(),
-                    function: super::types::FunctionCallData {
-                        name: "get_weather".to_string(),
-                        arguments: "{\"location\":\"Tokyo\"}".to_string(),
+                tool_calls: Some(vec![
+                    super::types::ToolCall {
+                        index: Some(0),
+                        id: "call_tokyo_123".to_string(),
+                        tool_type: "function".to_string(),
+                        function: super::types::FunctionCallData {
+                            name: "get_weather".to_string(),
+                            arguments: "{\"location\":\"Tokyo\"}".to_string(),
+                        },
                     },
-                }]),
+                    super::types::ToolCall {
+                        index: Some(1),
+                        id: "call_osaka_456".to_string(),
+                        tool_type: "function".to_string(),
+                        function: super::types::FunctionCallData {
+                            name: "get_weather".to_string(),
+                            arguments: "{\"location\":\"Osaka\"}".to_string(),
+                        },
+                    },
+                ]),
                 tool_call_id: None,
                 reasoning_content: None,
             },
@@ -282,6 +408,14 @@ async fn test_tool_calls_and_responses_conversion() {
                 tool_call_id: Some("call_tokyo_123".to_string()),
                 reasoning_content: None,
             },
+            ChatMessage {
+                role: "tool".to_string(),
+                content: Some(json!("{\"temperature\": 18, \"condition\": \"Cloudy\"}")),
+                name: Some("get_weather".to_string()),
+                tool_calls: None,
+                tool_call_id: Some("call_osaka_456".to_string()),
+                reasoning_content: None,
+            },
         ],
     };
 
@@ -291,10 +425,7 @@ async fn test_tool_calls_and_responses_conversion() {
 
     let req = &got["request"];
     assert!(req.get("tools").is_some());
-    assert_eq!(
-        req["toolConfig"]["functionCallingConfig"]["mode"],
-        "AUTO"
-    );
+    assert_eq!(req["toolConfig"]["functionCallingConfig"]["mode"], "AUTO");
 
     let contents = req["contents"].as_array().expect("contents array");
     assert_eq!(contents.len(), 3);
@@ -306,6 +437,10 @@ async fn test_tool_calls_and_responses_conversion() {
     assert_eq!(model_part["name"], "get_weather");
     assert_eq!(model_part["args"]["location"], "Tokyo");
     assert_eq!(model_part["id"], "call_tokyo_123");
+    assert_eq!(
+        model_turn["parts"][1]["functionCall"]["id"],
+        "call_osaka_456"
+    );
     // Since model is gemini, thoughtSignature should be present
     assert!(model_turn["parts"][0].get("thoughtSignature").is_some());
 
@@ -316,6 +451,10 @@ async fn test_tool_calls_and_responses_conversion() {
     assert_eq!(tool_resp["name"], "get_weather");
     assert_eq!(tool_resp["id"], "call_tokyo_123");
     assert_eq!(tool_resp["response"]["condition"], "Sunny");
+    assert_eq!(
+        tool_turn["parts"][1]["functionResponse"]["id"],
+        "call_osaka_456"
+    );
 
     // Tool response with non-object JSON (array, string, etc.) wrapped in object
     let tool_req_array = ChatRequest {
@@ -332,17 +471,37 @@ async fn test_tool_calls_and_responses_conversion() {
         tool_choice: None,
         response_format: None,
         reasoning_effort: None,
-        messages: vec![ChatMessage {
-            role: "tool".to_string(),
-            content: Some(json!("[1, 2, 3]")),
-            name: Some("list_items".to_string()),
-            tool_calls: None,
-            tool_call_id: Some("call_arr_123".to_string()),
-            reasoning_content: None,
-        }],
+        messages: vec![
+            ChatMessage {
+                role: "assistant".to_string(),
+                content: None,
+                name: None,
+                tool_calls: Some(vec![super::types::ToolCall {
+                    index: Some(0),
+                    id: "call_arr_123".to_string(),
+                    tool_type: "function".to_string(),
+                    function: super::types::FunctionCallData {
+                        name: "list_items".to_string(),
+                        arguments: "{}".to_string(),
+                    },
+                }]),
+                tool_call_id: None,
+                reasoning_content: None,
+            },
+            ChatMessage {
+                role: "tool".to_string(),
+                content: Some(json!("[1, 2, 3]")),
+                name: Some("list_items".to_string()),
+                tool_calls: None,
+                tool_call_id: Some("call_arr_123".to_string()),
+                reasoning_content: None,
+            },
+        ],
     };
-    let got_arr = to_antigravity_request(&state, &tool_req_array, "test-project").await.unwrap();
-    let resp_val = &got_arr["request"]["contents"][0]["parts"][0]["functionResponse"]["response"];
+    let got_arr = to_antigravity_request(&state, &tool_req_array, "test-project")
+        .await
+        .unwrap();
+    let resp_val = &got_arr["request"]["contents"][1]["parts"][0]["functionResponse"]["response"];
     assert!(resp_val.is_object());
     assert_eq!(resp_val["output"], json!([1, 2, 3]));
 }
@@ -390,7 +549,12 @@ async fn test_multimodal_image_url_conversion() {
     let parts = &got["request"]["contents"][0]["parts"];
     assert_eq!(parts[0]["text"], "Describe this image");
     assert_eq!(parts[1]["inlineData"]["mimeType"], "image/png");
-    assert!(parts[1]["inlineData"]["data"].as_str().unwrap().starts_with("iVBORw0K"));
+    assert!(
+        parts[1]["inlineData"]["data"]
+            .as_str()
+            .unwrap()
+            .starts_with("iVBORw0K")
+    );
 }
 
 #[tokio::test]

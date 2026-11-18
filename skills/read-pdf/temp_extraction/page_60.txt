@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 53 
+ 
+Clinger-Cohen Act (CCA) 
+A more familiar name for the Information Technology Management Reform Act, a United States 
+federal law co-authored in 1996 by Congressman William Clinger and Senator William Cohen, 
+designed to improve the way the federal government acquires and manages information technology. 
+It requires departments and programs to use performance-based management principles for 
+acquiring IT, and it mandates the use of a formal enterprise architecture for all federal agencies. 
+ 
+closed architecture 
+SEE architecture, closed. 
+ 
+cloud computing 
+An architecture in which all access to shared resources is provided on-demand via self-service 
+internet applications. Formerly known as distributed computing. Can be used as a delivery 
+mechanism for Software-As-A-Service  and Hardware-as-a-Service. 
+ 
+cloud services 
+Services that are made available in a distributed computing (cloud) environment. 
+ 
+clustered index 
+SEE index, clustered. 
+ 
+clustering 
+Verb. To output a smaller data set based on grouping criteria of common attributes. 
+ 
+code 
+1. Generally, a language-independent set of letters, numbers, or symbols that represent a concept whose 
+meaning is described in a natural language. 
+2. In software, the program language lines of instruction that make up software. 
+3. In data modeling, a shorthand key value representing the domain value of an attribute. Code sets are 
+intensional domain value sets.  
+4. Verb. To represent data in a form that can be accepted by a data entry program. 
+ 
+code management 
+1. The definition and maintenance of coded data values, descriptions, definitions, cross references, 
+parent-child rollups, and other relationships for the valid instances of limited (intensional) domains. 
+Code management is a specialized form of Master Data Management. It is a key responsibility of 
+operational data stewards, because it has a very significant impact on overall data quality. Code 
+management typically includes an approval process for all code value additions, changes, and 
+retirements. 
+2. The definition and maintenance of program code for the purposes of controlling development on 
+production systems. 
+ 
+code table 
+A relational database table containing rows for each valid value in a finite domain. Code tables 
+contain some form of encoded data values. Code tables are reference data, maintained through code 
+management. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

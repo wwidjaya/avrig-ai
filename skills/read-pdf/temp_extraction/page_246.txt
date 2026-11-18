@@ -1,0 +1,60 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 239 
+ 
+time 
+A class word, abbreviated usually to tm.  
+ 
+time series 
+A sequence of data points that can be related to points in time in some pattern of intervals. 
+ 
+time, transaction 
+The time period where a data value is stored in a database.  
+ 
+time, valid 
+The time period where a data value represents a true status in the real world. 
+ 
+time box 
+1. A period of time in which a task may be completed. 
+2. In project management, a technique for separating parts of a project schedule in order to distribute 
+work as well as management of that work. 
+ 
+timeline chart 
+SEE chart, timeline. 
+ 
+timeliness 
+1. The degree to which available data meets the currency requirements of information consumers. 
+2. The length of time between data availability and the event or phenomenon they describe. 
+ 
+time-variant 
+A system that has a dependence on time for the content of output. 
+ 
+Timing Configuration 
+Zachman Framework cell name, intersection of When/Timing Periods and Component 
+Assemblies/Technicians as Implementers. 
+ 
+Timing Definition 
+Zachman Framework cell name, intersection of When/Timing Periods and Business 
+Concepts/Executive Leaders as Owners. 
+ 
+Timing Identification 
+Zachman 
+Framework 
+cell 
+name, 
+intersection 
+of 
+When/Timing 
+Periods 
+and 
+Scope 
+Contexts/Strategists as Theorists. 
+ 
+Timing Instantiation 
+Zachman Framework cell name, intersection of When/Timing Periods and Operations Instance 
+Classes/Workers as Participants. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

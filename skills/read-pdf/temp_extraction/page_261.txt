@@ -1,0 +1,1 @@
+**Z**: Zachman Framework for Enterprise Architecture In 2003, John Zachman updated his Zachman Framework for Information Systems to classify descriptive representations contributing to an enterprise architecture. This framework is also represented by a matrix. Each of the six columns contains a basic interrogative and what it represents in a functioning enterprise:

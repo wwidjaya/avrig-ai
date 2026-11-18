@@ -50,7 +50,11 @@ pub struct VirtualOffice {
 }
 
 impl VirtualOffice {
-    pub fn new(name: impl Into<String>, owner_id: impl Into<String>, office_type: OfficeType) -> Self {
+    pub fn new(
+        name: impl Into<String>,
+        owner_id: impl Into<String>,
+        office_type: OfficeType,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
             name: name.into(),

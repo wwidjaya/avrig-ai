@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 25 
+ 
+Barker data modeling notation 
+SEE data modeling notation, Barker. 
+ 
+base table 
+1. In Data Warehousing, the normalized data structures maintained in a Data Warehouse, in contrast to 
+the de-normalized dependent data mart tables sourced from the base tables. 
+2. Outside of Data Warehousing, a table for an entity that is not dependent on any other entity in the 
+database. 
+ 
+base unit 
+The unit used as the basis of an index number, or to which a constant series refers, examples; base 
+period, base weight, base currency 
+ 
+Basel Accords 
+International banking supervision standards designed to ensure the liquidity of financial institutions 
+doing business in European Union countries. Developed by the Basel Committee on Banking 
+Supervision, and implemented in 2006 as Basel II New Accords. Basel III is currently under 
+development. 
+ 
+behavior 
+What something does at any point in time. The execution or carrying out of a process constitutes 
+behavior. Behavior is something that happens, as opposed to something that is. Opposite of state. 
+ 
+believability 
+Confidence in inherent truthfulness. 
+ 
+bell curve 
+A statistical frequency distribution pattern that is shaped like a bell (narrow at ends, wide in the 
+middle of the range). SEE ALSO normal distribution. 
+ 
+benchmark 
+A point of reference for measurement, comparison, and evaluation. A benchmark can be a standard 
+of excellence or a point-in-time snapshot measurement for comparison with other benchmarks. A 
+benchmark may be an internal or external measurement. 
+ 
+benchmarking 
+Verb. To analyze and compare an organization’s processes (an internal benchmark) against the 
+performance to those of another organization or against an industry standard (an external 
+benchmark). 
+ 
+best practice 
+A technique, method, process, discipline, incentive, or reward generally considered more effective at 
+delivering a particular outcome than by other means. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

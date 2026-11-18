@@ -1,0 +1,47 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 183 
+ 
+Open Educational Resource (OER) 
+Free learning materials available via the Internet. 
+ 
+Open Geospatial Consortium (OGC) 
+An international voluntary standards group with over 300 commercial, governmental, nonprofit and 
+research member organizations worldwide, collaborating to develop and implement standards for 
+geospatial data and services, GIS data processing and exchange. Previously known as Open GIS 
+Consortium. OGC specifications include the Web Map Service (WMS), Simple Features SQL (SFS) 
+and Geography Markup Language (GML). 
+ 
+Open Software Foundation (OSF) 
+An organization that promotes the adoption of standards for UNIX operating systems. 
+ 
+open source  
+Software code that is freely available - meaning the customer can download it, install it, begin using it, 
+or customize it without paying. 
+ 
+Open Source Intelligence (OSINT) 
+A form of data acquisition and analysis that focuses on publicly available data. 
+ 
+OpenCourseWare (OCW) 
+The process of making course materials from learning institutions available on the Internet. 
+ 
+Open-High-Low-Close chart (OHLC) 
+SEE chart, Open-High-Low-Close. 
+ 
+operational activity 
+In the DAMA-DMBOK Functional Framework, a service and support activity performed on an on-
+going basis. SEE ALSO activity group. 
+ 
+Operational Business Intelligence 
+Alternate form: Operational BI 
+The application of BI tools to provide BI to the front lines of the business, where analytical 
+capabilities guide operational decisions. Operational BI is used to manage and optimize business 
+operations. (DAMA-DMBOK Guide, 1st edition, pg. 209.) 
+ 
+operational data 
+SEE data, operational. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

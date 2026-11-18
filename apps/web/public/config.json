@@ -1,0 +1,17 @@
+{
+  "apiBaseUrl": "",
+  "wsBaseUrl": "wss://app.avrig.ai/ws",
+  "auth": {
+    "authority": "https://iam.avrig.ai",
+    "clientId": "avrig-web-ui",
+    "scope": "openid profile email",
+    "redirectUri": "https://app.avrig.ai/auth/callback",
+    "postLogoutRedirectUri": "https://app.avrig.ai/logged-out",
+    "responseType": "code",
+    "automaticSilentRenew": true
+  },
+  "features": {
+    "spatialCanvas": true,
+    "experimentalGraph": true
+  }
+}

@@ -1,0 +1,60 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 33 
+ 
+Business Intelligence developer 
+Alternate form: BI developer 
+An IT professional software developer who specializes in report writing and/or the development of 
+analytic applications. 
+ 
+Business Intelligence environment  
+Alternate form: BI environment 
+The hardware, software and organizational support for Business Intelligence activity that enables 
+knowledge workers to access, analyze and manipulate data. It generally includes the Business 
+Intelligence software, user interfaces, associated infrastructure hardware and software, data mart 
+databases and multi-dimensional data cubes. It may also include Data Warehouses and the data 
+integration programs that provide data for Business Intelligence. 
+ 
+Business Intelligence platform  
+Alternate form: BI platform 
+The infrastructure of selected enabling tools and technologies necessary for the development and 
+deployment of Business Intelligence applications.  
+ 
+Business Intelligence Service Provider (BISP) 
+An Application Service Provider providing Data Warehousing and Business Intelligence capabilities 
+as outsourced services hosted offsite. A BISP ties into source information systems and databases 
+behind a corporation's firewall, providing traditional Data Warehouse and analytic application 
+capabilities to internal knowledge workers and external customers. Often used to extend Business 
+Intelligence functions into e-commerce. 
+ 
+Business Intelligence software  
+Alternate form: BI software 
+Technology and products (tools) used by knowledge workers to access data, analyze and share 
+information, understand business performance and improve decision-making. Includes query and 
+reporting tools, OLAP technologies, statistical analysis tools, data mining tools, scenario modeling 
+tools, planning and budgeting tools, advanced analytic applications, dashboards and scorecards for 
+performance monitoring, and enterprise reporting tools. BI software is the current term for the 
+current generation of decision support tools. 
+ 
+Business Intelligence support 
+Alternate form: BI support 
+The training and assistance available to business professionals in use of Business Intelligence tools 
+and techniques, and the valid interpretation of Business Intelligence data. Typically, a help desk 
+provides Level 1 support, with BI analysts providing Level 2 support. 
+ 
+Business Intelligence Value Chain 
+A sequence of events where value is added from the data resource, through each step, to the support 
+of business goals. (Brackett 2011) 
+ 
+Business Intelligence, mobile 
+Alternate form: Mobile BI 
+The distribution of business data to mobile devices such as Smartphone and tablet computers. 
+ 
+Business Intelligence, social 
+Alternate form: Social BI 
+The creation, publishing, and sharing of custom business analytics reports and dashboards by end 
+users of “Cloud” technologies. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

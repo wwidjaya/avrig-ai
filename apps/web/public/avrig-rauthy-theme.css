@@ -1,0 +1,819 @@
+@charset "utf-8";
+/* ==========================================================================
+   avrig.ai IAM theme for Rauthy 0.37.x
+   --------------------------------------------------------------------------
+   Injected by nginx (sub_filter) as /custom/avrig-rauthy-theme.css into every
+   /auth/v1 HTML response, after Rauthy's own theme + component stylesheets.
+
+   Scope:
+     * Token layer repaints Rauthy's palette from warm-orange/violet to the
+       avrig monochrome + blue system, for every auth screen, not only login.
+     * Structural layer targets the auth shell only:
+         main > .outer > div > .container(.head, .name, form, .providers)
+       Hashed svelte-* classes are never used, so a Rauthy upgrade cannot
+       silently break the layout. The one exception is noted inline.
+     * Brand text that has no DOM node (tagline, subline, subtitle, footer) is
+       emitted with ::before/::after on .outer and .name.
+
+   Constraints on this host: CSP allows only 'self' styles and scripts, so no
+   webfonts and no injected JS. Everything below is plain CSS.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. Design tokens
+   ========================================================================== */
+
+/* Dark token set. The selector needs class-level specificity (body:not(.theme-light)
+   is 0,1,1) because Rauthy ships `.theme-dark{--action:...}` at 0,1,0, which would
+   otherwise win over a plain `body` rule and leave native widgets on the stock
+   orange/violet palette in dark mode. */
+body:not(.theme-light) {
+  --av-canvas: #0a0a0b;
+  --av-surface: #101114;
+  --av-input: #0b0b0d;
+  --av-raised: #1a1b1f;
+
+  /* avrig hairlines */
+  --av-line: rgba(255, 255, 255, 0.07);
+  --av-line-strong: rgba(255, 255, 255, 0.14);
+  --av-hair: rgba(255, 255, 255, 0.22);
+
+  /* avrig type */
+  --av-text: #fafafa;
+  --av-muted: #a1a1aa;
+  --av-faint: rgba(161, 161, 170, 0.55);
+
+  /* avrig accent */
+  --av-action: #3b82f6;
+  --av-ring: rgba(59, 130, 246, 0.26);
+  --av-btn-grad: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  --av-btn-grad-hover: linear-gradient(180deg, #4b8df7 0%, #2f6be8 100%);
+  --av-btn-inset: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  --av-btn-shadow: 0 6px 16px -6px rgba(37, 99, 235, 0.5);
+
+  /* avrig chrome */
+  --av-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  --av-ghost-hover: rgba(255, 255, 255, 0.04);
+
+  /* control chips: theme switch and language selector */
+  --av-ctl: #1a1b1f;
+  --av-ctl-line: rgba(255, 255, 255, 0.12);
+
+  --av-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --av-radius-card: 14px;
+  --av-radius-ctl: 10px;
+
+  /* Rauthy token layer: keeps native widgets (dialog, popover, error text,
+     tooltips, native inputs) inside the same palette. */
+  --bg: 240 9% 7%;
+  --bg-high: 231 9% 11%;
+  --text: 240 5% 65%;
+  --text-high: 0 0% 98%;
+  --action: 217 91% 60%;
+  --accent: 217 91% 60%;
+  --error: 0 72% 58%;
+  --btn-text: #ffffff;
+}
+
+html body.theme-light {
+  --av-canvas: #f1f1f3;
+  --av-surface: #ffffff;
+  --av-input: #fbfbfc;
+  --av-raised: #ededef;
+
+  --av-line: rgba(9, 9, 11, 0.07);
+  --av-line-strong: rgba(9, 9, 11, 0.15);
+  --av-hair: rgba(9, 9, 11, 0.16);
+
+  --av-text: #09090b;
+  --av-muted: #52525b;
+  --av-faint: rgba(82, 82, 91, 0.62);
+
+  --av-action: #2563eb;
+  --av-ring: rgba(37, 99, 235, 0.18);
+  --av-btn-grad: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  --av-btn-grad-hover: linear-gradient(180deg, #4b8df7 0%, #2f6be8 100%);
+  --av-btn-inset: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --av-btn-shadow: 0 6px 16px -6px rgba(37, 99, 235, 0.45);
+
+  --av-shadow: 0 1px 2px rgba(9, 9, 11, 0.05), 0 14px 34px -10px rgba(9, 9, 11, 0.18);
+  --av-ghost-hover: rgba(9, 9, 11, 0.03);
+  --av-ctl: #ffffff;
+  --av-ctl-line: rgba(9, 9, 11, 0.1);
+
+  --bg: 0 0% 100%;
+  --bg-high: 240 8% 93%;
+  --text: 240 4% 34%;
+  --text-high: 240 6% 4%;
+  --action: 221 83% 53%;
+  --accent: 221 83% 53%;
+  --error: 0 72% 46%;
+  --btn-text: #ffffff;
+}
+
+/* Before the Svelte layout sets body.theme-*, honour the OS preference so a
+   light-preference browser never flashes a dark canvas. */
+@media (prefers-color-scheme: light) {
+  body:not(.theme-dark):not(.theme-light) {
+    --av-canvas: #f1f1f3;
+    --av-surface: #ffffff;
+    --av-input: #fbfbfc;
+    --av-raised: #ededef;
+    --av-line: rgba(9, 9, 11, 0.07);
+    --av-line-strong: rgba(9, 9, 11, 0.15);
+    --av-hair: rgba(9, 9, 11, 0.16);
+    --av-text: #09090b;
+    --av-muted: #52525b;
+    --av-faint: rgba(82, 82, 91, 0.62);
+    --av-action: #2563eb;
+    --av-ring: rgba(37, 99, 235, 0.18);
+    --av-btn-shadow: 0 6px 16px -6px rgba(37, 99, 235, 0.45);
+    --av-shadow: 0 1px 2px rgba(9, 9, 11, 0.05), 0 14px 34px -10px rgba(9, 9, 11, 0.18);
+    --av-ghost-hover: rgba(9, 9, 11, 0.03);
+  --av-ctl: #ffffff;
+  --av-ctl-line: rgba(9, 9, 11, 0.1);
+    --bg: 0 0% 100%;
+    --bg-high: 240 8% 93%;
+    --text: 240 4% 34%;
+    --text-high: 240 6% 4%;
+    --action: 221 83% 53%;
+    --accent: 221 83% 53%;
+    --error: 0 72% 46%;
+  }
+}
+
+/* ==========================================================================
+   2. Canvas
+   ========================================================================== */
+
+body {
+  background-color: var(--av-canvas);
+  color: var(--av-text);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+/* Rauthy tints this band with --bg-high/25, which fights the card. */
+main > .outer {
+  background: transparent;
+}
+
+/* ==========================================================================
+   3. Auth shell: one centred stack of tagline, card and footer
+   ========================================================================== */
+
+main > .outer {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 24px !important;
+  width: 100% !important;
+  min-height: 100dvh !important;
+  padding: 32px 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* ContentCenter wrapper: must not claim 100% height, or the stack overflows. */
+main > .outer > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* 3a. Tagline, above the card (no DOM node exists for it) */
+main > .outer::before {
+  content: "avrig.ai \B7  Autonomous Engineering Rig";
+  order: 0;
+  display: block;
+  margin: 0;
+  padding: 0 0 18px;
+  font-family: var(--av-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--av-faint);
+  background-image: linear-gradient(var(--av-hair), var(--av-hair));
+  background-repeat: no-repeat;
+  background-position: 50% calc(100% - 7px);
+  background-size: 24px 1px;
+}
+
+/* 3b. Footer, below the card */
+main > .outer::after {
+  content: "avrig.ai \B7  Sovereign access";
+  order: 2;
+  display: block;
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--av-faint);
+}
+
+/* ==========================================================================
+   4. Card
+   ========================================================================== */
+
+main > .outer .container:not(.absolute) {
+  width: 100% !important;
+  max-width: 380px !important;
+  padding: 28px !important;
+  background: var(--av-surface) !important;
+  border: 1px solid var(--av-line) !important;
+  border-radius: var(--av-radius-card) !important;
+  box-shadow: var(--av-shadow) !important;
+  box-sizing: border-box !important;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+/* ==========================================================================
+   5. Brand lockup: [A] avrig, then the subline
+   ========================================================================== */
+
+main > .outer .head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin: 0 0 14px !important;
+  padding: 0 !important;
+}
+
+/* Client logos are not configured for avrig-web-ui; guarantee ours is the
+   only mark, even if a logo row is later added to the client record. */
+main > .outer .head img,
+main > .outer .head .logo {
+  display: none !important;
+}
+
+main > .outer .head::before {
+  content: "";
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  background: url("/custom/avrig-mark.svg") center / 32px 32px no-repeat;
+}
+
+main > .outer .head::after {
+  content: "avrig";
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--av-text);
+}
+
+/* ==========================================================================
+   6. Title block: subline, client name, subtitle
+   ========================================================================== */
+
+main > .outer .name {
+  margin: 0 0 22px !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+main > .outer .name::before {
+  content: "0.1 \B7  Sovereign IAM";
+  display: block;
+  margin: 0 0 12px;
+  font-family: var(--av-font-mono);
+  font-size: 10px;
+  font-weight: 550;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--av-faint);
+}
+
+main > .outer .name h2 {
+  margin: 0 !important;
+  font-size: 20px !important;
+  font-weight: 650 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--av-text) !important;
+}
+
+main > .outer .name::after {
+  content: "Sign in to continue";
+  display: block;
+  margin: 8px 0 0;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--av-muted);
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   7. Field
+   ========================================================================== */
+
+main > .outer .emailMinHeight {
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+/* Rauthy pins this wrapper to an inline width: 18rem, narrower than the card */
+main > .outer .emailMinHeight > div {
+  width: 100% !important;
+}
+
+main > .outer .label {
+  width: 100% !important;
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+}
+
+main > .outer .label label {
+  font-size: 12px !important;
+  font-weight: 550 !important;
+  letter-spacing: 0 !important;
+  color: var(--av-muted) !important;
+}
+
+/* drop the " *" required marker: single field, visually implied */
+main > .outer .label label[data-required="true"]::after {
+  content: none !important;
+}
+
+main > .outer input[type="email"],
+main > .outer input[type="text"],
+main > .outer input[type="password"]:not([hidden]) {
+  display: block !important;
+  width: 100% !important;
+  height: 44px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  font-family: inherit !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  color: var(--av-text) !important;
+  background: var(--av-input) !important;
+  border: 1px solid var(--av-line-strong) !important;
+  border-radius: var(--av-radius-ctl) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+html body.theme-light main > .outer input[type="email"] {
+  box-shadow: inset 0 1px 2px rgba(9, 9, 11, 0.04) !important;
+}
+
+/* the duplicated placeholder that makes the stock page look unfinished */
+main > .outer input::placeholder {
+  color: transparent !important;
+}
+
+main > .outer input[type="email"]:hover,
+main > .outer input[type="text"]:hover {
+  border-color: var(--av-muted) !important;
+  background: var(--av-input) !important;
+}
+
+main > .outer input[type="email"]:focus,
+main > .outer input[type="text"]:focus,
+main > .outer input[type="password"]:focus {
+  border-color: var(--av-action) !important;
+  background: var(--av-input) !important;
+  box-shadow: 0 0 0 3px var(--av-ring) !important;
+}
+
+main > .outer input[aria-invalid="true"] {
+  border-color: #dc2626 !important;
+}
+
+main > .outer .errMsg {
+  margin: 6px 0 0 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  max-width: none !important;
+  color: #dc2626 !important;
+}
+
+/* ==========================================================================
+   8. Buttons
+   ========================================================================== */
+
+main > .outer .btn {
+  display: flex !important;
+  margin: 16px 0 0 !important;
+  padding: 0 !important;
+}
+
+main > .outer button.l1,
+main > .outer button.l2 {
+  width: 100% !important;
+  height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 14px !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.01em !important;
+  border-radius: var(--av-radius-ctl) !important;
+  cursor: pointer !important;
+  transition: background 140ms ease, box-shadow 140ms ease,
+              border-color 140ms ease, transform 140ms ease, color 140ms ease;
+}
+
+main > .outer button.l1 {
+  color: #ffffff !important;
+  background: var(--av-btn-grad) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: var(--av-btn-inset), var(--av-btn-shadow) !important;
+}
+
+main > .outer button.l1:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--av-btn-grad-hover) !important;
+  transform: translateY(-1px);
+}
+
+main > .outer button.l1:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: translateY(0);
+}
+
+/* The submit button is disabled until the email validates. Fading the gradient
+   with opacity turns it into a black slab on the dark card, so instead it keeps
+   a translucent tint of the same accent and solid text. */
+main > .outer button.l1:disabled,
+main > .outer button.l1[aria-disabled="true"] {
+  color: rgba(255, 255, 255, 0.66) !important;
+  background: rgba(59, 130, 246, 0.18) !important;
+  border: 1px solid rgba(59, 130, 246, 0.28) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+html body.theme-light main > .outer button.l1:disabled,
+html body.theme-light main > .outer button.l1[aria-disabled="true"] {
+  color: rgba(37, 99, 235, 0.8) !important;
+  background: rgba(37, 99, 235, 0.12) !important;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+main > .outer button.l2 {
+  color: var(--av-text) !important;
+  background: transparent !important;
+  border: 1px solid var(--av-line-strong) !important;
+  box-shadow: none !important;
+  opacity: 0.92;
+}
+
+main > .outer button.l2:hover {
+  background: var(--av-ghost-hover) !important;
+  border-color: var(--av-muted) !important;
+  box-shadow: none !important;
+  opacity: 1;
+}
+
+main > .outer button.l2 svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  opacity: 0.85;
+}
+
+main > .outer button.l1:focus-visible,
+main > .outer button.l2:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--av-ring) !important;
+}
+
+/* ==========================================================================
+   9. Divider: "or login with"
+   ========================================================================== */
+
+main > .outer .providers {
+  margin-top: 18px !important;
+}
+
+main > .outer .providersSeparator {
+  position: relative !important;
+  margin: 0 0 14px !important;
+}
+
+main > .outer .separator {
+  height: 1px !important;
+  background: var(--av-line) !important;
+}
+
+main > .outer .loginWith {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap;
+}
+
+main > .outer .loginWith > div {
+  padding: 0 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--av-faint) !important;
+  background: var(--av-surface) !important;
+}
+
+main > .outer .providers .btn {
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   10. Utility cluster: theme switch + language selector, top right
+   ========================================================================== */
+
+/* Rauthy's layout nests both controls inside .outer > div (not as children of
+   main), so these are descendant selectors. */
+main .absolute,
+body .absolute {
+  position: fixed !important;
+  top: 20px !important;
+  bottom: auto !important;
+  left: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  z-index: 20 !important;
+}
+
+main .container.absolute,
+body .container.absolute {
+  right: 20px !important;
+  background: var(--av-ctl) !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Fallback for the language selector when Svelte portals it inside .outer.
+   Hashed class, kept narrow: only ever matches the LangSelector root. */
+main .absolute:not(.container),
+body .absolute:not(.container),
+main [class*="svelte-fexfbq"].absolute {
+  right: 58px !important;
+}
+
+/* Theme switch root also has the generic `.container` class. Only reset its
+   card chrome here, then style its actual button below. */
+main .container.absolute,
+body .container.absolute {
+  border: 0 !important;
+}
+
+main .container.absolute button,
+body .container.absolute button,
+/* Rauthy's selector nests a second `.btn` with its own .9rem type size and
+   padding. Reset that inner control too, otherwise the visible EN label is
+   larger than the 11px trigger and makes the button look cramped. */
+main [class*="svelte-fexfbq"].absolute > div > button .btn[data-border="false"],
+body [class*="svelte-fexfbq"].absolute > div > button .btn[data-border="false"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font: inherit !important;
+  line-height: 1 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+main [class*="svelte-fexfbq"].absolute > div > button .btnText,
+body [class*="svelte-fexfbq"].absolute > div > button .btnText {
+  margin: 0 !important;
+  padding: 0 !important;
+  font: inherit !important;
+  line-height: 1 !important;
+}
+
+main [class*="svelte-fexfbq"].absolute > div > button svg,
+body [class*="svelte-fexfbq"].absolute > div > button svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex: 0 0 13px !important;
+}
+
+main [class*="svelte-fexfbq"].absolute > div > button,
+body [class*="svelte-fexfbq"].absolute > div > button {
+  height: 32px !important;
+  min-width: 64px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 0 10px !important;
+  font-family: var(--av-font-mono) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--av-muted) !important;
+  background: var(--av-ctl) !important;
+  border: 1px solid var(--av-ctl-line) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+main [class*="svelte-fexfbq"].absolute > div > button::before,
+body [class*="svelte-fexfbq"].absolute > div > button::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 14px !important;
+  height: 14px !important;
+  flex: 0 0 14px !important;
+  background-color: currentColor !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 8 6 6'/%3E%3Cpath d='m4 14 6-6 2-3'/%3E%3Cpath d='M2 5h12'/%3E%3Cpath d='M7 2h1'/%3E%3Cpath d='m22 22-5-10-5 10'/%3E%3Cpath d='M14 18h6'/%3E%3C/svg%3E") no-repeat center / contain !important;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 8 6 6'/%3E%3Cpath d='m4 14 6-6 2-3'/%3E%3Cpath d='M2 5h12'/%3E%3Cpath d='M7 2h1'/%3E%3Cpath d='m22 22-5-10-5 10'/%3E%3Cpath d='M14 18h6'/%3E%3C/svg%3E") no-repeat center / contain !important;
+}
+
+main .container.absolute button:hover,
+body .container.absolute button:hover,
+main [class*="svelte-fexfbq"].absolute > div > button:hover,
+body [class*="svelte-fexfbq"].absolute > div > button:hover {
+  color: var(--av-text) !important;
+  background: var(--av-ctl) !important;
+  border-color: var(--av-muted) !important;
+  filter: brightness(1.1);
+  box-shadow: none !important;
+}
+
+main .container.absolute button > div,
+body .container.absolute button > div,
+main [class*="svelte-fexfbq"].absolute > div > button > div,
+body [class*="svelte-fexfbq"].absolute > div > button > div,
+main .container.absolute button:hover > div,
+body .container.absolute button:hover > div,
+main [class*="svelte-fexfbq"].absolute > div > button:hover > div,
+body [class*="svelte-fexfbq"].absolute > div > button:hover > div {
+  color: inherit !important;
+  font: inherit !important;
+}
+
+main .container.absolute .icon,
+body .container.absolute .icon {
+  width: 15px !important;
+  height: 15px !important;
+  margin: 0 !important;
+  color: inherit !important;
+}
+
+main .container.absolute svg,
+body .container.absolute svg,
+main [class*="svelte-fexfbq"].absolute > div > button svg,
+body [class*="svelte-fexfbq"].absolute > div > button svg {
+  width: 15px !important;
+  height: 15px !important;
+  display: block;
+}
+
+main .container.absolute button:focus-visible,
+body .container.absolute button:focus-visible,
+main [class*="svelte-fexfbq"].absolute > div > button:focus-visible,
+body [class*="svelte-fexfbq"].absolute > div > button:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--av-ring) !important;
+}
+
+/* Keep the Rauthy language picker as one clean menu. The trigger lives in the
+   selector root; option buttons are nested deeper and must not inherit its
+   chip styling. */
+main [class*="svelte-fexfbq"].absolute .popover.anchored,
+body [class*="svelte-fexfbq"].absolute .popover.anchored {
+  width: 84px !important;
+  min-width: 84px !important;
+  max-width: min(84px, calc(100vw - 28px)) !important;
+  padding: 4px !important;
+  overflow: hidden !important;
+  background: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5) !important;
+  box-sizing: border-box !important;
+}
+
+main [class*="svelte-fexfbq"].absolute .popover.anchored [role="listbox"],
+body [class*="svelte-fexfbq"].absolute .popover.anchored [role="listbox"] {
+  width: 100% !important;
+  max-height: min(16rem, calc(100dvh - 76px)) !important;
+  overflow-y: auto !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+main [class*="svelte-fexfbq"].absolute .popover.anchored .popoverOptions,
+body [class*="svelte-fexfbq"].absolute .popover.anchored .popoverOptions {
+  width: 100% !important;
+  gap: 1px !important;
+}
+
+main [class*="svelte-fexfbq"].absolute .popover.anchored .popoverOptions > button,
+body [class*="svelte-fexfbq"].absolute .popover.anchored .popoverOptions > button {
+  width: 100% !important;
+  min-height: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+main [class*="svelte-fexfbq"].absolute .popover.anchored .optPopover,
+body [class*="svelte-fexfbq"].absolute .popover.anchored .optPopover {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 6px 10px !important;
+  border-radius: 6px !important;
+  color: var(--av-muted) !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+
+main [class*="svelte-fexfbq"].absolute .popover.anchored .optPopover:hover,
+body [class*="svelte-fexfbq"].absolute .popover.anchored .optPopover:hover,
+main [class*="svelte-fexfbq"].absolute .popover.anchored .optPopover[aria-selected="true"],
+body [class*="svelte-fexfbq"].absolute .popover.anchored .optPopover[aria-selected="true"] {
+  color: var(--av-action) !important;
+  background: var(--av-raised) !important;
+}
+
+/* ==========================================================================
+   11. Responsive
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  main > .outer {
+    /* the utility cluster is fixed at top:14, keep the tagline clear of it */
+    padding: 64px 16px 32px !important;
+    gap: 20px !important;
+  }
+
+  main > .outer .container:not(.absolute) {
+    padding: 22px !important;
+    border-radius: 12px !important;
+  }
+
+  main > .outer .head::before {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+    background-size: 28px 28px;
+  }
+
+  main > .outer .head::after {
+    font-size: 18px;
+  }
+
+  main .absolute,
+  body .absolute {
+    top: 14px !important;
+  }
+
+  main .container.absolute,
+  body .container.absolute {
+    right: 14px !important;
+  }
+
+  main .absolute:not(.container),
+  body .absolute:not(.container),
+  main [class*="svelte-fexfbq"].absolute {
+    right: 52px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main > .outer *,
+  main > .outer::before,
+  main > .outer::after,
+  body,
+  body .absolute * {
+    transition-duration: 0ms !important;
+  }
+}

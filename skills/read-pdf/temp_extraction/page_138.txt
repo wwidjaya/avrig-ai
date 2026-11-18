@@ -1,0 +1,3 @@
+**H**: half duplex Adjective. Describes a system that allows communication between two endpoints where only one may transmit at a time. SEE ALSO simplex; full duplex.
+**SEE key, hash.**: hash partitioning
+**SEE call center.**: heterogeneous Adjective. Describes multiple members in a set that have differences in nature or structure. Opposite of homogeneous. Order 85101 by gustaf prameswara on August 31, 2026. For use on purchaser device only. Contains DRM with visible and invisible purchaser identifiers.

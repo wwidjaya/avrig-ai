@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 208 
+ 
+reflexive relationship 
+SEE relationship, reflexive. 
+ 
+refresh  
+A process of taking a snapshot of data from one environment and moving it to another 
+environment, overlaying old data with the new data each time. 
+ 
+registry 
+1. Generally, a permanent collection of data related to some topic or collected through some process. 
+2. In Meta-data Management, an application which stores meta-data for querying, and which can be 
+used by any other application in the network with sufficient access privileges. 
+ 
+regression 
+Using one data set to predict the results of a second. 
+ 
+regression analysis 
+A statistical technique which seeks to find a line which best fits through a set of data as plotted on a 
+graph, seeking to find the cleanest path which deviates the least from any instance within the set. 
+ 
+regulatory compliance  
+The act of meeting the requirements of government legislation or self-regulating industry 
+organizational mandates. For instance, public companies are required to provide specific financial 
+reporting and disclosure. Regulators in the U.S. include the securities authorities (the SEC), tax 
+authorities (the IRS) and banking authorities (the FDIC). 
+ 
+relation 
+1. Generally, the manner in which two objects may be associated, ordered, connected, or otherwise 
+grouped, using inherent attributes. 
+2. In data management, a physical structure (a flat file, inverted list, linked list, bitmap, hash table, b-
+tree, etc.) consisting of a set of one or more columns and zero or more rows. The relation is between 
+the row category and column category. 
+3. DCMI element in element set Content: a relationship between any two resources or a resource and 
+another instance of that same resource. SEE ALSO Dublin Core Metadata Initiative. 
+ 
+relational data modeling scheme 
+SEE data modeling scheme, relational. 
+ 
+relational database  
+SEE database, relational. 
+ 
+Relational DataBase Management System 
+SEE DataBase Management System, Relational. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,38 @@
+display-name = "Wirianto Widjaja"
+
+[accounts.gmail]
+default = true
+email = "wwidjaya@gmail.com"
+display-name = "Wirianto Widjaja"
+
+# Gmail REST API backend. `ortie token show` hands himalaya a live OAuth 2.0
+# access token (auto-refreshed); Gmail only accepts OAuth bearer tokens.
+gmail.auth.token.command = ["ortie", "token", "show", "-a", "gmail"]
+# gmail.user-id = "me"   # defaults to "me", the authenticated account
+
+# Friendly mailboxes for the shared commands (-m). Raw Gmail label ids work too.
+mailbox.alias.inbox = "INBOX"
+mailbox.alias.sent = "SENT"
+mailbox.alias.drafts = "DRAFT"
+mailbox.alias.trash = "TRASH"
+mailbox.alias.archive = "ALL_MAIL"
+mailbox.alias.spam = "SPAM"
+mailbox.alias.starred = "STARRED"
+mailbox.alias.important = "IMPORTANT"
+
+# Second Google Workspace account (composync.id), via the same ortie OAuth
+# broker. Select it with the wrapper's -Account composync.
+[accounts.composync]
+email = "wirianto.widjaja@composync.id"
+display-name = "Wirianto Widjaja"
+
+gmail.auth.token.command = ["ortie", "token", "show", "-a", "composync"]
+
+mailbox.alias.inbox = "INBOX"
+mailbox.alias.sent = "SENT"
+mailbox.alias.drafts = "DRAFT"
+mailbox.alias.trash = "TRASH"
+mailbox.alias.archive = "ALL_MAIL"
+mailbox.alias.spam = "SPAM"
+mailbox.alias.starred = "STARRED"
+mailbox.alias.important = "IMPORTANT"

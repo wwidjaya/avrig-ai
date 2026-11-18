@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 41 
+ 
+chain of custody  
+The documentation of ownership of something, from capture, through possession, storage, and 
+management, to disposition. This is especially important for compliance documentation. SEE ALSO 
+data provenance. 
+ 
+chaining 
+1. Verb. To connect a series of commands or responses. 
+2. In cryptography, a method of encryption where each block defines or contributes to the encryption 
+of the following blocks. 
+ 
+change control 
+The process of coordinating changes to a system, to minimize change-related errors and therefore 
+improve data quality and system availability. Proposed changes need to be reviewed and evaluated for 
+related impacts, grouped and scheduled, implemented and migrated through various test 
+environments before being implemented into the production environment. Database change control 
+disciplines are a very important responsibility of database administrators. 
+ 
+change data capture  
+The process of capturing changes made to a production data source. Change data capture is typically 
+performed by reading the log file of the Database Management System of the source database. 
+Change data capture consolidates units of work, ensures data is synchronized with the original 
+source, and reduces data volume in a Data Warehousing environment. 
+ 
+characteristic 
+1. A distinguishing feature or quality. (dictionary.com based on Random House Dictionary) 
+2. Adjective. Pertaining to, constituting, or indicating the character or peculiar quality of a person or 
+thing; typical; distinctive. (dictionary.com based on Random House Dictionary) 
+3. An abstraction of a property of an object or of a set of objects. 
+ 
+characteristic entity 
+SEE data entity, dependent. 
+ 
+chart 
+A visual representation of data, using shapes, colors, symbols, graphs, images, tables, diagrams, etc. to 
+show patterns, relationships, or ideas, that makes it easier to understand, or gives context to create 
+some form of information. 
+ 
+chart, affinity diagram 
+A form of visualization that shows patterns of ideas or data, by grouping them by topic or some 
+attribute they share. 
+ 
+chart, area 
+A chart showing multiple lines from left to right, each which define the top line of an area within the 
+chart. The areas are marked with colors, textures, and/or hatching. The areas may be overlapping or 
+stacked. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

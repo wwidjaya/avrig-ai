@@ -124,6 +124,7 @@ pub struct FunctionDefinition {
 pub struct ToolCall {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub index: Option<usize>,
+    #[serde(default)]
     pub id: String,
     #[serde(rename = "type", default = "default_tool_type")]
     pub tool_type: String,

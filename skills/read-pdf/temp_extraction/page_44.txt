@@ -1,0 +1,2 @@
+**C**: 
+**SEE key, candidate.**: candidate primary key A primary key that has been identified and considered as a primary key, but has not been verified.

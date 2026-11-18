@@ -1,0 +1,35 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 171 
+ 
+multimedia storage 
+Storage devices for multimedia files that also contain applications to display or play the multimedia 
+files. 
+ 
+multiplicity 
+Characteristic of a relationship as either at most one (exclusive) or more than one. (Everest 2010) 
+ 
+multi-tier architecture 
+SEE architecture, multi-tier. 
+ 
+multi-valued attribute 
+SEE data attribute, multi-valued. 
+ 
+multi-valued dependency 
+SEE dependency, multi-valued. 
+ 
+multi-variable model 
+A model showing evaluation based on multiple variables. 
+ 
+munge 
+To transform data such that the original data is unrecognizable without knowing the transformation 
+rules and sequence, which is unpredictable or inconsistent. Sometimes accomplished with 
+substitution of characters in order to obfuscate the original data. Occasionally explained as “modify 
+until not guessed easily”. 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

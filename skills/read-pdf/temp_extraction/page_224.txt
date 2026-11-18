@@ -1,0 +1,1 @@
+**schema, XML**: A set of XML tag definitions used to define and document XML applications. Order 85101 by gustaf prameswara on August 31, 2026. For use on purchaser device only. Contains DRM with visible and invisible purchaser identifiers.

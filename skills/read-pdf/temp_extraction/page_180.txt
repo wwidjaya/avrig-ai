@@ -1,0 +1,1 @@
+**SEE subquery.**: nested relation An attribute of a relation, itself representing a relation. In a relational DBMS, a column that contains a table in each row.

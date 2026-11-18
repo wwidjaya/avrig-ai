@@ -1,0 +1,50 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 38 
+ 
+canonical model 
+A data model of the inherent structure of data without regard to applications, hardware, or software 
+implementations. Built according to specific canons. Usually a result of canonical synthesis. 
+ 
+canonical synthesis 
+The concept that if everyone followed the canons (rules) for developing a data model, then those 
+independent data models could be readily plugged together, just like a picture puzzle, to provide a 
+single, comprehensive, organization-wide data architecture. (Brackett 2011) 
+ 
+Capability Maturity Model (CMM) 
+The common name for the Capability Maturity Model Integration and its more widely known 
+predecessor, the Capability Maturity Model for Software, both published by the Software 
+Engineering Institute of Carnegie-Mellon University. The CMM is a guide to improve an 
+organization's software development process, featuring defined practices used to rank an 
+organization at one of five process maturity levels. 
+ 
+Capability Maturity Model Integration (CMMI) 
+The most current system development process capability maturity model from the Software 
+Engineering Institute at Carnegie-Mellon University. The CMMI replaces several older related 
+maturity models, including the original Capability Maturity Model for Software (SW-CMM), the 
+Systems Engineering Capability Model (SECM), and the Integrated Product Development Capability 
+Maturity Model (IPD-CMM). The latest version of the CMMI, version 1.02, was released by the SEI 
+in 2002. 
+ 
+capacity 
+The maximum amount that can be held, contained, or processed at one time. 
+ 
+cardinal number 
+A number measured on a scale with an arithmetically meaningful zero point. Generally used to 
+measure quantities or volumes. Can be manipulated by all the binary operators: exponentiation, 
+multiplication and division, addition and subtraction, comparison (e.g., less than), matching, and 
+Boolean. SEE ALSO ordinal number; interval number; nominal number. 
+ 
+cardinality 
+The number of entities or members in a set. 
+ 
+Cartesian 
+Adjective. Related to the philosophy or mathematical method put forth by René Descartes. 
+ 
+Cartesian coordinates 
+The use of a set of points on a set of axes in order to show location or proximity. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

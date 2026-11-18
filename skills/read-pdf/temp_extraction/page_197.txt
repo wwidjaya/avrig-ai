@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 190 
+ 
+partitioning, vertical 
+A method of partitioning that segregates the columns of a single logical table into multiple physical 
+tables. All logical rows may appear in each new table, but each new table contains a subset of the 
+original table's columns. Some columns may be redundant across tables, and will necessarily be so for 
+primary key columns. Vertical partitioning is employed when there is a regular need to access, or to 
+isolate, a readily identifiable subset of the “parent” table's columns. This technique may be effective 
+to meet security, distribution, and usability requirements. Note: It is only vertical because of the 
+convention used to represent a table, namely, attributes across the top, and entity instances down. 
+SEE ALSO table, outrigger.  
+ 
+password 
+A string of characters used to help authenticate a user logging into a system. 
+ 
+path 
+A series of one or more arcs between nodes in a graph. 
+ 
+Payment Card Industry Data Security Standard (PCI DSS) 
+A worldwide information security standard assembled by the Payment Card Industry Security 
+Standards Council. 
+ 
+performance  
+Measurable outcomes relative to stated goals. 
+ 
+performance accountability  
+Assuming responsibility for achieving objectives and disclosing present and future variances against 
+those objectives. 
+ 
+performance alert  
+Notification via email, portal or wireless device of a key trend or business event that is associated 
+with an objective. 
+ 
+performance charting 
+SEE chart, performance charting. 
+ 
+performance monitoring and tuning 
+Activities related to understanding and improving computer hardware and software performance 
+(response time and throughput), including database performance. 
+ 
+performance scorecarding  
+A strategic management process designed to translate an organization’s mission statement and overall 
+business strategy into specific, quantifiable objectives and to monitor the organization’s performance 
+in terms of achieving those objectives.  
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

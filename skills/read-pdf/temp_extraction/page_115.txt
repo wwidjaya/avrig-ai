@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 108 
+ 
+Domain Name System server 
+Alternate form: DNS server 
+The Domain Name System uses a distributed database system architecture based on the client/server 
+model. The nodes are the name servers. Each top-level domain has at least one authoritative DNS 
+server that publishes information about that domain and the name servers of any domains 
+subordinate to it. 
+ 
+domain study 
+The study of a domain of values for a data item, to determine if that item is similar to another item 
+and a candidate for integration or merging. 
+ 
+Domain/Key Normal Form (DKNF) 
+SEE Normal Form, Domain/Key. 
+ 
+dot.com  
+Internet-based companies that rely on digital technology and the use of the Web as the primary 
+communication and interaction media.  
+ 
+downtime 
+Alternate form: down-time 
+A general condition wherein users cannot use or access computing systems, applications, data, or 
+information for a broad variety of reasons. 
+drill across 
+Data analysis performed across multiple dimensions. 
+ 
+drill anywhere  
+The ability to “drill down” to any dimension without having to follow predefined drill paths. 
+ 
+drill down  
+A method of exploring detailed data that was used in creating a summary level of data. Drill down 
+levels depend on the granularity of data within a dimension. 
+ 
+drill through 
+An OLAP function often used to imply the ability to navigate from dimensionally aggregated data to 
+relational transaction source data. Typically, the transaction set returned is constrained by multiple 
+filters in accordance with the starting dimensional aggregate. 
+ 
+drill up 
+Data analysis performed on a data set with applied mathematical functions, associated with fewer 
+dimensions, higher levels of hierarchy in one or more dimensions, or both. 
+ 
+Dublin Core 
+A standard core ontology for meta-data about documents, originating in Dublin Ohio and managed 
+by the Dublin Core Metadata Initiative. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

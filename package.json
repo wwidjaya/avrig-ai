@@ -1,0 +1,15 @@
+{
+  "name": "avrig-ai-monorepo",
+  "private": true,
+  "description": "avrig-ai multi-target applications and orchestration shell",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "scripts": {
+    "build": "pnpm -r run build",
+    "typecheck": "pnpm -r run typecheck",
+    "clean": "pnpm -r run clean"
+  }
+}

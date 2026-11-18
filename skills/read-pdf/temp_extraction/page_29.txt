@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 22 
+ 
+associative entity 
+SEE data entity, associative. 
+ 
+asynchronous 
+Adjective. Describes a style of communication in which the initiator does not wait for a reply. 
+Opposite of synchronous. 
+ 
+asynchronous replication 
+Data replication where the target database is updated as soon as possible after updates occur to the 
+source database, but not as part of a single integrated transaction. Failure to update the target has no 
+impact on the source database. Sometimes referred to as “near real time” replication. 
+ 
+atomic data  
+1. Data at the lowest chosen level of detail (granularity). The level of detail chosen depends on the 
+information requirements of the enterprise. For example, address could be one atomic item, or 
+address could be split into further composite items such as house identifier and city. Opposite of 
+aggregate data. 
+2. Non-aggregated observations, or measurements of characteristics of individual units, which cannot 
+be further decomposed and retain any useful meaning. 
+ 
+Atomicity-Consistency-Isolation-Durability (ACID) 
+Standard properties of relational databases. 
+ 
+attribute 
+An inherent characteristic, an accidental quality, an object closely associated with or belonging to a 
+specific person, place, or office; a word ascribing a quality. (Brackett 2011) 
+ 
+attribute class 
+SEE class, attribute. 
+ 
+attribute generalization 
+SEE generalization, attribute. 
+ 
+attributed relationship 
+SEE relationship, attributed. 
+ 
+attributive entity 
+SEE data entity, dependent. 
+ 
+audit 
+A formal and official verification of validity, accuracy, and conformance to requirements, regulations, 
+standards, and/or guidelines.  
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

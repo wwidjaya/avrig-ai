@@ -1,0 +1,23 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 152 
+ 
+Julian date 
+The date expressed as a simple number, used by astronomers and historians due to the simple math 
+involved. The Julian calendar started on January 1, 4713 BCE at noon. The Julian date for noon on 
+CE 2011 February 20 is JD 2455613.000000. 
+ 
+junction entity 
+SEE data entity, associative. 
+ 
+junk dimension 
+SEE dimension, junk. 
+ 
+just-in-time 
+Information delivered at the time it will be used, not before and not after. 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

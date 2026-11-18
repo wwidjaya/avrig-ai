@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 132 
+ 
+heuristics 
+“Rules of thumb” and approximation methods for obtaining a goal, a high quality solution, or 
+improved performance. It sacrifices completeness to increase efficiency, as some potential solutions 
+would not be practicable or acceptable due to their 'rareness' or 'complexity'. This method may not 
+always find the best solution, but it will find an acceptable solution within a reasonable timeframe for 
+problems that will require almost infinite or longer than acceptable times to compute. 
+ 
+hexadecimal 
+A numbering system using a base of 16, using letters A through F to represent 10 through 15 
+decimal. A byte is generally 8 binary digits, so that 1 hexadecimal representation represents 4 binary 
+digits. Core dumps are expressed in hexadecimal for example. 
+ 
+hierarchical data model 
+SEE data model, hierarchical. 
+ 
+hierarchical database 
+SEE database, hierarchical. 
+ 
+Hierarchical Query Language (HQL) 
+A high-level language on a hierarchical data structure, similar to SQL on a multi-file data structure. 
+ 
+hierarchical relationship 
+SEE relationship, hierarchical. 
+ 
+hierarchical structure 
+SEE structure, hierarchical 
+ 
+hierarchical taxonomy 
+SEE taxonomy, hierarchical. 
+ 
+hierarchy 
+1. Generally, a classification structure arranged in levels of detail from the broadest to the most detailed 
+level. Each level of the classification is defined in terms of the categories at the next lower level of 
+the classification. 
+2. In dimensional modeling and dimensional databases, the organization of a dimension’s members 
+based on parent-child relationships, typically where a parent member represents the consolidation of 
+child members. 
+ 
+high availability  
+A protocol and associated execution that ensures a certain relative degree of computing-system 
+operational continuity in any down-time event. 
+ 
+histogram 
+A chart that shows quantities of data points that occur within various numeric ranges. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

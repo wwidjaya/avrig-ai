@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 76 
+ 
+Data Governance Council (DGC) 
+The highest tier data governance organization in an enterprise. The DGC includes senior managers 
+serving as executive data stewards, along with the DM Leader and the CIO. A business executive 
+may formally chair the council as chief data steward with the DM Leader serving as facilitator for 
+council meetings and other activities.  
+ 
+Data Governance Office (DGO) 
+A staff organization of full-time data analysts found in larger enterprises whose mission is to support 
+the Data Governance Council, Data Stewardship Coordinating Committees, and data stewardship 
+teams. 
+ 
+data heritage 
+Documentation of the source of the data and their original meaning at the time of data capture. 
+(Brackett 2011) 
+ 
+data hoarding 
+The process of restricting access to data based on concerns regarding proprietary content, economic 
+impact, security implications. 
+ 
+data identification 
+The data that have been identified thus far for potential inclusion in the information system. The 
+process of specifying which data should or will be sought to fulfill user needs. A description of the 
+different types of data and their applicable tools for analysis is also included.  
+ 
+data in a cloud 
+Data that is stored in a distributed network of systems, where the location of the data is unknown 
+and transparent to the user. 
+ 
+data in context 
+Individual facts that have meaning and can be readily understood. They are raw facts wrapped with 
+meaning. (Brackett 2011) 
+ 
+data independence 
+1. The ability to change the logical or physical structure of data without changing the application 
+program and its view of the data. 
+2. On a large scale, the independence of the data architecture from the business activity architecture, the 
+platform architecture, and the information system architecture. On a smaller scale, the independence 
+of the logical design from the physical platform where data will be stored. 
+ 
+data instance 
+A specific set of data values for the characteristics in a data occurrence that is valid at a point in time, 
+or for a period of time. Many data instances can exist for each data occurrence, particularly when 
+historical data are maintained. One data instance is the current instance and the others are historical 
+instances. (Brackett 2011) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

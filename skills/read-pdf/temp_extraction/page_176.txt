@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 169 
+ 
+model, contextual 
+Generally, a very high-level block diagram listing the main terms and definitions for a business or 
+system. 
+ 
+Model-Driven Development (MDD) 
+A software development process that creates models or abstractions of a system or data in order to 
+increase basic compatibility between systems. 
+ 
+Model-View-Controller (MVC) 
+An application design paradigm for object-oriented applications that separates the underlying 
+“model” of business objects from the “view” presentation interface objects and the “controller” 
+events that users perform. By overlaying the controller functions on the view, it creates the illusion of 
+direct manipulation. 
+ 
+morals 
+In general, a person's internal rules of behavior. Contrast with ethics. SEE ALSO professional ethics. 
+ 
+morphological box 
+Alternate form: Zwicky box 
+A problem-structuring and problem-solving technique that reduces the parameters to a finite number 
+with a finite number of possible values, and then compares them to each other. Similar to 
+construction of a dense cube with each parameter being a dimension.  
+ 
+Motivation Configuration 
+Zachman Framework cell name, intersection of Why/Motivation Reasons and Component 
+Assemblies/Technicians as Implementers. 
+ 
+Motivation Definition 
+Zachman Framework cell name, intersection of Why/Motivation Reasons and Business 
+Concepts/Executive Leaders as Owners. 
+ 
+Motivation Identification 
+Zachman Framework cell name, intersection of Why/Motivation Reasons and Scope 
+Contexts/Strategists as Theorists. 
+ 
+Motivation Instantiation 
+Zachman Framework cell name, intersection of Why/Motivation Reasons and Operations Instance 
+Classes/Workers as Participants. 
+ 
+motivation model 
+In architecture, describes reasons for establishing organized business plans, their attributes, priorities, 
+and inter-relationships. 
+ 
+Motivation Reasons 
+Zachman Framework column name, matches Why. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

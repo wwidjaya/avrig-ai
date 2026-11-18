@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 91 
+ 
+data warehouse appliance 
+A system containing integrated servers, storage, and software specifically optimized for Data 
+Warehouse processing. 
+ 
+data warehouse architecture 
+SEE architecture, Business Intelligence. 
+ 
+data warehouse audits and controls 
+A collection of checks and balances to assure the right data is extracted from the right sources, then 
+transformed, cleansed and summarized correctly and finally loaded to the right target database tables. 
+ 
+data warehouse bus architecture  
+The Data Warehouse Bus Architecture is composed of “a master suite of conformed dimensions” 
+and standardized definitions of facts. [1, P. 156] 
+ 
+data warehouse engine  
+A Relational DataBase Management System or Multi-Dimensional DataBase Management System. 
+Data Warehouse engines require strong query capabilities, fast load mechanisms, and large storage 
+requirements. 
+ 
+data warehouse infrastructure 
+SEE infrastructure, data warehouse. 
+ 
+data warehouse network  
+An integrated network of Data Warehouses that contain sharable data propagated from a source 
+Data Warehouse based on information consumer demand. The warehouses are managed to control 
+data redundancy and to promote effective use of the sharable data. 
+ 
+data warehouse, active 
+Implementation of a Data Warehouse that enables real time or near-time data analysis. 
+ 
+data warehouse, federated 
+1. A conceptual Data Warehouse made up of multiple decision support databases, potentially on 
+multiple servers, but presented transparently to Business Intelligence users as a unified schema for 
+query, analysis, and reporting. 
+2. An Enterprise Data Warehouse fed by extracts from departmental Data Warehouses and/or legacy 
+Data Warehouses prior to their incorporation and/or retirement. 
+ 
+data warehouse, functional 
+A Data Warehouse that draws data from nearby operational systems and supports a distinct 
+organization, functional area (such as manufacturing), or geographic unit within the enterprise. 
+Distinct from an Enterprise Data Warehouse. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

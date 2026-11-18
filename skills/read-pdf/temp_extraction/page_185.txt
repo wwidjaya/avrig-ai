@@ -1,0 +1,26 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 178 
+ 
+null  
+The absence of any value. A null value tells you the value does not exist. It does not denote why the 
+value is missing. Placing a zero or blank in the row would not reflect the accurate state of the row, 
+because zero and blank are values. In ASCII, null is hex 00, blank is hex 20, and zero is hex 30. In 
+EBCDIC, null is hex 00, blank is hex 40, and zero is hex F0. SQL supports the notion of null values 
+as a way to search for missing data. 
+ 
+null hypothesis 
+1. Generally, the prediction that an observed result is not due to any inherent systemic cause. 
+2. In data analysis, the prediction that one variable has no association with and responds independently 
+of another variable. 
+ 
+number 
+A class word, abbreviated usually to num.  
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

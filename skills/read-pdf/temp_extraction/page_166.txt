@@ -1,0 +1,30 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 159 
+ 
+logistic regression 
+A modeling technique where unknown values are predicted by known values of other valuables 
+where the dependent variable is binary type. SEE ALSO predictive modeling. 
+ 
+Logistics 
+The management of flows of goods, information, resources, etc. in a logical progression between 
+points of origin, consumption, and destruction.  
+ 
+log-write-ahead 
+A process of writing data where modifications are written to a log before being applied to the stored 
+data at rest. 
+ 
+loose coupling 
+An arrangement whereby components can be easily attached and detached, enabling easier 
+configuration changes. SEE ALSO design. 
+ 
+lower control limit 
+SEE control limit, lower. 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

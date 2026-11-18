@@ -1,0 +1,49 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 116 
+ 
+entity type 
+A population of entity instances which conform to the same data definition or schema, often 
+synonymous with object type or class. An entity type represents a class of objects in the users' 
+universe of discourse, their world represented in a data model. They may be persons, places, things, 
+abstract concepts, events, etc. of interest to the enterprise. (Everest 2010) 
+ 
+entity, business 
+Something of interest to an organization. It may be concrete or an abstract concept. May be 
+represented by a data entity in a data model. (Everest 2010) SEE ALSO entity type. 
+ 
+entity, event 
+Discrete occurrences that are noted by time stamps or other ordering attributes. 
+ 
+entity, kernel 
+An entity that is at the top of a hierarchy, the basic high-level entity. 
+ 
+entity, reference 
+An entity that classifies something else, or that something else refers to for clarity. 
+ 
+entropy 
+The measurement of uncertainty in an outcome, or randomness in a system. 
+ 
+environment  
+1. In the computer technology context, it refers to the conditions surrounding data, such as databases, 
+data formats, servers, network, and any other components that affect the data. 
+2. In a business context, the influencing factors on business performance. 
+ 
+environmental element 
+An aspect of an organization and its business processes defined in the DAMA-DMBOK Functional 
+Framework. The seven environmental elements are Goals & Principles, Activities, Deliverables, 
+Roles & Responsibilities, Practices & Techniques, Technology, and Organization & Culture. 
+ 
+epistemology 
+A branch of philosophy that studies the nature of truth and knowledge. 
+ 
+equivalence 
+A relationship where each side implies or replaces the other; interchangeable. 
+ 
+ergonomics 
+The study of how technology affects the health of the human body. Also known as biotechnology. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

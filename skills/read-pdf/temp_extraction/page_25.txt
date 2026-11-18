@@ -1,0 +1,56 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 18 
+ 
+architecture, client/server  
+A distributed technology approach where application software processing is divided by function. 
+Servers perform shared functions such as processing business rules, managing communications, 
+managing databases, or providing print services. Clients performs individual user functions -- 
+providing customized interfaces, performing screen to screen navigation, offering help functions, etc. 
+Client and server software may reside on the same hardware platform, but each component is 
+designed to be distributed across a networked environment for efficiency. 
+ 
+architecture, closed 
+An architecture where only the original manufacturer can make add-ons and peripherals. 
+ 
+architecture, data 
+1. In common usage, the physical technology infrastructure supporting data management, including 
+database servers, data replication tools, and middleware.  
+2. The method of design and construction of an integrated data resource that is business driven, based 
+on real-world subjects as perceived by the organization, and implemented into appropriate operating 
+environments. It consists of components that provide a consistent foundation across organizational 
+boundaries to provide easily identifiable, readily available, high-quality data to support the current 
+and future business information demand. (Brackett 2011) 
+ 
+architecture, enterprise 
+1. Generally, an integrated collection of models and design approaches used to align information, 
+processes, projects, and technology with the goals of the enterprise. These high-level design artifacts 
+typically describe target views of the enterprise. Enterprise architecture may include:  
+a) an enterprise data model,  
+b) related data integration architecture,  
+c) a business process model,  
+d) an application portfolio architecture,  
+e) an application component architecture,  
+f) an IT infrastructure technology architecture,  
+g) an organizational business architecture, and  
+h) the enterprise information value chain analysis that identifies the linkage and alignment across 
+these perspectives, and to enterprise goals.  
+2. Other models and other forms of architecture may also be included within the enterprise 
+architecture.  
+3. In the Zachman Framework, the enterprise architecture generally includes design artifacts identified 
+in Rows 1 and 2 (conceptual views of data, process, locations, events, roles and goals), the value 
+chain analysis describing the linkages between these perspectives, and high-level decisions about how 
+to implement technology supporting these concepts in an integrated manner. 
+4. An initiative to describe comprehensively the architectures in an organization. It describes the 
+terminology, composition, and relationships within each architecture, the relationships between 
+architectures, and the relationships with external organizations. It includes business goals, business 
+processes, hardware, software, data, and information systems. (Brackett 2011) 
+ 
+architecture, information 
+The analysis and design of the data stored by information systems, concentrating on entities, their 
+attributes, and their relationships. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

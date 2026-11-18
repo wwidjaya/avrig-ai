@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 207 
+ 
+redundancy control  
+Management of a distributed data environment to limit excessive copying, update, and transmission 
+costs associated with multiple copies of the same data. Data replication is a strategy for redundancy 
+control with the intention to improve performance. SEE ALSO managed replication. 
+Redundant Array of Independent Disks (RAID) 
+A technology for configuring a logical data storage device across multiple physical devices to improve 
+performance, availability or both. The primary goal is fault tolerance as in most configurations data 
+can be recovered after a device failure and in some cases, without interruption. SEE ALSO RAID 0; 
+RAID 1; RAID 10; RAID 0+1; RAID 2; RAID 3; RAID 4; RAID 5; RAID 6. 
+ 
+reference & master data management 
+Ensuring consistency with a “golden version” of data values. Managing golden versions and replicas. 
+One of ten data management functions identified in the DAMA-DMBOK Functional Framework. 
+(DAMA-DMBOK Guide, 1st edition, pg. 6.) 
+ 
+reference data  
+1. Generally, any data used to organize or categorize other data, or for relating data to information both 
+within and beyond the boundaries of the enterprise. Usually consists of codes and descriptions or 
+definitions. 
+2. In financial services, refers to both reference and master data together. 
+ 
+Reference Data Management (RDM) 
+Processes that control vocabularies (defined domain values), including control over standardized 
+terms, code values and other unique identifiers, business definitions for each value, business 
+relationships within and across domain value lists, and the consistent, shared use of accurate, timely, 
+and relevant reference data values to classify and categorize data. (DAMA-DMBOK Guide, 1st 
+edition, pg. 171.) 
+ 
+reference data, location 
+Reference data that includes geopolitical data such as countries, states or provinces, counties, postal 
+codes, sales territories, etc. (DAMA-DMBOK Guide, 1st edition, pg. 180.) 
+ 
+reference entity 
+SEE entity, reference. 
+ 
+referential integrity 
+1. In data management, constraints that govern the relationship of an occurrence of one entity to one 
+or more occurrences of another entity. These constraints may be automatically enforced by the 
+DBMS. For instance, every purchase order must have one and only one customer. If the relationship 
+is represented using a foreign key, then the foreign key is said to reference a file or entity table where 
+the identifier is from the same domain. Having referential integrity means that IF a value exists in the 
+foreign key of the referencing file, then it must exist as a valid identifier in the referenced file or table.  
+2. The condition that exists when all intended references from data in one column of a table to data in 
+another column in the same or a different table are valid. (DAMA-DMBOK 1st edition, pg. 297.) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

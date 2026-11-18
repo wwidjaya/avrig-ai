@@ -1,0 +1,4 @@
+**U**: unary 1. Adjective. Consisting of only one component or value. 2. In Object Role Models, describes a predicate consisting of a single object. undo Verb. To rollback or undo a transaction prior to any commit of that transaction.
+**UNION**: A SQL set operator that concatenates two tabular SELECT answer sets with consistent column structures into one distinct answer set table.
+**UNION ALL**: A SQL set operator that concatenates two tabular SELECT answer sets with consistent column structures into one answer set table, including all duplicates. unique identifier A redundant synonym of identifier. Identifiers are unique by definition. SEE identifier. unique index
+**SEE index, unique.**: Order 85101 by gustaf prameswara on August 31, 2026. For use on purchaser device only. Contains DRM with visible and invisible purchaser identifiers.

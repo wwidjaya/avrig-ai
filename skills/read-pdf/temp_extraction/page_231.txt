@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 224 
+ 
+software 
+Computer programs, including operating systems, utilities, tools, Database Management Systems and 
+application programs. Software is intellectual property that imposes semantic meaning on input from 
+humans and devices.  
+ 
+Software As A Service (SAAS) 
+A distribution method for software through a network interface. 
+ 
+Software Configuration Management (SCM) 
+The control of changes made to software and documentation of an information system in 
+development and operational maintenance. Source code/component library management and source 
+code version control are each part of software configuration management. 
+ 
+Software Development Kit (SDK) 
+A set of tools that enable development of system modifications or customizations that will be more 
+likely to properly interface or interact with existing system processes. 
+ 
+software engineering 
+SEE Systems Development LifeCycle. 
+ 
+Software Engineering Body of Knowledge (SWEBOK®) 
+SEE Body of Knowledge, Software Engineering. 
+ 
+Software Engineering Institute (SEI) 
+An IT research organization at Carnegie-Mellon University in Pittsburgh, PA, funded by the US 
+Department of Defense. 
+ 
+Solid State Drive (SSD) 
+A data storage device that uses memory to persist data. Also known as thumb drives, ram drives, or 
+flash drives. 
+ 
+sound 
+A class word, abbreviated usually to snd.  
+ 
+soundex 
+An algorithm developed to index sounds in order to sort or search text with like sounds. 
+ 
+source 
+1. In data management, a specific data set, meta-data set, database, or meta-data repository from where 
+data or meta-data are available. 
+2. In data flow diagrams, where data enters the data flow. SEE ALSO sink. 
+3. DCMI element in element set Content: the origination of a resource. SEE ALSO Dublin Core 
+Metadata Initiative. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 104 
+ 
+dimension, conformed 
+A dimension that exists once but is used in multiple star schemas, so that the dimension content and 
+meaning is the same regardless of which fact table is joined. 
+ 
+dimension, degenerate 
+A dimension where there are no valid dimensional attributes other than a unique identifier in a one-
+to-one relationship with a fact table. 
+ 
+dimension, junk 
+A dimension that consists of multiple loosely-related codes and indicators collected into one table in 
+order to reduce the number of keys and indexes needed in a star schema. 
+ 
+dimension, mini 
+A dimension that includes attributes of another dimension that change over time more frequently 
+than is desired. This sometimes greatly enhances load performance by concentrating the write 
+operations to a small subset of attributes. 
+ 
+dimension, slowly changing 
+A dimension containing data that changes over time, such that the rate of change is a small 
+percentage of the total row count (i.e., 1% per quarter). Dimensions of type 0, 1, 2, 2A, 3, 4, and 6 
+are all types of slowly changing dimensions. 
+ 
+dimension, slowly growing 
+A dimension that slowly increases in the number of rows. 
+ 
+dimension, type 0 
+A dimension where no updates occur. All rows stay as they were when initially written to the table. 
+ 
+dimension, type 1 
+A dimension in which all attributes are type 1, so all attributes are overwritten with new data. 
+ 
+dimension, type 2 
+A dimension in which all attributes are type 2, so any attribute that changes for the business key 
+requires generation of a new row. 
+ 
+dimension, type 2A  
+Similar to a type 2 dimension, a type 2A writes a new row for any change in the data for the row and 
+is time-date stamped. However, the old row is retired to a history table; it is not left in the current 
+table. So in effect, the type 2A table resembles a type 1 in its contents. However, it can be joined to 
+the history table to get a full type 2 view.  
+ 
+dimension, type 3 
+A dimension in which all attributes are type 3, so that any attribute that changes for the business key 
+will require copying attribute values to other attributes before the original attributes are overwritten. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

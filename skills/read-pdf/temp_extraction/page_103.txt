@@ -1,0 +1,41 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 96 
+ 
+database, distributed 
+A database that contains objects residing on independent systems in a network, but can be accessed 
+as though all objects resided on the same system. 
+ 
+database, hierarchical 
+A database in which all relationships among data entities and attributes are hierarchical (SEE 
+relationship, hierarchical). Sometimes used to refer to databases that have hierarchical record 
+structures but allow more general network relationships between record types. Examples include 
+UML, most OO data models, Kroenke's Semantic Object Model, the SQL:99 standard (and later 
+versions), and nested relations. There is increasing interest in moving away from the restrictions of 
+the relational model, which allow only flat record structures. SEE ALSO structure, hierarchical. 
+ 
+database, historical 
+A database that provides an historical perspective on the data; that is, a database that can be used to 
+show how facts about an entity have changed over time. 
+ 
+DataBase, Multi-Dimensional (MDDB) 
+A data structure with three or more independent dimensions. 
+ 
+database, network 
+A type of database where records are stored with links or pointers to other records. Distinguished 
+from a hierarchical database in the sense that a child record may have relationships with multiple 
+parent records.  
+ 
+DataBase, Object-Oriented (OODB) 
+A database based on the object-oriented paradigm instead of the relational model. 
+ 
+database, operational 
+A database supporting one or more transactional applications. Operational databases are the sources 
+of data for data Operational Data Stores and Data Warehouses. They contain detailed data used to 
+run the day-to-day operations of the business. The data continually changes as updates are made. 
+SEE ALSO OnLine Transaction Processing. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

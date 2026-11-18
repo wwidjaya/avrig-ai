@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 236 
+ 
+taxonomy, hierarchical 
+A taxonomy with a tree structure of at least two levels and with bi-directional relationships. An 
+example is geography, from continent to address. (DAMA-DMBOK Guide, 1st edition, pg. 249.) 
+ 
+taxonomy, network 
+A taxonomy with both hierarchical and facet categories. Any two nodes in a network taxonomy link 
+based on their associations. An example is a thesaurus. (DAMA-DMBOK Guide, 1st edition, pg. 
+249.) 
+ 
+technical architecture 
+SEE architecture, technology. 
+ 
+technical data resource data 
+The data that technicians need to build, manage, and maintain databases and make the data available 
+to the business. (Brackett 2011) 
+ 
+technical meta-data 
+SEE meta-data, technical. 
+ 
+Technicians as Implementers 
+Zachman Framework row name, matches Component Assemblies. 
+ 
+technology 
+1. The application of knowledge to sustaining life, improving performance or productivity, conserving 
+resources or increasing human comfort.  
+2. One of the DAMA Functional Framework Environmental Elements. Categories of supporting 
+technology (primarily software tools), standards and protocols, product selection criteria and 
+common learning curves. (DAMA-DMBOK Guide, 1st edition, pg. 13.) 
+ 
+technology architecture 
+SEE architecture, technology. 
+ 
+Technology Physics 
+Zachman Framework row name, matches Engineers as Builders. 
+ 
+technology roadmap 
+SEE chart, technology roadmap. 
+ 
+template 
+A pre-existing form or outline that serves as a pattern guideline for creating a document, 
+specification or software object.  
+ 
+temple diagram 
+SEE chart, temple diagram. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

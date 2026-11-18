@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 248 
+ 
+verb 
+1. In language, a word describing a process or activity that occurs, has occurred, or will occur. 
+2. In data modeling, a predicate that implies a relationship between two (or more) objects or entities. It 
+can be used to form an elementary fact sentence. (Everest 2010)  
+ 
+version 
+A specific modification of a basic object that shares the same identifier with other modified forms of 
+the object. Supplementary version numbers or effective dates are often needed to uniquely identify 
+an instance. 
+ 
+versioning  
+The unique identification and storage of multiple versions of an object. 
+ 
+vertical abstraction 
+SEE abstraction, vertical. 
+ 
+vertical partitioning  
+SEE partitioning, vertical. 
+ 
+Vertical retrace interval  
+The time it takes to redisplay updates to a screen - 1/60th of a second. Used in comparison to zero 
+latency. 
+ 
+Very Large DataBase (VLDB) 
+Databases that pose unusual performance challenges due to their exceptional size.  
+ 
+Very Large Scale Integration (VLSI) 
+The process of combining transistor-based circuits to create integrated chips. 
+ 
+view 
+A presentation of a set of data from one or more physical tables as one logical table. A view can 
+include some or all the rows and columns from each contributing table, and can be defined as the 
+result table from a SELECT statement. 
+ 
+Virtual Reality Markup Language (VRML) 
+A tag language to describe a three-dimensional space in a tagged document. 
+ 
+Virtual Storage Access Method (VSAM) 
+A disk file storage management system invented by IBM. 
+ 
+visualization, compound 
+The use of multiple types of visualization formats in one display. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

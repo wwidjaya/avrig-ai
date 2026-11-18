@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 112 
+ 
+enterprise  
+The scope of an organization as defined by that organization based on a purpose or point of view. 
+An enterprise may be a business, not-for-profit, government agency, or educational institution. An 
+enterprise has a purpose, goals, and objectives. 
+ 
+Enterprise Application Integration (EAI) 
+Technology that allows data sharing between unrelated systems in the organization, providing a 
+single point of interface to which all applications and databases connect, resolving differences 
+between systems, triggering processes and delivering data in the proper format to the proper 
+destination. 
+ 
+enterprise architecture 
+SEE architecture, enterprise. 
+ 
+enterprise BI portal  
+A web-based approach to distributing business information, consolidating Business Intelligence 
+objects (reports, documents, spreadsheets, data cubes, etc.) and making them easily accessible, 
+subject to security authorization, to non- technical users via standard browser technology. 
+ 
+Enterprise Content Management (ECM) 
+SEE content management. 
+ 
+enterprise data  
+Data that is shared across more than one function within an enterprise, or is created and used by one 
+function but still considered essential to the enterprise. 
+ 
+enterprise data architecture 
+Part of the complete enterprise architecture, including  
+a) an enterprise data model, and  
+b) the information value chain analysis that identifies the linkages and alignment of the data 
+model with enterprise views of business functions and processes, organizations, applications 
+and enterprise goals.  
+SEE ALSO architecture, data. 
+ 
+Enterprise Data Fabric (EDF) 
+A data layer that separates data sources from applications, providing the means to solve the potential 
+gridlock prevalent in distributed environments such as grid computing and service-oriented 
+architecture. 
+ 
+Enterprise Data Management (EDM) 
+A structured program for managing physical data resources as they are used by the enterprise. 
+ 
+Enterprise Data Model (EDM) 
+SEE Data Model, Enterprise. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

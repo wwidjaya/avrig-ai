@@ -1,0 +1,1 @@
+**1. SEE component.**: 2. For use with data, SEE data attribute. elementary fact sentence A sentence having one predicate (verb phrase) and one or more nouns or noun phrases which serve as subject(s) or objects; can also include modifiers with the verb or nouns, such as must, only, at most one, at least one. The basis for Object Role Modeling or Fact Oriented Modeling  (formerly

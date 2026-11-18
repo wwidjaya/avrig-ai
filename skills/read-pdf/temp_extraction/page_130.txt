@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 123 
+ 
+File Transfer Program/File Transfer Protocol (FTP) 
+A service that allows you to transfer files to and from other computers. Anyone who has access to 
+FTP can transfer publicly available files to his or her computer. 
+ 
+filter  
+A saved set of selective criteria specifying a subset of data in a database. 
+ 
+Financial Accounting Standards Board (FASB) 
+A private organization whose mission is to “establish and improve standards of financial accounting 
+and reporting for the guidance and education of the public, including issuers, auditors and users of 
+financial information.” FASB publishes the Generally Accepted Accounting Principles (GAAP). 
+ 
+financial consolidation  
+The process of combining and aggregating data from different financial systems to create integrated 
+financial analytic views and comprehensive financial statements compliant with accounting and 
+financial reporting standards. 
+ 
+financial integrity  
+Compliant and reliable financial data, achieved through quality integrated systems and processes, 
+strong internal control, validations to ensure accuracy and conformance with accounting and 
+reporting standards. 
+ 
+firewall  
+A combination of specialized hardware and software set up to monitor traffic between an internal 
+network and an external network (i.e. the Internet). Its primary purpose if for security and is designed 
+to keep unauthorized outsiders from tampering with or accessing information on a networked 
+computer system. 
+ 
+First In, First Out (FIFO) 
+A method of posting a transaction in “first-in-first-out” order. In other words, transactions are 
+posted in the same order that the data producer entered them. 
+ 
+first Normal Form (1NF) 
+SEE Normal Form, first. 
+ 
+first valid date 
+The first date that an attribute or entity instance is valid. 
+ 
+fishbone diagram 
+SEE chart, cause-and-effect diagram. 
+ 
+flag 
+An attribute of a cell in a data set representing qualitative information about the value of that cell, 
+either positive or negative. SEE ALSO indicator. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 70 
+ 
+data attribute, type 3 
+An attribute where some history is preserved within the same record or row, in separate columns. 
+When new data arrives, old data is moved to other columns within the same row, and the new data 
+overwrites the old data in the column assigned to hold the current value. 
+ 
+data capture 
+The process by which collected data are put into a machine-readable form. 
+ 
+data cardinality  
+In relationships, the characteristic  of a relationship that specifies the upper and lower bounds of 
+how many instances of one entity or object type can be related to each instance of the same or some 
+other entity or object type. Cardinality is separately specified at each end of the relationship. At each 
+end the choices are 0, 1, or M. Combining the cardinality at both ends of a binary relationship, yields 
+3 x 9 - 1 = 8 possibilities (0:0 is not a valid option).  
+ 
+data certification 
+The process of verifying and stating that a data set's contents meets expected standards. SEE ALSO 
+certification. 
+ 
+data chaos 
+A state where multiple redundant, inconsistent databases contain the same data attribute used for a 
+similar purpose, rated by the maximum count of instances of a single data attribute. 
+ 
+data characteristic 
+An individual fact that describes or characterizes a data subject. It represents a business feature and 
+contains a single fact, or related facts, about a data subject. (Brackett 2011) 
+ 
+data characteristic substitution 
+An indication that any data characteristic variation can be used for a data characteristic, such as 
+“Date”, can mean any form of a date. (Brackett 2011) 
+ 
+data checking 
+Activity through which the correctness conditions of the data are verified. 
+ 
+data cleansing 
+The process of correcting data errors to bring the level of data quality to an acceptable level for the 
+information user needs. 
+ 
+data clustering  
+The process of partitioning the data attributes of an entity or table into subsets or clusters of similar 
+attributes, based on subject matter or characteristic (domain). 
+ 
+data compilation 
+Operations performed on data to derive information according to a given set of rules. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

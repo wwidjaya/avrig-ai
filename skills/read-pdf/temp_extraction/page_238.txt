@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 231 
+ 
+subquery 
+A query called within another query. 
+ 
+subscribe and publish 
+A style of system interaction and data distribution in which consumer applications or persons 
+indicate their interest in certain kinds of data from certain sources when certain events occur. When 
+the events occur, the consumers receive the data via a message. This approach is an alternative to 
+continual polling or scheduled batch interfaces. 
+ 
+subtype 
+A specialized subset of occurrences of a more general entity type, having one or more additional 
+attributes or relationships not inherent to other occurrences of the entity. SEE also supertype; 
+generalization; specialization; primitive. 
+ 
+summarization table 
+Tables created along commonly used access dimensions to speed query performance, although the 
+redundancies increase the amount of data in the warehouse. SEE ALSO aggregate data. 
+ 
+super 
+Adjective. Over and above, higher in quantity, quality, or degree; exceeding a norm, in excessive degree 
+or intensity, surpassing all or most others of its kind; situated or placed above, on, or at the top of; 
+having the ingredient present in a large or unusual large proportion; constituting a more inclusive 
+category than that specified; superior in status, title, or position. (Brackett 2011) 
+ 
+superkey 
+See key, superkey. 
+ 
+supertype 
+A more generalized entity of which some occurrences belong to a more specialized subtype. SEE 
+ALSO subtype; generalization; specialization; primitive. 
+ 
+supply chain  
+The optimal flow of product from site of production through intermediate locations to the site of 
+final use. 
+ 
+supply chain analytics  
+The process of extracting and presenting supply chain information to provide measurement, 
+monitoring, forecasting and management of the chain.  
+ 
+Supply Chain Management (SCM) 
+The process of ensuring optimal flow of inputs and outputs. 
+ 
+supply demand curve 
+SEE chart, supply demand curve. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

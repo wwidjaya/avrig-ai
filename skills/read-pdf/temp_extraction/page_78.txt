@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 71 
+ 
+data completeness 
+The degree to which data is captured. 
+ 
+data completeness, fact 
+Compares the attributes implemented in a database against all known requirements.  
+ 
+data completeness, value 
+A measure of the absence of null values for a database column. 
+ 
+data compression 
+1. Algorithms or techniques that change data to a smaller physical size that contains the same 
+information. 
+2. The process of changing data to be stored in a smaller physical or logical space. 
+ 
+data consistency 
+The degree to which one set of attribute values match another attribute set within the same row or 
+record (record-level consistency), within another attribute set in a different record (cross-record 
+consistency), or within the same record at different points in time (temporal consistency). (DAMA-
+DMBOK GUIDE 1st edition, pg. 296.) 
+ 
+data consumer  
+A person or group that receives data (on a screen, in a report, or through a query) and uses the data 
+to create information. SEE ALSO information consumer. 
+ 
+Data Control Language (DCL) 
+A subset of Structured Query Language used to define data security, user function permissions, and 
+data access to data in relational tables. 
+ 
+data conversion 
+1. The process of changing data structure, format, or contents to comply with some rule or 
+measurement requirement. 
+2. The process of changing data contents stored in one system so that it can be stored in another 
+system, or used by an application. 
+ 
+data creator 
+A person who enters or updates data. Roughly equivalent to data producer. SEE ALSO Create-Read-
+Update-Delete. 
+ 
+data cube  
+A multi-dimensional data structure that contains an aggregate value at each point, i.e., the result of 
+applying an aggregate function to an underlying relation. Data cubes are used to implement OLAP. 
+SEE ALSO schema, star. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

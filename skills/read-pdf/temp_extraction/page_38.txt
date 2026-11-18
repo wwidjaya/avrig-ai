@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 31 
+ 
+business analyst  
+1. Generally, a knowledge worker responsible for interpreting data, performing calculations, and 
+distributing reports to other knowledge workers.  
+2. In data management, a professional responsible for understanding the business processes and the 
+information needs of an organization, for serving as a liaison between IT and business units, and 
+acting as a facilitator of organizational and cultural change. Also known as a business systems analyst 
+or systems analyst. 
+ 
+business analytics 
+Meta-data that includes data definitions, report definitions, users, usage statistics, and performance 
+statistics. 
+ 
+business architecture  
+SEE architecture, business. 
+ 
+business case 
+A structured format for organizing the reasons, benefits, and estimated costs for initiating a project 
+or program. 
+ 
+Business Concepts 
+Zachman Framework row name, matches Executive Leaders as Owners. 
+ 
+business continuity  
+The degree of uninterrupted stability of an organization’s systems and operations in spite of 
+potentially disruptive events. 
+ 
+business data  
+Data about people, places, things, rules, events, or concepts used to operate and manage any 
+enterprise (not just commercial enterprises). Used to identify data that is not considered to be meta-
+data. 
+ 
+business data steward 
+A knowledge worker, business leader, and recognized subject matter expert assigned accountability 
+for the data specifications and data quality of specifically assigned business entities, subject areas or 
+databases, but with less responsibility for data governance than a coordinating data steward or an 
+executive data steward. 
+ 
+business driven data resource 
+A data resource where the design, development, and maintenance are driven by business needs, as 
+defined by the business information demand. (Brackett 2011) 
+ 
+business entity 
+SEE entity, business. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

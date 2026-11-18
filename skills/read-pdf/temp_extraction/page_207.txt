@@ -1,0 +1,46 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 200 
+ 
+psychographics 
+Used in Customer Relationship Management, a segment of a population delineated by certain shared 
+preferences, activities, or attitudes. 
+ 
+public 
+Adjective. Available for observation by everyone and anyone. Opposite of private. 
+ 
+public disclosure 
+The act of making information or data readily accessible and available to all interested individuals and 
+institutions. 
+ 
+public domain 
+Works that have no copyright restrictions on them, are freely available, and usable without 
+restriction. 
+ 
+Public Key Infrastructure (PKI) 
+Encryption technologies and services designed to protect the security of communications and 
+business transactions on the Internet.  
+ 
+publish/subscribe 
+SEE subscribe and publish. 
+ 
+publisher 
+1. The entity or organization that makes something available for common use. 
+2. DCMI element in element set Intellectual Property: an entity that provides accessibility to a resource. 
+SEE ALSO Dublin Core Metadata Initiative. 
+ 
+purge 
+1. Verb. Generally, to remove, cleanse, or empty. 
+2. Verb. In data management, to permanently delete data. SEE ALSO archive. 
+ 
+push vs. pull 
+The types of movement of things or data between two systems or entities. The system or entity that 
+produces may push; the system or entity that consumes may pull. 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 42 
+ 
+chart, area cartogram 
+A chart that uses a geographic map of the world with the size of countries or their subdivisions 
+distorted by the value of a property of that area such as population. 
+ 
+chart, argument slide 
+A diagram showing analysis of a claim in the form of a children's slide, where the premises and facts 
+support the claim at the top of the slide, and consequences are represented by the actual slide, 
+showing outcomes at the bottom of the slide. 
+ 
+chart, bar 
+A chart that shows bars to illustrate frequencies or values for individual categories. 
+ 
+chart, box plot 
+A chart that displays five values of a measurement where the median and quartile values are the 
+center and edges of a box, and the lowest and highest values are the ends of lines extending from the 
+box.  
+ 
+chart, bridge of negotiation 
+A diagram illustrating steps necessary for two disparate positions to come to a consensus in a middle 
+area, crossing some gap between them, usually illustrated by a bridge over a river or chasm. 
+ 
+chart, bubble 
+A chart showing two dimensions on horizontal and vertical axes, and a third dimension in the size of 
+the points. 
+ 
+chart, bullet 
+A variation of the bar chart, these feature a single, primary measure, compared to one or more other 
+measures, such as a target or a quantitative scale, and displayed in qualitative ranges (poor, fair, good, 
+etc.) by using variations of hue for a single color (which is helpful for colorblind eyes). These long 
+narrow graphs can be grouped to save space, especially on web forms or dashboards. 
+ 
+chart, candlestick 
+A chart showing bars representing range of value change within a point's time interval. 
+ 
+chart, cartogram 
+A chart consisting of a geographic map modified to show some measurement of the map's area, 
+contents, or qualities. Modifications can be to color or to proportional size. There are two types, area 
+cartograms and distance cartograms. 
+ 
+chart, cascade 
+A chart with the X-axis showing a unit of measure and the Y-axis showing a rate per unit. Boxes 
+show the result of X units x Y rate for a specific segment, such as customer. Tall thin boxes above 
+the X-axis are desirable, long short boxes above the X-axis are less desirable, boxes below the X-axis 
+are undesirable. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

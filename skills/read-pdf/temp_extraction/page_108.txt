@@ -1,0 +1,1 @@
+**SEE data, derived.**: description 1. A textual representation of a thing. 2. A class word, abbreviated usually to desc. 3. DCMI element in element set Content: a textual, tabular, or graphical portrayal of a resource. SEE ALSO Dublin Core Metadata Initiative. descriptive meta-data

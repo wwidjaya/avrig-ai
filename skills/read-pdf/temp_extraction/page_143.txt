@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 136 
+ 
+inaccurate 
+Adjective. Not complying with a standard, model, or rule. Having defects or errors. 
+ 
+inconsistent 
+Adjective. Having disagreement or disparity among things or parts of things. Having internal 
+contradictions. 
+ 
+increment 
+A portion of a complete implementation, considered as its own discrete project, but part of an 
+overall implementation program. 
+ 
+incremental implementation 
+SEE Phased Implementation. 
+ 
+incremental load 
+Data propagation to a target database limited to the data that has changed in the source database 
+since the last load. 
+ 
+index 
+1. Generally, a cross-reference created to find something that matches some selection criteria. 
+2. In data management, a data structure which cross references a set of values from the same domain to 
+the places (records or rows) where each value appears, generally within a single file (SEE join index). 
+An index is usually ordered according to the values in the domain. In general, an index can have 
+multiple references (or pointers) for each value, unless the index is on an identifier, in which case 
+there is a one-to-one relationship between the values and the record identifiers. An index is used to 
+improve retrieval performance on a file; it does not add any new information to the database.  
+3. Verb. To create a cross-reference list. 
+ 
+index, bitmap 
+An indexing technique in which a separate structure stores the references to the data as bit arrays. 
+ 
+index, block 
+Describes an index where every key relates to a block in a data file, using the lowest search key in the 
+block. 
+ 
+index, b-tree 
+A binary search tree index that stores index pointers in block partitions according to the values 
+themselves. It simulates a binary search tree and uses corresponding search methods to give 
+performance of the order of Log(base2)N, rather than N as in conventional indexes.  
+ 
+index, clustered 
+An indexing technique in which the actual data is physically stored in the order of the index values, 
+rather than having the index in a separate structure pointing to the data rows. Only one clustered 
+index may exist on an object at a time. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

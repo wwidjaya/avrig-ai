@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 63 
+ 
+correlation 
+A predictive relationship between two factors, such that when one factor changes, you can predict 
+the nature, direction and/or amount of change in the other factor. Not necessarily a cause-and-effect 
+relationship. 
+ 
+correlation database 
+SEE database, correlation. 
+ 
+correlation regression 
+A function that describes the correlation of the values of a data set to a line. 
+ 
+Cost Benefit Analysis (CBA) 
+Comparison of the estimated value of business benefits over time to the estimated cost of 
+expenditures required to realize these benefits. 
+ 
+coverage 
+DCMI element in element set Content: the topic, jurisdiction, or spatial scope of a resource. SEE 
+Dublin Core Metadata Initiative. 
+ 
+covering index 
+SEE index, covering. 
+ 
+Coxcomb chart 
+SEE chart, polar area. 
+ 
+Create-Read-Update-Delete (CRUD) 
+A list of the only functions of data in persistent storage, in a convenient acronym form. 
+ 
+Create-Read-Update-Delete matrix 
+Alternate form: CRUD matrix 
+An information value chain analysis tool, documenting that a given organization, role, process or 
+application “Creates”, “Reads”, “Updates”, and/or “Deletes” data in a given subject area, entity or 
+attribute. CRUD matrices are the vehicle for information value chain analysis. There are many 
+different kinds of CRUD matrices. Each establishes the linkage between a data model and another 
+model (data-to-process, data-to-organization, or data-to-application). 
+ 
+creation date 
+The date on which the record, data or meta-data item was created. 
+ 
+creator 
+DCMI element in element set Intellectual Property: an entity that is responsible for the first existence 
+of a resource instance. SEE Dublin Core Metadata Initiative. 
+ 
+Critical Path Method (CPM) 
+SEE chart, Critical Path Method. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

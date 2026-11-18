@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 128 
+ 
+generalization, relationship 
+The process of evaluating multiple relationships between entities in a set into fewer relationships. 
+Usually necessary after other generalization activities have taken place, which carry the relationships 
+of the specialized entities into the generalized entities. For example, two 1:M relationships between 
+two entities, each having a different parent, can be generalized into a M:N relationship. 
+ 
+Generally Acceptable release (GA) 
+A release of software for general use; it has passed the quality gates of alpha and beta releases.  
+ 
+Generally Accepted Accounting Principles (GAAP) 
+The standard framework of guidelines for financial accounting in the United States; the standards, 
+conventions, and rules accountants follow in recording and summarizing transactions, and in the 
+preparation of financial statements, including definitions of what the categories in financial 
+statements mean and what practices are commonly allowed. Managed by the Financial Accounting 
+Standards Board. 
+ 
+Generally Accepted Data Management Principles (GADMP) 
+A term coined by The DAMA Foundation for principles documented in the DAMA-DMBOK 
+Guide.  
+ 
+geodesy 
+Alternate form: geodetics 
+The science of measuring the shape of a planet and geographical point placement. This science 
+makes global positioning systems possible. 
+ 
+geodetic data 
+Data used in navigation and surveying to translate positions to a position on a planet. 
+ 
+Geographic Information System (GIS) 
+A system or tool for creating, storing, editing, analyzing, and managing geospatial data entities and 
+associated attributes.  
+ 
+Geography markup language (GML) 
+An XML grammar used to express geographical features and attributes. 
+ 
+geomatics 
+The discipline of gathering, storing, processing, and delivering of geospatial data. The use of 
+geospatial technology to survey and capture geospatial measurements. 
+ 
+geospacial 
+Adjective. Pertaining to data about locations on, in, above, or below a planet's surface. 
+ 
+geospatial data  
+Data pertaining to locations and regions on the earth, generally expressed as latitude and longitude 
+(and sometimes altitude); can be located and reasoned about in terms of area. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

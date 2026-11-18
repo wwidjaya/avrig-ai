@@ -1,0 +1,1 @@
+**SEE chart, pie.**: pivot Verb. To rotate the view of data. Used in multi-dimensional analysis with OLAP tools, but can also be performed in spreadsheet applications. pivot table A multi-dimensional modeling scheme (specifically found in Microsoft Excel and many Business

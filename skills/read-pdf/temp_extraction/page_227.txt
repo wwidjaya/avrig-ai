@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 220 
+ 
+Semantic Web, The  
+The next-generation Internet in which all content is tagged with semantic tags defined in published 
+ontologies. Interlinking these ontologies will allow software agents to reason about information not 
+directly connected by document creators. A project currently under the direction of the Web's 
+original creator, Tim Berners-Lee of the World Wide Web Consortium (W3C). 
+ 
+semantics 
+The study of the meaning behind the syntax (signs and symbols) of a language or graphical 
+expression of something. The semantics can only be understood through the syntax. The syntax is 
+like the encoded representation of the semantics. SEE ALSO syntax. 
+ 
+semiotic theory 
+A theory describing the relation between signs and symbols, and their interpretation. It consists of 
+syntax, semantics, and pragmatics. (Brackett 2011) 
+ 
+semiotics 
+The branch of linguistics concerned with signs, symbols, syntax, and semantics, and their use in 
+communication.  
+ 
+sequence 
+1. Generally, the order of things, or an ordering of things, often numbered. 
+2. In data management, a database object that generates numbers in order. 
+ 
+sequence chart 
+SEE chart, sequence. 
+ 
+Sequential Access Method (SAM) 
+A method of retrieving or touching data in some linear order. 
+ 
+server  
+1. A software service that provides standard functions for clients in response to standard messages 
+from clients. 
+2. The physical computer hardware from which services are provided. 
+ 
+service 
+A software component invoked via a message. The message may come from outside the service’s 
+environment, and the results returned by the service may be delivered outside the service’s 
+environment (to the requesting component on a different platform). 
+ 
+Service Integration Maturity Model (SIMM) 
+Developed by IBM, a model for evaluating an organization's security maturity in seven levels, from 
+Silo to Dynamically Reconfigurable Services. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

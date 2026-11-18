@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 215 
+ 
+rose diagram 
+SEE chart, polar area. 
+ 
+row  
+A set of column values describing one logical instance in a relational database table. Technically 
+called a tuple in relational calculus. Equivalent to a record in a flat file. 
+ 
+RSA encryption (RSA) 
+A public key encryption program, named for the authors (Rivest, Shamir, Adleman). SEE ALSO 
+encryption. 
+ 
+rubber-banding 
+The movement of a line or object with one point held fixed and the rest of the object stretches or 
+compresses around that point as other points are moved. 
+ 
+rule 
+A statement that applies logic or an algorithm to information values to determine a resulting output 
+or action, or to constrain the data relation or its valid values. 
+ 
+rule, authorization 
+Criteria used to determine whether or not a person or software agent has permission to access data 
+or perform a process. 
+ 
+rule, business 
+1. Generally, a formally stated constraint governing the characteristics or behavior of an object or 
+entity, or the relationship between objects or entities, used to control the complexity of the activities 
+of an enterprise.  
+2. In data quality, constraints that can be used to validate the contents of a database. The defined 
+characteristics of a database actually constitute business rules, such characteristics as 
+dependency/optionality, multiplicity/exclusivity, and value set constraints. 
+ 
+rule, duplicate identification match 
+In data analysis, a rule that focuses on a specific set of attributes that uniquely identify an entity and 
+identify merge opportunities without taking automatic action. (DAMA-DMBOK Guide, 1st edition, 
+pg. 186.) 
+ 
+rule, match-link 
+In data analysis, a rule that identifies and cross-references records that appear to relate to a master 
+record, without updating the content of the cross-referenced record. (DAMA-DMBOK Guide, 1st 
+edition, pg. 186.) 
+ 
+rule, match-merge 
+In data analysis, a rule that matches records and merges the data from these records into a single, 
+unified, reconciled, and comprehensive record. (DAMA-DMBOK Guide, 1st edition, pg. 186. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 77 
+ 
+data instant 
+The point in time or the timeframe the data represent in the business world. (Brackett 2011) 
+ 
+data integration  
+The planned and controlled: 
+a) merge using some form of reference,  
+b) transformation using a set of business rules, and  
+c) flow of data from a source to a target, 
+for operational and/or analytical use. Data needs to be accessed and extracted, moved, validated and 
+cleansed, standardized, transformed, and loaded. 
+ 
+data integration architect 
+An IT professional responsible for data integration processes, practices and software programs 
+across an enterprise. 
+ 
+data integration architecture 
+A part of a master plan for how data is selected, transformed and flows across databases. The data 
+integration architecture is an important part of enterprise data architecture. It may include database 
+architecture, Master Data Management architecture, Business Intelligence architecture, and meta-data 
+architecture.  
+ 
+data integration developer 
+A software developer responsible for data integration programming. 
+ 
+data integrity 
+1. Data that complies with all rules regarding definitions, relationships, lineage, and heritage. 
+2. In data movement, data that is provably not changed unexpectedly through transmission between 
+systems. 
+ 
+data intermediary 
+A role in which individuals transform data from one form, not created by them, into another form. 
+For example, a data entry clerk enters data from a paper form into a database. 
+ 
+data inventory 
+A comprehensive list of all data objects in a system or an organization, including electronically stored 
+data such as databases and files, and non-electronic data. 
+ 
+data item 
+An individual field in a data record, referred to as a column in a relational database. A data item 
+represents a data attribute, subject to adjustments made during formal data denormalization. 
+(Brackett 2011) 
+ 
+data key 
+Any data attribute or set of data attributes used to identify a data occurrence within a data entity. 
+(Brackett 2011) 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

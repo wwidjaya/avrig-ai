@@ -1,0 +1,46 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 113 
+ 
+enterprise data modeling  
+The development of a common consistent view and understanding of data entities and attributes, 
+and their relationships across the enterprise. 
+ 
+enterprise data strategy  
+A data strategy supporting the entire enterprise.  
+ 
+Enterprise Data Warehouse (EDW) 
+A centralized Data Warehouse designed to service the Business Intelligence needs of the entire 
+enterprise. An EDW adheres to an enterprise data model to ensure consistency of decision support 
+data across the enterprise. 
+ 
+enterprise information architecture  
+An architecture for managing information contained in multiple formats across an enterprise. SEE 
+ALSO enterprise data architecture. 
+ 
+Enterprise Information Integration (EII) 
+Technology providing custom views into multiple databases transparently to enable applications to 
+more easily provide integrated real time read and write access across databases. 
+ 
+Enterprise Information Management (EIM) 
+A structured program for managing information as a strategic asset. 
+ 
+Enterprise JavaBeans (EJB) 
+A server application component architecture defined by Sun. EJB is used to create application 
+objects, and related content may be sent using Java server pages (JSPs). 
+ 
+enterprise model  
+The collection of enterprise data models, enterprise process models, and any other model addressing 
+the entire enterprise in scope. The complete set of enterprise models is commonly called the 
+enterprise architecture. 
+ 
+Enterprise Performance Management (EPM) 
+An enterprise-wide program that provides a structured approach for deploying and evaluating a 
+company's strategy in a consistent and continuous manner. It gives an organization the capability to 
+effectively communicate strategy and ensure that business processes are aligned to support the 
+deployment of that strategy. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

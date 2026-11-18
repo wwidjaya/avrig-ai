@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 62 
+ 
+Control OBjectives for Information and related Technology (COBIT) 
+Standards for IT governance, published by the IT Governance Institute, and available online at 
+www.aisca.org/cobit. CobiT standards are organized into five subject areas, including Resource 
+Management. 
+ 
+controlled vocabulary 
+A defined list of explicitly allowed terms and their definitions. The organization of a controlled 
+vocabulary into a parent-child hierarchy is a taxonomy. 
+ 
+conversion 
+1. In systems, the migration from the use of one application to another. 
+2. In data management, the process of preparing, reengineering, cleansing and transforming data and 
+loading it into a new target data structure. Typically, the term is used to describe a one-time event as 
+part of a new database implementation. However, it is sometimes used to describe an ongoing 
+operational procedure. 
+ 
+cookie 
+An identifier used by a web application to associate a present website visitor with their previous 
+activity with that company. 
+ 
+cooperative processing  
+A style of application processing in which the presentation, business logic, and data management are 
+split among two or more software services operating on one or more computers. In cooperative 
+processing, individual software programs (services) perform specific functions that are invoked by 
+means of parameterized messages exchanged between them. 
+ 
+coordinating data steward 
+A business data steward with additional responsibility for  
+a) leading Data Stewardship Teams, and  
+b) representing data stewardship issues and integrating team models and specifications on a 
+Data Stewardship Committee. 
+ 
+copyright 
+The set of exclusive privileges granted to an author, creator, or owner of a work, allowing control of 
+use of that work, including copying, distribution, and adaptation of the work. 
+ 
+Corporate Information Factory (CIF) 
+An architecture promoted by Bill Inmon that describes the complete data lifecycle within an 
+organization through multiple layers and components of architecture in order to satisfy both 
+operational and analytical needs. 
+ 
+corporate performance management  
+SEE business performance management. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

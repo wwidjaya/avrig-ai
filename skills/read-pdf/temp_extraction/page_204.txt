@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 197 
+ 
+Process Definition 
+Zachman Framework cell name, intersection of How/Process Transformations and Business 
+Concepts/Executive Leaders as Owners. 
+ 
+process flow 
+SEE chart, process flow. 
+ 
+process framework 
+Specifies methods for business and systems planning, analysis, and design processes. (DAMA-
+DMBOK Guide, 1st edition, pg. 67.) 
+ 
+Process Identification 
+Zachman Framework cell name, intersection of How/Process Transformations and Scope 
+Contexts/Strategists as Theorists. 
+ 
+Process Instantiation 
+Zachman Framework cell name, intersection of How/Process Transformations and Operations 
+Instance Classes/Workers as Participants. 
+ 
+process management  
+The analysis, control, and improvement of a business process and its inter-related steps. 
+ 
+process owner 
+The person responsible for process definition, execution and control. 
+ 
+Process Representation 
+Zachman Framework cell name, intersection of How/Process Transformations and System 
+Logic/Architects as Designers. 
+ 
+Process Specification 
+1. The definition or specification of how a process is to be carried out. A computer program is a 
+process specification, to be carried out by the computer (the processor). 
+2. Zachman Framework cell name, intersection of How/Process Transformations and Technology 
+Physics/Engineers as Builders. 
+ 
+Process Transformations 
+Zachman Framework column name, matches How. 
+ 
+product 
+Generally, something produced. The output or result of a process. Something tangible, as opposed to 
+a service. Synonymous with an output, result or deliverable. 
+ 
+product architecture  
+SEE architecture, product. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

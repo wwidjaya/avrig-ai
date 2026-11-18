@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 194 
+ 
+portfolio management  
+SEE IT portfolio management. 
+ 
+positional notation 
+Alternate form: place-value notation 
+A notation where position affects the value of a character or digit. Binary, octal, decimal, and 
+hexadecimal are all examples of positional notation. 
+ 
+practice 
+A repeatedly performed, customary way of doing something. 
+ 
+practices and techniques 
+One of the DAMA Functional Framework Environmental Elements. Common and popular 
+methods and procedures used to perform the processes and product the deliverables. Practices and 
+Techniques may also include common conventions, best practice recommendations, and alternative 
+approaches without elaboration. (DAMA-DMBOK Guide, 1st edition, pg. 13.) 
+ 
+precision 
+The level of detail of a data attribute, usually expressed as the number of numeric places to the right 
+of a decimal point. SEE ALSO scale. 
+ 
+predicate 
+1. Generally, a statement that can be evaluated as true or false. For example, WHERE clauses of SQL 
+SELECT statements define predicate logic for qualifying rows. SEE ALSO arity. 
+2. In Object Role Models, a labeled relationship on one or more objects. Depending on the number of 
+objects, a predicate may be unary, binary, ternary, etc. 
+ 
+prediction 
+The estimation of future results or other data set results based on existing data. 
+ 
+predictive analysis  
+Methods of directed and undirected knowledge discovery, relying on statistical algorithms, neural 
+networks and optimization research to predict and recommend actions based on discovering, 
+verifying and applying patterns in data to predict the behavior of customers, products, services, 
+market dynamics and other critical business activity. 
+ 
+predictive analytics 
+An area of statistical analysis that deals with extracting information from data and using it to predict 
+future trends and behavior patterns 
+ 
+predictive customer relationship management  
+The discipline of getting to know your customers (or citizens) by performing complex analysis 
+(including data mining) on customer data. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -26,11 +26,18 @@ pub fn env_or(key: &str, fallback: &str) -> String {
     }
 }
 
-pub fn load_or_login(creds_path: &Path, client_id: &str, client_secret: &str) -> Result<Credentials> {
+pub fn load_or_login(
+    creds_path: &Path,
+    client_id: &str,
+    client_secret: &str,
+) -> Result<Credentials> {
     match load_credentials(creds_path) {
         Ok(creds) => Ok(creds),
         Err(err) => {
-            info!("Stored credentials not found or unreadable: {}. Starting OAuth login flow...", err);
+            info!(
+                "Stored credentials not found or unreadable: {}. Starting OAuth login flow...",
+                err
+            );
             login(creds_path, client_id, client_secret)
         }
     }
@@ -174,8 +181,7 @@ pub fn login(creds_path: &Path, client_id: &str, client_secret: &str) -> Result<
 
                     if req_state.as_deref() != Some(&state_clone) {
                         let _ = req.respond(
-                            Response::from_string("OAuth state mismatch")
-                                .with_status_code(400),
+                            Response::from_string("OAuth state mismatch").with_status_code(400),
                         );
                         let _ = tx.send(Err(anyhow!("OAuth state mismatch")));
                         return;
@@ -183,8 +189,10 @@ pub fn login(creds_path: &Path, client_id: &str, client_secret: &str) -> Result<
 
                     if let Some(e) = err {
                         let _ = req.respond(
-                            Response::from_string("Google authorization failed. Return to the terminal.")
-                                .with_status_code(400),
+                            Response::from_string(
+                                "Google authorization failed. Return to the terminal.",
+                            )
+                            .with_status_code(400),
                         );
                         let _ = tx.send(Err(anyhow!("Google OAuth: {}", e)));
                         return;
@@ -197,14 +205,19 @@ pub fn login(creds_path: &Path, client_id: &str, client_secret: &str) -> Result<
                                 Response::from_string("Missing authorization code")
                                     .with_status_code(400),
                             );
-                            let _ = tx.send(Err(anyhow!("callback did not include authorization code")));
+                            let _ = tx
+                                .send(Err(anyhow!("callback did not include authorization code")));
                             return;
                         }
                     };
 
-                    let header = Header::from_bytes(&b"Content-Type"[..], &b"text/html; charset=utf-8"[..]).unwrap();
-                    let resp = Response::from_string("Google Antigravity authorization complete. You may close this tab.")
-                        .with_header(header);
+                    let header =
+                        Header::from_bytes(&b"Content-Type"[..], &b"text/html; charset=utf-8"[..])
+                            .unwrap();
+                    let resp = Response::from_string(
+                        "Google Antigravity authorization complete. You may close this tab.",
+                    )
+                    .with_header(header);
                     let _ = req.respond(resp);
                     let _ = tx.send(Ok(code));
                     return;
@@ -352,9 +365,16 @@ impl AppState {
     pub async fn refresh_token(&self) -> Result<()> {
         let (needs_refresh, refresh_token_val, cid, csec) = {
             let creds = self.creds.read().await;
-            let valid = !creds.access_token.is_empty() && (creds.expires_at - Utc::now()) > Duration::seconds(60);
-            let cid = creds.client_id.clone().unwrap_or_else(|| self.client_id.clone());
-            let csec = creds.client_secret.clone().unwrap_or_else(|| self.secret.clone());
+            let valid = !creds.access_token.is_empty()
+                && (creds.expires_at - Utc::now()) > Duration::seconds(60);
+            let cid = creds
+                .client_id
+                .clone()
+                .unwrap_or_else(|| self.client_id.clone());
+            let csec = creds
+                .client_secret
+                .clone()
+                .unwrap_or_else(|| self.secret.clone());
             (!valid, creds.refresh_token.clone(), cid, csec)
         };
 
@@ -406,7 +426,11 @@ impl AppState {
         Ok(())
     }
 
-    pub async fn google_post(&self, path: &str, body: &serde_json::Value) -> Result<serde_json::Value> {
+    pub async fn google_post(
+        &self,
+        path: &str,
+        body: &serde_json::Value,
+    ) -> Result<serde_json::Value> {
         self.refresh_token().await?;
         let access_token = {
             let creds = self.creds.read().await;

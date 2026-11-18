@@ -1,0 +1,1 @@
+**Data Architect (DA)**: A master data analyst, responsible for the overall data requirements of an organization, its data architecture and data models, and the design of the databases and data integration solutions that support the organization. data architecture

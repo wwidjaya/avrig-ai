@@ -1,0 +1,11 @@
+[accounts.calendar]
+
+# Google Calendar over CalDAV (v2). Google's CalDAV only takes OAuth bearer
+# tokens; `ortie token show` supplies a live one (auto-refreshed).
+caldav.home = "https://apidata.googleusercontent.com/caldav/v2"
+caldav.auth.bearer.token.command = ["ortie", "token", "show", "-a", "calendar"]
+
+# Primary calendar id. Google CalDAV addresses each calendar by "<id>/events"
+# (e.g. "you@gmail.com/events"). Secondary ids come from the Google Calendar
+# web UI (settings → calendar → "Calendar ID").
+calendar.default = "YOUR_EMAIL@gmail.com/events"

@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 85 
+ 
+data quality certification 
+A declaration that a database has met a set of defined data quality requirements (service levels), based 
+on data quality analysis and audits. 
+ 
+data quality decay rate 
+The rate that a data attribute loses accuracy over time if not updated. For example, if age is stored, 
+the entire dataset's age attribute will be incorrect after one year because everyone will have aged by 
+then. 
+ 
+data quality management 
+The application of total quality management concepts and practices to improve data and information 
+quality, including setting data quality policies and guidelines, data quality measurement (including data 
+quality auditing and certification), data quality analysis, data cleansing and correction, data quality 
+process improvement, and data quality education. One of the ten data management functions 
+identified in the DAMA-DMBOK Functional Framework. 
+ 
+data quality process improvement 
+System analysis and redesign to eliminate or prevent data errors and defects. Data quality process 
+improvement is a proactive, preventive approach to improving data quality. 
+ 
+data quality requirement 
+Application requirements that eliminate or prevent data errors, including requirements for domain 
+control, referential integrity constraints, and edit and validation routines. 
+ 
+data reconciliation 
+The process of adjusting data derived from two different sources to remove, or at least reduce, the 
+impact of differences identified. 
+ 
+data record 
+A physical grouping of data items that are stored in or retrieved from a data file. It is referred to as a 
+row or tuple in a relational database. A data record represents a data instance. (Brackett 2011) 
+ 
+data redundancy  
+The unknown and unmanaged duplication of business facts. 
+ 
+data re-engineering 
+The process of analyzing, standardizing, and transforming data from non-standard files and databases 
+into a standardized database that is part of the enterprise data architecture. 
+ 
+data reference set  
+A specific set of data codes for a general topic, such as a set of management level codes in an 
+organization. (Brackett 2011) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

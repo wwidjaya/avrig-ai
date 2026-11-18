@@ -24,9 +24,16 @@ pub struct DecisionRequest {
 #[serde(rename_all = "snake_case")]
 pub enum HumanAction {
     Approve,
-    Reject { reason: String },
-    RequestRefinement { guidance: String },
-    Override { override_content: serde_json::Value, reason: String },
+    Reject {
+        reason: String,
+    },
+    RequestRefinement {
+        guidance: String,
+    },
+    Override {
+        override_content: serde_json::Value,
+        reason: String,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -68,18 +75,14 @@ impl AuthorityGate {
         }
 
         let (new_status, new_epistemic) = match &action {
-            HumanAction::Approve => (
-                CandidateStatus::Approved,
-                EpistemicStatus::ApprovedBaseline,
-            ),
+            HumanAction::Approve => (CandidateStatus::Approved, EpistemicStatus::ApprovedBaseline),
             HumanAction::Reject { .. } => (
                 CandidateStatus::Rejected,
                 EpistemicStatus::AssumptionOrUnknown,
             ),
-            HumanAction::RequestRefinement { .. } => (
-                CandidateStatus::Draft,
-                EpistemicStatus::AgentInference,
-            ),
+            HumanAction::RequestRefinement { .. } => {
+                (CandidateStatus::Draft, EpistemicStatus::AgentInference)
+            }
             HumanAction::Override { .. } => (
                 CandidateStatus::Approved,
                 EpistemicStatus::AuthoritativeRequirement,

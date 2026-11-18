@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 122 
+ 
+failure transparency 
+The extent to which errors and recoveries within a distributed system are invisible to users and 
+applications. 
+ 
+failure tree 
+SEE chart, fault tree. 
+ 
+false negative 
+An incorrect result, which fails to detect a condition or return a result that is actually present. 
+ 
+false positive 
+An incorrect result, which detects a condition or returns a result that is not actually present. 
+ 
+fault tree 
+SEE chart, fault tree. 
+ 
+Federal Information Processing Standard (FIPS) 
+A numeric code that identifies U.S. states, districts, and protectorates with 2 digit codes and counties 
+with 3 digit codes. 
+ 
+federated data warehouse 
+SEE data warehouse, federated. 
+ 
+federated database 
+A set of databases that are documented and then interconnected to operate as one database, even 
+when those databases are on different platforms. A person desiring data goes to the federation and 
+gets the data they need without knowing where those data reside. (Brackett 2011) 
+ 
+field 
+The physical container for values of an attribute. 
+ 
+fifth Normal Form (5NF) 
+SEE Normal Form, fifth. 
+ 
+file 
+A collection of information either on paper, or electronically in the form of data fields (or more 
+complex structures) which describe a set of entities possessing some common characteristics or 
+attributes; a collection of zero or more records which may have an arbitrarily complex structure (flat, 
+hierarchical, etc.).  
+ 
+File Allocation Table (FAT) 
+A table on a disk that catalogs the location and size of files on disk, as well as free and unusable areas. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

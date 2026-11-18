@@ -1,0 +1,55 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 19 
+ 
+architecture, information systems 
+The integrated set of design artifacts defining how data (including the logical data model), 
+applications (including the application portfolio architecture and data integration architecture), and 
+technology (including portfolios of technology products and standards) will integrate to support the 
+business architecture.  
+ 
+architecture, in-memory 
+An architecture that uses flash memory rather than conventional disk storage. 
+ 
+architecture, meta-data 
+The design for integration of meta-data across data dictionaries, directories, and repositories.  
+ 
+architecture, multi-tier 
+Alternate form: n-tier architecture 
+A form of architecture where the user interface layers, the application processing layers, and the data 
+management layers are all logically separate parts which communicate through services. SEE ALSO 
+architecture, three-tier. 
+ 
+architecture, open 
+The published specifications for a computer by a vendor, allowing other companies to create add-ons 
+to enhance and customize the machine, and to make peripheral devices that work properly with it. In 
+practice, has been difficult to engage on a corporate basis due to the risk involved in a source that has 
+multiple editors and has little to no assurance of quality when in use. Outsourcing the risk to a 
+second party who then use the open source and accept the liability for the code is then the way to 
+engage with open source code. 
+ 
+architecture, process 
+1. The structural design of process systems, such as computers, businesses, or other complex systems. 
+2. The first two rows of the “function” column of the Zachman Framework for Enterprise 
+Architecture:  
+Row 1: Objectives/Scope (contextual) – Planner View: a list of processes important to the business 
+(may be a hierarchical list outlining a functional decomposition of processes) 
+Row 2: Enterprise Model (conceptual) – Owner View: a business process model (process flow 
+diagrams, sometimes called data flow diagrams, showing the flow of data and other business 
+resources between processes as inputs and outputs).  
+a) Enterprise process architecture typically includes  
+b) a functional decomposition,  
+c) process flow diagrams, and  
+d) value chain analysis linking processes to data (subject areas or entities), organizations, roles, 
+goals, applications, and/or projects.  
+3. Includes functions, activities, workflows, events, cycles, products, and procedures. DAMA-DMBOK 
+1st edition, pg. 66. 
+ 
+architecture, product 
+Part of a technology architecture, identifying selected vendor-specific software tools and services. 
+Although not implied in the name, it may also include industry-wide standards and protocols. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -230,7 +230,9 @@ pub async fn login(
 
                     if let (Some(code), Some(returned_state)) = (code, returned_state) {
                         if returned_state != thread_state {
-                            let _ = request.respond(Response::from_string("OAuth state mismatch. Please try again."));
+                            let _ = request.respond(Response::from_string(
+                                "OAuth state mismatch. Please try again.",
+                            ));
                             continue;
                         }
                         let response = Response::from_string(
@@ -241,7 +243,8 @@ pub async fn login(
                         break;
                     }
                 } else {
-                    let _ = request.respond(Response::from_string("Not Found").with_status_code(404));
+                    let _ =
+                        request.respond(Response::from_string("Not Found").with_status_code(404));
                 }
             }
         }

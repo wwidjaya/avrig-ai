@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 177 
+ 
+Normal Form, sixth (6NF) 
+1. An advanced level of normalization that adds temporal constraints upon relations, such as a range of 
+time when a relationship was effective. SEE ALSO database, temporal. 
+2. Sometimes used incorrectly to refer to Domain/Key Normal Form; not the same as definition 1. 
+ 
+Normal Form, third (3NF) 
+A form of normalization where every entity has no transitive dependencies, that is, every data item 
+must be directly determined by the identifier, and not indirectly determined through some other non-
+key attribute. For example, if the boss of a department were determined by the department, then it 
+would be incorrect to store both the department ID and the boss name in the employee record. 
+Violations are commonly known as inter-attribute dependencies. Sometimes colloquially referred to 
+as “the key, the whole key, and nothing but the key.” 
+ 
+normalize 
+1. Verb. Generally, to impose standards or regulations, or bring to a desired state. 
+2. Verb. In data modeling, to apply rules to a record-based data structure to reduce redundancy, such 
+that each data attribute is stored  
+a) as few times as necessary, and  
+b) with its determinant as the identifier.  
+The rules of normalization are applied only within a record or table, and cannot be applied until an 
+identifier is first designated for the table. Even though the rules of normalization are numbered, there 
+is no necessary ordering -- they can be applied in any order, and some may be satisfied while others 
+are not. For example, a record may have no transitive dependencies (thus not violating the condition 
+for 3NF) but may have a partial dependency (thus failing 2NF). 
+ 
+normative model 
+A model that describes how a system should work according to assumptions or pre-defined 
+standards. 
+ 
+North American Industrial Classification System (NAICS) 
+A taxonomy of business classification, replacing the Standard Industry Code. The North American 
+Industry Classification System is the standard used by Federal statistical agencies in classifying 
+business establishments for the purpose of collecting, analyzing, and publishing statistical data related 
+to the U.S. business economy. NAICS was developed jointly by the U.S. Economic Classification 
+Policy Committee, Statistics Canada, and Mexico's Instituto Nacional de Estadistica y Geografia, to 
+allow for a high level of comparability in business statistics among the North American countries. 
+ 
+Not Only SQL (NoSQL) 
+A type of database that is distributed to enable large-scale data access. 
+ 
+noun 
+A type of word that describes a person, a place, a thing, or an idea. One of the syntactic components 
+used to construct sentences according to a grammar. 
+ 
+n-tier architecture 
+SEE architecture, multi-tier. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

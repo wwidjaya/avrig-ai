@@ -1,8 +1,8 @@
-use std::collections::HashMap;
-use uuid::Uuid;
-use avrig_harness::{CandidateArtifact, CandidateStatus};
 use crate::error::{Result, SdlcError};
 use crate::lifecycle::LifecycleStage;
+use avrig_harness::{CandidateArtifact, CandidateStatus};
+use std::collections::HashMap;
+use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub struct ProjectLifecycleState {
@@ -23,13 +23,20 @@ impl ProjectLifecycleState {
     }
 
     pub fn add_artifact(&mut self, stage: LifecycleStage, artifact: CandidateArtifact) {
-        self.stage_artifacts.entry(stage).or_default().push(artifact);
+        self.stage_artifacts
+            .entry(stage)
+            .or_default()
+            .push(artifact);
     }
 
     pub fn has_approved_baseline_for_stage(&self, stage: LifecycleStage) -> bool {
         self.stage_artifacts
             .get(&stage)
-            .map(|artifacts| artifacts.iter().any(|a| a.status == CandidateStatus::Approved))
+            .map(|artifacts| {
+                artifacts
+                    .iter()
+                    .any(|a| a.status == CandidateStatus::Approved)
+            })
             .unwrap_or(false)
     }
 

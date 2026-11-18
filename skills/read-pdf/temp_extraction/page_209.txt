@@ -1,0 +1,35 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 202 
+ 
+query  
+1. Generally, a request. 
+2. In data management, a statement written and issued against a database for decision support. It may 
+be an ad hoc query or a reusable standard query that populates an existing report format. 
+Colloquially, any SELECT SQL statement.  
+3. Verb. To request data from a database. 
+ 
+Query From Hell (QFH) 
+A query that takes a long time to return a result set to the user (or never concludes), and uses 
+significant computing resources, causing a negative impact on the performance experienced by other 
+users. 
+ 
+query governor  
+A facility that terminates a database query when it has exceeded a predefined threshold of elapsed 
+time, used computing resources or estimated cost. 
+ 
+QUEry Language (QUEL) 
+QUEry Language, as developed in Ingres, similar in semantics with SQL but with a different syntax. 
+ 
+query tool 
+Software that allows a user to create and direct specific questions to a database. These tools provide 
+the means for pulling the desired information from a database. They are typically SQL-based tools 
+and allow a user to define data in end-user language. 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

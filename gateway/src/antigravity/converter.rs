@@ -5,6 +5,7 @@ use base64::Engine;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use rand::RngCore;
 use serde_json::{Map, Value, json};
+use std::collections::HashSet;
 
 pub const ALLOWED_SCHEMA_FIELDS: &[&str] = &[
     "type",
@@ -59,6 +60,16 @@ pub fn random_id() -> String {
     let mut b = [0u8; 16];
     rand::thread_rng().fill_bytes(&mut b);
     URL_SAFE_NO_PAD.encode(b)
+}
+
+/// Provider responses may omit Gemini's optional function-call ID. In that
+/// case create the OpenAI ID here; clients replay this returned ID on the
+/// matching tool result, so the pair remains stable across turns.
+pub fn response_tool_call_id(upstream_id: Option<&str>) -> String {
+    match upstream_id {
+        Some(id) if !id.trim().is_empty() => id.to_string(),
+        _ => format!("call_{}", random_id()),
+    }
 }
 
 pub fn message_text(content: &Option<Value>) -> Result<String> {
@@ -124,10 +135,7 @@ pub fn sanitize_gemini_schema(val: Value) -> Value {
                     map.insert("nullable".to_string(), Value::Bool(true));
                 }
                 if non_null_types.len() == 1 {
-                    map.insert(
-                        "type".to_string(),
-                        Value::String(non_null_types[0].clone()),
-                    );
+                    map.insert("type".to_string(), Value::String(non_null_types[0].clone()));
                 } else if non_null_types.len() > 1 {
                     map.remove("type");
                     let any_of_list: Vec<Value> = non_null_types
@@ -253,7 +261,8 @@ pub fn parse_user_content_parts(content: &Option<Value>) -> Vec<Value> {
                                         if let Some((meta, data)) = raw_url.split_once(',') {
                                             let mut mime = "image/jpeg";
                                             if let Some(semi) = meta.find(';') {
-                                                if let Some(m) = meta[..semi].strip_prefix("data:") {
+                                                if let Some(m) = meta[..semi].strip_prefix("data:")
+                                                {
                                                     mime = m;
                                                 }
                                             }
@@ -278,11 +287,61 @@ pub fn parse_user_content_parts(content: &Option<Value>) -> Vec<Value> {
     parts
 }
 
+/// Check that every replayed tool call has one non-empty, unique ID and
+/// exactly one later tool result. Valid IDs are preserved verbatim.
+pub fn validate_tool_history(messages: &[ChatMessage]) -> Result<()> {
+    let mut all_ids = HashSet::new();
+    let mut pending = HashSet::new();
+
+    for (message_index, message) in messages.iter().enumerate() {
+        if message.role == "assistant" {
+            if let Some(calls) = &message.tool_calls {
+                for call in calls {
+                    if call.id.trim().is_empty() {
+                        return Err(anyhow!(
+                            "invalid tool history: assistant tool call at message {message_index} has an empty ID"
+                        ));
+                    }
+                    if !all_ids.insert(call.id.as_str()) {
+                        return Err(anyhow!(
+                            "invalid tool history: duplicate tool call ID {:?}",
+                            call.id
+                        ));
+                    }
+                    pending.insert(call.id.as_str());
+                }
+            }
+        } else if message.role == "tool" {
+            let id = message.tool_call_id.as_deref().unwrap_or_default();
+            if id.trim().is_empty() {
+                return Err(anyhow!(
+                    "invalid tool history: tool result at message {message_index} is missing its tool_call_id"
+                ));
+            }
+            if !pending.remove(id) {
+                return Err(anyhow!(
+                    "invalid tool history: tool result at message {message_index} has orphaned or mismatched tool_call_id {:?}",
+                    id
+                ));
+            }
+        }
+    }
+
+    if !pending.is_empty() {
+        return Err(anyhow!(
+            "invalid tool history: assistant tool call(s) have no matching tool result: {}",
+            pending.into_iter().collect::<Vec<_>>().join(", ")
+        ));
+    }
+    Ok(())
+}
+
 pub async fn to_antigravity_request(
     state: &AppState,
     input: &ChatRequest,
     project: &str,
 ) -> Result<Value> {
+    validate_tool_history(&input.messages)?;
     let mut contents: Vec<Value> = Vec::new();
     let mut system_parts: Vec<String> = Vec::new();
 
@@ -369,8 +428,14 @@ pub async fn to_antigravity_request(
                 let mut merged = false;
                 if let Some(last_turn) = contents.last_mut() {
                     if last_turn.get("role").and_then(|r| r.as_str()) == Some("user") {
-                        if let Some(parts_arr) = last_turn.get_mut("parts").and_then(|p| p.as_array_mut()) {
-                            if parts_arr.first().and_then(|p| p.get("functionResponse")).is_some() {
+                        if let Some(parts_arr) =
+                            last_turn.get_mut("parts").and_then(|p| p.as_array_mut())
+                        {
+                            if parts_arr
+                                .first()
+                                .and_then(|p| p.get("functionResponse"))
+                                .is_some()
+                            {
                                 parts_arr.push(fr_part.clone());
                                 merged = true;
                             }

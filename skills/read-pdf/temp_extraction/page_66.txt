@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 59 
+ 
+cone tree chart 
+SEE chart, cone tree. 
+ 
+Confidence Interval (CI) 
+The space between an upper and lower limit of a range, where there is a high probability of the 
+inclusion of a particular value. 
+ 
+confidence level 
+A measurement of certainty that a statistical prediction is accurate. 
+ 
+confidentiality 
+1. Ensuring that information is accessible only to those authorized to have access. ISO-17799. 
+2. In data security, a property of data indicating the extent to which their unauthorized disclosure could 
+be prejudicial or harmful to the interest of the source or other relevant parties. 
+ 
+configuration management 
+A generic term that is often used to describe the whole of the activities concerned with the creation, 
+maintenance, and control of databases and their environments. 
+ 
+conformance 
+Agreement to follow internal policies, standards, procedures, and architecture requirements. 
+ 
+conformed dimension 
+A dimension that means and represents the same thing when linked to different fact tables. 
+ 
+conformity 
+1. The state of being similar to accepted standards or to the attributes of peers. 
+2. The process of becoming similar to the attributes of peers or to a standard. 
+ 
+connected 
+The characteristic of a graph in which there exists at least one path from every node to every other 
+node in the graph. 
+ 
+consensus 
+The agreement of a group to a decision, judgment or definition, when all stakeholders present can 
+say, “I can live with it.” 
+ 
+consistent 
+Adjective. Uniformity or agreement among things or parts of things. Having internal logical and 
+numerical coherence; having no internal contradiction. 
+ 
+consolidation  
+The process of combining and aggregating data from different systems and possibly disparate 
+formats to create a unified view of information. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

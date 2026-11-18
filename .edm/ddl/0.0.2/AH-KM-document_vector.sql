@@ -6,7 +6,7 @@
 -- database: avrig-db
 -- schema:   km
 -- version:  0.0.2
--- updated:  2026-11-14 03:49 UTC
+-- updated:  2026-11-14 04:47 UTC
 -- update:   regenerated for version 0.0.2
 -- ============================================================
 
@@ -20,7 +20,7 @@ CREATE TABLE "km"."document_vector" (
     "page_no" integer NULL,
     "chunk_text" text NOT NULL,
     "token_count" integer NOT NULL,
-    "embedding" vector NOT NULL,
+    "embedding" vector(1024) NOT NULL,
     "tsv_content" tsvector NULL,
     "start_char_offset" integer NULL,
     "end_char_offset" integer NULL,

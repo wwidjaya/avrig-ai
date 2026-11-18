@@ -1,0 +1,5 @@
+**X**: 
+**XML schema**: 
+**SEE schema, XML.**: 
+**XSD**: The schema language for XML, expressed in XML, equivalent to Document Type Definition in older
+**Y**: 

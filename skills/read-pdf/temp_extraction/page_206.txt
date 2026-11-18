@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 199 
+ 
+project 
+An effort with a defined purposes, start and finish. 
+ 
+project charter/program charter 
+A statement of objectives, scope, and stakeholders or participants in a project or program. 
+ 
+Project Join Normal Form (PJNF) 
+SEE Normal Form, fifth. 
+ 
+project management  
+ The planning, supervision and control of a project. 
+ 
+Project Management Institute (PMI) 
+A non-profit organization of project management professionals. PMI is the sponsor of the 
+PMBOK® Guide and the certifying body for Project Management Professional certification. 
+ 
+project specification 
+A detailed description of a proposed effort. 
+ 
+Proof-Of-Concept (POC) 
+A minimal implementation or execution of a process that serves as a sample sufficient to prove the 
+success of the whole implementation or process. 
+propagated data  
+Data that is transferred from a data source to one or more target environments according to 
+propagation rules normally based on transaction logic. SEE ALSO data replication. 
+ 
+property 
+An attribute or a relationship of an object.  
+ 
+protocol  
+A set of conventions that govern the communications between processes. Protocol specifies the 
+format and content of messages to be exchanged. 
+ 
+prototype 
+1. An artifact in iterative development. A prototype may be disposable or the base for further 
+incremental development. 
+2. Verb. To create a test artifact for the sole purpose of determining whether the design is feasible or 
+will be successful given environmental restraints. 
+ 
+provenance 
+Originally from the French provenir, meaning to come from. It represents the origin or source of 
+something, the history of ownership, the location of an object. The term is used mostly for art work, 
+but is now used in a wide range of fields, including science and computing. (Brackett 2011) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

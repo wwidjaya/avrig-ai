@@ -1,0 +1,1 @@
+**INTERSECT**: A SQL set operator that intersects two tabular SELECT answer sets with consistent column structures into one answer set table where only rows that match using the join conditions are included. intersection entity

@@ -18,12 +18,7 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn new(
-        creds_path: PathBuf,
-        client_id: String,
-        secret: String,
-        creds: Credentials,
-    ) -> Self {
+    pub fn new(creds_path: PathBuf, client_id: String, secret: String, creds: Credentials) -> Self {
         let http = reqwest::Client::builder()
             .timeout(std::time::Duration::from_secs(90))
             .build()

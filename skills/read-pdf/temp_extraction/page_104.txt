@@ -1,0 +1,48 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 97 
+ 
+database, relational 
+1. The most common form of database today, storing data in tables made of up of columns and rows, 
+created using the relational data modeling scheme. 
+2. A database conforming to Codd's rules:  
+Rule 0: The system must qualify as relational, as a database, and as a management system. 
+Rule 1: The information rule. 
+Rule 2: The guaranteed access rule. 
+Rule 3: Systematic treatment of null values. 
+Rule 4: Active online catalog based on the relational model. 
+Rule 5: The comprehensive data sublanguage rule. 
+Rule 6: The view updating rule. 
+Rule 7: High-level insert, update, and delete. 
+Rule 8: Physical data independence. 
+Rule 9: Logical data independence. 
+Rule 10: Integrity independence. 
+Rule 11: Distribution independence. 
+Rule 12: The non-subversion rule. 
+ 
+database, source 
+A database that feeds into a target database. May be an operational database, ODS, data staging area  
+or Data Warehouse. 
+ 
+database, target 
+The database in which data will be loaded or inserted. 
+ 
+database, temporal 
+A database with built-in time aspects, including valid time and transaction time. 
+ 
+data-in-motion 
+Data that is carried across networks between systems. 
+ 
+date 
+1. A point in time with the granularity of a day. 
+2. A class word, abbreviated usually to dt.  
+3. DCMI element in element set Instantiation: a timeframe for an event. SEE ALSO Dublin Core 
+Metadata Initiative. 
+ 
+datum 
+Historically, has been defined as the singular form of data related to one fact. (Brackett 2011) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

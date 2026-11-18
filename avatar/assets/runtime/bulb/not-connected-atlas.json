@@ -1,0 +1,16 @@
+{
+  "source": "animation/not-connected.mp4",
+  "frame_count": 240,
+  "fps": 24.0,
+  "source_dimensions": [
+    1280,
+    720
+  ],
+  "frame_dimensions": [
+    192,
+    288
+  ],
+  "columns": 12,
+  "rows": 20,
+  "chroma_key": "green"
+}

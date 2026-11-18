@@ -57,7 +57,11 @@ pub async fn fetch_gemini_cli_quota(state: &AppState, project: &str) -> Result<V
     let status = resp.status();
     let body = resp.text().await.unwrap_or_default();
     if !status.is_success() {
-        return Err(anyhow::anyhow!("Gemini CLI quota HTTP {}: {}", status, body));
+        return Err(anyhow::anyhow!(
+            "Gemini CLI quota HTTP {}: {}",
+            status,
+            body
+        ));
     }
 
     let parsed: GeminiCliQuotaResponse = serde_json::from_str(&body)

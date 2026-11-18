@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 21 
+ 
+array 
+A grouping of similar items of the same storage type in a sequential pattern, and referenced by a 
+sequential index value. SEE ALSO matrix. 
+ 
+artifact 
+An object made or modified by a human. 
+ 
+Artificial Intelligence (AI) 
+Software that performs a function previously ascribed only to human beings, such as natural language 
+processing. 
+ 
+asset 
+1. Generally, something that has value or produces benefit. 
+2. In accounting, something of value on a balance sheet. 
+ 
+asset condition 
+Asset condition describes how an asset or a service will perform in objective and measurable terms. 
+The measurement is sometimes as simple as assigning a number. An example would be a range of 1 
+to 5, where one = poor and five = excellent. 
+ 
+asset, intangible 
+Non-physical assets, such as accounts receivable. 
+ 
+asset, tangible 
+Physical assets, such as equipment. 
+ 
+associate 
+Verb. To determine relationships between entities, including characteristics of the relationship: 
+dependent or not (optional, orphan), exclusive (at most one) or not (multiple). SEE ALSO 
+relationship. 
+ 
+association 
+1. SEE relationship. 
+2. In statistics, any relationship between measured quantities that shows a statistic dependency. 
+3. In object-oriented programming, a relationship between object classes which enables an object 
+instance to perform an action on another's behalf. 
+ 
+Association for Computing Machinery (ACM) 
+The largest and oldest international scientific and educational computer society. 
+ 
+association rule analysis 
+SEE relationship rule analysis. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

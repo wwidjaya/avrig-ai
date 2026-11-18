@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 130 
+ 
+gold data set 
+Alternate form: gold standard, gold source 
+A data set with perfect contents according to requirements. Used to describe sources of record or 
+data sets used for testing purposes. SEE ALSO system of record. 
+ 
+governance 
+1. Generally, the exercise of authority and control over a process, organization, or geopolitical area. 
+2. In data management, the process of setting, controlling, administering, and monitoring conformance 
+with policy. SEE ALSO data governance. 
+ 
+grain 
+Alternate form: granularity 
+The degree of summarization of data in a data set, representing the most detailed information 
+available. All aggregations would result from mathematical functions using this data set, without any 
+additional data. 
+ 
+grammar 
+The rules by which the syntact components of a language (whether linear or graphical) are assembled 
+into meaningful sentences, command statements, or graphical structures based on semiotics. 
+ 
+graph 
+1. Generally, a set of homogeneous nodes (vertices) and edges (arcs) between pairs of nodes. 
+2. In Business Intelligence, a visual representation using references to a set of axes to illustrate the 
+relationship between functions or sets of quantities. SEE ALSO chart. 
+ 
+graph theory 
+The study of mathematical structures used to model relations between items within a data set. 
+ 
+graphical data editing 
+The use of graphs to identify anomalies in data. 
+ 
+Graphical User Interface (GUI) 
+The dominant style for desktop and client/server computer applications. 
+ 
+Gregorian calendar 
+Internationally accepted civil calendar used in the western world, with additional rules regarding 
+application of leap days, and other minor adjustments. 
+ 
+grid computing  
+A web-based operation allowing companies to share computing resources on demand. 
+ 
+Guide to the Project Management Body of Knowledge (PMBOK®) 
+SEE Body of Knowledge, Guide to the Project Management. 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

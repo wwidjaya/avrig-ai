@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 241 
+ 
+transaction  
+1. A business transaction is an event involving the exchange of products, money and/or data. 
+2. A system transaction is a unit of work including one or more actions performed together or not at 
+all, usually in support of a business transaction. 
+3. A database transaction is a complete atomic unit of work; a set of statements to perform CRUD 
+operations on data, in which the Database Management System must either complete performance of 
+all the statements, or none of the statements. As the process continues, it requests locks on various 
+database objects, according to the concurrent update protocols, deadlock handling scheme, and 
+backup scheme. Any database updates performed are held in limbo until the END transaction 
+statement is encountered. At that point, the system checks the integrity rules to ensure that the 
+database remains in a valid state relative to its definition. If the check shows no errors, the updates 
+are made permanent, and all locks on data are released. Otherwise, no changes are applied and the 
+system is reset to the transaction starting point. 
+ 
+transaction fact 
+SEE fact table, transaction. 
+ 
+transaction time 
+SEE time, transaction. 
+ 
+transactional system  
+An information system designed to store and record day-to-day business information, often 
+structured around events, business processes or business activities. These systems are optimized for 
+storing large volumes of data and processing a high volume of requests for small amounts of data, 
+but not for analyzing or aggregating data.  
+ 
+transformers  
+In data management, rules applied to change data. 
+ 
+transient data 
+Data that does not exist past the execution of a particular program. 
+ 
+transitive dependency 
+SEE dependency, transitive. 
+ 
+transitivity 
+In logic, a relationship where if A and B, and B and C, then A and C.  
+ 
+Transmission Control Protocol (TCP) and the Internet Protocol (IP) (TCP/IP) 
+A set of standard protocols used to organize data sent across a network. 
+ 
+tree 
+A graph in which child nodes do not have more than one parent. SEE ALSO chart; graph; structure, 
+tree. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

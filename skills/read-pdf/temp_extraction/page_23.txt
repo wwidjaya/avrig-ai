@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 16 
+ 
+application development 
+1. The process of building and maintaining software applications. 
+2. Commonly, the IT organization responsible for application development. Synonymous with Software 
+Development or Software Engineering. 
+ 
+application portfolio architecture 
+SEE architecture, application portfolio. 
+ 
+Application Programming Interface (API) 
+A published standard format for communicating with applications. 
+ 
+application server 
+In a three-tier application architecture, the middle tier of software (and possibly hardware) where 
+business logic is performed. 
+ 
+Application Service Provider (ASP) 
+A company offering network access to application programs and services for other parties. ASPs 
+typically provide the applications, infrastructure, and technical support for a monthly service charge. 
+ 
+approach of no coupling 
+A programming technique where each module is independent: has no dependency on, is unrelated to, 
+and does not communicate with, all other modules.  
+ 
+appropriate 
+Adjective. Especially suitable or compatible; fitting. (Brackett 2011) 
+ 
+arc 
+1. In graph theory, a connection between two nodes in a graph. Also known as an edge. 
+2. In trigonometry, a curved line. 
+ 
+architect 
+1. Generally, a person trained in the planning, design, and oversight of the construction of something, 
+usually buildings. 
+2. In information technology, an experienced and skilled designer responsible for architecture 
+supporting a broad scope of requirements over time beyond the scope of a single project. The term 
+implies a higher level of professional experience and expertise than an analyst, designer, modeler, or 
+developer. 
+ 
+Architects as Designers 
+Zachman Framework row name, matches System Logic. 
+ 
+architectural framework 
+A way of thinking about and understanding architecture and the structures or systems requiring 
+architecture. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,1 @@
+**allowed in SQL).**: 3. Adjective. Characteristic of a relationship in which an entity or object instance need not relate to any member of the other entity type population, i.e., can be an orphan. optional relationship

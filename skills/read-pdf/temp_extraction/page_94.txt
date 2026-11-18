@@ -1,0 +1,45 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 87 
+ 
+data security management 
+The process of ensuring that data is safe from unauthorized and inappropriate access or change. 
+Includes focus on data privacy, confidentiality, access, functional capabilities and use. One of the ten 
+data management functions identified in the DAMA-DMBOK Functional Framework. (DAMA-
+DMBOK Guide, 1st edition, pg. 6.) 
+ 
+data service 
+An interface to a business process that receives or delivers data attributes, usually via a web 
+application. 
+ 
+data set 
+Any organized collection of data. 
+ 
+data sharing 
+Exchange of data and/or meta-data in a situation involving the use of open, freely available data 
+formats, where process patterns are known and standard, and where not limited by privacy and 
+confidentiality regulations. 
+ 
+data sharing agreement 
+An agreement between parties that describes the allowed activities, uses, and restrictions regarding 
+data shared between the parties. 
+ 
+Data Source Name (DSN) 
+Connection information for a database used in an Open DataBase Connectivity connection setup. 
+ 
+data staging 
+The process of moving data from one system into intermediate storage before final processing into a 
+target. 
+ 
+data staging area  
+A database that stands between the operational source databases and the target databases (typically an 
+Operational Data Store, Data Warehouse or Data Mart). The data staging area is considered the 
+“back room” portion of the Data Warehouse environment. The data staging area is where the 
+extract, transform, and load effort takes place, and is out of bounds for end users. Most data in the 
+data staging area is transient, although typically there is some relatively small amount of persistent 
+data. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

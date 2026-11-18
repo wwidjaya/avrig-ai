@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 52 
+ 
+class, attribute 
+In .net framework, associates information with a target element. 
+ 
+class, process 
+In .net framework, associates information with local system processes. 
+ 
+class, role 
+Represents the security level that can be assigned to users. 
+ 
+classic data warehouse development  
+The traditional, top-down comprehensive approach to implementing Business Intelligence, including: 
+building an enterprise data model, defining the Data Warehouse architecture, designing and 
+constructing the physical database, designing and constructing and testing extract-transform-load  
+programs, and populating the database using current sources and historical data conversions. Used in 
+contrast to incremental Data Warehouse development. 
+ 
+classification 
+1. Generally, a set of discrete, exhaustive, and mutually exclusive observations that can be assigned to 
+one or more variables to be measured in the collation and/or presentation of data. 
+2. In data modeling, the arrangement of entities into supertypes and subtypes. 
+3. In object-oriented design, the arrangement of objects into classes, and the assignment of objects to 
+these categories. 
+ 
+classification and regression tree (CART) 
+SEE tree, classification and regression. 
+ 
+classification framework 
+Organizes the structure and views that encompass enterprise architecture. (DAMA-DMBOK Guide, 
+1st edition, pg. 67.) 
+ 
+classification system 
+Arrangement or division of objects into groups based on characteristics that the objects have in 
+common. 
+ 
+client 
+1. Generally, an existing or prospective customer. 
+2. In client/server systems, a device (desktop, laptop, PDA, etc.) that communicates with a server. 
+3. In client/server programming, a software program used to contact and obtain data from a server 
+software program on another computer. Each client program is designed to work with one or more 
+specific kinds of server programs. 
+ 
+client/server architecture 
+SEE architecture, client/server. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

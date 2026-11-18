@@ -1,0 +1,57 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 32 
+ 
+business event 
+A happening in the real world, such as a sale, purchase, fire, flood, accident, and so on. (Brackett 
+2011) 
+ 
+business event happening 
+The actual happening of a business event, such as a specific sale, a purchase, a fire, a flood, an 
+accident, and so on. (Brackett 2011) 
+ 
+business feature 
+A trait or characteristic of a business object or business event, such as a customer's name, a city 
+population, a fire date, and so on. (Brackett 2011) 
+ 
+Business Image Management and Multimedia (BIMM) 
+A course studying design, import, and manipulation of text, graphics, audio, and video used in 
+presentation management and publishing systems. 
+ 
+business information demand 
+An organization's continuously increasing, constantly changing need for current, accurate, integrated 
+information, often on short notice or very short notice, to support its business activities. It is a very 
+dynamic demand for information to support the business that constantly changes. (Brackett 2011) 
+ 
+Business Intelligence (BI) 
+A set of concepts, methods, and processes to improve business decision-making using any 
+information from multiple sources that could affect the business, and applying experiences and 
+assumptions to deliver accurate perspectives of business dynamics. (Brackett 2011) 
+ 
+Business Intelligence administrative data 
+Alternate form: BI administrative data 
+The data that helps a Data Warehouse administrator manage a Data Warehouse, such as user profiles 
+and data access history. 
+ 
+Business Intelligence analyst 
+Alternate form: BI analyst 
+An IT professional specializing in assisting and supporting business professionals become more self-
+sufficient in the use of query, reporting and analysis procedures and tools. A BI analyst trains 
+knowledge workers, assists them in solving more complex analytical and reporting problems, 
+provides second level support for user problems with Business Intelligence data and tools, and may 
+serve as the administrator for the BI environment. 
+ 
+Business Intelligence architect 
+Alternate form: BI architect 
+An IT professional with overall responsibility for the Business Intelligence environment, its 
+architecture, and the effectiveness of knowledge workers engaged in Business Intelligence. A lead BI 
+analyst. May also be the Data Warehouse architect, or these responsibilities may be distinct. 
+ 
+Business Intelligence architecture 
+Alternate form: BI architecture 
+SEE architecture, Business Intelligence. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

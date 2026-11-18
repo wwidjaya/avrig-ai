@@ -1,10 +1,10 @@
 #[cfg(test)]
 mod tests {
-    use uuid::Uuid;
-    use serde_json::json;
     use avrig_harness::{CandidateArtifact, CandidateStatus, EpistemicStatus};
     use avrig_sdlc::coordinator::ProjectLifecycleState;
     use avrig_sdlc::lifecycle::LifecycleStage;
+    use serde_json::json;
+    use uuid::Uuid;
 
     #[test]
     fn test_canonical_lifecycle_order() {

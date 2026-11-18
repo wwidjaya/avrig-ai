@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 89 
+ 
+data strategy  
+A business plan for leveraging an enterprise’s data assets to maximum advantage. SEE ALSO 
+enterprise data strategy. 
+ 
+data structure definition 
+A set of structural meta-data associated to a data set, which includes information about how concepts 
+are associated with the measures, dimensions, and attributes of a data structure along with 
+information about the representation of data and related descriptive meta-data. 
+ 
+data structure diagram 
+The visual presentation of a data model with icons for entities with attributes and lines between them 
+to represent relationships and roles. First known published article to propose such diagrams was by 
+Charles Bachman (1969). (Everest 2010) SEE ALSO data model diagram; entity-relationship 
+diagram.  
+ 
+data subject 
+A person, place, thing, concept, or event that is of interest to the organization and about which data 
+are captured and maintained in the organization's data resource. Data subjects are defined from 
+business objects and business events, making the data resource subject oriented toward the business. 
+(Brackett 2011) 
+ 
+data supply chain 
+The flow of data across business processes. 
+ 
+data synchronization  
+The continuous harmonization of data attribute values between two or more different systems, with 
+the end result being the data attribute values are the same in all of the systems. 
+ 
+data technology management 
+The evaluation, selection, implementation, inventory and maintenance of hardware and software 
+products in support of data management,  including Database Management Systems, data modeling 
+and database administration tools, Meta-data Management tools, data integration tools and Business 
+Intelligence tools. 
+ 
+data tracking 
+The process of documenting data provenance. (Brackett 2011) 
+ 
+data transfer  
+The process of moving data from one system or operating environment to another. 
+ 
+data transformation  
+Changing the format, structure, integrity, and/or definitions of data from the source database to 
+comply with the requirements of a target database. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

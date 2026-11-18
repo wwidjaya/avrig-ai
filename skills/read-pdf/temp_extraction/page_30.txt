@@ -1,0 +1,49 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 23 
+ 
+audit trail 
+Data maintained to trace activity, such as a transaction log, for purposes of recovery or audit. 
+ 
+augmentation 
+1. The process of adding to something to make it more or greater than the original. 
+2. In logic, a relationship where if X leads to Y, then XZ will lead to YZ. 
+ 
+authentication 
+1. In data security, the process of verifying whether a person or software agent requesting a resource 
+has the authority or permission to access that resource. 
+2. In data quality, the process of verifying data as complying with what the data represents. 
+ 
+authoritative source 
+A source of data or information that is recognized by members of a Community of Interest to be 
+valid or trusted because its provenance is considered highly reliable or accurate. During the life cycle 
+process, the authoritative source (or system of use in which it is housed) can evolve according to use. 
+Subject Matter Experts validate that the data is authoritative, and Data Management assures that data 
+from the authoritative source is provided to users, and that it is current.  
+ 
+authorization  
+In data security, the granting of authority allowing a person, group, or software agent to access a 
+resource. 
+ 
+authorization request  
+In data security, a request to grant authority to a person, group, or software agent to access data for 
+which the data consumer does not presently have access privileges. 
+ 
+authorization rule 
+SEE rule, authorization. 
+ 
+automation 
+The act of replacing control of a manual process with computer or electronic controls. 
+ 
+availability  
+1. The percentage of time a system or data resource is accessible compared to the time it is expected to 
+be accessible. 
+2. The percentage of time a system or database can be used for productive work. DAMA-DMBOK 
+Guide, 1st edition, pg. 134. 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

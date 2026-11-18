@@ -2,14 +2,14 @@
 
 mod bridge;
 
-use std::sync::{Arc, Mutex};
-use std::sync::mpsc::Receiver;
+use avrig_harness::office::event::HarnessDesktopEvent;
 use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowLevel, WindowPlugin, WindowResolution},
 };
 use bridge::map_harness_status_to_bevy;
-use avrig_harness::office::event::HarnessDesktopEvent;
+use std::sync::mpsc::Receiver;
+use std::sync::{Arc, Mutex};
 
 const NOT_CONNECTED_ATLAS: &str = "bulb/not-connected-atlas.png";
 const MESSAGE_ALERT_IMAGE: &str = "bulb/bulb-base-needs-attention-v1.png";
@@ -165,13 +165,12 @@ fn setup(
     let (_tx, rx) = std::sync::mpsc::channel();
     commands.insert_resource(HarnessEventReceiver(Arc::new(Mutex::new(rx))));
 
-    println!("Bulb Bevy overlay ready with Harness bridge. N: not connected, C: connected, J: job done, M: message/alert.");
+    println!(
+        "Bulb Bevy overlay ready with Harness bridge. N: not connected, C: connected, J: job done, M: message/alert."
+    );
 }
 
-fn poll_harness_events(
-    rx: Option<Res<HarnessEventReceiver>>,
-    mut state: ResMut<PetVisualState>,
-) {
+fn poll_harness_events(rx: Option<Res<HarnessEventReceiver>>, mut state: ResMut<PetVisualState>) {
     if let Some(receiver) = rx {
         if let Ok(rx_guard) = receiver.0.lock() {
             while let Ok(event) = rx_guard.try_recv() {

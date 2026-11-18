@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 83 
+ 
+data normalization 
+The process that brings data into a normal form that minimizes redundancies and keeps anomalies 
+from entering the data resource. It provides a subject-oriented data resource based on business 
+objects and events. (Brackett 2011) 
+ 
+data occurrence 
+A logical record that represents the existence of a business object or the happening of a business 
+event in the business world, such as an employee, a vehicle, and so on. (Brackett 2011) 
+ 
+data operations management 
+Providing support from data acquisition to purging. (DAMA-DMBOK Guide, 1st edition, pg. 6.) 
+ 
+data overload 
+A deluge of data coming at a recipient that is not relevant and timely. It is a deluge of unwanted non-
+information.  
+ 
+data owner  
+An individual responsible for definitions, policy, and practice decisions about data within their area 
+of responsibility. For business data, the individual may be called a business owner of the data. 
+ 
+data policy 
+Short statements of management intent and fundamental rules governing the creation, acquisition, 
+integrity, security, quality, and use of data and information. (DAMA-DMBOK Guide, 1st edition, pg. 
+47.) 
+ 
+data preparation 
+The process which involves checking or logging the data in; checking the data for accuracy; entering 
+the data into the computer; transforming the data; and developing and documenting a database 
+structure that integrates the various measures. This process includes preparation and assignment of 
+appropriate metadata to describe the product in human readable code/format. 
+ 
+data presentation quality 
+The degree to which information products (reports, screens, charts) are easy to understand and use 
+without misinterpretation by the intended audience.  
+ 
+data privacy 
+The limitation of data access to only those authorized to view the data. SEE ALSO confidentiality. 
+ 
+data processing 
+The operation performed on data through capture, transformation, and storage, in order to derive 
+new information according to a given set of rules. 
+ 
+data producer  
+A person, organization, or software service creating or providing data. SEE ALSO data creator. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

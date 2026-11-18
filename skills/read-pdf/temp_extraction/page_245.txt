@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 238 
+ 
+Test, User Acceptance (UAT) 
+A validation process that evaluates functionality from a user's point of view, independent of any 
+technical validation. 
+ 
+text 
+A class word, abbreviated usually to txt.  
+ 
+text mining 
+The process of evaluating unstructured text for patterns, extract actionable data and sentiment via 
+semantic analysis, statistical methods, etc. 
+ 
+The Data Warehouse Institute (TDWI) 
+A leading provider of in-depth, high quality education and research in Business Intelligence and Data 
+Warehousing. (www.tdwi.org) 
+ 
+The Open Group Architecture Framework (TOGAF) 
+A detailed method and set of supporting tools for developing an enterprise architecture, developed 
+by The Open Group, www.opengorup.org/architecture/togaf. 
+ 
+thesaurus 
+A controlled vocabulary with both parent-child and associative relationships defined. SEE ALSO 
+taxonomy. 
+ 
+Third Generation Language (3GL) 
+A high-level language for manipulating a database one-record-at-a-time, with non-essential, repetitive 
+commands encapsulated in order to make programming more readable by a human. SEE ALSO 
+Fourth Generation Language. 
+ 
+third Normal Form (3NF) 
+SEE normal form, third. 
+ 
+thrashing 
+A situation where a large amount of resources are involved in doing minimal amounts of work, 
+mostly due to collisions or contention for resources in database access. 
+ 
+three-tier architecture 
+SEE architecture, three-tier. 
+ 
+tier 
+A level of separation of computing responsibility. Originally, computer architecture was monolithic 
+with all processing occurring on the same machine. Over time, two-tier and three-tier systems 
+separated processing for user interfaces, application logic and data persistence. Current architecture is 
+n-tiered. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 81 
+ 
+Data Model, Enterprise (EDM) 
+A conceptual data model or logical data model providing a common consistent view of shared data 
+across the enterprise, however that is defined, at a point in time. It is common to use the term to 
+mean a high-level, simplified data model, but that is a question of abstraction for presentation. SEE 
+ALSO data model, conceptual. 
+ 
+data model, hierarchical 
+A data model that represents data in a tree-like structure of only one-to-many relationships, where 
+each entity may have a ‘many’ side when related to a parent, and a ‘one’ side when related to a child. 
+SEE ALSO structure, hierarchical. 
+ 
+Data Model, Logical (LDM) 
+A entity-relationship data model including data attributes that represents the inherent properties of 
+the data, including names, definitions, structure, and integrity rules, independent of software, 
+hardware, volumetrics, frequency of use, or performance considerations. 
+ 
+data model, network 
+A representation of objects and their participation in one or more owner-member sets. In such a 
+model, a both owners and members may participate in multiple sets, affecting a network of objects 
+and relationships. 
+ 
+Data Model, Physical (PDM) 
+The definition or representation of a data model for implementation and realization in a particular 
+DBMS, including naming convention and physical data types. It may be denormalized for 
+performance and access simplification. A high-level description of a database design without specific 
+physical layout (how the data is stored on disk) information. 
+ 
+Data Model, Semantic (SDM) 
+A conceptual data model that provides structure and defines meaning for non-tabular data, making 
+that meaning explicit enough that a human or software agent can reason about it. SEE ALSO 
+ontology.  
+ 
+data modeler 
+A person who builds data models. 
+ 
+data modeling  
+1. An analysis and design method, building data models to  
+a) define and analyze data requirements,  
+b) design logical and physical data structures that support these requirements, and  
+c) define business and technical meta-data. 
+2. The act of creating a data model. 
+ 
+data modeling notation, Barker 
+One of several notation conventions for modeling data, developed by Richard Barker and others in 
+1986. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

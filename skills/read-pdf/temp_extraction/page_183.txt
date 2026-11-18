@@ -1,0 +1,60 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 176 
+ 
+normal form 
+A characteristic of a file or table that indicates that it satisfies one or more of the rules of 
+normalization. Not all rules must be satisfied in order. SEE ALSO normalize. 
+ 
+Normal Form, Boyce/Codd (BCNF) 
+A level of normalization where every attribute or combination of attributes that can uniquely identify 
+an instance is identified as a candidate key. Violations are known as overlapping keys. 
+ 
+Normal Form, Domain/Key (DKNF) 
+A level of normalization that requires that a database only contains key constraints and domain 
+constraints. 
+ 
+Normal Form, Elementary Key (EKNF) 
+A level of normalization where there are no candidate keys that re-use the same attribute.  
+ 
+Normal Form, fifth (5NF) 
+An advanced level of normalization where all attributes of a concatenated key are independent of 
+each other and cannot be derived from the remainder of the key. Violations are commonly known as 
+inter-entity dependencies. 
+ 
+Normal Form, first (1NF) 
+1. A level of normalization where exist no multi-valued dependencies within a record or row; all 
+attributes are atomic (single valued) for each entity instance. Multi-valued attributes and repeating 
+groups must be removed from the record. In practice, any relational database table with a primary 
+key assumes first normal form.  
+2. A table structure is in 1NF when it satisfies the six properties of a relation: 
+i. 
+All rows are unique 
+ii. 
+Order of rows is unimportant 
+iii. 
+All columns have unique names 
+iv. 
+Order of columns is unimportant 
+v. 
+All values in a column are the same type 
+vi. 
+No column contains multiple values in the same row 
+ 
+Normal Form, fourth (4NF) 
+An advanced level of normalization where no instance contains two or more independent multi-
+valued facts. Violations are commonly known as derived data. 
+ 
+Normal Form, Project Join (PJNF) 
+SEE Normal Form, fifth. 
+ 
+Normal Form, second (2NF) 
+A level of normalization where every non-key attribute is fully dependent on the key in its entirety. In 
+practice, when entities have compound keys, seek out any attribute that is dependent upon only part 
+of the key and create a separate entity for what is identifiable by anything less than the whole key. 
+Violations are commonly known as partial key dependencies. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

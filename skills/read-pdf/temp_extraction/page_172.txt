@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 165 
+ 
+Megabyte (Mb) 
+A million bytes of storage; a thousand Kilobytes. 
+ 
+member 
+An individual instance of a population. 
+ 
+membership 
+The state of belonging to a set. 
+ 
+memory block allocation 
+A system and method for placing, locating, and indexing blocks of data. 
+ 
+message  
+An electronic request or reply expressed in data. Messages can be expressed in the form of XML 
+documents. 
+ 
+message broker  
+A software intermediary function that dispatches messages to the correct sites.  
+ 
+Message Oriented Middleware (MOM) 
+Software that enables inter-component communication through messages and message routing 
+through a message broker. 
+ 
+meta muck 
+An environment created when meta-data exists in multiple products and repositories (DBMS 
+catalogs, DBMS dictionaries, CASE tool encyclopedias, BI information directories).  
+ 
+meta-data 
+Alternate forms: meta data, metadata 
+Literally, “data about data”; data that defines and describes the characteristics of other data, used to 
+improve both business and technical understanding of data and data-related processes. Because the 
+term ‘metadata’ is a trademark of The Metadata Company, DAMA specifically uses the term meta-
+data. 
+ 
+meta-data architecture 
+SEE architecture, meta-data. 
+ 
+meta-data integration  
+The process of joining differing attributes in multiple meta-data repositories to allow for easier 
+access.  
+ 
+Meta-data Management (MM) 
+Processes that create, control, integrate, access, and analyze meta-data. One of ten data management 
+functions identified in the DAMA-DMBOK Functional Framework. (DAMA-DMBOK Guide, 1st 
+edition, pg. 7.) 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

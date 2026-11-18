@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 82 
+ 
+data modeling notation, IDEF1X (IDEF1X) 
+A style of notation for entity relationship diagrams in data models, developed by Robert G. Brown in 
+1979, and extended by the U. S. Air Force in 1985. The 'X' stands for eXtensions to the original 
+IDEF1 specification, the extensions were due to Dan Appleton. This data modeling scheme is one 
+variant of Entity Relationship modeling. It was originally embodied in ERwin®, which has since 
+evolved to include additional modeling notations. SEE ALSO Integrated DEFinition. 
+ 
+data modeling notation, Information Engineering (IE) 
+A record-based data modeling scheme and notation developed by Clive Finkelstein in the 1970s and 
+later popularized by James Martin.  
+ 
+data modeling scheme 
+The formalism, technique, style, notation, etc. used to guide the Data Modeling activity to create a 
+data model. The scheme encompasses the notational conventions (syntax) for representing the 
+semantics of the data model. Examples of data modeling schemes include single file, flat file, multi-
+file, relational, hierarchical, record-based, ER, EER, fact oriented (no file), IE, UML, IDEF1X, 
+Barker, multi-dimensional, star, object-oriented. 
+ 
+data modeling scheme, no file 
+A data modeling scheme that is not record-based - does not use the constructs of file or entity tables, 
+and consequently does not suffer from table think. (Everest 2010) SEE ALSO Fact Oriented 
+Modeling; object role model. 
+ 
+data modeling scheme, record-based 
+A data modeling scheme in which records are formed by clustering attributes. Used to represent an 
+entity type population. One or more attributes may serve as an identifier. In general, a record could 
+have a hierarchical structure, thus allowing multi-valued data items and repeating groups of items. 
+(Everest 2010)  
+ 
+data modeling scheme, relational 
+A data modeling scheme that uses the constructs of entity, attribute, identifier, and foreign key to 
+represent relationships. Attributes are represented by data items or columns. Entities are represented 
+by tables, which is a cluster of one or more attributes. Relationships between entities are represented 
+by foreign keys. The major distinguishing characteristic of a relational data model is that all attributes 
+must be single valued (atomic). SEE ALSO flat file.  
+ 
+data movement 
+The process of extracting data from one system and loading it onto another system. SEE ALSO 
+Extract-Transform-Load. 
+ 
+data name 
+A label for a fact or a set of related facts contained in the data resource, appearing on a data model, 
+or displayed on screens, reports, or documents. (Brackett 2011) 
+ 
+data name abbreviation 
+The shortening of a primary data name to meet some length restriction. (Brackett 2011) 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

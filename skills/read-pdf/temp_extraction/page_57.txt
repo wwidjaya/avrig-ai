@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 50 
+ 
+chart, Venn diagram 
+A form of visualization that shows all potential logical relationships between a finite set of objects. 
+Used most often to illustrate the concepts of UNION, INTERSECTION, and EXCLUSIVE OR of 
+sets. 
+ 
+chart, waterfall 
+A chart that shows cumulative effects of sequentially applied values. 
+ 
+check digit 
+An extra digit added to a computer code to check accuracy, calculated from the other digits in the 
+code. SEE ALSO parity. 
+ 
+checkpoint 
+1. A synchronization step between a data system and an application where all changes to the data 
+system are recorded to disk and noted as complete. 
+2. A copy of the state of a system at a point in time. 
+ 
+Chief Data Officer (CDO) 
+A corporate officer who is responsible for managing the enterprise's data assets. 
+ 
+chief data steward 
+An executive data steward who serves as the chair of the Data Governance Council and as the 
+primary business champion of a data management program.  
+ 
+Chief Information Officer (CIO) 
+A job title for the head of the Information Technology group within an organization. They often 
+report to Chief Executive Officer. The prominence of this position has risen greatly as information 
+technology has become a more important part of organizations. 
+ 
+Chief Knowledge Officer (CKO) 
+An organizational leader responsible for ensuring that the organization maximizes the value it 
+achieves through the organization’s collective knowledge: their intellectual capital (including patents), 
+the skills and experience of their people, the maturity of their processes, and their customer 
+relationships. The CKO is responsible for managing these intangible assets through knowledge 
+management, fostering innovation, sharing best practices, facilitating communication and avoiding 
+knowledge loss after organizational restructuring. 
+ 
+Chief Risk Officer 
+Alternate form: Chief Risk Management Officer 
+The executive accountable for discovery and governance of significant risks (strategic, reputational, 
+operational, financial, or compliance-related) and related opportunities to an organization. Data 
+Governance is a form of risk management, and may be part of this executive's organization.  
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

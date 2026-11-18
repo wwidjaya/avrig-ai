@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 106 
+ 
+disaggregation 
+The breakdown of computations usually within a common branch of a hierarchy, to a more detailed 
+level for which detailed measures can be attributed. 
+ 
+disambiguate  
+Verb. To clarify the meaning of a term by selecting between alternate interpretations. 
+ 
+disambiguation 
+The process of identifying attributes to differentiate or clarify between alternate interpretations. 
+ 
+disaster recovery  
+A protocol and associated execution to recover lost computing-system usage (applications, data, and 
+data transactions) committed up to the moment of system loss. 
+ 
+disparate 
+Adjective. Fundamentally dissimilar in kind, or containing or including dissimilar or unlike attributes. 
+Opposite of similar.  
+ 
+disparate data 
+Data that are essentially not alike, or are distinctly different in kind, quality, or character. They are 
+unequal and cannot be readily integrated to meet the business information demand. They are low 
+quality, defective, discordant, ambiguous, heterogeneous data. (Brackett 2011) 
+ 
+distance cartogram 
+SEE chart, distance cartogram. 
+ 
+distributed database 
+SEE database, distributed. 
+Distributed Relational Database Architecture (DRDA) 
+An IBM architecture for coordinating data across multiple relational Database Management Systems. 
+ 
+document  
+1. Generally, any information delivery vehicle, paper or electronic.  
+2. In data management, the content and structure in an electronic file. 
+3. In document or record management, a paper object in the real world, which may include signatures. 
+ 
+document and content management 
+Managing data found outside of standard structured databases. One of ten data management 
+functions identified in the DAMA-DMBOK Functional Framework. (DAMA-DMBOK Guide, 1st 
+edition, pg. 7.) 
+ 
+document management 
+The storage, inventory, and control of electronic and paper documents. (DAMA-DMBOK Guide, 
+1st edition, pg. 239.) 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

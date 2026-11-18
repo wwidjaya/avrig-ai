@@ -1,0 +1,2 @@
+**J**: jargon Words in a dialect intended to keep nonmembers from knowing what is happening.
+**Java OLAP (JOLAP)**: SEE OnLine Analytical Processing, Java.

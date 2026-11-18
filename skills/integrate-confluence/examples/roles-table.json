@@ -1,0 +1,45 @@
+{
+  "sections": [
+    {"heading": {"level": 2, "text": "B Publisher"}},
+    {"paragraph": "The main roles within the publishing organization on the Composync Platform, covering essential functions such as member management, data handling, royalty distribution, licensing, and finance. Each primary role is supported by specialized sub-roles."},
+    {"roles_table": {
+      "columns": ["No.", "Name", "Description"],
+      "roles": [
+        {
+          "name": "System Owner",
+          "description": "Responsible for configuring publisher-level platform settings, assigning appropriate roles (**Membership Officer**, **Data Officer**, **Royalty & Distribution Officer**, **Licensing Officer**, and **Financial Management Officer**) to publisher users, and managing their access rights."
+        },
+        {
+          "name": "Membership Officer",
+          "description": "Manage, onboard, and support songwriters and publishing partners while ensuring accurate maintenance and alignment of membership data, repertoire, and contractual rights with organizational standards and legal requirements. The Membership Officer role specializes into these sub-roles:",
+          "sub_roles": [
+            {
+              "name": "Artist Service Specialist",
+              "description": [
+                {"lead": "Perform outbond Songwriter registration activities, including:", "items": [
+                  "Proactively identifying and researching promising songwriters in the market",
+                  "Conducting pre-screening assessments and gathering contact information to establish connections",
+                  "Preparing persuasive pitch materials to effectively communicate the platform's value",
+                  "Engaging directly with prospects to evaluate their interest and suitability for joining the platform."
+                ]},
+                {"lead": "Performing member registration involves the following tasks:", "items": [
+                  "Facilitating new membership registration for songwriters, composers, and sub-publishers.",
+                  "Verifying identity documents, contracts, and supporting materials such as work declarations, identification, and bank information.",
+                  "Ensuring accurate metadata entry and documentation for newly registered members."
+                ]}
+              ]
+            },
+            {
+              "name": "Repertoire Support Specialist",
+              "description": "Provide repertoire management support by:"
+            }
+          ]
+        },
+        {
+          "name": "Legal Officer",
+          "description": "Responsible for preparing and managing contracts that define the terms of partnership between publisher with songwriter. This role ensures that all contractual rights and obligations are clearly documented and compliant with applicable regulations."
+        }
+      ]
+    }}
+  ]
+}

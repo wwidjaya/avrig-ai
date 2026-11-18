@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 206 
+ 
+Records Management (RM) 
+The management of evidence of an organization's activities. SEE ALSO record, def 1. 
+ 
+recoverability 
+The ability to reestablish service after interruption, and correct errors caused by unforeseen events or 
+component failures. (DAMA-DMBOK Guide, 1st edition, pg. 134.) 
+ 
+recovery 
+1. Generally, the restoration of something to its status before an event or at a point in time. 
+2. In data management, the restoration of a database to its state as of a different point in time, typically 
+in the wake of a hardware or software failure.  
+ 
+Recovery Point Objective (RPO) 
+The intent to recover data up to a specific point in a transaction stream following a down-time event. 
+Expresses the amount of data an organization may tolerate to lose. 
+ 
+Recovery Time Objective (RTO) 
+The intent to recover lost applications, within specific time limitations, to assure a certain level of 
+operational continuity. Expresses the amount of time a business will tolerate the computing system 
+(hardware, software, services) to be offline. 
+ 
+recovery, backward 
+Consists of restoring a snapshot backup copy of the database (a valid snapshot copy of the data as of 
+a point in time), followed by the re-execution of logged change activity since the backup copy was 
+made. This method essentially reverses (rolls back) all changes after the snapshot was taken, and re-
+executes from that point forward.  
+ 
+recovery, roll-forward 
+Consists of restoring a full backup copy of the database, followed by re-execution of logged change 
+activity since the backup copy was made. This method essentially starts over from a full copy of the 
+database, and re-executes from that point forward. 
+ 
+recursive 
+1. Adjective. A process that can be infinitely repeated using one instance of the execution of the process 
+as the input of the next instance of execution. A process calling itself. 
+2. Sometimes used to refer to a relationship in a data structure. SEE ALSO relationship, reflexive. 
+ 
+recursive relationship 
+SEE relationship, recursive. 
+ 
+redundancy  
+The storage of multiple copies of logically identical data. Physically, the data may or may not be 
+identical across systems, and it is not known which is most current or accurate. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

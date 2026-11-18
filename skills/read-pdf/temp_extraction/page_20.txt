@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 13 
+ 
+administrative meta-data 
+SEE meta-data, administrative. 
+ 
+Advanced Research Projects Agency Network (ARPANET) 
+The world's first operational packet switching network, developed by the U.S. Department of 
+Defense. It became the precursor to the internet, which evolved into the World Wide Web. 
+ 
+affinity analysis 
+An analysis technique that relates occurrences of activities by individuals or groups. Market basket 
+analysis is a type of affinity analysis. 
+ 
+affinity diagram 
+SEE chart, affinity diagram. 
+ 
+age 
+The length of time that an entity has existed, or in the case of an organic entity, lived. 
+ 
+aggregate data  
+Data resulting from processes that combine and summarize atomic data. 
+ 
+aggregation 
+1. Generally, the process of gathering into a whole from parts. 
+2. In data management, a process that transforms atomic data into aggregate-level information by using 
+an aggregation function such as count, sum, average, standard deviation, etc. 
+ 
+agile software development 
+A group of software development methodologies based on iterative and incremental development, 
+where requirements and solutions evolve through collaboration between self-organizing, cross-
+functional teams. 
+ 
+alert 
+The notification of an event, usually exceeding a pre-defined threshold. 
+ 
+algorithm 
+A set of rules or steps that will result in a defined end from a defined start. 
+ 
+alias 
+1. Generally, an alternative reference to a standard name or term. 
+2. In RDBMS, a database object that indirectly references another database object, for example, an 
+abbreviated table reference within an SQL query. 
+3. In a distributed environment, an object that refers to another object to avoid having to use the full 
+location qualifier of the other object. This alias is not dropped if the object referred to is dropped. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

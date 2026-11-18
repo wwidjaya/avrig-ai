@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 212 
+ 
+requirement 
+1. A customer expectation of a product or service. May be formal or informal, stated or unstated, 
+needed or desired. 
+2. A formal statement of need for data, functionality or other characteristic.  
+ 
+requirement specification 
+The formal documentation of requirements, typically using standardized formats and templates, 
+often stored in a requirements database for further analysis and validation/testing/verification. 
+ 
+requirement, business 
+Requirements stated in business terms or ordinary language what must be delivered or accomplished 
+in order to return value. 
+ 
+requirement, functional 
+A description of expected behavior of a system given a defined set of inputs or events. 
+ 
+requirement, non-functional 
+A description of expected operation of a system separate independent of any specific tasks or 
+functions, and may not be measureable in the same terms as other requirements. Includes reliability, 
+efficiency, portability, etc. 
+ 
+requirements analysis 
+The elicitation, specification and modeling of requirements. 
+ 
+reserved word 
+A term that has meaning outside of a computer language, and therefore may not be used for other 
+than its defined purpose. 
+ 
+Resource Description Framework (RDF) 
+Alternate form: Resource Description Format  
+The basic technique for expressing knowledge on The Semantic Web. 
+ 
+responsibility 
+1. Accountability for performance of a function, activity or task by a role. 
+2. In object-oriented design, synonymous with a method. 
+ 
+Responsible Accountable Consulted Informed matrix (RACI matrix) 
+A matrix used to describe classes of involved parties and their impact on a situation by role. 
+ 
+retention 
+1. Generally, the process of keeping something in place. 
+2. In data management, the length of time that data is stored or archived before purging. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,3 @@
+**K**: 
+**SEE chart, Kagi.**: kaizen The Japanese word for “continuous improvement”. kernel entity
+**SEE entity, kernel.**: key 1. A data item or combination of data items designated to uniquely identify a particular entity instance or table row. SEE ALSO identifier. 2. Adjective. Critically important. key constraint

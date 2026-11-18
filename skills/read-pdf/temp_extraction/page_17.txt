@@ -1,0 +1,98 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 10 
+ 
+WS-I 
+Web Services Interoperability 
+Organization 
+WSRP 
+Web Services for Remote 
+Portlets   
+WWW 
+World Wide Web 
+WYSIWYG 
+What-You-See-Is-What-You-
+Get 
+ 
+ 
+XBRL 
+eXtensible Business Reporting 
+Language 
+XFML 
+eXchangeable Faceted 
+Metadata Language 
+XIE 
+eXtended Intelligent 
+Enterprise Architecture 
+XMI 
+eXtensible Markup Interface 
+XMI 
+XML Meta-data Interchange 
+XML 
+eXtensible Markup Language 
+XML/A 
+XML for Analysis 
+XP 
+eXtreme Programming   
+XSL 
+eXtensible Stylesheet 
+Language 
+ 
+ 
+Y2K 
+Year 2000 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

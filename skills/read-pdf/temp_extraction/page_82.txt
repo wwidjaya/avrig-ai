@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 75 
+ 
+data extract frequency  
+The latency of data extracts, such as daily versus weekly, monthly, quarterly, etc. The frequency that 
+data extracts are needed in the Data Warehouse is determined by the shortest frequency requested 
+through an order, or by the frequency required to maintain consistency of the other associated data 
+types in the source Data Warehouse. 
+ 
+data extract specification  
+The standard expectations of a particular source Data Warehouse for data extracts from the 
+operational database system-of-record. A system-of-record uses an extract specification to retrieve a 
+snapshot of shared data, and formats the data in the way specified for updating the data in the source 
+Data Warehouse. An extract specification also contains extract frequency rules for use by the data 
+access environment. 
+ 
+data extraction software  
+Software that reads one or more sources of data and creates a new image of the data. SEE ALSO 
+Extract-Transform-Load. 
+ 
+data federation 
+A method of transparently joining or linking data from multiple physical locations and/or multiple 
+platforms. 
+ 
+data file 
+A physical file of data that exists in a Database Management System, such as a computer file, or 
+outside a database management system, such as a manual file. It is referred to as a table in a relational 
+database. A data file generally represents a data entity, subject to adjustments made during formal 
+data denormalization. (Brackett 2011) 
+ 
+data file-relation diagram 
+A diagram that represents the data files and the relations between those data files in a database. 
+(Brackett 2011) 
+ 
+data flow 
+The transfer of data between systems, applications, or data sets. 
+ 
+Data Flow Diagram (DFD) 
+A visual representation of how data moves or is moved between logical processes or application 
+services (i.e., how the output data from a process serves as the input data for other processes). 
+Essentially a process model, complementary to a data model. 
+ 
+data governance  
+The exercise of authority, control, and shared decision-making (planning, monitoring, and 
+enforcement) over the management of data assets. SEE governance; data stewardship.  
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

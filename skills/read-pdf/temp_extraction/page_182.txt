@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 175 
+ 
+no file data modeling scheme 
+SEE data modeling scheme, no file. 
+ 
+node 
+In graph theory, a generic representation of something in a graph; could be a type (representing a 
+population), or an individual instance. Usually represented by some icon (e.g., box, circle) in the 
+diagram.  
+ 
+noise 
+Unwanted sound or data included with or around wanted sound or data. 
+ 
+nomenclature 
+A systematic naming of things or a system of names or terms for things. In classification, 
+nomenclature involves a systemic naming of categories or items. 
+ 
+nominal number  
+A number system that has no arithmetic or ordering significance, hence can only be compared as 
+match or no match. Other operators are meaningless - multiply, divide, add, subtract, comparative 
+(<, =,...), or Boolean. This is probably the most commonly occurring type of numerical data in 
+database. Examples include account numbers. Often used as codes for particular characteristics or 
+values in the real world. 
+ 
+non-clustered index 
+SEE index, non-clustered. 
+ 
+Non-Disclosure Agreement (NDA) 
+An agreement between parties to not share specific confidential information without proper 
+authorization from other involved parties. 
+ 
+non-functional requirement 
+SEE requirement, non-functional. 
+ 
+non-identifying relationship 
+SEE relationship, non-identifying. 
+ 
+non-information 
+A set of data in context that is not relevant or timely to the recipient. (Brackett 2011) 
+ 
+non-tabular data 
+SEE data, non-tabular. 
+ 
+normal distribution 
+A mathematical distribution of points around an axis that represents the mean of the data set values, 
+which resembles a bell (low at both ends and high in the middle). 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

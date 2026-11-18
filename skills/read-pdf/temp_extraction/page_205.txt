@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 198 
+ 
+Product Data Integration (PDI) 
+Solutions for capturing and maintaining accurate, up-to-date data about an organization's products, 
+and delivering information in an actionable form “just in time” at product development or 
+distribution points. A specialized form of Master Data Management, focusing on product master 
+data. 
+ 
+Product Information Management (PIM) 
+Processes and tools used to predict and evaluate success of products through marketing and sales 
+efforts. 
+ 
+product master data 
+SEE master data, product. 
+ 
+profession 
+1. An occupational calling (vocation) requiring specialized knowledge 
+2. The body of persons engaged in that vocation. 
+ 
+professional certification 
+A designation earned by a person verifying that the individual has the knowledge, skills or abilities 
+that qualify him/her to perform a job. While licensing is required by law, certification is generally 
+voluntary. Professional certifications are awarded by certification body, usually a professional 
+organization. People become certified through training and/or passing an exam. Individuals often 
+advertise their status by appending the abbreviation for the designation to their name. SEE ALSO 
+profession. 
+ 
+professional development 
+Training, mentoring and continuing education in a professional field of study to attain, maintain and 
+extend one’s mastery of professional skills. SEE ALSO profession. 
+ 
+professional ethics  
+Principles of standards of conduct with which all members of that profession are expected to 
+comply. SEE ALSO ethics; morals. 
+ 
+program 
+A set of projects that address a common set of goals and objectives; a long-term initiative made up of 
+several parallel or incremental projects. 
+ 
+Program Evaluation and Review Technique (PERT) 
+Alternate form: pert chart 
+A model for project or process management to evaluate tasks involved in the project or process in 
+order to find the shortest duration possible. 
+ 
+program management 
+The planning, supervision and control of a program. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

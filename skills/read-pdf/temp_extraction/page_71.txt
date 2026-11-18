@@ -1,0 +1,1 @@
+**SEE data cube.**: currency 1. A medium of exchange, usually a form of money. 2. Monetary denomination of the object being measured. currentness The degree to which data represents reality as of a point in time. currentness date

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 115 
+ 
+entity generalization 
+SEE generalization, entity. 
+ 
+entity hierarchy 
+The set of connected parent-child relationships of which an entity is a connected part. SEE ALSO 
+hierarchy. 
+ 
+entity instance 
+1. Generally, the existence of a thing or the happening of an event. 
+2. In data modeling, a single specimen or member of an entity type population. SEE ALSO object. 
+ 
+entity life history 
+The changes to the entity occurrence over its lifecycle. 
+ 
+entity lifecycle 
+The phases and distinct states through which an entity moves through time. A state transition 
+diagram documents the entity lifecycle. 
+ 
+entity occurrence 
+SEE entity instance. 
+ 
+Entity Relationship (ER) 
+Any relationship or connection between two entities, concepts, or objects. 
+ 
+Entity Relationship Diagram (ERD) 
+Alternate form: ER Diagram, E-R Diagram 
+The graphical diagram for an Entity Relationship data model. The underlying data model generally 
+includes more semantics than is or can be represented in the view shown on the diagram, e.g., some 
+business rules. 
+ 
+entity relationship model 
+1. Generally, a record-based data modeling scheme that focuses on entities and relationships in the 
+presentation of data model diagrams, thus suppressing the display of attributes. A true ER model 
+allows multi-valued data items and repeating groups of items (nested relations, thus violating first 
+normal form), retains M:N relationships, attributed relationships, subtypes/supertypes, ternary and 
+higher-order relationships, none of which can be represented directly in a relational data model. A 
+true ER model generally excludes (defers) the representation of entity identifiers and foreign keys. 
+Originally proposed and named by Peter Chen (1976). 
+2. In relational modeling, the most popular style of data model, defining entities and the business 
+relationships between the entities. Some more detailed models include also some of the attributes of 
+these entities, usually those involved in the relationships as keys.  
+ 
+entity set 
+In mathematics, is a group of like entities, such as Employee. (Brackett 2011) 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 28 
+ 
+blog 
+A type of website containing regular entries of commentary, notes on events, or links to graphics or 
+video. Short for 'web log'. 
+ 
+Body of Knowledge (BOK) 
+The sum of all professional knowledge in a given field, or what is generally accepted to be true. 
+ 
+Body of Knowledge, Business Analysis (BABOK) 
+A body of knowledge document available from the International Institute for Business Analysis. 
+(DAMA-DMBOK Guide, 1st edition, pg. 11.) 
+ 
+Body of Knowledge, Business Process Management Common (BPM CBOK®) 
+A body of knowledge document created by the Association of Business Process Management 
+Professionals. 
+ 
+Body of Knowledge, Canadian Information Technology (CITBOK) 
+A project undertaking by the Canadian Information Processing Society to outline the knowledge 
+required of a Canadian Information Technology Professional. (DAMA-DMBOK Guide, 1st edition, 
+pg. 11.) 
+ 
+Body of Knowledge, Common (CBK) 
+Published by the International Information Systems Security Certification Consortium. contains the 
+information tested to achieve the Certified Information Systems Security Professional designation. 
+(DAMA-DMBOK Guide, 1st edition, pg. 11.) 
+ 
+Body of Knowledge, Data Management (DAMA-DMBOK) 
+A guide to knowledge about data management, or at least that which is commonly accepted as true 
+about data management. SEE DAMA-DMBOK Guide. 
+ 
+Body of Knowledge, Guide to the Project Management (PMBOK®) 
+An acronym and registered trademark for the Guide to the Project Management Body of Knowledge, 
+a publication by the non-profit Project Management Institute (PMI) and an internationally 
+recognized standard (IEEE Std 1490-2003) defining the fundamental vocabulary of project 
+management and identifying generally accepted project management practices. First published in 
+1987, the current third edition was released and copyrighted in 2004. The PMBOK® Guide is the 
+ANSI standard for project management (ISO 9906 and PRINCE2 are related project management 
+standards). 
+ 
+Body of Knowledge, IT Architect (ITABOK) 
+A body of knowledge document created by the International Association of Software Architects. 
+ 
+Body of Knowledge, Personal Software Process (PSPBOK) 
+Developed by Carnegie Mellon University, a body of knowledge on Personal Software Process and 
+Team Software Process. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

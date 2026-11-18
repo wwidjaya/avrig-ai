@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 166 
+ 
+meta-data repository 
+1. Generally, any structured database of meta-data, often in support of a particular tool.  
+2. Specifically, an integrated database of meta-data, considered the official representation of meta-data 
+in an enterprise. A repository contains business and technical meta-data from multiple sources. It 
+may be updated in real time or in batch. 
+ 
+meta-data synchronization  
+The process of consolidating and relating data attributes with the same or similar meaning from 
+different systems.  
+ 
+meta-data, administrative 
+Meta-data that records lifecycle attributes of a resource, including acquisition, access rules, locations, 
+version control/differentiations, lineage, and archival/destruction. 
+ 
+meta-data, business 
+The names and business definitions of entities and tables, attributes and columns, and defined 
+domain data values that establish the consistent shared meaning of data. Non-technical meta-data of 
+interest to business professionals, ideally defined by business data stewards. Business meta-data 
+includes the names and definitions of business entities and their data attributes in a conceptual or 
+logical data model, as well as the equivalent business definitions for tables and columns in a physical 
+data model or implemented database. Business meta-data also includes the descriptions of business 
+relationships between business entities, the business rules that govern those relationships, the logical 
+business names and definitions of domain values (code values), and the descriptions of rules 
+governing use of these code values.  
+ 
+meta-data, data stewardship 
+Data stewardship meta-data is data about data stewards, stewardship processes, and responsibility 
+assignments. 
+ 
+meta-data, descriptive 
+Meta-data that characterizes and catalogs the actual resource. 
+ 
+meta-data, preservation 
+Meta-data that describes the physical condition of stored resources, and changes to that physical 
+condition over time (such as copying to different media). 
+ 
+meta-data, process 
+Meta-data is that defines and describes the characteristics of other systems (processes, business rules, 
+programs, jobs, tools, etc.). 
+ 
+meta-data, rights management 
+Meta-data that represents rules regarding the use of that resource with respect to intellectual property 
+rights. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

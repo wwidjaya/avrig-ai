@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 164 
+ 
+match-link rule 
+SEE rule, match-link. 
+ 
+match-merge rule 
+SEE rule, match-merge. 
+ 
+materialized view 
+A view that is actually stored as a separate object in order to optimize performance. 
+ 
+matrix 
+A set of arrays of the same type, where each array is seen as a dimension. Matrices are used to analyze 
+and document the linkages and relationships between the occurrences of one dimension with the 
+occurrences of the other dimensions. SEE ALSO array; scalar. 
+ 
+maturity model 
+A structured collection of characteristics of effective processes at progressive levels of quality and 
+effectiveness. A maturity model provides a common language and a shared vision for process 
+improvement, a standard for benchmarking, and a framework for prioritizing actions. A maturity 
+model assumes a natural evolutionary path for organizational process improvement.  
+ 
+mean 
+The result of dividing the sum of all values within a set by the count of all values included. 
+ 
+Mean Time Between Failures (MTF, MTBF) 
+The predicted elapsed time (arithmetic mean) between system failures. Used to evaluate system 
+stability. 
+ 
+Mean Time To Recover (MTR, MTTR) 
+The predicted elapsed time (arithmetic mean) between a failure and restoration of a system. Used to 
+evaluate system support efficacy. 
+ 
+measure 
+Alternate form: measurement 
+1. Loosely used, a metric. 
+2. In data modeling, a quantified characteristic; the unit used to quantify the dimensions, capacity, or 
+amount of something. 
+3. Verb. To quantify one or more dimensions, capacity or amounts of something. 
+ 
+median 
+The center-most value in an ordered set of values. If the set quantity is even, then the average of the 
+two center-most values. 
+ 
+Medical Subject Heading (MeSH) 
+A comprehensive set of descriptors used to index medical and life sciences journal articles. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

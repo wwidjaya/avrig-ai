@@ -1,0 +1,3 @@
+**SEE class, role.**: roles and responsibilities One of the DAMA Functional Framework Environmental Elements. The business and IT roles involved in performing and supervising the function, and the specific responsibilities of each role in that function. Many roles will participate in multiple functions. (DAMA-DMBOK Guide, 1st edition, pg. 13.) roll down
+**SEE Drill Down.**: roll up
+**SEE Drill Up.**: roll up query Queries that summarize data at a level higher than the previous level of detail. rollback To undo the database statements performed prior to a commit of the transaction. roll-forward recovery

@@ -13,10 +13,7 @@ pub enum SdlcError {
     },
 
     #[error("Stage prerequisites not met for stage {stage}: {reason}")]
-    PrerequisitesNotMet {
-        stage: String,
-        reason: String,
-    },
+    PrerequisitesNotMet { stage: String, reason: String },
 
     #[error("Stage not found: {0}")]
     StageNotFound(String),

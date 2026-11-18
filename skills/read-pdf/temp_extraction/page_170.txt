@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 163 
+ 
+Massively Parallel Processing (MPP) 
+In computer architecture, the “shared nothing” approach to parallel computing. Describes a 
+distributed memory computer system of multiple nodes where each node has data, processors, 
+memory, a network link so that each node may process a part of a task independently on its data, and 
+then send the results back to a collector. Growth is achieved by adding more nodes. Possible 
+bottlenecks include network bandwidth. Requires specialized partitioning to spread the data 
+effectively and efficiently across the nodes based on expected usage. Contrast with Symmetrical 
+Multi-Processing. 
+ 
+master data  
+The data that provides the context for business activity data in the form of common and abstract 
+concepts that relate to the activity. It includes the details (definitions and identifiers) of internal and 
+external objects involved in business transactions, such as customers, products, employees, vendors, 
+and controlled domains (code values). 
+ 
+Master Data Management (MDM) 
+Processes that control management of master data values to enable consistent, shared, contextual use 
+across systems, of the most accurate, timely, and relevant version of truth about essential business 
+entities. (DAMA-DMBOK Guide, 1st edition, pg. 171.) 
+ 
+master data, financial 
+Master data about an organization's financial configuration including business units, cost centers, 
+profit centers, general ledger accounts, budgets, projections, and projects. 
+ 
+master data, location 
+Master data about locations specifically related to a business, in the form of geographic data, such as 
+business party addresses and facility locations. (DAMA-DMBOK Guide, 1st edition, pg. 180.) 
+ 
+master data, party 
+Master data about individuals, organizations, and the roles they play in business relationships. May 
+include customer, employee, vendor, partner, and competitors; citizens; suspects, witnesses, and 
+victims; members and donors; patients and providers; or students and faculty. (DAMA-DMBOK 
+Guide, 1st edition, pg. 178. 
+ 
+master data, product 
+Master data that focuses on an organization's internal products or services, or an entire industry's 
+shared products or services, including competitor products and services.  
+ 
+master file 
+An old term for database, used before relational databases were commonplace. Now used as a 
+concept in Master Data Management regarding the official version of master data. 
+ 
+matching 
+The process of comparing rows in data sets to determine which rows describe the same thing and are 
+therefore either complimentary or redundant. SEE ALSO similarity analysis. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

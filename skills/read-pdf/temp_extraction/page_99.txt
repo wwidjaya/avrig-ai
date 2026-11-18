@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 92 
+ 
+Data Warehousing (DW) 
+1. The operational extract, cleansing, transformation, and load processes, and associated control 
+processes, that maintain the data containing within a Data Warehouse. 
+2. The storage of evaluational data for the analysis of trends and patterns in the business. (Brackett 
+2011) 
+ 
+Data Warehousing and Business Intelligence management 
+The operational, administrative and control processes that provide access to Business Intelligence 
+data and support to knowledge workers engaged in reporting, query, and analysis. One of ten data 
+management functions identified in the DAMA-DMBOK Functional Framework. (DAMA-
+DMBOK Guide, 1st edition, pg. 7.) 
+ 
+data, analytical 
+Subject oriented, integrated, time variant, non-volatile collections of data in support of Business 
+Intelligence activities. SEE ALSO OnLine Analytical Processing. 
+ 
+data, derived 
+A data set created through a computational step applied to atomic data. Derived data is the result 
+either of relating two or more attributes of a single transaction (such as an aggregation), or of relating 
+one or more attributes of a transaction to an external algorithm (formula) or rule. SEE ALSO data 
+attribute, derived. 
+ 
+data, non-tabular 
+Data not structured in a relational database table or grid format. Includes unstructured data, which 
+has different internal structures, but can include links as well as classification tags as part of the 
+tabular data attributes. SEE ALSO data, unstructured. 
+ 
+data, operational 
+Process oriented, non-integrated, time current, volatile collections of data used to support the daily 
+activities of an enterprise. SEE ALSO OnLine Transaction Processing.  
+ 
+data, structured 
+Data that can be described using a discrete domain of vocabulary terms, organized by inherent 
+patterns into semantic  groups or entities, presented by context rather than content. 
+ 
+data, tabular 
+Data stored in grid (or table) format (records or rows, and columns). 
+ 
+data, unstructured 
+Any document, file, graphic, image, text, report, form, video, or sound recording that has not been 
+tagged or otherwise structured into rows and columns or records. This term has some inaccurate 
+connotations, as there is usually some structure (for instance, paragraphs and chapters) in these 
+formats. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

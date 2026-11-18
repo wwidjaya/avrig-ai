@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 170 
+ 
+Motivation Representation 
+Zachman Framework cell name, intersection of Why/Motivation Reasons and System 
+Logic/Architects as Designers. 
+ 
+Motivation Specification 
+Zachman Framework cell name, intersection of Why/Motivation Reasons and Technology 
+Physics/Engineers as Builders. 
+ 
+multi-dimensional 
+1. Adjective. In physics and mathematics, describes an item that has a greater-than-two minimum 
+number of coordinates necessary to specify it. 
+2. Adjective. In data analysis, describes a data attribute that must be described by two or more distinct 
+parameters. 
+ 
+multi-dimensional array  
+A group of data cells arranged by the dimensions of the data. For example, a spreadsheet exemplifies 
+a two-dimensional array with the data cells arranged in rows and columns, each being a dimension. A 
+three-dimensional array can be visualized as a cube with each dimension forming a side of the cube, 
+including any slice parallel with that side. Higher dimensional arrays have no physical metaphor, but 
+they organize the data in the way users think of their enterprise. Typical enterprise dimensions are 
+time, measures, products, services, geographical regions, etc. 
+ 
+Multi-Dimensional DataBase (MDDB) 
+SEE database, multi-dimensional. 
+ 
+Multi-Dimensional DataBase Management System (MDDBMS) 
+SEE DataBase Management System, Multi-dimensional.  
+ 
+Multi-Dimensional eXtensions to SQL (MDX) 
+A language used to access a multi-dimensional data structure. 
+ 
+Multi-dimensional OLAP (MOLAP) 
+SEE OnLine Analytical Processing, Multi-dimensional. 
+ 
+Multi-dimensional Query Language (MQL) 
+A computer language that allows one to specify which data to retrieve out of a multi-dimensional 
+structure. The user process for this type of query is usually called slicing and dicing. The result of a 
+multi-dimensional query is a cell, a two- dimensional slice, or a multi-dimensional sub-cube.  
+ 
+multi-file data structure 
+A data structure consisting of multiple files that may also include the explicit definition of 
+relationships between/among the files. SEE ALSO data model, physical. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

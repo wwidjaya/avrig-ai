@@ -1,0 +1,55 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 182 
+ 
+OnLine Analytical Processing, Real Time (RTOLAP) 
+Alternate form: Real Time OLAP 
+A version of OnLine Analytical Processing where data is stored in RAM memory rather than on disk, 
+and calculations are performed on-the-fly, rather than stored. RTOLAP has a limitation of size since 
+all data must be stored in RAM, and therefore space is at a premium; calculation results are therefore 
+not stored. 
+ 
+OnLine Analytical Processing, Relational (ROLAP) 
+Alternate form: Relational OLAP 
+OnLine Analytical Processing that performs multi-dimensional analysis on data stored in an RDBMS. 
+The multi-dimensional processing may be done within the RDBMS, a mid-tier server or the client. A 
+'merchant' ROLAP is one from an independent vendor that can work with any standard RDBMS. 
+ 
+OnLine Analytical Processing, Spatial (SOLAP) 
+Alternate form: Spatial OLAP 
+OnLine Analytical Processing where the spatial data is included in the data to be analyzed. 
+ 
+OnLine Analytical Processing, Web-based (WOLAP) 
+Alternate form: Web OLAP 
+OnLine Analytical Processing where the interaction with the data is through a web browser, and may 
+include the addition of web-based applications when analyzing or displaying the data. 
+ 
+OnLine Transaction Processing (OLTP) 
+The application systems used to support the daily business operations (transactions) of an enterprise. 
+Opposite of OnLine Analytical Processing. 
+ 
+ontology  
+1. Generally, the grammar rules for usage of a controlled vocabulary to create meaningful expressions 
+within a domain or subject area. 
+2. In data management, a semantic data model defining structure and meaning, typically used to model 
+non-tabular data. SEE ALSO schema. 
+ 
+Ontology Inference Layer (OIL) 
+In semantic modeling, a standard for defining ontologies.  
+ 
+open architecture 
+SEE architecture, open. 
+ 
+open data 
+A philosophy and practice requiring that some data be freely available to everyone, without 
+restrictions from copyright, patents, or other mechanisms of control.  
+ 
+Open Database Connectivity (ODBC) 
+A standard to allow programmers to write to an abstract relational database layer and delay binding 
+until run time. Developed by the SQL Access Group consortium, ODBC has been widely adopted 
+with modifications by Microsoft. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

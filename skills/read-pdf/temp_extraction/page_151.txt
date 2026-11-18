@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 144 
+ 
+Integrated DEFinition (IDEF) 
+ICAMS (Integrated Computer-Aided Manufacturing) DEFinition Languages, developed for the U.S. 
+Air Force. There are several of these modeling languages. 
+IDEF0 describes functional modeling notation. 
+IDEF1X describes data modeling notation. 
+IDEF2 describes simulation model notation. 
+IDEF3 describes process description capture. 
+IDEF4 describes object-oriented design. 
+IDEF5 describes ontology description capture. 
+IDEF6 describes design rationale capture. 
+IDEF7 describes information system auditing (not developed). 
+IDEF8 describes user interface modeling. 
+IDEF9 describes business constraint discovery. 
+IDEF10 describes implementation architecture modeling (not developed). 
+IDEF11 describes information artifact modeling (not developed). 
+IDEF12 describes organization modeling (not developed). 
+IDEF13 describes three schema mapping design (not developed). 
+IDEF14 describes network design. 
+ 
+Integrated Development Environment (IDE) 
+A software application or suite of integrated applications that are used to design, develop, and test 
+application code. 
+ 
+Integrated Drive Electronics (IDE) 
+A disk system where the disk controller is integrated into the drive itself, rather than remotely. 
+ 
+integration 
+1. The unified state of multiple components into one whole, complex system. 
+2. The process of unifying multiple components into one complex system. 
+ 
+integration test 
+SEE test, integration. 
+ 
+intellectual capital 
+SEE intellectual property. 
+ 
+Intellectual Property (IP) 
+1. Intangible assets of an enterprise created by its knowledge workers including information about 
+tangible assets, documents, ideas, patents, inventions, trade secrets, brands, software and databases, 
+and generally expressed in some copyable storage form.  
+2. The name of a DCMI element set (Contributor, Creator, Publisher, Rights). SEE ALSO Dublin Core 
+Metadata Initiative. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

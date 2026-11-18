@@ -1,0 +1,48 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 221 
+ 
+Service Level Agreement (SLA) 
+The part of a contract between two parties that outlines the delivery of services within defined 
+timeframes. 
+ 
+serviceability 
+The ability to determine the existence of problems, diagnose their causes, and repair and/or solve the 
+problems. (DAMA-DMBOK Guide, 1st edition, pg. 134.) 
+ 
+Service-Oriented Architecture (SOA) 
+An application architecture organized around the use of services, especially web services. 
+ 
+Service-Oriented Development Architecture (SODA) 
+SEE service-oriented architecture. 
+ 
+Service-Oriented Integration (SOI) 
+Performing enterprise application integration (EAI) using service-based technology. 
+ 
+set theory 
+The branch of mathematics that studies collections of objects, and the manipulation of those sets. 
+ 
+Shewhart cycle 
+The “plan-do-check-act” cycle of continuous improvement developed by Walter Shewhart and 
+popularized by W. Edwards Deming. Also known as the Deming Cycle. 
+ 
+Short Message Service (SMS) 
+Text messaging. 
+ 
+shredding 
+The parsing of an XML document into constituent parts to be stored atomically in a relational 
+database. 
+ 
+sigma 
+1. A Greek letter (∑) that stands for the sum of a group of numbers. 
+2. In statistics, a shorthand term for standard deviation. The Greek letter omicron (ό) is used to stand 
+for the standard deviation of an entire population and the lower case English letter (s) is used to 
+stand for the standard deviation of a sample set. SEE ALSO six sigma. 
+ 
+signal-to-noise ratio 
+The ratio of meaningful data to nonsense within a data stream. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

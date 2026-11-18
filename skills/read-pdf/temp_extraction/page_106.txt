@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 99 
+ 
+defect rate 
+The percentage of data that is incorrect, inaccurate, or no longer true. The number of defects found 
+compared to the total number of data values. 
+ 
+Defense Advanced Research Projects Agency (DARPA) 
+The U.S. federal funding source for development of the semantic web. 
+ 
+Define-Measure-Analyze-Design-Verify (DMADV) 
+A Six Sigma process improvement method, used for projects to design and create new product or 
+processes. 
+ 
+Define-Measure-Analyze-Improve-Control (DMAIC) 
+A Six Sigma process improvement method, used for projects to improve existing business processes. 
+ 
+definition 
+1. A statement conveying a fundamental character or the meaning of a word, phrase, or term. It is a 
+clear, distinct, detailed statement of the precise meaning or significance of something. (Brackett 2011) 
+2. The process of assigning names, description, and specification. 
+ 
+degenerate dimension 
+SEE dimension, degenerate. 
+ 
+degenerate fact table 
+SEE fact table, factless. 
+ 
+degree 
+The number of attributes (columns) in a record or relation including those making up the identifier. 
+(Everest 2010) 
+ 
+delete 
+1. To remove or erase. 
+2. A SQL statement (command) that specifies removal of data in a relational database. 
+ 
+deliverable 
+An expected output or outcome from a project, function, activity, or task. Usually an information 
+delivery product, such as a document or database. 
+ 
+delta 
+1. A Greek letter (Δ) signifying the difference between two statistical values. 
+2. The term used to identify rows that have changed between time periods, used in ETL processing. 
+ 
+delta update  
+A dataset containing only the data that was updated between the last extraction or snapshot process 
+and the current execution of the extraction or snapshot. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

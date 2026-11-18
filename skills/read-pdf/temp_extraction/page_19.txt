@@ -1,0 +1,56 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 12 
+ 
+accumulating snapshot fact 
+SEE fact table, accumulating snapshot. 
+ 
+accuracy 
+Freedom from mistakes or error, conformity to truth or to a standard, exactness, the degree of 
+conformity of a measure to a standard or true value. (Brackett 2011) 
+ 
+accurate 
+1. Adjective. Complying with a standard, model, or rule. 
+2. Adjective. Free from defect or error. 
+ 
+active data warehousing 
+SEE data warehouse, active. 
+ 
+activity 
+1. A contribution to the performance of a function or process. An activity is a lower level process than 
+a function or process, but higher level than a task or step. Inputs, activities, and outputs combine to 
+form a process.  
+2. One of the DAMA Functional Framework Environmental Elements. Each function is composed of 
+lower level activities, which may be grouped into sub-activities, and then further decomposed into 
+tasks and steps. (DAMA-DMBOK Guide, 1st edition, pg. 13.) 
+ 
+activity group 
+In the DAMA-DMBOK Functional Framework, one of four types of activities – either a Planning 
+Activity, Control Activity, Development Activity or Operational Activity. SEE ALSO activity. 
+ 
+acyclic 
+1. In general, not cyclic, or not composed of regular cycles. 
+2. A characteristic of a graph where there exists at most one path between any two nodes. SEE ALSO 
+connected. 
+ 
+ad hoc query  
+ 
+ 
+Alternate form: ad-hoc query 
+A query constructed and executed to answer an immediate and unanticipated question or need, in 
+contrast to a planned query. For example, a dynamic SQL SELECT statement against a relational 
+database, constructed by a knowledge worker using an English-like or point-and-click interface of a 
+desktop-resident Business Intelligence tool. The data returned may drive further analysis and 
+reporting. 
+ 
+adequate 
+Adjective. Sufficient for a specific requirement; sufficient or satisfactory; or lawfully and legally 
+sufficient. (Brackett 2011) 
+ 
+adjective 
+A type of word that modifies or adds characteristics to a noun. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

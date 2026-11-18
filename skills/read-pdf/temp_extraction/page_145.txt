@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 138 
+ 
+Indexed Sequential Access Method (ISAM) 
+Alternate form: block index 
+A form of disk file management that uses indexes to assign storage information and retrieve data 
+from the disk. Originally the name IBM assigned to its partial or block indexing scheme. Has since 
+taken on a more generic usage. 
+ 
+indicator 
+1. An attribute type that is considered to be binary: On or Off, True or False, Yes or No. 
+2. A class word, abbreviated usually to ind.  
+ 
+induction 
+In data management, the process of creating categories from instances. 
+ 
+inference 
+Reasoning from known propositions. 
+ 
+inferential model 
+A model in which some of the data is inferred by actual data points. 
+ 
+information 
+1. Generally, understanding concerning any objects such as facts, events, things, processes, or ideas, 
+including concepts that, within a certain context and timeframe, have a particular meaning. 
+2. The interpretation of data based on its context, including the  
+a) the business meaning of data elements and related terms,  
+b) the format in which the data is presented,  
+c) the timeframe represented by the data, and  
+d) the relevance of the data to a given usage.  
+(DAMA-DMBOK Guide, 1st edition, pg. 2.) 
+ 
+Information and Communication Technology (ICT) 
+Synonymous with Information Technology, used predominantly in the United Kingdom, particularly 
+in the UK education system. 
+ 
+information architecture 
+SEE architecture, information. 
+ 
+information asset 
+Data in any form or media placed into meaningful context for users, collected in relation to business 
+or research activity. 
+ 
+Information Asset Management (IAM) 
+Formal management of data, and organization of the users of that data, that provide context and 
+create information assets. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

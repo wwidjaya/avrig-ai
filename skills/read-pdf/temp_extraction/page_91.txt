@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 84 
+ 
+data professional 
+SEE data management professional.  
+ 
+data profile 
+A collection of statistics about a data attribute that shows patterns of usage, patterns of contents, and 
+any other patterns that may be interesting. 
+ 
+data profiler 
+Someone who performs data profiling. 
+ 
+data profiling  
+An approach to data quality analysis, using statistics to show patterns of usage, and patterns of 
+contents, and automated as much as possible. Some profiling activities must be done manually, but 
+most can be automated. 
+ 
+data propagation  
+The distribution of data from one or more source databases to one or more local target databases, 
+according to defined rules. Typically used in reference to distributed databases. SEE ALSO data 
+replication. 
+ 
+data provenance 
+Provenance applied to the organization's data resource. (Brackett 2011) 
+ 
+data quality 
+The degree to which data is accurate, complete, timely, consistent with all requirements and business 
+rules, and relevant for a given use. SEE ALSO information quality. 
+ 
+data quality analysis 
+The evaluation of data quality; the identification of inaccurate, incomplete, inconsistent, and untimely 
+data and its causes.  
+ 
+data quality assessment 
+SEE data quality audit; quality assessment. 
+ 
+data quality assurance 
+Quality inspection and review processes for data, data models, and database designs, including testing 
+for application data controls and edits, testing of data integration programs, data quality analysis, and 
+data quality audits. SEE ALSO quality assurance. 
+ 
+data quality audit 
+The random sampling of data and testing it against its valid data values to determine its accuracy and 
+reliability.  
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

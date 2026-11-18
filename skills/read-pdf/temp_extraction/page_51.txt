@@ -1,0 +1,56 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 44 
+ 
+chart, Critical Path Method (CPM) 
+A form of visualization of the critical path for a set of interdependent activities, showing the longest 
+discrete path through the tasks with the longest duration. 
+ 
+chart, cycle graph 
+Alternate form: cycle diagram 
+A form of visualization showing cycles of a concept's stages, phases, or process steps in a clockwise 
+path around a circle. 
+ 
+chart, data map 
+A form of visualization using a geographic map with overlaid data shapes using colors to illustrate 
+ranges of values for each geographic block. 
+ 
+chart, decision tree 
+A graph of decisions and their possible consequences (including resource costs and risks) used to 
+create a plan to reach a goal. Decision trees are constructed in order to help with making decisions. A 
+decision tree is a special form of tree structure. Regression trees approximate real-valued functions 
+(e.g., estimate the price of a house or a patient's length of stay in a hospital). Classification trees 
+define the logic for categorization using Boolean variables such as gender (male or female) or game 
+results (lose or win). 
+ 
+chart, distance cartogram 
+A chart consisting of a geographic map modified to show some relative travel times between points 
+in a network. 
+ 
+chart, Edgeworth box 
+A form of visualization showing one pool of two fixed resources shared by two entities. Each point 
+shows a possible division of resources between the entities. Curves can be drawn between points of 
+equal value to both parties according to the value associated with each resource. 
+ 
+chart, event tree 
+A form of visualization that follows a process from a desired input through possible system events to 
+final consequences. SEE ALSO chart, fault tree. 
+ 
+chart, fault tree 
+Alternate form: failure tree 
+A form of visualization showing top-down, deductive analytical steps through Boolean logic gates to 
+all possible failure states. 
+ 
+chart, force field diagram 
+Alternate form: forcefield diagram 
+A form of visualization where a topic is in the center, and forces for and against the topic are listed 
+on each side. 
+ 
+chart, functional decomposition 
+An outline or hierarchy diagram depicting the hierarchical decomposition of processes into their 
+component processes. A functional decomposition can be depicted vertically as an outline or 
+horizontally as a hierarchy chart. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

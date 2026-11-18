@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 17 
+ 
+architecture  
+1. Generally, the design of any complex object or system, including the implied architecture of abstract 
+things such as music or mathematics, the apparent architecture of natural things such as geological 
+formations or living things, or explicitly planned architecture of human-made things such as 
+buildings, machines, organizations, processes, software and databases. 
+2. In data management, the organized arrangement of components to optimize the function, 
+performance, feasibility, cost, and/or aesthetics of an overall structure. 
+3. In common use, the art and discipline of designing buildings and structures, from the macro-level of 
+urban planning to the micro-level of creating furniture and machine parts. 
+ 
+architecture, application component 
+A set of standard programming structures, design patterns, formats and protocols for how software 
+applications should operate and communicate with each other. 
+ 
+architecture, application portfolio 
+A master blueprint for an organization’s existing and planned portfolio of software applications, how 
+they support the organization’s processes, and how interface with each other and with the 
+organization’s databases. 
+ 
+architecture, business 
+The portion of an enterprise architecture that describes organizational goals, roles, reporting 
+structures and locations, but excluding the enterprise data architecture, process architecture, 
+technology architecture and application architecture. The business architecture includes those 
+artifacts identified in rows 1 and 2 of the Zachman Framework, but limited to columns 4, 5 and 6. 
+ 
+architecture, Business Intelligence 
+The overall design and implementation of components of the Business Intelligence environment, 
+including: 
+1. the Data Warehouse, data marts and staging area databases,  
+2. the flow of data from operational sources and these databases,  
+3. the selection and configuration of Database Management Systems and database 
+administration tools used for Business Intelligence,  
+4. the selection and configuration of data integration products used to extract, cleanse, 
+transform, and load data,  
+5. the design patterns and standards for data integration programs,  
+6. the selection and configuration of BI software products that enable access, reporting, and 
+analysis,  
+7. the data schemas presented to business professionals for ad hoc query and analysis,  
+8. the user interfaces for query, analysis  and reporting, and  
+9. the administrative controls put in place to safeguard the data. 
+ 
+architecture, business process  
+The future state business process models of an enterprise, used in conjunction with a business data 
+architecture to perform information value chain analysis. Part of an enterprise architecture. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

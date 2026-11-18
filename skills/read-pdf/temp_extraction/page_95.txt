@@ -1,0 +1,54 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 88 
+ 
+data steward 
+A business leader and/or subject matter expert designated as accountable for: 
+a) the identification of operational and Business Intelligence data requirements within an 
+assigned subject area,  
+b) the quality of data names, business definitions, data integrity rules, and domain values within 
+an assigned subject area,  
+c) compliance with regulatory requirements and conformance to internal data policies and data 
+standards,  
+d) application of appropriate security controls,  
+e) analyzing and improving data quality, and  
+f) identifying and resolving data related issues.  
+Data stewards are often categorized as executive data stewards, business data stewards, or 
+coordinating data stewards. SEE ALSO data owner; data stewardship; data governance. 
+ 
+data stewardship 
+1. The formal, specifically assigned, and entrusted accountability for business (non-technical) 
+responsibilities ensuring effective control and use of data and information resources. SEE ALSO 
+data steward; stewardship; data governance. 
+2. The formal accountability for business responsibilities ensuring effective control and use of data 
+assets. (DAMA-DMBOK Guide, 1st edition, pg. 39.) 
+ 
+Data Stewardship Committee (DSC) 
+A permanent cross-functional group of coordinating data stewards responsible for  
+a) supporting the Data Governance Council, and  
+b) integrating the work of Data Stewardship Teams.  
+The Data Governance Council may delegate responsibilities to the Data Stewardship Committee. 
+The DSC may be led by the Chief Data Steward, DM Leader, and/or the Enterprise Data Architect. 
+In a large organization, there may be additional Data Stewardship Committees at one more levels 
+lower than the enterprise DSC.  
+ 
+data stewardship council 
+A generic term for any committee of data stewards. May be synonymous with Data Governance 
+Council (DGC) with both executive data stewards and coordinating data stewards, or may be a 
+working committee of coordinating data stewards below the DGC. 
+ 
+data stewardship team 
+A temporary or permanent focused group of business data stewards collaborating on data modeling, 
+specification, and data quality improvement, typically in an assigned subject area, led by a 
+coordinating data steward and facilitated by a data architect. 
+ 
+data storage 
+The means of recording or archiving data so that they are available for future use. 
+ 
+data store  
+A place where data is stored; data at rest. A generic term that includes databases, flat files, and non-
+electronic data files. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

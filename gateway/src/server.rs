@@ -1,19 +1,27 @@
+use crate::antigravity::AppState as AntigravityState;
 use crate::antigravity::server::local_only;
 use crate::antigravity::types::ChatRequest;
-use crate::antigravity::AppState as AntigravityState;
 use crate::siwc::client::SiwcClient;
+use crate::version::VersionInfo;
 use axum::{
     Json, Router,
-    extract::State,
-    http::StatusCode,
+    body::Body,
+    extract::{Request, State},
+    http::{HeaderValue, Method, StatusCode, header},
     middleware,
     response::{IntoResponse, Response},
     routing::{get, post},
 };
+use rust_embed::RustEmbed;
 use serde_json::{Value, json};
 use std::sync::Arc;
 use tokio::time::Duration;
+use tower_http::cors::{AllowOrigin, CorsLayer};
 use tracing::info;
+
+#[derive(RustEmbed)]
+#[folder = "../apps/web/dist"]
+struct WebAssets;
 
 pub fn strip_model_prefix(model: &str) -> (Option<&str>, String) {
     let mut m = model.trim();
@@ -88,18 +96,115 @@ pub struct GatewayState {
 }
 
 pub fn build_gateway_router(state: GatewayState) -> Router {
-    Router::new()
+    let cors = CorsLayer::new()
+        .allow_origin(AllowOrigin::predicate(|origin: &HeaderValue, _| {
+            if let Ok(s) = origin.to_str() {
+                s == "https://app.avrig.ai"
+                    || s == "tauri://localhost"
+                    || s == "http://tauri.localhost"
+                    || s == "capacitor://localhost"
+                    || s == "http://localhost"
+                    || s.starts_with("http://localhost:")
+                    || s.starts_with("http://127.0.0.1:")
+            } else {
+                false
+            }
+        }))
+        .allow_methods([
+            Method::GET,
+            Method::POST,
+            Method::PUT,
+            Method::PATCH,
+            Method::DELETE,
+            Method::OPTIONS,
+        ])
+        .allow_headers([
+            header::AUTHORIZATION,
+            header::CONTENT_TYPE,
+            header::ACCEPT,
+            header::UPGRADE,
+            header::CONNECTION,
+        ])
+        .allow_credentials(true);
+
+    let public_v1_router = Router::new()
+        .route("/version", get(handle_version))
+        .route("/health", get(handle_health));
+
+    let v1_router = Router::new()
+        .route("/models", get(handle_models))
+        .route("/quota", get(handle_quota))
+        .route("/chat/completions", post(handle_chat_completions))
+        .layer(middleware::from_fn(local_only));
+
+    let api_router = Router::new()
         .route("/health", get(handle_health))
-        .route("/v1/models", get(handle_models))
-        .route("/v1/quota", get(handle_quota))
-        .route("/v1/chat/completions", post(handle_chat_completions))
-        .layer(middleware::from_fn(local_only))
+        .route("/version", get(handle_version))
+        .nest("/v1", v1_router.clone());
+
+    Router::new()
+        .nest("/api", api_router)
+        .nest("/api/v1", public_v1_router.clone())
+        .nest("/v1", v1_router)
+        .merge(public_v1_router)
+        .fallback(static_asset_handler)
+        .layer(cors)
         .with_state(Arc::new(state))
+}
+
+pub async fn static_asset_handler(req: Request) -> Response {
+    let path = req.uri().path().trim_start_matches('/');
+    let clean_path = if path.is_empty() { "index.html" } else { path };
+
+    if let Some(content) = WebAssets::get(clean_path) {
+        let mime = mime_guess::from_path(clean_path).first_or_octet_stream();
+        let mut response = Response::builder()
+            .status(StatusCode::OK)
+            .header(header::CONTENT_TYPE, mime.as_ref());
+
+        if clean_path.starts_with("assets/") {
+            response = response.header(
+                header::CACHE_CONTROL,
+                "public, max-age=31536000, immutable",
+            );
+        } else if clean_path == "index.html" {
+            response = response.header(
+                header::CACHE_CONTROL,
+                "no-cache, no-store, must-revalidate",
+            );
+        } else {
+            response = response.header(header::CACHE_CONTROL, "public, max-age=86400");
+        }
+
+        response
+            .body(Body::from(content.data))
+            .unwrap_or_else(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Static asset error").into_response())
+    } else {
+        // SPA Fallback: serve index.html for unknown frontend routes
+        if let Some(index_content) = WebAssets::get("index.html") {
+            Response::builder()
+                .status(StatusCode::OK)
+                .header(header::CONTENT_TYPE, "text/html; charset=utf-8")
+                .header(
+                    header::CACHE_CONTROL,
+                    "no-cache, no-store, must-revalidate",
+                )
+                .body(Body::from(index_content.data))
+                .unwrap_or_else(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Static fallback error").into_response())
+        } else {
+            (StatusCode::NOT_FOUND, "Web dist not embedded").into_response()
+        }
+    }
+}
+
+pub async fn handle_version() -> impl IntoResponse {
+    Json(VersionInfo::current())
 }
 
 pub async fn handle_health(State(state): State<Arc<GatewayState>>) -> impl IntoResponse {
     let mut providers = Vec::new();
     let mut details = json!({});
+    let version = VersionInfo::current();
 
     if let Some(ag) = &state.antigravity {
         providers.push("google-antigravity");
@@ -123,6 +228,14 @@ pub async fn handle_health(State(state): State<Arc<GatewayState>>) -> impl IntoR
 
     Json(json!({
         "ok": true,
+        "version": version.semver,
+        "build": {
+            "commit_sha": version.commit_sha,
+            "commit_short_sha": version.commit_short_sha,
+            "build_timestamp": version.build_timestamp,
+            "target_triple": version.target_triple,
+            "dirty": version.dirty,
+        },
         "providers": providers,
         "details": details,
     }))
@@ -209,7 +322,10 @@ pub async fn handle_chat_completions(
     // Check if this is an SIWC ChatGPT model
     if is_siwc {
         if let Some(siwc) = &state.siwc {
-            info!("Routing model '{}' (resolved: '{}') to SIWC ChatGPT endpoint", original_model, input.model);
+            info!(
+                "Routing model '{}' (resolved: '{}') to SIWC ChatGPT endpoint",
+                original_model, input.model
+            );
             return siwc.handle_chat_completions(input).await;
         } else {
             return (
@@ -227,7 +343,10 @@ pub async fn handle_chat_completions(
 
     // Otherwise route to Google Antigravity
     if let Some(ag) = &state.antigravity {
-        info!("Routing model '{}' (resolved: '{}') to Google Antigravity endpoint", original_model, input.model);
+        info!(
+            "Routing model '{}' (resolved: '{}') to Google Antigravity endpoint",
+            original_model, input.model
+        );
         crate::antigravity::server::handle_chat_completions(State(ag.clone()), Json(input)).await
     } else {
         (

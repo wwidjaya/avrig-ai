@@ -1,0 +1,53 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 210 
+ 
+relationship, hierarchical 
+In data modeling, a one-to-many relationship between two entity types (which could be the same 
+entity type, SEE relationship, reflexive), in which the entity type on the many side of the relationship 
+is dependent upon the entity type on the one side; sometimes called a parent-child relationship. An 
+instance of the child must relate to one and only one instance of the parent entity type.  
+ 
+relationship, identifying 
+In data modeling, a relationship where the child instance cannot be uniquely identified without 
+knowing the parent instance or the identifier (key) of the parent instance in 
+that relationship. 
+ 
+relationship, mandatory 
+In data modeling, a relationship where the both instances are required to be present. Example: An 
+account must have an account holder. Each account holder must have at least one account. 
+ 
+relationship, non-identifying 
+In data modeling, a relationship where the child instance can be uniquely identified without knowing 
+the parent instance or the identifier (key) of the parent instance in that relationship. 
+ 
+relationship, optional 
+In data modeling, a relation instance where not all instances of either entity participate in the 
+relationship. Example: A company location may not have assigned orders (a data center), and orders 
+may not have assigned company locations (for a service done over the phone). 
+ 
+relationship, recursive 
+1. In data modeling, a relationship within processes in which a process calls itself during execution. 
+Sometimes used to refer to a reflexive relationship in a data structure.  
+2. SEE relationship, recursive. 
+ 
+relationship, reflexive 
+In data modeling, a relationship in a data structure in which individual instances are related to other 
+instances of the same type, i.e., in the same file or table. For example, in an employee table, an 
+employee could be related to some other employee who is their boss. Sometimes (erroneously) called 
+a recursive relationship, which instead applies to a process calling itself. 
+ 
+relationship, ternary 
+In data modeling, a relationship that involves three entity types or object types. If only two of the 
+participating entity types are required to uniquely identify instances of the relationship, then it would 
+also be an attributed, binary, many-to-many relationship. For example, Employee, Skill, and 
+Proficiency Level. For each Employee-Skill combination (a M:N relationship), if there can only be at 
+most one Proficiency Level, then it can be viewed as a binary relationship between Employee and 
+Skill, and Proficiency Level would be an attribute of the binary relationship.  
+ 
+relative address pointer 
+A method of assigning pointer values based on a start point other than the root of the structure. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

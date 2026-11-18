@@ -1,0 +1,6 @@
+**SEE web crawler.**: spider chart
+**SEE chart, radar.**: sponsorship To support or aid, but not lead, another in an effort. spread The extent of variation in a set of items. SEE ALSO standard deviation. spreadmart A concept describing the use of spreadsheets to approximate Business Intelligence applications. Due to the limitations of spreadsheet applications, multiple redundant applications are developed, and spread across an organization, making it difficult to impose standards and formal support. spreadsheet A two-dimensional format for representing and storing information having columns and rows. A spreadsheet can be used to store a relational table or flat file, assuming the columns have headings and the rows represent entity instances. NOTE: Every flat file or table can be represented in a spreadsheet, but not every spreadsheet is a relational table, even though it consists of columns and rows.
+**SQL compliant**: Conformity to current ANSI or ISO standards for SQL specifications.
+**SQL query tool**: An end-user tool that accepts SQL to be processed against one or more relational databases.
+**SQL set operator**: Set operators are commands in SQL that allow result sets from SELECT statements to be combined. There are four set operators in SQL: UNION, UNION ALL, INTERSECT, and EXCEPT (also
+**known as MINUS).**: staging area

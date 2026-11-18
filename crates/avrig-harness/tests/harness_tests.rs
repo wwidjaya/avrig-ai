@@ -1,12 +1,12 @@
 #[cfg(test)]
 mod tests {
-    use uuid::Uuid;
-    use serde_json::json;
-    use avrig_harness::domain::epistemic::EpistemicStatus;
+    use avrig_harness::context::resolver::ResolvedContext;
     use avrig_harness::domain::artifact::{CandidateArtifact, CandidateStatus};
     use avrig_harness::domain::decision::{AuthorityGate, DecisionRequest, HumanAction};
-    use avrig_harness::context::resolver::ResolvedContext;
-    use avrig_harness::governance::policy::{Guardrail, ActionType};
+    use avrig_harness::domain::epistemic::EpistemicStatus;
+    use avrig_harness::governance::policy::{ActionType, Guardrail};
+    use serde_json::json;
+    use uuid::Uuid;
 
     #[test]
     fn test_authority_gate_enforces_human_decision() {
@@ -53,7 +53,8 @@ mod tests {
             HumanAction::Approve,
             artifact.status,
             Some("Reviewed and approved by tech lead".into()),
-        ).expect("Human approval must succeed");
+        )
+        .expect("Human approval must succeed");
 
         assert_eq!(record.human_user_id, "human_lead_engineer");
         assert_eq!(new_status, CandidateStatus::Approved);

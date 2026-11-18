@@ -1,0 +1,9 @@
+{
+  "sections": [
+    {"heading": {"level": 2, "text": "Known Issues"}},
+    {"bullet_list": [
+      "Duplicate identifiers from bulk imports are rejected with a validation warning.",
+      "Reconciliation jobs run hourly; expect up to 60 minutes delay for new assignments."
+    ]}
+  ]
+}

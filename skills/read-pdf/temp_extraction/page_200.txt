@@ -1,0 +1,52 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 193 
+ 
+Platform As A Service (PAAS) 
+A software package delivered as a service that allows third-party applications to “plug in”. For 
+example, facebook.com, twitter.com. 
+ 
+pointer 
+A data type that serves specifically only to refer to another data point's storage address. 
+ 
+Poisson distribution 
+A distribution curve where the tail on one side is longer and thinner than the other. 
+ 
+polar area pie chart 
+SEE chart, polar area. 
+ 
+policy 
+A statement of a selected course of action and high-level description of desired behavior to achieve a 
+set of goals. 
+ 
+polymorphism 
+1. In object oriented design, the implementation of subclasses of a parent class so that identical requests 
+sent to different child classes are handled differently without the caller knowing. 
+2. A collection of things (instances) which are considered part of the same set, called a type.  
+ 
+population  
+1. In general, a collection of things (instances) which are considered part of the same set, called a type.  
+2. The process of loading and replicating multiple rows of data into a relational database on a one-time 
+or recurring basis. SEE ALSO data loading; data replication. 
+ 
+population cartogram 
+SEE chart, area cartogram. 
+ 
+portal  
+A website designed to be the “front door” through which a user accesses links to relevant sites. 
+Typically, a portal site has a catalog of sites, a search engine or both. A portal site may also offer e-
+mail and other services to entice people to use that site as the main point of entry or portal to the 
+web. 
+ 
+Porter's five forces diagram 
+SEE chart, Porter's five forces. 
+ 
+portfolio 
+A collection of assets, liabilities and/or issues to manage. 
+ 
+portfolio diagram 
+SEE chart, portfolio. 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 49 
+ 
+chart, supply demand curve 
+A form of visualization which plots price vertically and quantity horizontally. The supply curve 
+(usually trending upward left to right) shows the price per quantity offered by a supplier. The demand 
+curve (usually trending downward left to right) shows the price per quantity desired by consumers. 
+Equilibrium is the intersection of both curves. 
+ 
+chart, swim lane  
+A form of process flow diagram that shows involvement over time within the process for multiple 
+equivalent actors, such as teams, departments, systems, etc. 
+ 
+chart, technology roadmap 
+A form of visualization that matches goals of different time horizons with the specific technologies 
+necessary to meet or enable those goals. 
+ 
+chart, temple diagram 
+A form of visualization showing an image with a foundation, and two or more pillars supporting a 
+roof, with or without a cloud of distantly related topics. The foundation contains fundamental 
+elements, the pillars group supporting elements, and the roof includes overarching topics that cover 
+all the pillars/groups. 
+ 
+chart, timeline 
+A chart showing a horizontal line or bar containing points labeled with dates and/or events. 
+ 
+chart, tree 
+A method of representing a hierarchical set of data in a graphical form, with fewer nodes at the either 
+the top (i.e., descendent genealogy) or bottom (i.e., ancestor genealogy). 
+ 
+chart, tree map 
+Alternate form: treemap 
+A chart where one set of values is represented by areas of rectangles, and other sets of values are 
+represented by colors. invented by Professor Ben Shneiderman at the University of Maryland. Used 
+to look at large, fast-changing sets of structured data. In this chart, the size of a rectangle reflects its 
+importance, and color conveys urgency (blue shades for positive, red shades for negative). SEE 
+ALSO chart, heat map. 
+ 
+chart, use case diagram 
+A form of visualization showing actors and roles when interacting with objects in defined scenarios. 
+UML or flow charts are common formats for use case diagrams. 
+ 
+chart, vee diagram 
+A form of visualization that shows a problem, the steps to planning a solution, and then steps to 
+evaluate the results afterwards. Shaped like a V, hence the name. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

@@ -1,0 +1,12 @@
+{
+  "access_token": "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",
+  "refresh_token": "",
+  "expires_at": "2027-09-30T08:01:36.993Z",
+  "client_id": "9d1c250a-e61b-44d9-88ed-5944d1962f5e",
+  "scopes": [
+    "//api.anthropic.com",
+    "user",
+    "inference"
+  ],
+  "source": "claude-desktop"
+}

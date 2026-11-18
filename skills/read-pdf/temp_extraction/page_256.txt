@@ -1,0 +1,41 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 249 
+ 
+visualization, concept 
+Visual representation of qualitative concepts. 
+ 
+visualization, data 
+Visual representation of quantitative data in schematic form. 
+ 
+visualization, information 
+An interactive visual representation of data by transformation into an image that can be then 
+manipulated. 
+ 
+visualization, metaphor 
+The positioning of information graphically using a secondary related framework to convey insight. 
+ 
+visualization, strategy 
+Use of complementary visual representations to enable development and communication of a 
+strategy. 
+ 
+vocabulary 
+A collection of terms and concepts that have not necessarily been screened for duplication and 
+ambiguity. SEE ALSO controlled vocabulary. 
+ 
+vocabulary management 
+A way to improve the effectiveness of information storage and retrieval systems, Web navigation 
+systems, and other environments that seek to both identify and locate desired content via some sort 
+of description using language. The primary purpose of vocabulary control is to achieve consistency in 
+the description of content objects and to facilitate retrieval. (ANSI/NISO Z39.19-2005) 
+ 
+volatile 
+1. Adjective. Subject to sharp, frequent, or regular changes. 
+2. Adjective. Transient, not persistent. 
+ 
+ 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.

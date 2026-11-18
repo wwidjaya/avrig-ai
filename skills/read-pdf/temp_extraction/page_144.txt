@@ -1,0 +1,51 @@
+DAMA Dictionary of Data Management 2nd Edition 
+Copyright © 2011 by DAMA International. All rights reserved. 
+ 
+page 137 
+ 
+index, covering 
+An index where the values of the data are stored in the index, allowing data retrieval from the index 
+itself, instead of the data object. 
+ 
+index, dense 
+Describes an index where every row in the indexed structure relates to a value in the index. 
+ 
+index, global 
+A type of index that either is related to a non-partitioned table, or is not partitioned even though the 
+underlying table is partitioned. 
+ 
+index, inverted 
+An index structure that stores locations of keywords within a set of files, and possibly the location 
+within the file, rather than a list of possible values, in order to provide speedy searches for words or 
+phrases. Mostly used for content searches through multiple files, such as a search for the term 
+“DAMA” within several web pages or documents. 
+ 
+index, local 
+A type of partitioned index where the index block corresponds to one and only one data block. 
+ 
+index, non-clustered 
+An indexing technique in which the actual data is stored in random order, not physically in the order 
+of the index. Files can have multiple non-clustered indexes, and each non-clustered index will take up 
+space as an object. 
+ 
+index, reverse 
+An indexing technique in which the value being indexed is reversed (reversing the characters or 
+reversing the digits) before being sorted. This is especially useful for indexing sequence numbers, 
+where the most significant digit rarely changes, but the least significant digit always does. 
+ 
+index, sparse 
+Describes an index where every possible value in the indexed object relates to a pointer in the index, 
+and few of those values actually appear in the indexed file or object, so that the index is mostly 
+empty. See also index, block. 
+ 
+index, unique 
+An index on an identifier, or attribute(s) defined as unique, in which case there can only be one 
+pointer for each value entry in the index. 
+ 
+indexed file organization 
+A method of storing data such that the index key controls the physical order of the data within the 
+file. 
+ 
+Order 85101 by gustaf prameswara on August 31, 2026.
+For use on purchaser device only.
+Contains DRM with visible and invisible purchaser identifiers.
