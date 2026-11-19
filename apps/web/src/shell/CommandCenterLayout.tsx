@@ -233,7 +233,7 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
 
       {/* Sign Out Confirmation Dialog */}
       <AlertDialog open={signOutConfirmOpen} onOpenChange={setSignOutConfirmOpen}>
-        <AlertDialogContent className="sm:max-w-md">
+        <AlertDialogContent size="sm">
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
             <AlertDialogDescription>
