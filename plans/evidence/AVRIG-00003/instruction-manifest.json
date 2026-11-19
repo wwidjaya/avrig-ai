@@ -10,9 +10,9 @@
     {
       "File": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md",
       "Status": "PRESENT",
-      "Bytes": 24386,
-      "Lines": 241,
-      "Sha256": "E8EE3EE738724120A2E8D284727DEECD1B6A3D91A0BA5B2C53E0170C0A64C8A7",
+      "Bytes": 25014,
+      "Lines": 242,
+      "Sha256": "7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6",
       "Backup": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md.bak-20261120-062939",
       "BackupStatus": "PRESENT",
       "BackupBytes": 11496,
@@ -37,5 +37,18 @@
     "harness_choice_added": true,
     "new_section": "## Desktop UAT Testing",
     "new_section_subsections": 11
-  }
+  },
+  "amendments": [
+    {
+      "sequence": 2,
+      "amended_utc": "2026-11-19T23:44:24Z",
+      "amended_local": "2026-11-20 06:44:24 +07:00",
+      "section": "## Desktop UAT Testing > ### Launch the tested artifact",
+      "reason": "close-app cannot resolve a hosted application. --app resolves against list-apps, where a hosted application appears under its host process, so close-app answers APP_NOT_FOUND while list-windows --app finds the window. Verified against CalculatorApp.exe on this host. The section now records the window Close ref route.",
+      "sha256_before": "E8EE3EE738724120A2E8D284727DEECD1B6A3D91A0BA5B2C53E0170C0A64C8A7",
+      "sha256_after": "7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6",
+      "lines_before": 241,
+      "lines_after": 242
+    }
+  ]
 }
