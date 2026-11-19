@@ -756,6 +756,43 @@ None. This plan creates no table, column, index, constraint, or migration, and r
 
 P5 to P8 touch disjoint file sets, so they run concurrently. P10 must not start until P9 confirms the documents agree on the tag shape, the branch pattern, the token regex, the ancestry assertion, and the release command.
 
+## Execution Record
+
+Stage 5 was executed on 2026-11-19, after the user approved the plan on the same day. This section is the durable record required by stage 5, and it is appended on the plan branch rather than on the default branch.
+
+### 5a, default branch reconciliation
+
+Command `C18` was run after `git fetch origin --tags --prune --quiet` in every repository. Result: `stranded_release_tags=0`, verdict `PASS`.
+
+| Repository | Resolved default | Release tags tested | Stranded | Reconciliation merge |
+|---|---|---|---|---|
+| `avrig-ai` | `main` | `0.2.0`, `0.2.1`, `0.3.0`, `0.4.0` | 0 | none required |
+| `avrig-api` | `main` | `0.2.0`, `0.2.1`, `0.3.0`, `0.4.0` | 0 | none required |
+| `avrig-lib` | `main` | `0.2.0`, `0.2.1`, `0.3.0`, `0.4.0` | 0 | none required |
+| `avrig-ui` | `main` | `0.2.0`, `0.2.1`, `0.3.0`, `0.4.0` | 0 | none required |
+| `Agentic` | `master` | none (no SemVer tags exist) | 0 | none required |
+
+Every local default branch was also confirmed identical to its `origin` counterpart after the fetch, so `C18` did not pass against a stale local ref. No candidate tag was examined, by construction: a three segment ref cannot match the anchored release regex, and the gate forbids merging one regardless.
+
+### 5b, branch creation
+
+| Repository | Default | Authoring commit | Plan branch | Branch head | Upstream |
+|---|---|---|---|---|---|
+| `avrig-ai` | `main` | `5aaa879`, "AVRIG-00001: plan and ledger for agent workflow update", pushed to `origin/main` | `feature/AVRIG-00001` | `5aaa879` | `origin/feature/AVRIG-00001` |
+| `Agentic` | `master` | none (this plan adds no tracked file there yet) | `feature/AVRIG-00001` | `0bf72a5` | `origin/feature/AVRIG-00001` |
+
+The authoring commit touched exactly two paths, `plans/PLAN-INDEX.md` and this plan file. A pre-existing modified plan, `plans/2026-11-19-gateway-opencode-header-passthrough.md`, was deliberately left out of it and remains uncommitted.
+
+The Agentic plan branch is currently identical to `master` because `AGENTS.md` is not written until P7. Cutting it now satisfies the gate: P5 to P8 cannot start without it, and the branch must exist before `be` writes into it.
+
+## Open Implementation Decisions
+
+1. **The Agentic `AGENTS.md` working copy already carries uncommitted drift that predates this plan.** `git diff AGENTS.md` shows 54 insertions and 1 deletion: a new `## Environment & Directories` section, a `## Codebase Exploration & Navigation (graphify > grep)` section, a rewritten `## Subagent Delegation & Operational Workflows` section, and a `Local project AGENTS.md takes precedence` sentence. None of it is AVRIG-00001 content, and it still contains the stale sentence this plan exists to fix: "The Plan agent owns plan creation and lifecycle updates. Follow its instructions in `$env:OPENCODE_CONFIG_DIR/.opencode/agents/plan.md`". Committing `AGENTS.md` on the plan branch would therefore sweep in a large governance rewrite of unverified provenance together with this plan's change.
+
+   Options: (a) commit only this plan's AGENTS.md change, reconstructed from `git show master:AGENTS.md` plus the plan's edits, leaving the drift uncommitted in the working tree (recommended, since it keeps the branch commit honest and is fully reversible); (b) commit the whole working tree file at P7 with the drift included and disclose it in the commit message; (c) commit the drift to `master` first as its own change, then branch and make the targeted edit.
+
+   Blocked by this: only the P7 `AGENTS.md` write in the Agentic repository. P5, P6 and P8 are unaffected because they write untracked `.opencode/agents/` files, and the `avrig-ai` half of P7 is unaffected because `avrig-ai/AGENTS.md` has no pre-existing drift. Waiting on: the user.
+
 ## Resolved Decisions
 
 Answered by the user on 2026-11-19. These are settled and are no longer questions.
