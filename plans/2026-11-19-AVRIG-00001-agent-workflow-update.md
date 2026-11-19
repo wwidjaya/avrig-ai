@@ -785,13 +785,11 @@ The authoring commit touched exactly two paths, `plans/PLAN-INDEX.md` and this p
 
 The Agentic plan branch is currently identical to `master` because `AGENTS.md` is not written until P7. Cutting it now satisfies the gate: P5 to P8 cannot start without it, and the branch must exist before `be` writes into it.
 
-## Open Implementation Decisions
+## Resolved Implementation Decisions
 
-1. **The Agentic `AGENTS.md` working copy already carries uncommitted drift that predates this plan.** `git diff AGENTS.md` shows 54 insertions and 1 deletion: a new `## Environment & Directories` section, a `## Codebase Exploration & Navigation (graphify > grep)` section, a rewritten `## Subagent Delegation & Operational Workflows` section, and a `Local project AGENTS.md takes precedence` sentence. None of it is AVRIG-00001 content, and it still contains the stale sentence this plan exists to fix: "The Plan agent owns plan creation and lifecycle updates. Follow its instructions in `$env:OPENCODE_CONFIG_DIR/.opencode/agents/plan.md`". Committing `AGENTS.md` on the plan branch would therefore sweep in a large governance rewrite of unverified provenance together with this plan's change.
+1. **The Agentic `AGENTS.md` working copy carries uncommitted drift that predates this plan, and it is committed as part of P7.** `git diff AGENTS.md` showed 54 insertions and 1 deletion: a new `## Environment & Directories` section, a `## Codebase Exploration & Navigation (graphify > grep)` section, a rewritten `## Subagent Delegation & Operational Workflows` section, and a `Local project AGENTS.md takes precedence` sentence. None of it is AVRIG-00001 content, and it still contains the stale sentence this plan exists to fix: "The Plan agent owns plan creation and lifecycle updates. Follow its instructions in `$env:OPENCODE_CONFIG_DIR/.opencode/agents/plan.md`".
 
-   Options: (a) commit only this plan's AGENTS.md change, reconstructed from `git show master:AGENTS.md` plus the plan's edits, leaving the drift uncommitted in the working tree (recommended, since it keeps the branch commit honest and is fully reversible); (b) commit the whole working tree file at P7 with the drift included and disclose it in the commit message; (c) commit the drift to `master` first as its own change, then branch and make the targeted edit.
-
-   Blocked by this: only the P7 `AGENTS.md` write in the Agentic repository. P5, P6 and P8 are unaffected because they write untracked `.opencode/agents/` files, and the `avrig-ai` half of P7 is unaffected because `avrig-ai/AGENTS.md` has no pre-existing drift. Waiting on: the user.
+   The user chose to commit the whole file at P7 rather than reconstruct a minimal version or land the drift on `master` first. Consequence: the P7 commit in the Agentic repository contains both this plan's AGENTS.md change and the pre-existing drift, so its message must disclose the drift explicitly and name it as pre-existing rather than implying it was authored here. The targeted correction is applied on top of the drift, so the stale sentence is replaced in the same commit. If the drift later proves wrong, it reverts with the plan branch, not with `master`.
 
 ## Resolved Decisions
 
