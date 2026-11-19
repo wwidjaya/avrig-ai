@@ -13,6 +13,12 @@ logs/
 data/
 *.log
 
+# Python bytecode: the interpreter writes `__pycache__/` and `*.pyc` as a side
+# effect of running a script, so they appear mid-run and are never source.
+# Default-deny them so `git add -A` cannot sweep a cache into a release commit.
+__pycache__/
+*.pyc
+
 # Secrets and local environment
 .secrets/
 .env
