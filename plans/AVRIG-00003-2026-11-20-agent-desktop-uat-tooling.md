@@ -3,9 +3,10 @@ title: Agent-Desktop as the Desktop UAT Harness for the Tester Agent
 plan_id: AVRIG-00003
 project_indicator: AVRIG
 branch: chore/AVRIG-00003-agent-desktop-uat-tooling
-candidate_tags: []
+candidate_tags:
+  - "avrig/00003/rc.001 @ 68520e980a10a220fed78b7a86b6ba36e63e0e36 (AVRIG-00003-build.001)"
 release_version:
-status: approved
+status: testing
 created: 2026-11-20
 owner: Architect
 tags:
@@ -465,3 +466,13 @@ Each item below was found by running the real binary or by observing the real en
 | D5 | Any harmless built-in application is a stable smoke target | A baseline Notepad process and a launched one both disappeared before any close command ran | The smoke moved to the documented fallback, and the behaviour is recorded rather than explained away. A target that exits on its own is a finding about the host, and the observe, act, verify loop reports it as such instead of retrying |
 
 Screenshot and `screenshot` by window are subject to the same hosted-application limit as `close-app`, so a hosted target is captured through its window ref or with the full surface rather than by process name.
+
+## Candidate and Test Record
+
+| Stage | Record |
+|---|---|
+| 7, workspace build gate | Not applicable, with the reason stated: the diff from the approval commit `1ad27f4` to the branch head contains only `plans/AVRIG-00003-2026-11-20-agent-desktop-uat-tooling.md` and `plans/evidence/AVRIG-00003/instruction-manifest.json`. No buildable source changed, so there is nothing for `cargo check --workspace` or `pnpm build` to say about this plan |
+| 8, candidate tag | `avrig/00003/rc.001`, annotated, on `68520e980a10a220fed78b7a86b6ba36e63e0e36`, build id `AVRIG-00003-build.001`, pushed. The tag resolves to that commit, and it is the commit the matrix runs against |
+| 9, QA | Verdict recorded once the run completes, against the tag rather than the tree |
+
+The tag covers the manifest, and the manifest covers the definition. That chain is the only evidence available for a file the Agentic repository does not version, which is why check G13 recomputes the live hash instead of trusting the recorded one.
