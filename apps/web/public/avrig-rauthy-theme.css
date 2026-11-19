@@ -605,9 +605,11 @@ body .container.absolute {
   border: 0 !important;
 }
 
-/* Shared reset, unchanged from 0.3.0. It matches the theme switch's own
-   `button` and the `.btn` Rauthy nests inside the language trigger; neither
-   wants a border, padding or rounded corner. It carries no `min-width`. */
+/* Shared reset. This rule genuinely spans both controls: the theme switch's own
+   `button` and the `.btn` Rauthy nests inside the language trigger. Neither
+   wants a border, a padding box or a rounded corner of its own. The switch is an
+   icon-only control whose chrome comes from the `.container.absolute` root
+   above, so this rule deliberately sets no box and no `min-width`. */
 main .container.absolute button,
 body .container.absolute button,
 /* The nested `.btn` holds the label plus the chevron. Anchored on the
@@ -639,11 +641,11 @@ body [class*="svelte-fexfbq"].absolute > div > button .btnText {
 
 /* Language trigger. Split out of the rule that styled the theme switch, which
    is where `min-width: 64px` came from: a two-letter label was stretched into a
-   64px box. The locale rows do not match this selector, because the popover
-   nests its buttons under `.popoverOptions`, one level deeper than `> div >
-   button`, so no `:not()` guard is needed. */
-main [class*="svelte-fexfbq"].absolute > div > button,
-body [class*="svelte-fexfbq"].absolute > div > button {
+   64px box. The `:not(.popover *)` guard states the intent explicitly: the
+   chip may only match the trigger at the root of the selector, never a locale
+   row, whatever depth Rauthy renders the popover at in a future release. */
+main [class*="svelte-fexfbq"].absolute > div > button:not(.popover *),
+body [class*="svelte-fexfbq"].absolute > div > button:not(.popover *) {
   height: 32px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -661,7 +663,7 @@ body [class*="svelte-fexfbq"].absolute > div > button {
   border-radius: 8px !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: color 120ms ease, background-color 120ms ease;
+  transition: color 120ms ease, background-color 120ms ease !important;
 }
 
 /* One glyph, not two. Rauthy's own inline `<svg>` chevron is the survivor: it
@@ -671,8 +673,8 @@ body [class*="svelte-fexfbq"].absolute > div > button {
    `data:` URI, which that CSP blocks, so it never painted; the rule is deleted
    outright rather than left as dead weight that would reappear if the policy
    were ever loosened. */
-main [class*="svelte-fexfbq"].absolute > div > button svg,
-body [class*="svelte-fexfbq"].absolute > div > button svg {
+main [class*="svelte-fexfbq"].absolute > div > button:not(.popover *) svg,
+body [class*="svelte-fexfbq"].absolute > div > button:not(.popover *) svg {
   width: 14px !important;
   height: 14px !important;
   flex: 0 0 14px !important;
@@ -692,8 +694,8 @@ body .container.absolute button:hover {
 
 /* Language chip hover. Split from the switch above so the chip gets the landing
    page's ghost hover and, per R5, neither a border nor a filter. */
-main [class*="svelte-fexfbq"].absolute > div > button:hover,
-body [class*="svelte-fexfbq"].absolute > div > button:hover {
+main [class*="svelte-fexfbq"].absolute > div > button:not(.popover *):hover,
+body [class*="svelte-fexfbq"].absolute > div > button:not(.popover *):hover {
   color: var(--av-text) !important;
   background: var(--av-ghost-hover) !important;
   border: 0 !important;
