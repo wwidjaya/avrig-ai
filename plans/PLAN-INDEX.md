@@ -142,3 +142,15 @@ A coded plan also moves to `plans/done/` once it is released, and it keeps its c
 Archived coded plans: `plans/done/AVRIG-00001-2026-11-19-agent-workflow-update.md`.
 
 New work in this project starts at `AVRIG-00001`.
+
+## Deferred defects
+
+Defects found while executing a plan but out of its scope. Each is recorded here so it is not lost, and each needs its own plan before it is fixed. A defect is deferred rather than folded into the running plan because folding it in would change the tested surface after the test.
+
+| Found during | Defect | Evidence |
+|---|---|---|
+| AVRIG-00001 | `cargo check --workspace` fails on `avrig-desktop`. RC.EXE rejects `apps/desktop/src-tauri/icons/icon.ico` as an old DIB because the file is a 22-byte placeholder committed in `f7b70fa`. Pre-existing: the same 22-byte file is present at the `0.4.0` release tag, so `0.4.0` shipped with it. The release path is unaffected, since `make build` runs `cargo build --release` and never references `src-tauri`. `cargo check --workspace --exclude avrig-desktop` exits 0. | AVRIG-00001, Pass 11 |
+| AVRIG-00001 | `scripts/bump-version.ps1` runs `cargo check --workspace` at line 85 and prints `Successfully bumped version to $newVersion` at line 90 with no `$LASTEXITCODE` check between them, so it reports success over a failed lock sync. | AVRIG-00001, Pass 11 |
+| AVRIG-00001 | `scripts/check-version-sync.ps1` compares only `avrig-ai`'s `Cargo.toml` against `apps/web/package.json`, never against `avrig-api`, so the release set can hold a `0.5.0` tag on a `0.4.0` binary. | AVRIG-00001, Pass 13 |
+| AVRIG-00001 | The Agentic `.gitignore` rule `*.bak-*` requires a timestamp, so a bare `<file>.bak` backup is not ignored. `AGENTS.md.bak` (31 lines, modified 2026-11-12) sits untracked in the Agentic checkout. Not a regression, since it predates this plan and was inside the measured D14 baseline, but a `git add -A` would sweep it. | AVRIG-00001, stage 16 |
+| AVRIG-00001 | The `bump-version` Makefile target guards with a POSIX test, `if [ -z "$(VERSION)" ]`, but `SHELL := sh.exe` is not on `PATH` by default here, so GNU Make falls back to `cmd.exe` and the guard fails with `-z was unexpected at this time`. | AVRIG-00001, Pass 11 |
