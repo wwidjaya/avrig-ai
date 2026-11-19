@@ -2,11 +2,11 @@
 title: "Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate"
 plan_id: AVRIG-00001
 project_indicator: AVRIG
-indicator_status: pending-user-confirmation
+indicator_status: frozen
 status: testing
 created: 2026-11-19
 owner: Architect (authoring), analyst (review and findings), tester (test matrix and live browser verification), be (config file writes), build (branch, candidate tags, merge, release), Infra (deploy), km (retrospective)
-branch: feature/AVRIG-00001
+branch: feat/AVRIG-00001-agent-workflow-update
 repos:
   - avrig-ai (default main)
   - Agentic (default master)
@@ -14,9 +14,8 @@ default_branches_resolved: true
 instruction_files_tracked: false
 candidate_tags:
   - avrig/00001/rc.001 @ d100017, build AVRIG-00001-build.001
-release_version: undecided until the user approves a version at stage 12
-version_target: none, project codes never imply a SemVer
-resolved_decisions: 3 (default branch per repo, instruction files local only, plans committed)
+release_version:
+resolved_decisions: 6 (default branch per repo, instruction files local only, plans committed at approval, no code before approval, version blank until deployment, issue before branch)
 tags:
   - agent-workflow
   - plan-lifecycle
@@ -34,7 +33,7 @@ tags:
 2. Make the indicator permanent and provable. It is declared once per project in the plan ledger, it is frozen only after the user confirms it, and any later change requires a documented alias mapping so old codes never break.
 3. Separate the six identifiers so they can never be confused: work items identify work, branches identify active development, build ids identify produced artifacts, candidate tags identify testable artifacts, release tags identify released software, and slice branches identify one part of one work item.
 4. Reorder the Architect stages so an authored plan goes straight to `analyst` review with no intervening gate, the test matrix is attached before the user is asked anything, and the Architect then confirms findings and open clarifications with the user.
-5. Bind execution to a branch cut after explicit approval from a default branch that has first been reconciled with every release tag, named `<type>/<CODE>-<NNNNN>`, cut in every repository the plan touches, with the default branch resolved per repository rather than assumed to be `main`, and make those branches the only place development and fixes happen.
+5. Bind execution to a branch cut after explicit approval from a default branch that has first been reconciled with every release tag, named `<type>/<CODE>-<NNNNN>-<slug>` and linked to the plan's feature request, cut in every repository the plan touches, with the default branch resolved per repository rather than assumed to be `main`, and make those branches the only place development and fixes happen.
 6. Guarantee the plan branch is never cut from stale code. Before branching, every release tag must be proven an ancestor of the default branch, so released content that never reached it is merged first instead of being silently absent from the work.
 7. Bind every test run to an immutable candidate tag created before the test starts, so the tester verifies an exact tagged tree instead of a moving working directory.
 8. Make each remediation cycle produce a fresh candidate tag and a matching build, so the artifact promoted to production is provably the artifact that passed.
@@ -50,11 +49,11 @@ Measurable outcomes:
 |---|---|
 | Universal indicator | The fenced instruction text destined for `Architect.md` and `tester.md` contains no user project's actual indicator outside an Example column, and describes the shape by regex `^[A-Z][A-Z0-9]{1,9}$` |
 | Indicator declared per project | `plans/PLAN-INDEX.md` frontmatter carries `project_indicator:` and states the freeze-after-confirmation rule |
-| Plan codes, forward only | Every plan file created at or after this one matches `plans/YYYY-MM-DD-<CODE>-<NNNNN>-<slug>.md` and its code extracts by token regex. Legacy files are exempt by recorded exception |
+| Plan codes, forward only | An approved plan file matches `plans/<CODE>-<NNNNN>-YYYY-MM-DD-<slug>.md` and its code extracts by token regex; a draft carries no code in its name or frontmatter. Legacy files are exempt by recorded exception |
 | Allocation is collision safe | The allocation rule reads the union of the fetched remote tree, the local tree, and all branch names, filters to this project's indicator, parses with the anchored filename regex rather than a hyphen split, rechecks before writing, and asserts no duplicate after writing |
 | Identifier separation | Policy text names all six identifier kinds and states that a work-item code never implies a SemVer |
 | Analyst-first stage | `Architect.md` lists `analyst` as the immediate successor of plan authoring, with the test matrix attached before the approval stage |
-| Branch gate | `Architect.md` states the branch is cut from the repository's resolved default branch in every affected repository, only after user approval, in the pattern `<type>/<CODE>-<NNNNN>`, and only after every release tag is confirmed an ancestor of that default branch |
+| Branch gate | `Architect.md` states the branch is cut from the repository's resolved default branch in every affected repository, only after user approval, in the pattern `<type>/<CODE>-<NNNNN>-<slug>`, only after every release tag is confirmed an ancestor of that default branch, and that the branch is linked to the plan's feature request |
 | Candidate tag gate | `Architect.md` states a candidate tag and its build exist before the first test and that every fix produces the next numbered pair |
 | Release integrity | `Architect.md` states the bump happens on the plan branch and is itself candidate tested, the ancestry assertion and tree-equality assertion guard the merge, the merge precedes the tag, and the tag is created by hand at the tested commit because the publisher can only tag a branch head |
 | Live browser test | `tester.md` names the Playwright harness and the `wmux browser` fallback with its real call forms, plus evidence storage per candidate tag |
@@ -110,6 +109,10 @@ resolve_default_branch(repo):
 
 Step 1 exists because the Agentic repository is developed on `master` while its remote still advertises `main`, and step 4 is what makes this repository resolvable rather than a hard stop. Applied here: `avrig-ai` and the three product repositories resolve to `main` by step 3; the Agentic repository resolves to `master` by step 4, with the `origin/main` disagreement recorded.
 
+**The contract must be evaluated before the plan branch exists, or it becomes self-defeating.** This was found by `D12` on candidate `rc.001`, and it is a real defect rather than a measurement error. Step 4 depends on there being exactly one local branch. In the Agentic repository there was one, `master`, so the step resolved correctly. Then stage 5b created the plan branch, leaving two local branches, so step 4 no longer applies, step 3 still fails because `origin/HEAD` names `main` which does not exist locally, and the contract falls through to step 5 and stops. Cutting the branch destroyed the evidence path the rule depended on.
+
+Two corrections close it. First, resolution is recorded once, before any branch is cut, and the recorded value is what later stages use; re-resolving after branching is not required and would be wrong. Second, the exclusion is made explicit: when counting local branches, exclude any branch matching the plan branch pattern `<type>/<CODE>-<NNNNN>-<slug>` and any slice branch beneath it, because those are this plan's own working branches and not candidate defaults. With that exclusion the Agentic repository keeps resolving to `master` by step 4 before, during, and after this plan's branch exists.
+
 The resolution result and its step number are recorded in the plan before any branch is cut, so a later reader can see how each repository was decided instead of inferring it.
 
 The worktree case has a consequence worth stating: because `avrig-ai-gateway-oauth` shares `avrig-ai`'s object store, a ledger row committed on the default branch is not visible while that worktree sits on its feature branch. The ledger therefore lives in the checked-out branch, and allocation reads the ledger, the filenames it can see, and the archived `plans/done/` tree. A worktree that cannot see the newest plans must merge or fast-forward its default branch before allocating.
@@ -128,20 +131,24 @@ The worktree case has a consequence worth stating: because `avrig-ai-gateway-oau
 | Collision avoidance | Two projects never share an indicator. A workspace registry is optional and deferred |
 | Case | Uppercase in work items, lowercase in tag namespaces, both derived from the one declared value |
 
-The parse rule is a token regex rather than a hyphen split because the hyphen split is provably broken. Measured: applying the split to the real filename `2026-11-19-AVRIG-00001-agent-workflow-update.md` gives a right side of `update.md`, so the ledger cannot read its own first entry and the next author reissues `00001`. The token regex returns `AVRIG-00001` from that filename, `AVRIG2-00042` from `2026-11-19-AVRIG2-00042-fix-v2-timeout-in-rc.2.md`, and no match from `2026-11-18-release-0.3.0-consolidated.md`, which is exactly the required behaviour for legacy files.
+The parse rule is a token regex rather than a hyphen split because the hyphen split is provably broken. Measured: applying the split to the real filename `AVRIG-00001-2026-11-19-agent-workflow-update.md` gives a right side of `update.md`, so the ledger cannot read its own first entry and the next author reissues `00001`. The token regex returns `AVRIG-00001` from that filename, `AVRIG2-00042` from `2026-11-19-AVRIG2-00042-fix-v2-timeout-in-rc.2.md`, and no match from `2026-11-18-release-0.3.0-consolidated.md`, which is exactly the required behaviour for legacy files.
 
 #### The identifier taxonomy
 
 | Identifier | Shape | Example | Owner |
 |---|---|---|---|
 | Work item | `<CODE>-<NNNNN>` | `AVRIG-00002` | Architect |
-| Branch | `<type>/<CODE>-<NNNNN>` | `feature/AVRIG-00002` | build |
-| Slice branch | `<type>/<CODE>-<NNNNN>-<slice>` | `feature/AVRIG-00002-reporting` | be, fe |
+| Branch | `<type>/<CODE>-<NNNNN>-<slug>` | `feat/AVRIG-00002-document-version-comparison` | build |
+| Slice branch | `<type>/<CODE>-<NNNNN>-<slug>/<slice>` | `feat/AVRIG-00002-document-version-comparison/reporting` | be, fe |
 | Build id | `<CODE>-<NNNNN>-build.<NNN>` | `AVRIG-00002-build.003` | build, artifact space only |
 | Candidate tag | `<code-lower>/<NNNNN>/rc.<NNN>` | `avrig/00002/rc.002` | build |
 | Release tag | `X.Y.Z` | `1.1.0` | build |
 
-Six identifiers, where `<type>` is one of `feature`, `fix`, `chore`, `docs`, `refactor`, `perf`. A slice branch is a branch subtype, not a seventh kind.
+Six identifiers, where `<type>` is one of `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`. A slice branch is a branch subtype, not a seventh kind.
+
+The `<slug>` is required on a plan branch, not optional. It is a short kebab-case description of the work, taken from the plan filename slug so the two always agree. It exists for a mechanical reason: GitHub can only link an issue to a branch it creates through its own linking API, and that API refuses a name that already exists, so a bare `<type>/<CODE>-<NNNNN>` cannot be attached to its issue after the fact. A slug makes the branch readable in a branch list and lets the issue link resolve.
+
+Because the plan branch now ends in `-<slug>`, a slice branch cannot reuse that shape without becoming ambiguous, so a slice nests as a path segment after the plan branch name. The two are therefore distinguishable by structure alone: a plan branch has no `/` after the code and slug, a slice branch always does.
 
 Hard rules:
 
@@ -193,10 +200,10 @@ Two hard preconditions fall out of the script's behaviour:
 
 | State | Owning assignee | Entry condition |
 |---|---|---|
-| `draft` | Architect | Plan file and ledger row created with an allocated code |
+| `draft` | Architect | Plan file written, dated name only, no code and no ledger row |
 | `under-review` | analyst | Architect hands the plan over immediately after writing it |
 | `awaiting-approval` | Architect | Analyst has recorded `## Review Findings`, the test matrix is attached, and open questions are presented |
-| `approved` | primary | User approves execution, which cuts branches |
+| `approved` | primary | User approves execution, which assigns the code, renames the plan file, writes the ledger row, and cuts branches |
 | `in-progress` | be, fe, edm | Branches exist in every affected repository |
 | `testing` | tester | A candidate tag and its matching build exist on the branch head |
 | `passed` | tester | QA passes against that specific candidate tag |
@@ -238,18 +245,18 @@ Branches are cut from each project's default branch, after approval:
 ```text
 AVRIG main                        WEB main
  |                                 |
- +--- feature/AVRIG-00001          +--- feature/WEB-00001
+ +--- feat/AVRIG-00001-doc-version-compare  +--- feat/WEB-00001
  |
- +--- feature/AVRIG-00002
+ +--- feat/AVRIG-00002-user-profile
 ```
 
 A plan spanning several slices may branch further, but the plan branch remains the release candidate branch:
 
 ```text
-feature/AVRIG-00001
-    +--- feature/AVRIG-00001-user-profile
-    +--- feature/AVRIG-00001-reporting
-    +--- feature/AVRIG-00001-validation
+feat/AVRIG-00001-doc-version-compare
+    +--- feat/AVRIG-00001-doc-version-compare/user-profile
+    +--- feat/AVRIG-00001-doc-version-compare/reporting
+    +--- feat/AVRIG-00001-doc-version-compare/validation
 ```
 
 Iteration 1 on `AVRIG-00001`:
@@ -257,7 +264,7 @@ Iteration 1 on `AVRIG-00001`:
 ```text
 main @ 1.0.0
    |
-   +--- feature/AVRIG-00001
+   +--- feat/AVRIG-00001-doc-version-compare
             +--- commit A
             +--- commit B
             +--- commit C
@@ -272,7 +279,7 @@ AVRIG-00001-build.001
 Iteration 2 adds work, and the build number advances with it:
 
 ```text
-feature/AVRIG-00001
+feat/AVRIG-00001-doc-version-compare
        +--- commit A
        +--- commit B
        +--- commit C
@@ -287,7 +294,7 @@ AVRIG-00001-build.002
 Testing finds bugs, fixed on the same branch:
 
 ```text
-feature/AVRIG-00001
+feat/AVRIG-00001-doc-version-compare
        +--- ...
        +--- fix F
        +--- fix G
@@ -302,11 +309,11 @@ Meanwhile `AVRIG-00002` moves faster, which is normal:
 ```text
 main @ 1.0.0
    |
-   +--- feature/AVRIG-00001
+   +--- feat/AVRIG-00001-doc-version-compare
    |       +--- iteration 1
    |       +--- iteration 2
    |
-   +--- feature/AVRIG-00002
+   +--- feat/AVRIG-00002
            +--- iteration 1
            +--- iteration 2
            +--- iteration 3
@@ -322,7 +329,7 @@ AVRIG-00002-build.004
 Ready for formal testing, a candidate is cut. The production version is still unassigned:
 
 ```text
-feature/AVRIG-00002
+feat/AVRIG-00002
              |
              v
        test candidate
@@ -395,7 +402,7 @@ main
 So `AVRIG-00001` synchronizes with `main` before its next candidate. Merge rather than rebase, because it preserves history and is safer for a long-running agent branch:
 
 ```bash
-git switch feature/AVRIG-00001
+git switch feat/AVRIG-00001-doc-version-compare
 git merge main
 ```
 
@@ -406,7 +413,7 @@ main
  |
  +--- 1.1.0
        |
-       +--- feature/AVRIG-00001
+       +--- feat/AVRIG-00001-doc-version-compare
               +--- iteration 3
               +--- iteration 4
               +--- iteration 5
@@ -447,8 +454,8 @@ And in repository terms, with the `WEB` project running its own untouched series
 AVRIG repository
     Branches
         main
-        feature/AVRIG-00001
-        feature/AVRIG-00002
+        feat/AVRIG-00001-doc-version-compare
+        feat/AVRIG-00002
         fix/AVRIG-00001-validation
         fix/AVRIG-00002-timeout
 
@@ -475,7 +482,7 @@ AVRIG repository
 WEB repository
     Branches
         main
-        feature/WEB-00001
+        feat/WEB-00001
 
     Git tags
         3.4.1
@@ -533,7 +540,7 @@ Replace `## Write Scope` with:
 ```markdown
 ## Write Scope
 
-- Authoritative location: the project root's `plans/` subfolder, using `YYYY-MM-DD-<CODE>-<NNNNN>-<task-name>.md` filenames. Completed plans move to `plans/done/`.
+- Authoritative location: the project root's `plans/` subfolder. A plan has two filename states. While it is a draft it is dated and carries no code: `YYYY-MM-DD-<task-name>.md`. Once the user approves it, it is renamed to put the work-item code first: `<CODE>-<NNNNN>-YYYY-MM-DD-<task-name>.md`. Completed plans move to `plans/done/` and keep the approved name.
 - `<CODE>` is the project indicator and `<NNNNN>` the five digit running number, both defined in Plan Identity and Numbering below. A plan file never ships without both.
 - Plan ledger: `plans/PLAN-INDEX.md` is the running-number source of truth, the indicator declaration, and the status register for every plan in this project.
 - Test evidence: `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/` holds per candidate screenshots, traces, and browser reports. Follow the project's evidence retention policy rather than committing large binaries by default.
@@ -559,20 +566,21 @@ Every plan carries a work-item key shaped `<CODE>-<NNNNN>`. The indicator is nev
 - Indicator uniqueness: two projects must never share an indicator. Check the workspace registry if one exists before declaring a new one.
 - Running number: five digits, zero padded, starting at `00001`.
 - Allocation source: take the maximum from the union of `git ls-tree -r --name-only origin/<default> -- plans/`, the local `plans/*.md`, the local `plans/done/**/*.md`, and every coded branch name in `git branch --all`. A row that exists only on an unpushed branch, or only on the remote, still claims its number.
+- Allocation timing: allocation runs at **approval**, in stage 4, and at no other time. Authoring a draft allocates nothing, so a draft has no number to hold and a discarded draft leaves no gap. Because drafts are not numbered, the sources above cannot be the only evidence: a draft that was approved in another clone appears as a ledger row and an approved filename, both of which are already in the union, so nothing is missed.
 - Freshness precondition: run `git fetch origin <default>` (and `git fetch --all --prune` when other remotes are configured) immediately before reading the union. `origin/<default>` is a cached ref, so without a fetch a pushed plan from another clone is invisible and the number is reissued. The fetch and the recheck are one step, and nothing else runs between them.
 - Default branch is per repository, never assumed, and never read from `origin/HEAD` alone. Resolve it with the four step contract in the plan: current tracking branch, else `git symbolic-ref --short refs/remotes/origin/HEAD`, else the sole local branch when remote HEAD and local branches disagree, else stop and ask. Do not assume `main`: one repository here works on `master` while its remote advertises `main`.
 - Allocation filter, mandatory: keep only codes whose indicator equals this project's `project_indicator`, then take the maximum over that filtered set. Never take a maximum across all codes. Two codes can appear in one filename, and a plan in another project may legitimately mention a code from this one, so an unfiltered scan inflates this project's series permanently because numbers are never renumbered.
-- Allocation parse: use the anchored filename regex `^(?<date>\d{4}-\d{2}-\d{2})-(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<slug>.+)$`, which captures only the code adjacent to the date. Match a ledger cell with `^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})$` and a branch name with `<type>/<CODE>-(?<num>\d{5})`. In every form the captured indicator must equal the declared value by case sensitive comparison: in PowerShell use `-ceq` or `[string]::Equals($a, $b, 'Ordinal')`, never `-eq`, because `-eq` is case insensitive by default and would accept a lowercase indicator that the shape rule forbids.
+- Allocation parse: use the anchored filename regex `^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<date>\d{4}-\d{2}-\d{2})-(?<slug>.+)$`, which captures the code only at the start of the name, where the code-first convention puts it. A draft filename carries no code, so it contributes nothing here and its number is claimed by its ledger row instead, which is why the ledger is read alongside the tree rather than replaced by it. Match a ledger cell with `^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})$` and a branch name with `<type>/<CODE>-(?<num>\d{5})`. In every form the captured indicator must equal the declared value by case sensitive comparison: in PowerShell use `-ceq` or `[string]::Equals($a, $b, 'Ordinal')`, never `-eq`, because `-eq` is case insensitive by default and would accept a lowercase indicator that the shape rule forbids.
 - Never split a filename at a hyphen, and never scan loosely for any five digit run. A slug may contain `20250` or `12345`, which a loose scan would read as the next number and jump the series permanently. Both rules are required, not optional.
 - A filename with no matching token contributes nothing. Never treat it as number zero.
 - Numbers are permanent. A number is never reused, renumbered, or reclaimed when a plan is abandoned, superseded, or archived. An abandoned plan keeps its row with status `abandoned`.
 - Single writer: allocation is serialized through the Architect role, which is the only role that writes ledger rows.
 - Recheck before write: immediately before writing the row, re-read the ledger and the allocation sources, confirm the chosen number is still unclaimed, then write with nothing in between. Record the claiming branch in the row so a reader can see where the claim lives.
 - Duplicate assertion after write: re-read the ledger and abort if the number appears more than once. If two sessions race, the second push fails as non-fast-forward, which is the intended fail-fast signal and should be reported as expected rather than worked around.
-- Authoring commit: plan authoring is the single sanctioned commit on the default branch. The Architect, or `build` on its behalf, commits only the new plan file and `plans/PLAN-INDEX.md` with a `docs(<CODE>-<NNNNN>):` message and pushes before any implementation branch is cut. This makes the reservation visible to every checkout and worktree. No other plan work lands on the default branch directly.
+- Approval commit: no code is assigned while a plan is a draft. A draft carries no `plan_id`, no ledger number row, and no code in its filename, because a number claimed before anyone approved the work reserves a slot for something that may never happen and makes abandoned drafts indistinguishable from real commitments. The single sanctioned commit on the default branch happens at approval instead: the Architect, or `build` on its behalf, allocates the number at that moment, renames the plan file to put the code first, writes the ledger row, and commits exactly the renamed plan file and `plans/PLAN-INDEX.md` with a `docs(<CODE>-<NNNNN>):` message, then pushes before any implementation branch is cut. That commit is what makes the reservation visible to every checkout and worktree. No other plan work lands on the default branch directly.
 - Worktree rule: a linked worktree inherits the indicator of its main checkout, detected with `git rev-parse --git-common-dir`, and never proposes one of its own. It also merges or fast-forwards the default branch before allocating, so it can read the newest ledger.
-- Filename pattern: `plans/YYYY-MM-DD-<CODE>-<NNNNN>-<task-name>.md`.
-- Frontmatter carries `plan_id: <CODE>-<NNNNN>`, `project_indicator: <CODE>`, `branch: <type>/<CODE>-<NNNNN>`, `candidate_tags: []` appended per test cycle, and `release_version:` left undecided until UAT.
+- Filename pattern: `plans/<CODE>-<NNNNN>-YYYY-MM-DD-<task-name>.md` once approved, and `plans/YYYY-MM-DD-<task-name>.md` while a draft. The code prefix is added by the rename at approval, so the filename and the issue share one identifier and a reader can go from a file to its issue without a lookup.
+- Frontmatter carries `plan_id:` empty while the plan is a draft and set to `<CODE>-<NNNNN>` at approval, `project_indicator: <CODE>`, `branch: <type>/<CODE>-<NNNNN>-<slug>` assigned at approval alongside the code, `candidate_tags: []` appended per test cycle, and `release_version:` left empty until deployment. Neither a code nor a version is guessed when the plan is written. The version stays blank through review, approval, implementation, testing, UAT, merge and deployment, and is filled with the released tag only after deployment succeeds. A blank field is the honest state, because a work-item code never implies a SemVer and a plan that carried a version early would be claiming something no one has decided.
 - Status vocabulary, in order: `draft`, `under-review`, `awaiting-approval`, `approved`, `in-progress`, `testing`, `passed`, `release-version-decided`, `merged`, `deployed`, `released`, `abandoned`.
 - Plans authored before this ledger existed keep their legacy filenames and are exempt from the filename rule, so existing cross-references stay valid.
 ```
@@ -587,15 +595,15 @@ Six identifiers exist and must never be conflated.
 | Identifier | Shape | Example | Owner |
 |---|---|---|---|
 | Work item | `<CODE>-<NNNNN>` | `AAAAA-00002` | Architect |
-| Branch | `<type>/<CODE>-<NNNNN>` | `feature/AAAAA-00002` | build |
-| Slice branch | `<type>/<CODE>-<NNNNN>-<slice>` | `feature/AAAAA-00002-reporting` | be, fe |
+| Branch | `<type>/<CODE>-<NNNNN>-<slug>` | `feat/AAAAA-00002-document-version-comparison` | build |
+| Slice branch | `<type>/<CODE>-<NNNNN>-<slug>/<slice>` | `feat/AAAAA-00002-document-version-comparison/reporting` | be, fe |
 | Build id | `<CODE>-<NNNNN>-build.<NNN>` | `AAAAA-00002-build.003` | build, artifact space only, not a Git tag |
 | Candidate tag | `<code-lower>/<NNNNN>/rc.<NNN>` | `aaaaa/00002/rc.002` | build |
 | Release tag | `X.Y.Z` | `1.1.0` | build |
 
 The example column uses a neutral stand-in so this table never prescribes a real project's indicator. Replace `AAAAA` with the project indicator in force.
 
-Where `<type>` is one of `feature`, `fix`, `chore`, `docs`, `refactor`, `perf`. A slice branch is a branch subtype, not a seventh identifier.
+Where `<type>` is one of `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`. A slice branch is a branch subtype, not a seventh identifier.
 
 - A work-item code identifies work. It never implies a SemVer and never reserves one. Two plans authored on the same day have no version relationship to each other.
 - The version is assigned only when a release is approved, from what the change actually contains: `major` for breaking, `minor` for backward-compatible functionality, `patch` for backward-compatible fixes.
@@ -613,17 +621,17 @@ Replace the existing `## Orchestration Stages` list with:
 
 Every plan step designates an assignee and an execution mode. The stages are ordered. Stages 3 and 4 are hard gates: implementation never begins until both pass.
 
-1. **Stage 1, Discovery and Detailed Design (`Assignee: Architect`)** - Read or propose the project indicator from `plans/PLAN-INDEX.md`, validate it against the shape regex, resolve each repository's default branch with the four step contract and record the resolved name plus the deciding step, run `git fetch origin <default>` so the cached remote ref is fresh, allocate the running number from the union of the remote tree, the local tree, and all branch names, filtered to this project's indicator by case sensitive comparison, recheck immediately before writing with nothing in between, query the knowledge graph via graphify, map affected modules, define contracts, specify exact target file paths, write the plan file and its ledger row, assert the number is unique, then commit and push only those two files with a `docs(<CODE>-<NNNNN>):` message. That authoring commit is the single sanctioned commit on the default branch and it makes the reservation visible to every checkout. Move status from `draft` to `under-review`. Do not assign a SemVer at this stage.
+1. **Stage 1, Discovery and Detailed Design (`Assignee: Architect`)** - Read or propose the project indicator from `plans/PLAN-INDEX.md` and validate it against the shape regex. Resolve each repository's default branch with the four step contract and record the resolved name plus the deciding step. Query the knowledge graph via graphify, map affected modules, define contracts, and specify exact target file paths. Write the plan file as a draft, named `plans/YYYY-MM-DD-<task-name>.md`, with `plan_id:` empty and no ledger row yet: **assign no code at this stage**, because a code is a reservation for approved work and nothing has been approved. Move status from `draft` to `under-review`. Do not assign a SemVer at this stage either.
 2. **Stage 2, Analyst Review Gate (`Assignee: analyst`)** - Runs immediately after the plan is written, with no intervening gate. The analyst audits against the coding principles and universal programming references, adjusts wording where it diverges, and records the verdict under `## Review Findings`.
 3. **Stage 3, Test Matrix Attachment (`Assignee: tester`)** - Runs in parallel with stage 2 and completes before stage 4. The tester attaches `## Test Specification and Validation Matrix` with exact commands, fixtures, journeys, and pass criteria. A plan with an empty matrix may not reach stage 4.
-4. **Stage 4, Findings Confirmation and User Consultation (`Assignee: Architect`)** - Present the analyst findings, the test matrix, the proposed indicator if it is new, and every open clarification, then ask for confirmation. Status becomes `awaiting-approval`. Never proceed on a silent assumption.
-5. **Stage 5, Default Branch Reconciliation, Branch Creation, and Feature Request Publication (`Assignee: Architect` dispatches, `build` executes)** - Runs only after the user approves, and it has three parts that must all succeed before any implementation commit.
+4. **Stage 4, Findings Confirmation, Approval, and Code Assignment (`Assignee: Architect`)** - Present the analyst findings, the test matrix, the proposed indicator if it is new, and every open clarification, then ask for confirmation. Status becomes `awaiting-approval`. Never proceed on a silent assumption. **When the user approves, that approval is the moment the code is assigned**, and it is the only moment it can be: run `git fetch origin <default>` so the cached remote ref is fresh, allocate the running number from the union of the fetched remote tree, the local tree, the archive, and all branch names, filtered to this project's indicator by case sensitive comparison, recheck the ledger immediately before writing with nothing in between, then rename the plan file from `plans/YYYY-MM-DD-<task-name>.md` to `plans/<CODE>-<NNNNN>-YYYY-MM-DD-<task-name>.md`, set `plan_id:` in the frontmatter, write the ledger row recording the claiming branch, and assert the number is unique by re-reading the ledger. Commit exactly the renamed plan file and `plans/PLAN-INDEX.md` with a `docs(<CODE>-<NNNNN>):` message and push, so the reservation is visible to every checkout before any branch is cut. An abandoned draft therefore consumes no number and leaves no gap in the series.
+5. **Stage 5, Default Branch Reconciliation, Feature Request Publication, and Branch Creation (`Assignee: Architect` dispatches, `build` executes)** - Runs only after the user approves, and it has three parts that must all succeed before any implementation commit. The order matters: reconciliation first, then the issue, then the branch, so the branch is created already linked to its issue rather than needing to be repaired into that state.
    - **5a, reconcile released content into each default branch.** For every repository the plan touches, resolve its default branch, then `git fetch origin --tags --prune`. Enumerate **release tags only**, meaning bare `X.Y.Z` that match the release regex; never a candidate tag. For each release tag, test `git merge-base --is-ancestor refs/tags/<X.Y.Z> refs/heads/<default>`. If every release tag is already an ancestor, the repository is reconciled and nothing is merged. If any release tag is not an ancestor, that released content is stranded off the default branch and the plan branch would be cut from stale code, so merge it with `git merge --no-ff <X.Y.Z>` on the default branch, then push. Record every repository, every release tag tested, and every merge performed, in the plan.
-   - **5b, cut the branch.** With the default branch reconciled, `git pull --ff-only`, then `git switch -c <type>/<CODE>-<NNNNN>`, then push with upstream tracking. Record every repository, its resolved default branch, and the new branch in the plan.
-   - **5c, publish the feature request.** Once the branch exists, convert the approved plan into a GitHub Issue on the project's own repository with `gh issue create`, titled `<CODE>-<NNNNN> <plan title>` so the work item is searchable by its code. The body is generated from the plan, never authored separately: goals, scope, the target files, the acceptance criteria expressed as the plan's measurable outcomes, and a traceability footer naming the plan file path, the plan branch, and the ledger entry. The plan stays the source of truth and the issue mirrors it, so a later plan edit never requires a hand-maintained second document. Check for an existing issue carrying the code before creating one, and update it with `gh issue edit` rather than opening a duplicate. Record the issue number and URL in `plans/PLAN-INDEX.md` and in the plan. At stage 16, close the issue with a comment naming the release version, so the request and the release are linked in both directions.
-   - Preconditions for 5c. `gh auth status` must report an authenticated host, because a missing credential fails the step rather than silently skipping it. The target repository must be resolvable from the working checkout, and the issue must be created on the project repository rather than on a nested or unrelated one. Apply labels only when they already exist in that repository, since an unknown label aborts `gh issue create` and a missing label must never block a release. If the environment has no authenticated `gh`, stop at 5b, record the feature request as `BLOCKED` with the exact command the user must run, and continue with implementation, because the issue is a communication artifact and its absence must not stall the work.
+   - **5b, publish the feature request first.** Convert the approved plan into a GitHub Issue on the project's own repository with `gh issue create`, titled `<CODE>-<NNNNN> <plan title>` so the work item is searchable by its code. The body is generated from the plan, never authored separately: goals, scope, the target files, the acceptance criteria expressed as the plan's measurable outcomes, and a traceability footer naming the plan file path, the plan branch, and the ledger entry. The footer ends with a version line that is present but **empty**: `Release version: (filled at deployment)`. Do not put a version there at creation, not even a proposed one, because no version exists until a release is approved and a plan that guessed one would be asserting something undecided. Check for an existing issue carrying the code before creating one, and update it with `gh issue edit` rather than opening a duplicate. Record the issue number and URL in `plans/PLAN-INDEX.md` and in the plan.
+   - **5c, create the branch through the issue, then develop on it.** Create the plan branch with `gh issue develop <number> --name <type>/<CODE>-<NNNNN>-<slug> --base <default>`, which creates the branch and links it to the issue in one operation, so the two point at each other from the moment they exist. This ordering is required rather than stylistic: GitHub's linking API refuses a branch name that already exists, so a branch created first with `git switch -c` can never be linked afterwards and would have to be deleted and recreated at the same commit. Creating the branch second makes the link the normal path instead of a repair. Then `git fetch origin --prune` and `git switch <branch>` locally with upstream tracking. Every repository the plan touches gets its own branch from its own resolved default branch. All implementation and all fixes happen on this branch, and the default branch receives no implementation commits. The slug is the plan filename slug, so the branch and the plan file never disagree. Record every repository, its resolved default branch, the new branch, and the linked issue in the plan.
+   - Preconditions for 5b and 5c. `gh auth status` must report an authenticated host, because a missing credential fails the step rather than silently skipping it. The target repository must be resolvable from the working checkout, and the issue must be created on the project repository rather than on a nested or unrelated one. Apply labels only when they already exist in that repository, since an unknown label aborts `gh issue create` and a missing label must never block a release. If the environment has no authenticated `gh`, record the feature request as `BLOCKED` with the exact command the user must run, and create the branch with `git switch -c` instead of through the linking API, accepting that the issue will not be linked, because the issue is a communication artifact and its absence must not stall the work. Record that unlinked state in the plan so it is not mistaken for a completed link.
    - Hard rules for all parts. Never merge a candidate tag (`<code-lower>/<NNNNN>/rc.<NNN>`) into a default branch, because it is unapproved work and merging it would bypass UAT and stage 14 entirely. Never move, delete, or force a tag to make it an ancestor; if reconciliation requires rewriting released history, stop and escalate to the user. If the merge conflicts, stop and escalate rather than resolving silently, because a conflict here means the default branch diverged from a released artifact. Never create a feature request before approval, since an unapproved plan is not a commitment. All implementation and all fixes happen on the plan branch. The default branch receives no implementation commits; the single exception is the Stage 1 authoring commit, which touched only the plan file and the ledger, plus the 5a reconciliation merges. Untracked local files are edited in place on the working checkout and are covered by the instruction manifest, not by a branch.
-6. **Stage 6, Concurrent Implementation (`Assignee: edm`, `be`, `fe`)** - Commit to the plan branch only. Each subagent reports the commit SHA and the repository, and never switches branches or touches the default branch. Slice branches are `<type>/<CODE>-<NNNNN>-<slice>` and merge back into the plan branch.
+6. **Stage 6, Concurrent Implementation (`Assignee: edm`, `be`, `fe`)** - Commit to the plan branch only. Each subagent reports the commit SHA and the repository, and never switches branches or touches the default branch. Slice branches are `<type>/<CODE>-<NNNNN>-<slug>/<slice>`, nested under the plan branch name so they can never be confused with it, and merge back into the plan branch.
 7. **Stage 7, Workspace Build Gate (`Assignee: build`)** - Run the workspace builds (`cargo check --workspace`, `pnpm build`) on the plan branch, validate types, isolate compiler diagnostics, and record the build id `<CODE>-<NNNNN>-build.<NNN>`. Plans that change no buildable source record this stage as not applicable with a stated reason.
 8. **Stage 8, Candidate Tag Before Test (`Assignee: build`)** - Before the first test run, create the annotated candidate tag `<code-lower>/<NNNNN>/rc.<NNN>`, starting at `rc.001`, on the plan branch head, and push it. Record the tag, its commit SHA, and its build id in the plan's `candidate_tags` list and in the ledger. A test run never starts against an untagged tree.
 9. **Stage 9, QA: Automated Verification and Live Browser Test (`Assignee: tester`)** - Resolve the candidate with `git rev-parse <code-lower>/<NNNNN>/rc.<NNN>^{commit}` and test exactly that commit. Run the matrix with the token cache (`.secrets/test_token.json`), including a real live browser pass. Store evidence under `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/`. Report one line naming the tested tag, its SHA, and the verdict.
@@ -633,7 +641,7 @@ Every plan step designates an assignee and an execution mode. The stages are ord
 13. **Stage 13, Ancestry Assertion and Merge (`Assignee: build`)** - Before merging, assert `git merge-base --is-ancestor <default> <candidate>`; abort on exit 1. Then merge with `--no-ff` and assert the resulting tree equals the candidate tree. Set status `merged`. Concurrent plans stay independent: a later plan never waits for an earlier one.
 14. **Stage 14, Release Tag and Publication (`Assignee: build`)** - Create the annotated release tag by hand at the default branch tip whose tree equals the passing candidate, `git tag -a <X.Y.Z> <sha> -m "<project-tag-message> <X.Y.Z>"`, using the same message text the publisher would use for this project (do not invent one, and do not hardcode any project's name in this instruction), because the retained script can only tag HEAD and has no target-commit parameter. Then, with the default branch checked out and the tree clean, invoke the publisher with `-SkipBump`, which finds the tag already present, reuses it without moving it, and pushes the branch and tag to the release set. Never create the release tag before the merge, so a failed merge cannot orphan a published tag.
 15. **Stage 15, Deployment and Smoke Verification (`Assignee: Infra`, then `tester`)** - Deploy the artifact built for the passing candidate. Never rebuild for production, because the tested artifact is the promoted artifact. Then run post-deployment live smoke and browser health checks.
-16. **Stage 16, Publication, Archival, and Retrospective (`Assignee: build`, `km`, `Architect`)** - Confirm the release tag across the release set, close the GitHub Issue with a comment naming the release version and the commit SHA so the request and the shipped artifact are linked in both directions, run the retrospective, set status `released`, and move the plan file to `plans/done/` while keeping its code and ledger row forever.
+16. **Stage 16, Publication, Version Recording, Archival, and Retrospective (`Assignee: build`, `km`, `Architect`)** - Confirm the release tag across the release set. Then record the version in **both** places, because this is the first moment a version is permitted to exist in either. In the plan, set the frontmatter field: `release_version: <X.Y.Z>`. In the issue, update the body so its footer line reads `Release version: <X.Y.Z>`, using `gh issue edit <number> --repo <owner>/<repo> --body-file <path>`, then close it with `gh issue comment <number> --repo <owner>/<repo> --body "Released as <X.Y.Z> at <sha>."` The footer line was created present but empty at 5b, so filling it and commenting are the two writes that make the request and the shipped artifact point at each other. The version is recorded, not predicted, so a plan or an issue that carries a version before deployment is a defect rather than a convenience. Then run the retrospective, set status `released`, and move the plan file to `plans/done/` while keeping its code and ledger row forever.
 ```
 
 Replace the existing `## Build, Release, and Versioning` list with:
@@ -721,12 +729,12 @@ The repository column matters, because the target files live in two repositories
 | `.opencode/agents/Infra.md` | Agentic, **local only** | edit in place, back up first | be | Line 67 still sets status `completed`, which is absent from the new vocabulary |
 | `.opencode/agents/build.md` | Agentic, **local only** | edit in place, back up first | be | Candidate tag creation, ancestry assertion, `--no-ff` merge, hand-made release tag at the candidate SHA, `-SkipBump` publisher, per-repository default branch precondition |
 | `.opencode/agents/analyst.md` | Agentic, **local only** | edit in place, back up first | be | Analyst-first gate, indicator and identifier separation checks, instruction manifest verification |
-| `AGENTS.md` | Agentic, tracked, default `master` | branch `feature/AVRIG-00001` | be | Identifier taxonomy, indicator rules, candidate tag gate, 32 rule policy, per-repository default branch rule, and the corrected sentence that names `plan.md` as the workflow authority |
-| `avrig-ai/AGENTS.md` | `avrig-ai`, tracked, default `main` | branch `feature/AVRIG-00001` | be | Same policy, plus the indicator declaration and the four-repository publish rule |
-| `avrig-ai/plans/PLAN-INDEX.md` | `avrig-ai` | authoring commit on `main`, then maintain | Architect | Ledger with indicator, allocation rule and indicator filter, status vocabulary, and the `AVRIG-00001` row. Maintained at stages 8, 12, 13, 14 and 16 |
-| `avrig-ai/plans/2026-11-19-AVRIG-00001-agent-workflow-update.md` | `avrig-ai` | authoring commit on `main` | Architect | This plan |
+| `AGENTS.md` | Agentic, tracked, default `master` | branch `feat/AVRIG-00001-agent-workflow-update` | be | Identifier taxonomy, indicator rules, candidate tag gate, 32 rule policy, per-repository default branch rule, and the corrected sentence that names `plan.md` as the workflow authority |
+| `avrig-ai/AGENTS.md` | `avrig-ai`, tracked, default `main` | branch `feat/AVRIG-00001-agent-workflow-update` | be | **Project-scoped only.** Describes what avrig-ai is and how it is built: workspace layout with the real Cargo members and the empty placeholder crates named as placeholders, design invariants read from `governance/policy.rs` and `domain/{epistemic,artifact,traceability}.rs`, build and deploy facts, environment services, and testing constraints. The workflow sections (indicator, taxonomy, gates, release policy) are deliberately **removed**, because they already live in the global `AGENTS.md` and `Architect.md` and a second copy drifts |
+| `avrig-ai/plans/PLAN-INDEX.md` | `avrig-ai` | approval commit on `main`, then maintain | Architect | Ledger with indicator, allocation rule and indicator filter, status vocabulary, and the `AVRIG-00001` row. Maintained at stages 8, 12, 13, 14 and 16 |
+| `avrig-ai/plans/AVRIG-00001-2026-11-19-agent-workflow-update.md` | `avrig-ai` | approval commit on `main` | Architect | This plan, renamed to code-first at approval under decision 4 |
 | `avrig-ai/plans/evidence/` | `avrig-ai` | create folder, gitignore entry | be | Retention policy plus the SHA-256 instruction manifest for the local-only files |
-| `avrig-ai/.gitignore` | `avrig-ai`, tracked | branch `feature/AVRIG-00001` | be | Add the evidence ignore rule so `git add -A` does not sweep screenshots into releases |
+| `avrig-ai/.gitignore` | `avrig-ai`, tracked | branch `feat/AVRIG-00001-agent-workflow-update` | be | Two default-deny rules: evidence contents so `git add -A` cannot sweep screenshots into releases, and `*.bak-*` so timestamped rollback copies cannot be swept in either |
 
 The six `local only` rows are untracked by decision 2. They are edited in place on the working checkout, backed up as `<file>.bak-<timestamp>` first, and verified by the SHA-256 manifest rather than by a candidate tag. Only `AGENTS.md`, `avrig-ai/AGENTS.md`, the plans tree, and `.gitignore` are covered by the branch and the tag.
 
@@ -740,7 +748,7 @@ None. This plan creates no table, column, index, constraint, or migration, and r
 
 | Stream | Assignee | Depends on | Mode |
 |---|---|---|---|
-| P1 Ledger, plan authoring, code allocation, duplicate assertion | Architect | none | done in this pass |
+| P1 Ledger, plan authoring, approval-time code allocation, duplicate assertion | Architect | none | done in this pass |
 | P1b Default branch resolution recorded per repository | Architect | P1 | done in this pass, measured |
 | P2 Analyst review of this plan | analyst | P1 | parallel with P2b |
 | P2b Attach the test matrix | tester | P1 | parallel with P2 |
@@ -782,22 +790,30 @@ Command `C18` was run after `git fetch origin --tags --prune --quiet` in every r
 
 Every local default branch was also confirmed identical to its `origin` counterpart after the fetch, so `C18` did not pass against a stale local ref. No candidate tag was examined, by construction: a three segment ref cannot match the anchored release regex, and the gate forbids merging one regardless.
 
-### 5b, branch creation
+### 5b, feature request publication
 
-| Repository | Default | Authoring commit | Plan branch | Branch head | Upstream |
+Issue [#3](https://github.com/wwidjaya/avrig-ai/issues/3) was created on `wwidjaya/avrig-ai`, titled `AVRIG-00001 Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate`, labelled `documentation`. The label was confirmed to exist before use, because an unknown label aborts `gh issue create`.
+
+The body was generated from this plan rather than authored separately: goals 1 to 13, the measurable outcomes table, the target file table, the acceptance criteria, and a traceability footer naming the plan path, the branch, the ledger, and the candidate. It is stored at `plans/evidence/AVRIG-00001/feature-request-body.md` so the generation is reproducible. A duplicate check ran first and returned no existing issue carrying the code.
+
+The first attempt was genuinely blocked: `gh` was installed but never authenticated on this machine, with no `hosts.yml` and no token in any of the three recognised environment variables. That was recorded as `BLOCKED` with the recovery command rather than treated as a failure, exactly as rule 32 requires. After the user ran `gh auth login`, the issue was created and `D20` re-ran to `PASS`.
+
+### 5c, branch creation
+
+| Repository | Default | Approval commit | Plan branch | Branch head | Upstream |
 |---|---|---|---|---|---|
-| `avrig-ai` | `main` | `5aaa879`, "AVRIG-00001: plan and ledger for agent workflow update", pushed to `origin/main` | `feature/AVRIG-00001` | `5aaa879` | `origin/feature/AVRIG-00001` |
-| `Agentic` | `master` | none (this plan adds no tracked file there yet) | `feature/AVRIG-00001` | `0bf72a5` | `origin/feature/AVRIG-00001` |
+| `avrig-ai` | `main` | `5aaa879`, "AVRIG-00001: plan and ledger for agent workflow update", pushed to `origin/main` | `feat/AVRIG-00001-agent-workflow-update` | `6c2da01` | `origin/feat/AVRIG-00001-agent-workflow-update` |
+| `Agentic` | `master` | none (this plan adds no tracked file there yet) | `feat/AVRIG-00001-agent-workflow-update` | `53c55f1` | `origin/feat/AVRIG-00001-agent-workflow-update` |
 
-The authoring commit touched exactly two paths, `plans/PLAN-INDEX.md` and this plan file. A pre-existing modified plan, `plans/2026-11-19-gateway-opencode-header-passthrough.md`, was deliberately left out of it and remains uncommitted.
+The branch was first cut as `feature/AVRIG-00001`, then renamed twice on user instruction: once to add the required slug, and once to shorten the type prefix to `feat`. The final name is `feat/AVRIG-00001-agent-workflow-update` in both repositories, matching the plan filename slug. Renaming was safe because the candidate tag pins the commit independently of any branch name: `avrig/00001/rc.001` still resolves to `d100017` throughout.
+
+The commit that carried the plan and ledger touched exactly two paths, `plans/PLAN-INDEX.md` and this plan file. It was made under the earlier convention, where the number was claimed at authoring; decision 4 moved allocation to approval, so a future plan reaches this point through the approval commit instead. A pre-existing modified plan, `plans/2026-11-19-gateway-opencode-header-passthrough.md`, was deliberately left out of it and remains uncommitted.
 
 The Agentic plan branch is currently identical to `master` because `AGENTS.md` is not written until P7. Cutting it now satisfies the gate: P5 to P8 cannot start without it, and the branch must exist before `be` writes into it.
 
-### 5c, feature request publication
+**Branch linking, and the constraint it exposed.** GitHub can only attach an issue to a branch created through its own linking API, `createLinkedBranch`, and that API silently returns null for a branch name that already exists. Since this plan's branch was created with `git switch -c` before the issue existed, it could not be linked after the fact. The resolution is now part of stage 5c: the branch is created through `gh issue develop`, which creates and links in one step, and the slug in the branch name is what makes that possible in a readable form. Where a branch already exists unlinked, it is deleted and recreated at the same commit through the API, which is safe precisely because the candidate tag pins the commit independently.
 
-`BLOCKED`, recorded with its reason and recovery command as rule 32 requires. `gh` is installed at `C:\Program Files\GitHub CLI\gh.exe`, but this machine has never authenticated it: `gh auth status` exits 1 reporting no host, `%APPDATA%\GitHub CLI\hosts.yml` does not exist, and `GH_TOKEN`, `GITHUB_TOKEN` and `GH_ENTERPRISE_TOKEN` are all unset. Recovery: run `gh auth login`, then execute stage 5c to create the issue on `https://github.com/wwidjaya/avrig-ai`.
-
-This does not block implementation, by design. The issue is a communication artifact; the plan remains the source of truth, so nothing about the work is lost while the credential is missing.
+Verified state: `gh issue develop --list 3` returns `feat/AVRIG-00001-agent-workflow-update`.
 
 ### Stages 6 to 8, implementation and candidate tag
 
@@ -819,6 +835,25 @@ This does not block implementation, by design. The issue is a communication arti
 
 **Instruction manifest.** Because six of the nine files are untracked and cannot be covered by a candidate tag, their state is pinned by `plans/evidence/AVRIG-00001/instruction-manifest.json`, which records the SHA-256 of each file and of its `.bak-` sibling. Every hash differs from its backup, which proves each file was actually modified rather than silently left alone. This is the substitute for a tag on those files, and it is why decision 2 needed an explicit verification path.
 
+### Stage 9, QA on rc.001
+
+```text
+rc.001 @ d10001791170d0e9828092e0d2c6e84c384e9869 | verdict FAIL | 15/20 checks | evidence plans/evidence/AVRIG-00001/rc.001/
+```
+
+Fifteen PASS, one BLOCKED and permitted, four FAIL. The tester resolved the tag to its commit, ran every document check against the tagged blob rather than the working tree, and wrote 33 evidence files.
+
+Three of the four failures were matrix defects rather than plan defects, and one was a real defect this plan created:
+
+- **`D12` failed, and it is the real one.** The four step default branch contract resolves the Agentic repository by its sole local branch. Stage 5b then created `feat/AVRIG-00001-agent-workflow-update` there, giving it two local branches, so the step no longer applies and the contract falls through to "stop and ask". The recorded `master` was correct when there was one branch, and cutting the plan branch destroyed the evidence path the rule depended on. The contract had no clause for "several local branches, and `origin/HEAD` names one that does not exist locally". This is a genuine gap that only appears after the first branch is cut.
+- **`D09` failed on measurement, not content.** `C09` took the first occurrence of each anchor across the whole region, and `merge-base --is-ancestor` first appears in stage 5a reconciliation, before the stage 12 bump. Re-measured within stages 12 to 14, all seven anchors are present and strictly increasing. The sequence is correct; the check was not scoped.
+- **`D14` failed because `C14` never read the baseline it wrote.** Its 20 out-of-set hits are all pre-existing Agentic drift already captured in the baseline. Subtracting the baseline by hand gives 0 new paths outside the allowed set. Separately, the baseline was captured after the backups rather than before implementation, so that precondition was not honoured.
+- **`D13` failed on its stated criterion.** `C13` asserted `-ge 6` against an 8 of 8 criterion. Six of eight files have a `.bak` sibling; the two tracked `AGENTS.md` files do not, which is defensible since Git recovers them, but the check silently lowered the bar instead of saying so.
+
+Also found: `C15` does not run as written, because writing the script to `$env:TEMP` breaks Node ESM resolution of `@playwright/test`; the same payload inside the harness directory runs clean and returned HTTP 200 with the expected `Login: Rauthy` surface. `C16` emits no `RESULT` token so it cannot be machine-read, `C05` omits `Branch` from its required array, and `C19` does not verify the code-in-title literal that `D19` requires.
+
+None of these were fixed by moving the tag. Candidate `rc.001` is immutable, so the corrections land on the branch and are verified by a fresh candidate, which is the behaviour the plan mandates.
+
 ## Resolved Implementation Decisions
 
 1. **The Agentic `AGENTS.md` working copy carries uncommitted drift that predates this plan, and it is committed as part of P7.** `git diff AGENTS.md` showed 54 insertions and 1 deletion: a new `## Environment & Directories` section, a `## Codebase Exploration & Navigation (graphify > grep)` section, a rewritten `## Subagent Delegation & Operational Workflows` section, and a `Local project AGENTS.md takes precedence` sentence. None of it is AVRIG-00001 content, and it still contains the stale sentence this plan exists to fix: "The Plan agent owns plan creation and lifecycle updates. Follow its instructions in `$env:OPENCODE_CONFIG_DIR/.opencode/agents/plan.md`".
@@ -831,7 +866,13 @@ Answered by the user on 2026-11-19. These are settled and are no longer question
 
 1. **Default branch differs per repository, and remote HEAD can be wrong.** Each repository declares its own default branch and the workflow never assumes `main`. Resolution follows the four step contract in `#### Measured state of the workspace`: the current tracking branch, else `origin/HEAD`, else the sole local branch when the two disagree, else stop and ask. Measured outcome for this workspace: `avrig-ai`, `avrig-api`, `avrig-lib` and `avrig-ui` resolve to `main` by the remote HEAD step, and the Agentic configuration repository resolves to `master` by the sole-local-branch step because `origin/HEAD` there points at `origin/main` while no local `main` exists. Every stage records the resolved name and the step that decided it. No repository's default branch is renamed, deleted, or harmonized by this plan.
 2. **Agent instruction files are local only.** `.opencode/agents/` stays untracked in the Agentic repository by decision, not by accident. Consequence: the candidate tag cannot cover them, so their verification is read-back plus a recorded checksum manifest rather than a tagged artifact. See "Local-only files and how they are verified" below.
-3. **Plans are committed.** The plan file and `plans/PLAN-INDEX.md` are committed to the project's default branch as the single sanctioned authoring commit, before any implementation branch is cut. This publishes the number reservation so other checkouts and worktrees can see it.
+3. **Plans are committed, at approval.** The plan file and `plans/PLAN-INDEX.md` are committed to the project's default branch as the single sanctioned commit, before any implementation branch is cut. This publishes the number reservation so other checkouts and worktrees can see it. The commit happens at approval rather than at authoring, because no code exists until the work is approved.
+
+4. **No code is assigned before approval.** A draft plan carries no `plan_id`, no ledger number row, and no code in its filename. Allocation runs at approval, which is the only moment it can: the number is claimed from the fetched union of the remote tree, the local tree, the archive and all branch names, filtered to this project's indicator by case sensitive comparison, and rechecked immediately before the ledger row is written. The plan file is then renamed to put the code first, `<CODE>-<NNNNN>-YYYY-MM-DD-<task-name>.md`, so the filename and the issue share one identifier. An abandoned draft consumes no number and leaves no gap in the series. Consequence for this plan: it was authored as `2026-11-19-AVRIG-00001-agent-workflow-update.md` under the earlier date-first convention and renamed to `AVRIG-00001-2026-11-19-agent-workflow-update.md` when the convention changed, with every reference updated in the plan and the ledger.
+
+5. **The version label is blank until deployment.** No version appears in a plan or an issue at creation. The plan's `release_version:` field and the issue's `Release version:` line are both present but empty through review, approval, implementation, testing, UAT, merge and deployment, and are filled with the released tag only at stage 16, after deployment succeeds. A work-item code never implies a SemVer, so a version written early would be asserting something nobody decided.
+
+6. **The issue is created before the branch, and development happens on that branch.** After approval, stage 5 reconciles the default branches, then creates the GitHub Issue, then creates the branch through the issue with `gh issue develop`, which creates and links in one operation. The order is forced by GitHub's linking API, which refuses a branch name that already exists: a branch created first with `git switch -c` can never be linked afterwards. All implementation and all fixes happen on that branch, and the default branch receives no implementation commits.
 
 ## Local-only files and how they are verified
 
@@ -853,9 +894,9 @@ This is a deliberate accepted risk, recorded so a later reader does not assume t
 
 Non-blocking. Each has a recommended default, and execution proceeds on the recommendation unless the user overrides it.
 
-1. **Indicator confirmation.** Confirm `AVRIG` for this project. The ledger marks it `pending-user-confirmation` rather than frozen, so the rule and the artifact agree.
+1. **Indicator confirmation.** Closed: the user confirmed `AVRIG`, so the ledger and this plan now carry `indicator_status: frozen`. The rule and the artifact agree.
 2. **Indicator derivation policy.** Deriving from the folder name produces `AVRIGAIGAT` for the worktree, which truncates a word, and `API` or `WEB` for generic folders. Should the Architect always require the user to supply the indicator, with derivation offered only as a hint, and never truncate inside a word? Recommended: yes on both.
-3. **Test evidence retention.** Commit `plans/evidence/` (which `git add -A` sweeps into releases), keep it local with a manifest checksum recorded in the ledger, or store it outside both repositories? Recommended: local plus checksum, with a `.gitignore` entry.
+3. **Test evidence retention.** Commit `plans/evidence/` (which `git add -A` sweeps into releases), keep it local with a manifest checksum recorded in the ledger, or store it outside both repositories? Recommended: local plus checksum, with a `.gitignore` entry. Resolved: the evidence contents are default-denied by `.gitignore` while the folder itself is kept, so the evidence path always resolves and a release cannot sweep screenshots in. The same reasoning was later applied to `<file>.bak-<timestamp>` rollback copies, which are also generated rather than authored and are now default-denied by `*.bak-*`, because a release running `git add -A` would otherwise commit nine of them.
 4. **Release set scope.** The retained script tags all four repositories regardless of what a plan touched. Accept that the release set is always all four, or lift the non-goal and add a repository filter to `release.ps1`? Recommended: accept all four, since the script tags HEAD of repositories with no pending change, which is harmless.
 5. **Candidate tag namespace.** `<code-lower>/<NNNNN>/rc.<NNN>` versus flat `<CODE>-<NNNNN>-rc.<NNN>`. Both are provably disjoint from SemVer, so this is readability only. Recommended: namespaced.
 6. **Indicator uniqueness registry.** Adopt `<OPENCODE_CONFIG_DIR>/.opencode/plan-projects.json` now, or only when a second project adopts plans? Recommended: write the rule now, create the file when needed.
@@ -876,23 +917,23 @@ The seven instruction files are untracked by resolved decision 2, so a candidate
 |---|---|---|---|---|
 | D01 | The fenced instruction blocks destined for `Architect.md` and `tester.md` contain zero literal occurrences of this project's indicator, case insensitive, while the neutral `AAAAA` stand-in remains permitted in the taxonomy Example column only | `C01` (slice the replacement region, enumerate fences, count `(?i)avrig` per fence) | 0 indicator hits in every fence. `AAAAA` may appear in the Identifier Taxonomy fence and nowhere else. Failing fence named | `rc.<NNN>/D01-fence-indicator-count.txt` |
 | D02 | The indicator shape regex rejects every adversarial value and accepts the boundary lengths | `C02` (13 cases through `[regex]::IsMatch` against `^[A-Z][A-Z0-9]{1,9}$`) | 13 of 13 match expectation: accepts `AVRIG`, `WEB`, `AB`, `ABCDEFGHIJ`; rejects `A`, `ABCDEFGHIJK`, `MY-PROJ`, `avrig`, `AV RIG`, `1AVRIG`, `_AVRIG`, `AVRIG!`, empty | `rc.<NNN>/D02-shape-regex.txt` |
-| D03 | The anchored filename regex extracts the code adjacent to the date, and neither a hyphen split nor a loose digit scan is used | `C03` (anchored regex over one real name plus five hostile names) | `2026-11-19-AVRIG-00001-...` yields `AVRIG/00001`; `AVRIG2-00042` yields `AVRIG2/00042`; `chore-migrate-to-20250-table` yields no match, proving `20250` is not read from the slug; the legacy, four digit, and lowercase forms each yield no match | `rc.<NNN>/D03-parse-regex.txt` |
+| D03 | The anchored filename regex reads the code only at the start of an approved name, and neither a hyphen split nor a loose digit scan is used | `C03` (anchored regex over one real name plus six hostile names) | `AVRIG-00001-2026-11-19-...` yields `AVRIG/00001`; `AVRIG2-00042-...` yields `AVRIG2/00042`; a draft name `2026-11-19-chore-migrate-to-20250-table.md` yields no match, proving `20250` is not read from the slug and that an unapproved plan contributes no number; the date-first legacy form, the four digit form, and the lowercase form each yield no match | `rc.<NNN>/D03-parse-regex.txt` |
 | D04 | The allocation filter keeps only this project's indicator, so a foreign code in a slug or filename never inflates the series | `C04` (unfiltered max versus indicator filtered max over five names, one carrying a higher foreign code) | Unfiltered max is strictly greater than filtered max (measured 91 versus 43). Filtered values are exactly the two `AVRIG` claims. A foreign code raises the unfiltered max and leaves the filtered max unchanged | `rc.<NNN>/D04-indicator-filter.txt` |
 | D05 | The instruction text names all six identifier kinds and states that a work-item code never implies a SemVer | `C05` (count the seven required tokens inside the replacement region) | `Six identifiers` present; `Work item`, `Branch`, `Slice branch`, `Build id`, `Candidate tag`, `Release tag` each present; the SemVer separation sentence present | `rc.<NNN>/D05-identifier-kinds.txt` |
-| D06 | `Architect.md` places `analyst` review immediately after authoring, with the test matrix attached before the approval stage | `C06` (index positions of stages 1 to 4 in the replacement region) | All four stage headings found and strictly increasing: Stage 1 < Stage 2 < Stage 3 < Stage 4. Stage 3 names the matrix and stage 4 names the confirmation | `rc.<NNN>/D06-stage-order.txt` |
-| D07 | `Architect.md` states the branch is cut from the repository's resolved default branch, only after user approval, in the pattern `<type>/<CODE>-<NNNNN>` | `C07` (token counts in the replacement region) | `symbolic-ref --short refs/remotes/origin/HEAD` present; `<type>/<CODE>-<NNNNN>` present; an explicit approval precondition present; no unconditional `git switch main` | `rc.<NNN>/D07-branch-gate.txt` |
+| D06 | `Architect.md` places `analyst` review immediately after authoring, attaches the test matrix before the approval stage, and assigns the work-item code only at approval rather than at authoring | `C06` (stage positions, plus three literals: stage 1 forbids a code, stage 4 assigns it, and a draft is unnumbered) | All four stage headings found and strictly increasing: Stage 1 < Stage 2 < Stage 3 < Stage 4. Stage 1 contains "assign no code at this stage", stage 4 contains "that approval is the moment the code is assigned", and the policy contains "no code is assigned while a plan is a draft" | `rc.<NNN>/D06-stage-order.txt` |
+| D07 | `Architect.md` states the branch is cut from the repository's resolved default branch, only after user approval, in the pattern `<type>/<CODE>-<NNNNN>-<slug>`, that the branch is created through the issue so it is born linked, that all development and fixes happen on it, and that a slice branch nests as `<type>/<CODE>-<NNNNN>-<slug>/<slice>` | `C07` (token counts in the replacement region) | `symbolic-ref --short refs/remotes/origin/HEAD` present; `<type>/<CODE>-<NNNNN>-<slug>` present; the nested slice pattern present; "after the user approves" present; `gh issue develop <number> --name` present; "All implementation and all fixes happen on this branch" present; no unconditional `git switch main` | `rc.<NNN>/D07-branch-gate.txt` |
 | D08 | A candidate tag and its aligned build exist before the first test, and every fix produces the next numbered pair | `C08` (token counts plus a scale check) | `rc.<NNN>` present; `build.<NNN>` present; `rc.<NNN+1>` present; the first-test precondition present; `immutable` and the no-move rule present | `rc.<NNN>/D08-candidate-gate.txt` |
 | D09 | The release sequence is stated in the correct order: bump on branch, candidate the bump, ancestry assertion, tree equality, merge, hand-made tag, `-SkipBump` publisher | `C09` (ordered index walk over seven anchors) | All seven anchors found and strictly increasing. `merge-base --is-ancestor` before `--no-ff`; tree equality before `git tag -a`; `git tag -a` before `-SkipBump` | `rc.<NNN>/D09-release-order.txt` |
 | D10 | `tester.md` names the Playwright harness and the `wmux browser` fallback with real ref-based call forms, and grants write permission for `**/plans/evidence/**` | `C10` (count the nine required forms plus the permission glob) | `npx playwright test` present; `wmux browser open`, `snapshot`, `click <ref>`, `fill <ref>`, `wait <ref> <ms>`, `get-text <ref>`, `eval`, `screenshot [--full]` each present; `**/plans/evidence/**` present in the permissions block; no `@` prefix on refs | `rc.<NNN>/D10-tester-browser.txt` |
 | D11 | No edited instruction file carries the stale status value `completed` | `C11` (count `status:\s*completed` and the backticked token across all eight files) | 0 status assignments and 0 backticked `completed` tokens. Prose such as "completed history" is exempt and reported separately, because it is not a status value | `rc.<NNN>/D11-stale-status.txt` |
-| D12 | Every recorded default branch equals the value the four step resolution contract actually returns, including the disagreeing case | `C12` (apply the contract per repository, then compare to the plan's table, printing the deciding step for each) | The resolved value for each repository matches the plan's recorded default branch, and the deciding step is recorded. The Agentic repository must resolve to `master` by the sole-local-branch step while `origin/HEAD` reports `origin/main`, so a run that returns `main` there is a BLOCKER, not a warning | `rc.<NNN>/D12-default-branch.txt` |
-| D13 | A SHA-256 instruction manifest exists for the local-only files and every edited file has a `.bak-` sibling | `C13` (hash eight files, write manifest, then re-hash from the manifest) | Manifest exists at the recorded path; read-back verifies 8 of 8 hashes; 8 of 8 `.bak-` siblings present; no `MISSING` placeholder row | `rc.<NNN>/instruction-manifest.txt`, `rc.<NNN>/D13-manifest-readback.txt` |
-| D14 | Tracked edits are confined to `plans/`, the two `AGENTS.md` files, and `.gitignore`, observed per repository with absolute paths | `C14` (baseline capture before implementation, then one `git diff --stat` per repository) | The after-minus-before delta contains no path outside the allowed set, in both `Agentic` and `avrig-ai`. Pre-existing drift is subtracted, not tolerated | `rc.<NNN>/D14-drift-agentic.txt`, `rc.<NNN>/D14-drift-avrig-ai.txt`, `rc.<NNN>/D14-baseline.txt` |
+| D12 | Every recorded default branch equals the value the four step resolution contract actually returns, including the disagreeing case, with this plan's own branches excluded from the branch count | `C12` (apply the contract per repository, then compare to the plan's table, printing the deciding step for each) | The resolved value for each repository matches the plan's recorded default branch, and the deciding step is recorded. The Agentic repository must resolve to `master` by the sole-local-branch step while `origin/HEAD` reports `origin/main`, so a run that returns `main` there is a BLOCKER, not a warning. Branches matching the plan branch pattern `<type>/<CODE>-<NNNNN>-<slug>` and any slice beneath them are excluded from the count, because otherwise cutting this plan's own branch makes the sole-local-branch step inapplicable and the check fails as a direct consequence of the work starting | `rc.<NNN>/D12-default-branch.txt` |
+| D13 | A SHA-256 instruction manifest exists for the local-only files and every file whose only recovery path is a backup has a `.bak-` sibling | `C13` (hash eight files, write manifest, then re-hash from the manifest, then assert a backup per untracked file) | Manifest exists at the recorded path; read-back verifies 8 of 8 hashes; no `MISSING` placeholder row; every untracked file has a `.bak-` sibling, and the two tracked `AGENTS.md` files are exempt because Git recovers them | `rc.<NNN>/instruction-manifest.txt`, `rc.<NNN>/D13-manifest-readback.txt` |
+| D14 | Tracked edits are confined to `plans/`, the two `AGENTS.md` files, `.gitignore`, and `.opencode/`, observed per repository with absolute paths | `C14` (capture the dirty path set before implementation, then subtract it from the dirty path set after) | The after-minus-before delta contains no path outside the allowed set, in both `Agentic` and `avrig-ai`. Pre-existing drift is subtracted by path, not tolerated by allow-list | `rc.<NNN>/D14-baseline-agentic.txt`, `rc.<NNN>/D14-baseline-avrig-ai.txt`, `rc.<NNN>/D14-new-agentic.txt`, `rc.<NNN>/D14-new-avrig-ai.txt`, `rc.<NNN>/D14-drift-summary.txt` |
 | D15 | Live browser verification is actually executable, with a screenshot, a stated URL, and a stated verdict | `C15` (Playwright journey against the platform login surface) | Page reaches HTTP 200, the login form renders with one email and one password input, both viewport screenshots exist and are non-empty, zero requests failed, and every console error is reconciled by name. A surface that cannot be served is recorded BLOCKED with a reason, never PASS | `rc.<NNN>/browser-login-1440x900.png`, `rc.<NNN>/browser-login-390x844.png`, `rc.<NNN>/D15-browser-report.json` |
 | D16 | The plan itself carries no em-dash and no en-dash, since it mandates that rule | `C16` (count U+2014 and U+2013 in the plan file) | 0 and 0 | `rc.<NNN>/D16-dash-scan.txt` |
 | D17 | `Architect.md` states the pre-branch reconciliation gate, naming release tags only, and forbids merging a candidate tag into a default branch | `C17` (token counts in the replacement region) | `merge-base --is-ancestor refs/tags/` present; `--no-ff` present in the reconciliation step; a prohibition on merging `rc.<NNN>` into a default branch present; a prohibition on moving or forcing a tag present; no wording that permits merging a candidate tag | `rc.<NNN>/D17-pre-branch-reconcile.txt` |
 | D18 | Every release tag is an ancestor of its repository's default branch, so the plan branch is not cut from stale code | `C18` (`git fetch origin --tags --prune`, then per-tag `git merge-base --is-ancestor` across all repositories) | Zero stranded release tags, or every stranded tag named with its repository and merged before branching. Candidate tags are excluded from the check by design | `rc.<NNN>/D18-release-tag-ancestry.txt` |
-| D19 | The instruction text states the feature request gate: created after approval, generated from the plan, and checked for an existing issue first | `C19` (token counts in the replacement region) | `gh issue create` present; the code in the issue title required; generated-from-plan wording present; duplicate check present; close-at-release present; a prohibition on creating before approval present | `rc.<NNN>/D19-feature-request-gate.txt` |
+| D19 | The instruction text states the feature request gate: created after approval, generated from the plan, checked for an existing issue first, titled with the work-item code, linked to the plan branch, and given a version line that is empty at creation and filled only at release | `C19` (literal presence in the replacement region) | `gh issue create` present; the title form `titled \`<CODE>-<NNNNN> <plan title>\`` present; `gh issue develop` present so the branch is linked; generated-from-plan wording present; duplicate check present; `gh issue comment` present so the close-at-release step is concrete; `Release version: (filled at deployment)` present so the line exists but is empty; `Release version: <X.Y.Z>` present so it is filled at stage 16; a prohibition on creating before approval present | `rc.<NNN>/D19-feature-request-gate.txt` |
 | D20 | The feature request exists on the project repository, or its absence is recorded as blocked with the recovery command | `C20` (`gh auth status`, then `gh issue list --search`) | Authenticated host, and an issue whose title carries `AVRIG-00001`, or the verdict `BLOCKED` recorded in the ledger with the exact recovery command. `D20` being blocked does not fail the matrix | `rc.<NNN>/D20-feature-request-exists.txt` |
 
 ### Preconditions and measured environment baseline
@@ -968,17 +1009,20 @@ $out
 
 **C03, anchored filename parse**
 
+The convention is code-first: `<CODE>-<NNNNN>-YYYY-MM-DD-<slug>.md` once approved, and a bare dated draft name while unapproved. The regex is anchored at the start, so a code is only read where the convention puts it. A draft name yields no match and therefore contributes nothing, which is correct: an unapproved plan has no number to contribute.
+
 ```powershell
-$fileRx = '^(?<date>\d{4}-\d{2}-\d{2})-(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<slug>.+)$'
+$fileRx = '^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<date>\d{4}-\d{2}-\d{2})-(?<slug>.+)$'
 $names = @(
-    '2026-11-19-AVRIG-00001-agent-workflow-update.md',
-    '2026-11-19-AVRIG2-00042-fix-v2-timeout-in-rc.2.md',
+    'AVRIG-00001-2026-11-19-agent-workflow-update.md',
+    'AVRIG2-00042-2026-11-19-fix-v2-timeout-in-rc.2.md',
     '2026-11-19-chore-migrate-to-20250-table.md',
     '2026-11-18-release-0.3.0-consolidated.md',
-    '2026-11-19-AVRIG-0001-fourdigits.md',
-    '2026-11-19-avrig-00044-lowercase.md'
+    'AVRIG-0001-2026-11-19-fourdigits.md',
+    'avrig-00044-2026-11-19-lowercase.md',
+    '2026-11-19-AVRIG-00045-date-first-legacy.md'
 )
-$expect = @('AVRIG/00001','AVRIG2/00042','NO MATCH','NO MATCH','NO MATCH','NO MATCH')
+$expect = @('AVRIG/00001','AVRIG2/00042','NO MATCH','NO MATCH','NO MATCH','NO MATCH','NO MATCH')
 $out = @(); $bad = 0; $i = 0
 foreach ($name in $names) {
     $m = [regex]::Match($name, $fileRx)
@@ -997,12 +1041,12 @@ $out
 
 ```powershell
 $own = 'AVRIG'
-$fileRx = '^(?<date>\d{4}-\d{2}-\d{2})-(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<slug>.+)$'
+$fileRx = '^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<date>\d{4}-\d{2}-\d{2})-(?<slug>.+)$'
 $names = @(
-    '2026-11-19-AVRIG-00001-agent-workflow-update.md',
-    '2026-11-19-AVRIG-00043-mentions-WEB-00009.md',
-    '2026-11-19-WEB-00091-shared-work.md',
-    '2026-11-19-AVRIG2-00042-fix-v2-timeout-in-rc.2.md',
+    'AVRIG-00001-2026-11-19-agent-workflow-update.md',
+    'AVRIG-00043-2026-11-19-mentions-WEB-00009.md',
+    'WEB-00091-2026-11-19-shared-work.md',
+    'AVRIG2-00042-2026-11-19-fix-v2-timeout-in-rc.2.md',
     '2026-11-19-chore-migrate-to-20250-table.md'
 )
 $all = @(); $mine = @()
@@ -1031,7 +1075,7 @@ $out
 $plan = '<plan>'; $raw = Get-Content -LiteralPath $plan -Raw
 $a = $raw.IndexOf('#### Exact replacement text, `Architect.md`'); $b = $raw.IndexOf('### Target Program Files (Mandatory)')
 $region = $raw.Substring($a, $b - $a)
-$need = @('Six identifiers','Work item','Slice branch','Build id','Candidate tag','Release tag','never implies a SemVer')
+$need = @('Six identifiers','Work item','Branch','Slice branch','Build id','Candidate tag','Release tag','never implies a SemVer')
 $out = @(); $miss = 0
 foreach ($t in $need) {
     $c = ([regex]::Matches($region, [regex]::Escape($t))).Count
@@ -1044,7 +1088,9 @@ $out | Set-Content -LiteralPath "<rc>\D05-identifier-kinds.txt" -Encoding utf8
 $out
 ```
 
-**C06, analyst-first stage ordering**
+**C06, analyst-first stage ordering and approval-time code assignment**
+
+Checks the ordering and also that the code is assigned at approval rather than at authoring. The second half matters because a rule that only checked stage order would pass even if stage 1 still allocated a number, which is exactly the defect this revision removes.
 
 ```powershell
 $plan = '<plan>'; $raw = Get-Content -LiteralPath $plan -Raw
@@ -1059,8 +1105,19 @@ foreach ($s in $stages) {
 }
 $ok = $miss -eq 0
 for ($k = 1; $k -lt $pos.Count; $k++) { if ($pos[$k] -le $pos[$k-1]) { $ok = $false } }
-$out = @("positions=$($pos -join ',')", "missing=$miss", 'ordered=' + $ok)
-$out += if ($ok) { 'RESULT PASS' } else { 'RESULT FAIL' }
+
+# The code must be assigned at approval, not at authoring.
+$s1 = $region.IndexOf('Stage 1, Discovery')
+$s4 = $region.IndexOf('Stage 4, Findings Confirmation')
+$stage1 = $region.Substring($s1, $s4 - $s1)
+$noCodeAtAuthoring = $stage1.Contains('assign no code at this stage')
+$codeAtApproval    = $region.Contains('that approval is the moment the code is assigned')
+$draftUnnumbered   = $region.Contains('no code is assigned while a plan is a draft')
+
+$out = @("positions=$($pos -join ',')", "missing=$miss", 'ordered=' + $ok,
+         "stage1_forbids_code=$noCodeAtAuthoring", "stage4_assigns_code=$codeAtApproval",
+         "draft_unnumbered=$draftUnnumbered")
+$out += if ($ok -and $noCodeAtAuthoring -and $codeAtApproval -and $draftUnnumbered) { 'RESULT PASS' } else { 'RESULT FAIL' }
 $out | Set-Content -LiteralPath "<rc>\D06-stage-order.txt" -Encoding utf8
 $out
 ```
@@ -1073,11 +1130,17 @@ $a = $raw.IndexOf('#### Exact replacement text, `Architect.md`'); $b = $raw.Inde
 $region = $raw.Substring($a, $b - $a)
 $out = @()
 $resolve = ([regex]::Matches($region, 'symbolic-ref --short refs/remotes/origin/HEAD')).Count
-$pattern = ([regex]::Matches($region, [regex]::Escape('<type>/<CODE>-<NNNNN>'))).Count
+$pattern = ([regex]::Matches($region, [regex]::Escape('<type>/<CODE>-<NNNNN>-<slug>'))).Count
+$slice = ([regex]::Matches($region, [regex]::Escape('<type>/<CODE>-<NNNNN>-<slug>/<slice>'))).Count
 $approve = ([regex]::Matches($region, '(?i)after the user approves')).Count
 $naive   = ([regex]::Matches($region, 'git switch main')).Count
-$out += "resolve_command=$resolve pattern=$pattern approval_precondition=$approve unconditional_switch_main=$naive"
-$out += if ($resolve -ge 1 -and $pattern -ge 1 -and $approve -ge 1 -and $naive -eq 0) { 'RESULT PASS' } else { 'RESULT FAIL' }
+# The branch must be created through the issue, so it is born linked. A branch
+# created with `git switch -c` first can never be linked, because the linking API
+# refuses a name that already exists.
+$viaIssue = ([regex]::Matches($region, 'gh issue develop <number> --name')).Count
+$developOn = ([regex]::Matches($region, '(?i)all implementation and all fixes happen on this branch')).Count
+$out += "resolve_command=$resolve pattern=$pattern slice=$slice approval_precondition=$approve unconditional_switch_main=$naive branch_via_issue=$viaIssue develop_on_branch=$developOn"
+$out += if ($resolve -ge 1 -and $pattern -ge 1 -and $slice -ge 1 -and $approve -ge 1 -and $naive -eq 0 -and $viaIssue -ge 1 -and $developOn -ge 1) { 'RESULT PASS' } else { 'RESULT FAIL' }
 $out | Set-Content -LiteralPath "<rc>\D07-branch-gate.txt" -Encoding utf8
 $out
 ```
@@ -1103,10 +1166,20 @@ $out
 
 **C09, release sequence order**
 
+Scoped to stages 12 to 14 rather than the whole region. `merge-base --is-ancestor` and `--no-ff` first appear in stage 5a reconciliation, so an unscoped search matches those and compares unrelated offsets, which produced a false FAIL on `rc.001`.
+
 ```powershell
 $plan = '<plan>'; $raw = Get-Content -LiteralPath $plan -Raw
 $a = $raw.IndexOf('#### Exact replacement text, `Architect.md`'); $b = $raw.IndexOf('### Target Program Files (Mandatory)')
 $region = $raw.Substring($a, $b - $a)
+# Scope to the release stages only.
+$s12 = $region.IndexOf('**Stage 12,')
+$s15 = $region.IndexOf('**Stage 15,')
+if ($s12 -lt 0 -or $s15 -le $s12) {
+    'RESULT FAIL release-stage-anchors-not-found' | Set-Content -LiteralPath "<rc>\D09-release-order.txt" -Encoding utf8
+    return
+}
+$region = $region.Substring($s12, $s15 - $s12)
 $order = @(
     'run the bump on the plan branch',
     'cut and QA test one more candidate that includes the bump',
@@ -1209,7 +1282,11 @@ foreach ($k in $repos.Keys) {
 
     $sym   = (& git -C $p symbolic-ref --short refs/remotes/origin/HEAD 2>$null)
     $remote = ($sym -replace '^origin/','')
-    $locals = @(& git -C $p for-each-ref --format='%(refname:short)' refs/heads 2>$null)
+    # Exclude this plan's own working branches. Without this, cutting the plan
+    # branch leaves two local branches and the sole-local-branch step stops
+    # applying, so the check fails because the work started.
+    $locals = @(& git -C $p for-each-ref --format='%(refname:short)' refs/heads 2>$null |
+        Where-Object { $_ -notmatch '^(feat|fix|chore|docs|refactor|perf)/[A-Z][A-Z0-9]{1,9}-\d{5}-' })
 
     # four step contract
     $name = $null; $step = $null
@@ -1264,9 +1341,33 @@ foreach ($ln in (Get-Content -LiteralPath "$rc\instruction-manifest.txt")) {
         if ($got -eq $want) { $ok++ } else { $bad++; $out += "MISMATCH $fp" }
     } else { $bad++; $out += "UNPARSED $ln" }
 }
-$bak = (Get-ChildItem 'D:\Cloud\OneDrive\AI\Agentic\.opencode\agents' -Filter '*.bak-*' -File -ErrorAction SilentlyContinue).Count
-$out += "manifest_ok=$ok manifest_bad=$bad backup_siblings=$bak"
-$out += if ($ok -eq 8 -and $bad -eq 0 -and $bak -ge 6) { 'RESULT PASS' } else { 'RESULT FAIL' }
+# Recovery coverage is asserted per file, not by a blanket count.
+# The six .opencode files are untracked, so a .bak sibling is their only recovery
+# path and each one must have it. Each AGENTS.md is tracked in ITS OWN repository,
+# so Git recovers it and a .bak sibling is not required. An earlier version
+# asserted `backup_siblings -ge 6`, which passed while two files silently had no
+# recovery path at all, so the check now names the requirement instead of counting.
+#
+# Tracked-ness must be tested in the repository that owns the file. The root
+# AGENTS.md belongs to `Agentic`, but `avrig-ai/AGENTS.md` belongs to `avrig-ai`,
+# and testing the latter against `Agentic` reports it untracked and demands a
+# backup it does not need. Each file therefore carries its owning repo.
+$owners = @{
+    'D:\Cloud\OneDrive\AI\Agentic\AGENTS.md'                  = 'D:\Cloud\OneDrive\AI\Agentic'
+    'D:\Cloud\OneDrive\AI\Agentic\avrig-ai\AGENTS.md'         = 'D:\Cloud\OneDrive\AI\Agentic\avrig-ai'
+}
+$untrackedMissing = @()
+foreach ($f in $files) {
+    $repo = if ($owners.ContainsKey($f)) { $owners[$f] } else { 'D:\Cloud\OneDrive\AI\Agentic' }
+    $rel = $f.Substring($repo.Length).TrimStart('\').Replace('\', '/')
+    $tracked = @(& git -C $repo ls-files 2>$null)
+    if ($tracked -contains $rel) { continue }
+    $sib = @(Get-ChildItem (Split-Path $f) -Filter ((Split-Path $f -Leaf) + '.bak-*') -File -ErrorAction SilentlyContinue)
+    if ($sib.Count -eq 0) { $untrackedMissing += $f }
+}
+$out += "manifest_ok=$ok manifest_bad=$bad untracked_without_backup=$($untrackedMissing.Count)"
+$untrackedMissing | ForEach-Object { $out += "NO-BACKUP $_" }
+$out += if ($ok -eq 8 -and $bad -eq 0 -and $untrackedMissing.Count -eq 0) { 'RESULT PASS' } else { 'RESULT FAIL' }
 $out | Set-Content -LiteralPath "$rc\D13-manifest-readback.txt" -Encoding utf8
 $out
 ```
@@ -1275,37 +1376,42 @@ $out
 
 Run the baseline before implementation and the after capture once edits land. The comparison subtracts the baseline, which is required because both repositories already carry drift this plan never caused.
 
+Both halves record a path list, not a diff summary. An earlier version wrote `diff --stat HEAD` to the baseline and then never read it, comparing `git status` to a fixed allow-list only, so pre-existing drift was reported as if this plan caused it. The baseline is now the set of paths already dirty before implementation, and the after pass reports only paths that are dirty now and were not dirty then.
+
 ```powershell
 # Baseline, run BEFORE implementation
-$rc = '<rc>'; $base = '<rc>\D14-baseline.txt'
-'D:\Cloud\OneDrive\AI\Agentic','D:\Cloud\OneDrive\AI\Agentic\avrig-ai' | ForEach-Object {
-    "=== $_ ==="
-    & git -C $_ rev-parse --show-toplevel
-    & git -C $_ diff --stat HEAD
-} | Set-Content -LiteralPath $base -Encoding utf8
-Get-Content -LiteralPath $base
-
-# After capture, run AFTER implementation
 $rc = '<rc>'
 $repos = [ordered]@{ 'agentic'='D:\Cloud\OneDrive\AI\Agentic'; 'avrig-ai'='D:\Cloud\OneDrive\AI\Agentic\avrig-ai' }
+New-Item -ItemType Directory -Force -Path $rc | Out-Null
 foreach ($k in $repos.Keys) {
-    $p = $repos[$k]
-    & git -C $p rev-parse --show-toplevel | Set-Content -LiteralPath "$rc\D14-drift-$k.txt" -Encoding utf8
-    & git -C $p diff --stat HEAD | Add-Content -LiteralPath "$rc\D14-drift-$k.txt" -Encoding utf8
+    & git -C $repos[$k] status --porcelain 2>$null |
+        ForEach-Object { $_.Substring(3).Trim('"') } |
+        Sort-Object -Unique |
+        Set-Content -LiteralPath "$rc\D14-baseline-$k.txt" -Encoding utf8
 }
-$allowed = @('^plans/','^AGENTS\.md$','^\.gitignore$')
+"baseline captured: " + (($repos.Keys | ForEach-Object { "$_=" + @(Get-Content "$rc\D14-baseline-$_.txt" -ErrorAction SilentlyContinue).Count }) -join ' ')
+```
+
+```powershell
+# After capture, run AFTER implementation. Subtract the baseline.
+$rc = '<rc>'
+$repos = [ordered]@{ 'agentic'='D:\Cloud\OneDrive\AI\Agentic'; 'avrig-ai'='D:\Cloud\OneDrive\AI\Agentic\avrig-ai' }
+$allowed = @('^plans/','^AGENTS\.md$','^\.gitignore$','^\.opencode/')
 $out = @(); $bad = 0
 foreach ($k in $repos.Keys) {
-    $status = & git -C $repos[$k] status --porcelain 2>$null
-    foreach ($ln in ($status | Where-Object { $_ -notmatch '^\?\?' })) {
-        $path = $ln.Substring(3)
+    $now = @(& git -C $repos[$k] status --porcelain 2>$null | ForEach-Object { $_.Substring(3).Trim('"') } | Sort-Object -Unique)
+    $was = @(Get-Content -LiteralPath "$rc\D14-baseline-$k.txt" -ErrorAction SilentlyContinue)
+    $new = @($now | Where-Object { $was -notcontains $_ })
+    $out += "repo=$k now=$($now.Count) baseline=$($was.Count) new=$($new.Count)"
+    foreach ($p in $new) {
         $okPath = $false
-        foreach ($a in $allowed) { if ($path -match $a) { $okPath = $true } }
-        if (-not $okPath) { $bad++; $out += "OUTSIDE-EDIT-SET repo=$k path=$path" }
+        foreach ($a in $allowed) { if ($p -match $a) { $okPath = $true } }
+        if (-not $okPath) { $bad++; $out += "OUTSIDE-EDIT-SET repo=$k path=$p" }
+        else { $out += "in-edit-set repo=$k path=$p" }
     }
+    $new | Set-Content -LiteralPath "$rc\D14-new-$k.txt" -Encoding utf8
 }
-$out += "outside_edit_set=$bad"
-$out += 'NOTE: pre-existing drift is present in both repositories and must be matched against D14-baseline.txt'
+$out += "new_paths_outside_edit_set=$bad"
 $out += if ($bad -eq 0) { 'RESULT PASS' } else { 'RESULT FAIL' }
 $out | Set-Content -LiteralPath "$rc\D14-drift-summary.txt" -Encoding utf8
 $out
@@ -1382,6 +1488,9 @@ $out = @(
     'U+2014 em-dash = ' + ([regex]::Matches($raw, [char]0x2014)).Count,
     'U+2013 en-dash = ' + ([regex]::Matches($raw, [char]0x2013)).Count
 )
+$em = ([regex]::Matches($raw, [char]0x2014)).Count
+$en = ([regex]::Matches($raw, [char]0x2013)).Count
+$out += if ($em -eq 0 -and $en -eq 0) { 'RESULT PASS' } else { 'RESULT FAIL' }
 $out | Set-Content -LiteralPath "<rc>\D16-dash-scan.txt" -Encoding utf8
 $out
 ```
@@ -1469,9 +1578,19 @@ if ($a -lt 0 -or $b -le $a) {
         'issue creation command'      = 'gh issue create'
         'duplicate check'            = 'gh issue edit'
         'generated from the plan'    = 'generated from the plan'
-        'close at release'           = 'close the GitHub Issue'
+        'close at release'           = 'gh issue comment'
         'blocked not skipped'        = 'gh auth status'
         'forbidden before approval'  = 'Never create a feature request before approval'
+        # D19 requires the work-item code in the title, and a branch link. Both are
+        # asserted as literals here, because a check that only greps `gh issue create`
+        # passes even if the title rule and the link step are both missing.
+        'code in title'              = 'titled `<CODE>-<NNNNN> <plan title>`'
+        'branch linked to issue'     = 'gh issue develop'
+        # The version line must exist but be empty at creation, and be filled only at
+        # stage 16. Asserted as two literals: the placeholder proves the line exists,
+        # and the recorded-not-predicted sentence proves it is not filled early.
+        'version line present empty' = 'Release version: (filled at deployment)'
+        'version recorded at release'= 'Release version: <X.Y.Z>'
     }
     $fail = 0
     foreach ($k in $checks.Keys) {
@@ -1693,7 +1812,7 @@ Closed, with the distinction that matters. The gate reconciles **release tags on
 
 Four prohibitions close the obvious ways this could go wrong: never merge a candidate tag into a default branch, since it is unapproved work that would bypass UAT and stage 14; never move, delete, or force a tag to make it an ancestor; never resolve a reconciliation conflict silently, because a conflict there means the default branch diverged from a shipped artifact; and never treat a failed fetch as an empty tag list, since `--tags --prune` must run first or the check reads stale refs.
 
-Where it is now stated: stage 5 is split into 5a reconciliation and 5b branch creation, policy rules 13 to 15 cover the gate and both prohibitions, goal 6 states it, the branch gate measurable outcome requires it, the ledger carries a `## Pre-branch reconciliation` section, and the matrix adds `D17` (the rule is present in the instruction text) and `D18` (the rule passes against real state).
+Where it is now stated: stage 5 is split into 5a reconciliation, 5b feature request publication, and 5c branch creation through the issue, policy rules 13 to 15 cover the gate and both prohibitions, goal 6 states it, the branch gate measurable outcome requires it, the ledger carries a `## Pre-branch reconciliation` section, and the matrix adds `D17` (the rule is present in the instruction text) and `D18` (the rule passes against real state).
 
 Measured on 2026-11-19 with `C18` executed: all sixteen release tags across `avrig-ai`, `avrig-api`, `avrig-lib` and `avrig-ui` (four each, `0.2.0` through `0.4.0`) are ancestors of `main`, the Agentic repository carries no SemVer tags, and `stranded_release_tags=0`. Every default branch is also in sync with its remote. So no reconciliation merge is required before this plan branches; the gate exists for the case where one is, and it now fails loudly instead of silently producing a stale base.
 
@@ -1711,7 +1830,7 @@ The failure mode that mattered here is environmental, not conceptual. `gh` is in
 
 ### Pass 7a, downstream sync after the gate was added
 
-Adding stage 5c after `Architect.md` had already been written left that file stale at 28 rules and a two-part stage 5. Rather than leave the drift for `P9` to find, the correction was dispatched immediately and `P9` still verifies it. This is the concrete reason `P9` exists: a plan that changes after an instruction file is written will silently diverge from it, and the read-back is what catches that.
+Adding stage 5c after `Architect.md` had already been written left that file stale at 28 rules and a two-part stage 5. Rather than leave the drift for `P9` to find, the correction was dispatched immediately and `P9` still verifies it. This is the concrete reason `P9` exists: a plan that changes after an instruction file is written will silently diverge from it, and the read-back is what catches that. The same drift happened twice more, and both were caught the same way: the code moved from authoring to approval, and stage 5 was reordered so the branch is created through the issue. `Architect.md` was synced for the first and the second is pending the same treatment, which is exactly what a read-back gate is for.
 
 ### Preserved audit evidence
 

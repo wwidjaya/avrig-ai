@@ -44,3 +44,7 @@ lab/
 plans/evidence/**
 !plans/evidence/.gitkeep
 
+# Agent edit backups: `<file>.bak-<timestamp>` rollback copies are local, not source.
+# Default-deny so `git add -A` cannot sweep them into a release. A backup is a
+# recovery aid for an untracked file edit, never a committed artifact.
+*.bak-*
