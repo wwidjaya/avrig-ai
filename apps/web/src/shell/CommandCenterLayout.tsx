@@ -13,14 +13,16 @@ import {
 } from "lucide-react";
 import { useAuth } from "react-oidc-context";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   Badge,
   Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
 } from "@avrig/ui";
 import { useApi } from "../shared/api/ApiContext";
 import { SystemInfoDialog } from "../shared/components/SystemInfoDialog";
@@ -230,30 +232,22 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
       </aside>
 
       {/* Sign Out Confirmation Dialog */}
-      <Dialog open={signOutConfirmOpen} onOpenChange={setSignOutConfirmOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Confirm Sign Out</DialogTitle>
-            <DialogDescription>
+      <AlertDialog open={signOutConfirmOpen} onOpenChange={setSignOutConfirmOpen}>
+        <AlertDialogContent className="sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
+            <AlertDialogDescription>
               Are you sure you want to end your active command session and return to the main landing page?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button
-              variant="outline"
-              onClick={() => setSignOutConfirmOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleConfirmSignOut}
-            >
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={handleConfirmSignOut}>
               Sign Out
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* System Telemetry & Information Dialog */}
       <SystemInfoDialog open={systemInfoOpen} onOpenChange={setSystemInfoOpen} />

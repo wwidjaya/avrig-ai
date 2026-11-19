@@ -101,6 +101,13 @@ html body.theme-light {
   --av-ctl: #ffffff;
   --av-ctl-line: rgba(9, 9, 11, 0.1);
 
+  /* Declared in the dark set only until 0.4.0, which left every light-theme
+     `font-family: var(--av-font-mono)` an invalid substitution, so the
+     language chip fell back to the UA sans stack (R2). */
+  --av-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --av-radius-ctl: 10px;
+  --av-radius-card: 14px;
+
   --bg: 0 0% 100%;
   --bg-high: 240 8% 93%;
   --text: 240 4% 34%;
@@ -132,6 +139,12 @@ html body.theme-light {
     --av-ghost-hover: rgba(9, 9, 11, 0.03);
   --av-ctl: #ffffff;
   --av-ctl-line: rgba(9, 9, 11, 0.1);
+    /* Same two omissions as the .theme-light block: without them the first
+       paint in a light-preference browser renders the chip in the UA sans
+       stack at square corners, then snaps once .theme-light lands. */
+    --av-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --av-radius-ctl: 10px;
+    --av-radius-card: 14px;
     --bg: 0 0% 100%;
     --bg-high: 240 8% 93%;
     --text: 240 4% 34%;
@@ -145,6 +158,16 @@ html body.theme-light {
 /* ==========================================================================
    2. Canvas
    ========================================================================== */
+
+/* Rauthy sets `color-scheme` only on `body.theme-light|.theme-dark`, and that
+   class arrives from the client bundle. Until then the document root has no
+   scheme, so the canvas, scrollbars and native controls paint light and then
+   snap. Declaring both schemes on the root fixes the first paint and hands
+   every native widget (inputs, the locale popover, scrollbars) the right
+   rendering in both modes without touching a single one of them. */
+:root {
+  color-scheme: light dark;
+}
 
 body {
   background-color: var(--av-canvas);
@@ -582,11 +605,13 @@ body .container.absolute {
   border: 0 !important;
 }
 
+/* Shared reset, unchanged from 0.3.0. It matches the theme switch's own
+   `button` and the `.btn` Rauthy nests inside the language trigger; neither
+   wants a border, padding or rounded corner. It carries no `min-width`. */
 main .container.absolute button,
 body .container.absolute button,
-/* Rauthy's selector nests a second `.btn` with its own .9rem type size and
-   padding. Reset that inner control too, otherwise the visible EN label is
-   larger than the 11px trigger and makes the button look cramped. */
+/* The nested `.btn` holds the label plus the chevron. Anchored on the
+   `data-border` attribute Rauthy always renders, not on its hashed class. */
 main [class*="svelte-fexfbq"].absolute > div > button .btn[data-border="false"],
 body [class*="svelte-fexfbq"].absolute > div > button .btn[data-border="false"] {
   display: inline-flex !important;
@@ -606,58 +631,73 @@ body [class*="svelte-fexfbq"].absolute > div > button .btnText {
   padding: 0 !important;
   font: inherit !important;
   line-height: 1 !important;
+  /* R3: the label carries the bright token and the glyph stays muted. Rauthy
+     tints .btnText with --text and the shared `> div` rule below sets
+     `color: inherit`, so the label colour is stated here. */
+  color: var(--av-text) !important;
 }
 
-main [class*="svelte-fexfbq"].absolute > div > button svg,
-body [class*="svelte-fexfbq"].absolute > div > button svg {
-  width: 13px !important;
-  height: 13px !important;
-  flex: 0 0 13px !important;
-}
-
+/* Language trigger. Split out of the rule that styled the theme switch, which
+   is where `min-width: 64px` came from: a two-letter label was stretched into a
+   64px box. The locale rows do not match this selector, because the popover
+   nests its buttons under `.popoverOptions`, one level deeper than `> div >
+   button`, so no `:not()` guard is needed. */
 main [class*="svelte-fexfbq"].absolute > div > button,
 body [class*="svelte-fexfbq"].absolute > div > button {
   height: 32px !important;
-  min-width: 64px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 6px !important;
   padding: 0 10px !important;
   font-family: var(--av-font-mono) !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
-  color: var(--av-muted) !important;
-  background: var(--av-ctl) !important;
-  border: 1px solid var(--av-ctl-line) !important;
+  color: var(--av-text) !important;
+  background: transparent !important;
+  border: 0 !important;
   border-radius: 8px !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+  transition: color 120ms ease, background-color 120ms ease;
 }
 
-main [class*="svelte-fexfbq"].absolute > div > button::before,
-body [class*="svelte-fexfbq"].absolute > div > button::before {
-  content: '' !important;
-  display: inline-block !important;
+/* One glyph, not two. Rauthy's own inline `<svg>` chevron is the survivor: it
+   is plain DOM painting with `currentColor`, so it is immune to the host's
+   `Content-Security-Policy: img-src 'self'` and to Rauthy's hashed class
+   names. The `::before` mask that used to sit here drew a second icon from a
+   `data:` URI, which that CSP blocks, so it never painted; the rule is deleted
+   outright rather than left as dead weight that would reappear if the policy
+   were ever loosened. */
+main [class*="svelte-fexfbq"].absolute > div > button svg,
+body [class*="svelte-fexfbq"].absolute > div > button svg {
   width: 14px !important;
   height: 14px !important;
   flex: 0 0 14px !important;
-  background-color: currentColor !important;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 8 6 6'/%3E%3Cpath d='m4 14 6-6 2-3'/%3E%3Cpath d='M2 5h12'/%3E%3Cpath d='M7 2h1'/%3E%3Cpath d='m22 22-5-10-5 10'/%3E%3Cpath d='M14 18h6'/%3E%3C/svg%3E") no-repeat center / contain !important;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 8 6 6'/%3E%3Cpath d='m4 14 6-6 2-3'/%3E%3Cpath d='M2 5h12'/%3E%3Cpath d='M7 2h1'/%3E%3Cpath d='m22 22-5-10-5 10'/%3E%3Cpath d='M14 18h6'/%3E%3C/svg%3E") no-repeat center / contain !important;
+  display: block !important;
+  color: var(--av-muted) !important;
 }
 
+/* Theme switch hover, unchanged. */
 main .container.absolute button:hover,
-body .container.absolute button:hover,
-main [class*="svelte-fexfbq"].absolute > div > button:hover,
-body [class*="svelte-fexfbq"].absolute > div > button:hover {
+body .container.absolute button:hover {
   color: var(--av-text) !important;
   background: var(--av-ctl) !important;
   border-color: var(--av-muted) !important;
   filter: brightness(1.1);
+  box-shadow: none !important;
+}
+
+/* Language chip hover. Split from the switch above so the chip gets the landing
+   page's ghost hover and, per R5, neither a border nor a filter. */
+main [class*="svelte-fexfbq"].absolute > div > button:hover,
+body [class*="svelte-fexfbq"].absolute > div > button:hover {
+  color: var(--av-text) !important;
+  background: var(--av-ghost-hover) !important;
+  border: 0 !important;
+  filter: none !important;
   box-shadow: none !important;
 }
 
@@ -682,9 +722,7 @@ body .container.absolute .icon {
 }
 
 main .container.absolute svg,
-body .container.absolute svg,
-main [class*="svelte-fexfbq"].absolute > div > button svg,
-body [class*="svelte-fexfbq"].absolute > div > button svg {
+body .container.absolute svg {
   width: 15px !important;
   height: 15px !important;
   display: block;
@@ -704,14 +742,13 @@ body [class*="svelte-fexfbq"].absolute > div > button:focus-visible {
 main [class*="svelte-fexfbq"].absolute .popover.anchored,
 body [class*="svelte-fexfbq"].absolute .popover.anchored {
   width: 84px !important;
-  min-width: 84px !important;
   max-width: min(84px, calc(100vw - 28px)) !important;
   padding: 4px !important;
   overflow: hidden !important;
-  background: #0f172a !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5) !important;
+  background: var(--av-surface) !important;
+  border: 1px solid var(--av-line-strong) !important;
+  border-radius: 10px !important;
+  box-shadow: var(--av-shadow) !important;
   box-sizing: border-box !important;
 }
 

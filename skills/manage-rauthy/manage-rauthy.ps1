@@ -7,7 +7,7 @@
     Action to perform: status, logs, config, test, reload-nginx, restart, update-theme
 .EXAMPLE
     .\manage-rauthy.ps1 status
-    .\manage-rauthy.ps1 update-theme -CssPath "D:\Cloud\OneDrive\AI\Agentic\avrig-ai\apps\web\public\custom\avrig-rauthy-theme.css"
+    .\manage-rauthy.ps1 update-theme -CssPath "D:\Cloud\OneDrive\AI\Agentic\avrig-ai\apps\web\public\avrig-rauthy-theme.css"
 #>
 
 [CmdletBinding()]
@@ -69,7 +69,7 @@ switch ($Action) {
     }
 
     'update-theme' {
-        $sourceCss = if ($CssPath) { $CssPath } else { "D:\Cloud\OneDrive\AI\Agentic\avrig-ai\apps\web\public\custom\avrig-rauthy-theme.css" }
+        $sourceCss = if ($CssPath) { $CssPath } else { "D:\Cloud\OneDrive\AI\Agentic\avrig-ai\apps\web\public\avrig-rauthy-theme.css" }
         if (-not (Test-Path $sourceCss)) {
             throw "Theme stylesheet not found at: $sourceCss"
         }

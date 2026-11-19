@@ -82,9 +82,9 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2 text-xs">
+        <div className="flex flex-col gap-4 py-2 text-xs">
           {/* Version Parity Comparison */}
-          <div className="rounded-lg border border-border bg-card p-3 space-y-2">
+          <div className="rounded-lg border border-border bg-card p-3 flex flex-col gap-2">
             <div className="flex items-center justify-between font-medium">
               <div className="flex items-center gap-2">
                 <Laptop className="h-4 w-4 text-muted-foreground" />
@@ -119,7 +119,7 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
             </div>
 
             {backendVersion && !isVersionSynced && (
-              <div className="flex items-center gap-2 rounded-md bg-amber-500/10 p-2 text-amber-500 mt-2">
+              <div className="flex items-center gap-2 rounded-md bg-amber-500/10 p-2 text-amber-500">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span className="text-[11px] leading-tight">
                   Client version (v{clientVersion}) differs from backend (v{backendVersion.semver}). A browser refresh or rebuild may be required.
@@ -134,7 +134,7 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
               {error}
             </div>
           ) : backendVersion ? (
-            <div className="rounded-lg border border-border bg-card p-3 space-y-2 font-mono">
+            <div className="rounded-lg border border-border bg-card p-3 flex flex-col gap-2 font-mono">
               <div className="flex items-center justify-between py-1 border-b border-border/50">
                 <span className="text-muted-foreground">Git Commit:</span>
                 <div className="flex items-center gap-1.5">

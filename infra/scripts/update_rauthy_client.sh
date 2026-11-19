@@ -8,7 +8,7 @@ cp /var/lib/rauthy/data/state_machine/db/hiqlite.db /var/lib/rauthy/data/state_m
 sqlite3 /var/lib/rauthy/data/state_machine/db/hiqlite.db "
 UPDATE clients SET 
     redirect_uris = 'https://app.avrig.ai/auth/callback,https://avrig.ai/auth/callback,https://web.avrig.ai/auth/callback,http://localhost:3000/auth/callback',
-    post_logout_redirect_uris = 'https://app.avrig.ai/logged-out,https://app.avrig.ai/,https://app.avrig.ai,https://avrig.ai/,https://web.avrig.ai/,https://avrig.ai,https://web.avrig.ai,http://localhost:3000/,http://localhost:3000',
+    post_logout_redirect_uris = 'https://app.avrig.ai/,https://app.avrig.ai,https://avrig.ai/,https://web.avrig.ai/,https://avrig.ai,https://web.avrig.ai,http://localhost:3000/,http://localhost:3000',
     allowed_origins = 'https://app.avrig.ai,https://avrig.ai,https://web.avrig.ai,http://localhost:3000'
 WHERE id = 'avrig-web-ui';
 
@@ -24,7 +24,7 @@ INSERT OR REPLACE INTO clients (
 SELECT 
     'avrig-app', name, enabled, confidential, secret, secret_kid,
     'https://app.avrig.ai/auth/callback,https://avrig.ai/auth/callback,https://web.avrig.ai/auth/callback,http://localhost:3000/auth/callback',
-    'https://app.avrig.ai/logged-out,https://app.avrig.ai/,https://app.avrig.ai,https://avrig.ai/,https://web.avrig.ai/,https://avrig.ai,https://web.avrig.ai,http://localhost:3000/,http://localhost:3000',
+    'https://app.avrig.ai/,https://app.avrig.ai,https://avrig.ai/,https://web.avrig.ai/,https://avrig.ai,https://web.avrig.ai,http://localhost:3000/,http://localhost:3000',
     'https://app.avrig.ai,https://avrig.ai,https://web.avrig.ai,http://localhost:3000',
     flows_enabled, access_token_alg, id_token_alg,
     auth_code_lifetime, access_token_lifetime, scopes, default_scopes,

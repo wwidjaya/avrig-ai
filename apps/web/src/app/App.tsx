@@ -25,7 +25,6 @@ import { SdlcBoardView } from "../modules/sdlc/SdlcBoardView";
 import { KnowledgeView } from "../modules/knowledge/KnowledgeView";
 import { KnowledgeChat } from "../modules/knowledge/KnowledgeChat";
 import { LandingPage } from "../modules/landing/LandingPage";
-import { LoggedOutView } from "../modules/auth/LoggedOutView";
 import { ErrorBoundary } from "../shared/components/ErrorBoundary";
 
 const DOMAIN_PATHS: Record<string, ActiveDomain> = {
@@ -37,11 +36,8 @@ const DOMAIN_PATHS: Record<string, ActiveDomain> = {
   "/chat": "chat",
 };
 
-function parsePath(pathname: string): { mode: "landing" | "console" | "logged-out"; domain: ActiveDomain } {
+function parsePath(pathname: string): { mode: "landing" | "console"; domain: ActiveDomain } {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
-  if (cleanPath === "/logged-out") {
-    return { mode: "logged-out", domain: "office" };
-  }
   if (cleanPath in DOMAIN_PATHS) {
     return { mode: "console", domain: DOMAIN_PATHS[cleanPath] };
   }
@@ -55,10 +51,7 @@ export const App: React.FC = () => {
   const auth = useAuth();
   const [initialRoute] = useState(() => {
     if (typeof window !== "undefined") {
-      // Legacy hash migration support: #console or #logged-out
-      if (window.location.hash === "#logged-out") {
-        return { mode: "logged-out" as const, domain: "office" as ActiveDomain };
-      }
+      // Legacy hash migration support: #console
       if (window.location.hash === "#console") {
         return { mode: "console" as const, domain: "office" as ActiveDomain };
       }
@@ -75,7 +68,7 @@ export const App: React.FC = () => {
 
   const [activeDomain, setActiveDomain] = useState<ActiveDomain>(initialRoute.domain);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"landing" | "console" | "logged-out">(initialRoute.mode);
+  const [viewMode, setViewMode] = useState<"landing" | "console">(initialRoute.mode);
 
   const isOperator = Boolean(
     auth.isAuthenticated ||
@@ -84,7 +77,7 @@ export const App: React.FC = () => {
   );
 
   // Sync navigation helper
-  const navigateToPath = useCallback((path: string, mode: "landing" | "console" | "logged-out", domain?: ActiveDomain) => {
+  const navigateToPath = useCallback((path: string, mode: "landing" | "console", domain?: ActiveDomain) => {
     if (typeof window !== "undefined") {
       if (window.location.pathname !== path) {
         window.history.pushState({}, document.title, window.location.origin + path);
@@ -131,11 +124,6 @@ export const App: React.FC = () => {
     const handlePopState = () => {
       if (typeof window !== "undefined") {
         // Clean up any legacy hash if encountered
-        if (window.location.hash === "#logged-out") {
-          window.history.replaceState({}, document.title, window.location.origin + "/logged-out");
-          setViewMode("logged-out");
-          return;
-        }
         if (window.location.hash === "#console") {
           window.history.replaceState({}, document.title, window.location.origin + "/console");
           setViewMode("console");
@@ -212,24 +200,6 @@ export const App: React.FC = () => {
     );
   }
 
-  // Show Logged Out confirmation view
-  if (viewMode === "logged-out") {
-    return (
-      <LoggedOutView
-        onSignInAgain={async () => {
-          try {
-            await auth.signinRedirect();
-          } catch (err) {
-            console.error("Sign-in error:", err);
-          }
-        }}
-        onReturnHome={() => {
-          navigateToPath("/", "landing");
-        }}
-      />
-    );
-  }
-
   return (
     <ProtectedRoute>
       <CommandCenterLayout
@@ -250,7 +220,7 @@ export const App: React.FC = () => {
             localStorage.removeItem("avrig-operator-mode");
             sessionStorage.clear();
           }
-          navigateToPath("/logged-out", "logged-out");
+          navigateToPath("/", "landing");
         }}
       >
         {activeDomain === "office" && (

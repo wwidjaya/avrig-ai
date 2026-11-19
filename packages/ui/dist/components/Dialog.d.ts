@@ -1,19 +1,19 @@
 import * as React from "react";
-export interface DialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    children: React.ReactNode;
-}
-export declare function Dialog({ open, onOpenChange, children }: DialogProps): React.JSX.Element | null;
-export declare const DialogContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
-export declare const DialogHeader: {
-    ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;
-    displayName: string;
-};
-export declare const DialogFooter: {
-    ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;
-    displayName: string;
-};
-export declare const DialogTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>>;
-export declare const DialogDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+export type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root>;
+declare function Dialog({ ...props }: DialogProps): React.JSX.Element;
+declare function DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>): React.JSX.Element;
+declare function DialogPortal({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>): React.JSX.Element;
+declare function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>): React.JSX.Element;
+declare function DialogOverlay({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>): React.JSX.Element;
+declare function DialogContent({ className, children, showCloseButton, ...props }: React.ComponentProps<typeof DialogPrimitive.Content> & {
+    showCloseButton?: boolean;
+}): React.JSX.Element;
+declare function DialogHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
+declare function DialogFooter({ className, showCloseButton, children, ...props }: React.ComponentProps<"div"> & {
+    showCloseButton?: boolean;
+}): React.JSX.Element;
+declare function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>): React.JSX.Element;
+declare function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>): React.JSX.Element;
+export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };
 //# sourceMappingURL=Dialog.d.ts.map

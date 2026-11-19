@@ -18,7 +18,7 @@ Manages the Rauthy IAM service (OIDC / OAuth 2.1 Identity Provider) and its cust
 | **Local Upstream** | `https://127.0.0.1:8443` | TLS listener fronted by local Nginx reverse proxy |
 | **Custom Theme Directory** | `/var/www/iam-custom/` | Static theme assets served by Nginx (`avrig-rauthy-theme.css`, logos) |
 | **Nginx Site Config** | `/etc/nginx/sites-available/iam.avrig.ai.conf` | Ingress config with sub_filter stylesheet injection and cache-busting |
-| **Repository Theme Source** | `apps/web/public/custom/avrig-rauthy-theme.css` | Source stylesheet in `avrig-ai` repository |
+| **Repository Theme Source** | `apps/web/public/avrig-rauthy-theme.css` | Source stylesheet in `avrig-ai` repository |
 
 ## Invocation (PowerShell Wrapper)
 

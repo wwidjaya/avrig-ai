@@ -6,7 +6,7 @@
     "clientId": "avrig-web-ui",
     "scope": "openid profile email",
     "redirectUri": "https://app.avrig.ai/auth/callback",
-    "postLogoutRedirectUri": "https://app.avrig.ai/logged-out",
+    "postLogoutRedirectUri": "https://app.avrig.ai/",
     "responseType": "code",
     "automaticSilentRenew": true
   },
