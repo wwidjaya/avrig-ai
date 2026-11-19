@@ -5,7 +5,7 @@ project_indicator: AVRIG
 branch: feat/AVRIG-00002-landing-console-unslop-redesign
 candidate_tags: []
 release_version:
-status: approved
+status: in-progress
 created: 2026-11-20
 owner: Architect
 tags:
@@ -384,7 +384,34 @@ A green run must name the candidate tag, both commit SHAs, the count of passing 
 - Candidate identity: the pair `(avrig-ai SHA, avrig-ui SHA)`. Both appear in the evidence folder and in the verdict line, because `@avrig/tokens` resolves through a filesystem symlink into the sibling checkout and the `avrig-ai` tag alone does not describe the shipped CSS.
 - `@avrig/tokens` stays at `0.1.0`. No package bump, because `link:` resolution ignores the version field and the repository release tag records the change.
 - EDM: not applicable, no schema surface.
-- Feature request: created at stage 5b, titled `AVRIG-00002 Landing and Console Unslop Redesign`. The `Release version:` line stays empty until deployment.
+- Feature request: [issue 5](https://github.com/wwidjaya/avrig-ai/issues/5), titled `AVRIG-00002 Landing and Console Unslop Redesign`, created at stage 5b with the `Release version:` line present and empty.
+- Candidate workspace: `D:\Cloud\OneDrive\AI\Agentic\AVRIG-00002\{avrig-ai,avrig-ui}`. The pairing is not cosmetic. `apps/web/package.json` resolves `@avrig/tokens` as `link:../../../avrig-ui/packages/tokens`, and from `<P>/apps/web` three levels up is `parent(P)`. Placing both worktrees under one parent makes the symlink resolve to the `avrig-ui` plan-branch worktree instead of the unrelated `main` checkout beside it. A worktree at `Agentic\avrig-ai-AVRIG-00002` would silently read `main`'s tokens, which is the exact defect the SHA pair exists to prevent.
+
+## Stage Gate Record
+
+**Stage 5a, reconciliation.** `gh auth status` reports `github.com` as `wwidjaya` with `repo` scope. Both repositories resolve their default branch to `main` by contract step 1 and agree with `origin/HEAD`. After `git fetch origin --tags --prune`, every release tag was tested with `git merge-base --is-ancestor`:
+
+| Repository | Default | Release tags tested | Not an ancestor | Merges performed |
+|---|---|---|---|---|
+| `avrig-ai` | `main` | 0.2.0, 0.2.1, 0.3.0, 0.4.0, 0.5.0 | none | none |
+| `avrig-ui` | `main` | 0.2.0, 0.2.1, 0.3.0, 0.4.0, 0.5.0 | none | none |
+
+Both default branches already contain every released artifact, so no reconciliation merge was needed and no tag was created, moved or deleted.
+
+**Stage 5b, feature request.** Issue 5 created on `wwidjaya/avrig-ai` with `gh issue create`. The body is generated from this plan: goals, scope with the mandatory target file list, acceptance criteria from the measurable outcomes, the design artifact link with the frozen direction, and a traceability footer whose `Release version:` line is present and empty. No issue carried the code beforehand, so nothing was duplicated. The `enhancement` label was applied only after `gh label list` confirmed it exists.
+
+**Stage 5c, branches.**
+
+| Repository | Branch | Created by | Linked to issue | Notes |
+|---|---|---|---|---|
+| `avrig-ai` | `feat/AVRIG-00002-landing-console-unslop-redesign` | `gh issue develop 5 --base main` | yes, confirmed by `gh issue develop --list 5` | cut from `main` at `d79f992` |
+| `avrig-ui` | `feat/AVRIG-00002-landing-console-unslop-redesign` | `git push origin main:refs/heads/...` | **no, by design** | cut from `main` at `c61d338`. The issue lives in `avrig-ai`, so the linking API cannot attach a branch in another repository. Recorded here so the unlinked state is never mistaken for a completed link. |
+
+Both branches were created without switching either primary checkout, so the sibling `AVRIG-00003` session kept a stable tree. `D:\Cloud\OneDrive\AI\Agentic\avrig-ai` and `D:\Cloud\OneDrive\AI\Agentic\avrig-ui` both remain on `main`.
+
+**Stage 5d, worktrees.** `git worktree add` created `D:\Cloud\OneDrive\AI\Agentic\AVRIG-00002\avrig-ai` and `...\avrig-ui`, each tracking its own plan branch. Verified that `<avrig-ai>/apps/web/../../../avrig-ui/packages/tokens/theme.css` resolves to the plan-branch worktree rather than the `main` checkout. Both worktrees need `pnpm install` before `fe` can run a dev server; that is a stage 6 prerequisite, not a stage 5 one.
+
+**Hard rules held.** No candidate tag merged, no tag created, moved or force-pushed, no implementation commit made, and the default branches received nothing beyond what was already there.
 
 ## Review Findings
 

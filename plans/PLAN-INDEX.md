@@ -127,7 +127,7 @@ Empty. Populated only if the indicator ever changes after freezing.
 | Plan | Created | Title | Repos | Claiming branch | Status | Passing candidate tag | Evidence path | Feature request | Release version |
 |---|---|---|---|---|---|---|---|---|---|
 | AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (approval), feat/AVRIG-00001-agent-workflow-update | released | **`avrig/00001/rc.005` @ `472dc04` PASS 20/20** (includes 0.5.0 bump); `rc.004` @ `a908c7e` PASS 20/20; `rc.003` @ `5ebede4` FAIL 19/20; `rc.002` @ `d23a7aa` FAIL 19/20; `rc.001` @ `d100017` FAIL 15/20 | `plans/evidence/AVRIG-00001/rc.005/` | [#3](https://github.com/wwidjaya/avrig-ai/issues/3), branch linked | **0.5.0** @ `dea90a7`, tagged in all four repositories |
-| AVRIG-00002 | 2026-11-20 | Landing and Console Unslop Redesign | avrig-ai, avrig-ui | main (approval), feat/AVRIG-00002-landing-console-unslop-redesign | approved | none yet | pending | not created | empty until deployment |
+| AVRIG-00002 | 2026-11-20 | Landing and Console Unslop Redesign | avrig-ai, avrig-ui | main (approval), feat/AVRIG-00002-landing-console-unslop-redesign | in-progress | none yet | pending | [#5](https://github.com/wwidjaya/avrig-ai/issues/5), avrig-ai branch linked, avrig-ui branch unlinked by design | empty until deployment |
 | AVRIG-00003 | 2026-11-20 | Agent-Desktop as the Desktop UAT Harness for the Tester Agent | Agentic, avrig-ai | main (approval), chore/AVRIG-00003-agent-desktop-uat-tooling | approved | none yet | `plans/evidence/AVRIG-00003/` | pending | empty until deployment |
 
 ## Backfill
