@@ -41,6 +41,7 @@ tags:
 10. Let concurrent plans finish independently. A later plan never blocks an earlier one, and a long-running branch resynchronizes with its repository's default branch before its final candidate, guarded by an ancestry assertion.
 11. Require the `tester` subagent to run real live browser testing of the running application, not only API calls and unit suites, with evidence retained per candidate tag.
 12. Close the drift this plan exists to remove: the plan file list covers every live document that still carries the old workflow, not just the two primary ones.
+13. Turn each approved plan into a feature request on the project's own repository, generated from the plan rather than written twice, and closed at release so the request and the shipped artifact link to each other.
 
 Measurable outcomes:
 
@@ -160,7 +161,7 @@ The sequence that keeps rule 7 and rule 8 true without touching the script. Note
 ```text
 1. passing candidate exists           avrig/00002/rc.003
 2. decide the version                 user approves 1.1.0
-3. bump manifests ON THE PLAN BRANCH  make bump-version 1.1.0
+3. bump manifests ON THE PLAN BRANCH  make bump-version VERSION=1.1.0
 4. commit the bump on the branch      chore(release): 1.1.0
 5. cut and test rc.004                the bump is now part of the tested tree
 6. ancestry assert, then merge        git merge-base --is-ancestor <default> <candidate>
@@ -615,10 +616,12 @@ Every plan step designates an assignee and an execution mode. The stages are ord
 2. **Stage 2, Analyst Review Gate (`Assignee: analyst`)** - Runs immediately after the plan is written, with no intervening gate. The analyst audits against the coding principles and universal programming references, adjusts wording where it diverges, and records the verdict under `## Review Findings`.
 3. **Stage 3, Test Matrix Attachment (`Assignee: tester`)** - Runs in parallel with stage 2 and completes before stage 4. The tester attaches `## Test Specification and Validation Matrix` with exact commands, fixtures, journeys, and pass criteria. A plan with an empty matrix may not reach stage 4.
 4. **Stage 4, Findings Confirmation and User Consultation (`Assignee: Architect`)** - Present the analyst findings, the test matrix, the proposed indicator if it is new, and every open clarification, then ask for confirmation. Status becomes `awaiting-approval`. Never proceed on a silent assumption.
-5. **Stage 5, Default Branch Reconciliation and Branch Creation (`Assignee: Architect` dispatches, `build` executes)** - Runs only after the user approves, and it has two parts that must both succeed before any implementation commit.
+5. **Stage 5, Default Branch Reconciliation, Branch Creation, and Feature Request Publication (`Assignee: Architect` dispatches, `build` executes)** - Runs only after the user approves, and it has three parts that must all succeed before any implementation commit.
    - **5a, reconcile released content into each default branch.** For every repository the plan touches, resolve its default branch, then `git fetch origin --tags --prune`. Enumerate **release tags only**, meaning bare `X.Y.Z` that match the release regex; never a candidate tag. For each release tag, test `git merge-base --is-ancestor refs/tags/<X.Y.Z> refs/heads/<default>`. If every release tag is already an ancestor, the repository is reconciled and nothing is merged. If any release tag is not an ancestor, that released content is stranded off the default branch and the plan branch would be cut from stale code, so merge it with `git merge --no-ff <X.Y.Z>` on the default branch, then push. Record every repository, every release tag tested, and every merge performed, in the plan.
    - **5b, cut the branch.** With the default branch reconciled, `git pull --ff-only`, then `git switch -c <type>/<CODE>-<NNNNN>`, then push with upstream tracking. Record every repository, its resolved default branch, and the new branch in the plan.
-   - Hard rules for both parts. Never merge a candidate tag (`<code-lower>/<NNNNN>/rc.<NNN>`) into a default branch, because it is unapproved work and merging it would bypass UAT and stage 14 entirely. Never move, delete, or force a tag to make it an ancestor; if reconciliation requires rewriting released history, stop and escalate to the user. If the merge conflicts, stop and escalate rather than resolving silently, because a conflict here means the default branch diverged from a released artifact. All implementation and all fixes happen on the plan branch. The default branch receives no implementation commits; the single exception is the Stage 1 authoring commit, which touched only the plan file and the ledger, plus the 5a reconciliation merges. Untracked local files are edited in place on the working checkout and are covered by the instruction manifest, not by a branch.
+   - **5c, publish the feature request.** Once the branch exists, convert the approved plan into a GitHub Issue on the project's own repository with `gh issue create`, titled `<CODE>-<NNNNN> <plan title>` so the work item is searchable by its code. The body is generated from the plan, never authored separately: goals, scope, the target files, the acceptance criteria expressed as the plan's measurable outcomes, and a traceability footer naming the plan file path, the plan branch, and the ledger entry. The plan stays the source of truth and the issue mirrors it, so a later plan edit never requires a hand-maintained second document. Check for an existing issue carrying the code before creating one, and update it with `gh issue edit` rather than opening a duplicate. Record the issue number and URL in `plans/PLAN-INDEX.md` and in the plan. At stage 16, close the issue with a comment naming the release version, so the request and the release are linked in both directions.
+   - Preconditions for 5c. `gh auth status` must report an authenticated host, because a missing credential fails the step rather than silently skipping it. The target repository must be resolvable from the working checkout, and the issue must be created on the project repository rather than on a nested or unrelated one. Apply labels only when they already exist in that repository, since an unknown label aborts `gh issue create` and a missing label must never block a release. If the environment has no authenticated `gh`, stop at 5b, record the feature request as `BLOCKED` with the exact command the user must run, and continue with implementation, because the issue is a communication artifact and its absence must not stall the work.
+   - Hard rules for all parts. Never merge a candidate tag (`<code-lower>/<NNNNN>/rc.<NNN>`) into a default branch, because it is unapproved work and merging it would bypass UAT and stage 14 entirely. Never move, delete, or force a tag to make it an ancestor; if reconciliation requires rewriting released history, stop and escalate to the user. If the merge conflicts, stop and escalate rather than resolving silently, because a conflict here means the default branch diverged from a released artifact. Never create a feature request before approval, since an unapproved plan is not a commitment. All implementation and all fixes happen on the plan branch. The default branch receives no implementation commits; the single exception is the Stage 1 authoring commit, which touched only the plan file and the ledger, plus the 5a reconciliation merges. Untracked local files are edited in place on the working checkout and are covered by the instruction manifest, not by a branch.
 6. **Stage 6, Concurrent Implementation (`Assignee: edm`, `be`, `fe`)** - Commit to the plan branch only. Each subagent reports the commit SHA and the repository, and never switches branches or touches the default branch. Slice branches are `<type>/<CODE>-<NNNNN>-<slice>` and merge back into the plan branch.
 7. **Stage 7, Workspace Build Gate (`Assignee: build`)** - Run the workspace builds (`cargo check --workspace`, `pnpm build`) on the plan branch, validate types, isolate compiler diagnostics, and record the build id `<CODE>-<NNNNN>-build.<NNN>`. Plans that change no buildable source record this stage as not applicable with a stated reason.
 8. **Stage 8, Candidate Tag Before Test (`Assignee: build`)** - Before the first test run, create the annotated candidate tag `<code-lower>/<NNNNN>/rc.<NNN>`, starting at `rc.001`, on the plan branch head, and push it. Record the tag, its commit SHA, and its build id in the plan's `candidate_tags` list and in the ledger. A test run never starts against an untagged tree.
@@ -629,7 +632,7 @@ Every plan step designates an assignee and an execution mode. The stages are ord
 13. **Stage 13, Ancestry Assertion and Merge (`Assignee: build`)** - Before merging, assert `git merge-base --is-ancestor <default> <candidate>`; abort on exit 1. Then merge with `--no-ff` and assert the resulting tree equals the candidate tree. Set status `merged`. Concurrent plans stay independent: a later plan never waits for an earlier one.
 14. **Stage 14, Release Tag and Publication (`Assignee: build`)** - Create the annotated release tag by hand at the default branch tip whose tree equals the passing candidate, `git tag -a <X.Y.Z> <sha> -m "<project-tag-message> <X.Y.Z>"`, using the same message text the publisher would use for this project (do not invent one, and do not hardcode any project's name in this instruction), because the retained script can only tag HEAD and has no target-commit parameter. Then, with the default branch checked out and the tree clean, invoke the publisher with `-SkipBump`, which finds the tag already present, reuses it without moving it, and pushes the branch and tag to the release set. Never create the release tag before the merge, so a failed merge cannot orphan a published tag.
 15. **Stage 15, Deployment and Smoke Verification (`Assignee: Infra`, then `tester`)** - Deploy the artifact built for the passing candidate. Never rebuild for production, because the tested artifact is the promoted artifact. Then run post-deployment live smoke and browser health checks.
-16. **Stage 16, Publication, Archival, and Retrospective (`Assignee: build`, `km`, `Architect`)** - Confirm the release tag across the release set, run the retrospective, set status `released`, and move the plan file to `plans/done/` while keeping its code and ledger row forever.
+16. **Stage 16, Publication, Archival, and Retrospective (`Assignee: build`, `km`, `Architect`)** - Confirm the release tag across the release set, close the GitHub Issue with a comment naming the release version and the commit SHA so the request and the shipped artifact are linked in both directions, run the retrospective, set status `released`, and move the plan file to `plans/done/` while keeping its code and ledger row forever.
 ```
 
 Replace the existing `## Build, Release, and Versioning` list with:
@@ -665,6 +668,10 @@ Replace the existing `## Build, Release, and Versioning` list with:
 26. Never use `latest` as a production version identifier.
 27. Every production release must be traceable to its work item, commit, build id, test result, UAT approval, and production artifact.
 28. The project indicator is declared per project and never hardcoded in these instructions. Two projects never share one.
+29. An approved plan is published as a GitHub Issue on the project's own repository, titled with the work-item code, so the request is searchable and linked to the work rather than living only in a local file.
+30. The issue body is generated from the plan, never hand-authored, and the plan remains the source of truth. A plan edit does not create a second document to maintain.
+31. A feature request is created only after approval, and is closed at release with a comment naming the release version, so the request and the shipped artifact are linked in both directions.
+32. A missing or unauthenticated `gh` records the feature request as blocked with the exact recovery command, and never stalls implementation, because the issue is a communication artifact rather than a gate on correctness.
 ```
 
 #### Exact additions to `tester.md`
@@ -707,13 +714,13 @@ The repository column matters, because the target files live in two repositories
 
 | File | Repo | Action | Owning assignee | Change |
 |---|---|---|---|---|
-| `.opencode/agents/Architect.md` | Agentic, **local only** | edit in place, back up first | be | Permission `**` fix, Write Scope, Plan Identity and Numbering, Identifier Taxonomy, 16 stages, 28 rule policy, and the `## Plan File Standards & Structure` frontmatter list (lines 46 to 55), which still omits `plan_id`, `project_indicator`, `branch`, `candidate_tags`, `release_version` |
+| `.opencode/agents/Architect.md` | Agentic, **local only** | edit in place, back up first | be | Permission `**` fix, Write Scope, Plan Identity and Numbering, Identifier Taxonomy, 16 stages, 32 rule policy, and the `## Plan File Standards & Structure` frontmatter list (lines 46 to 55), which still omits `plan_id`, `project_indicator`, `branch`, `candidate_tags`, `release_version` |
 | `.opencode/agents/tester.md` | Agentic, **local only** | edit in place, back up first | be | Live Browser Testing with real `wmux` call forms, not-applicable path, line 12 filename pattern updated, release trigger alignment, renumber, **plus a frontmatter permissions block granting edit on `**/plans/evidence/**`**, because without it the mandatory evidence folder has no writer |
 | `.opencode/agents/plan.md` | Agentic, **local only** | edit in place, back up first | be | Holds the old Phase 1 to 7 workflow and status `completed`; either redirect it to `Architect.md` or align it in the same pass |
 | `.opencode/agents/Infra.md` | Agentic, **local only** | edit in place, back up first | be | Line 67 still sets status `completed`, which is absent from the new vocabulary |
 | `.opencode/agents/build.md` | Agentic, **local only** | edit in place, back up first | be | Candidate tag creation, ancestry assertion, `--no-ff` merge, hand-made release tag at the candidate SHA, `-SkipBump` publisher, per-repository default branch precondition |
 | `.opencode/agents/analyst.md` | Agentic, **local only** | edit in place, back up first | be | Analyst-first gate, indicator and identifier separation checks, instruction manifest verification |
-| `AGENTS.md` | Agentic, tracked, default `master` | branch `feature/AVRIG-00001` | be | Identifier taxonomy, indicator rules, candidate tag gate, 28 rule policy, per-repository default branch rule, and the corrected sentence that names `plan.md` as the workflow authority |
+| `AGENTS.md` | Agentic, tracked, default `master` | branch `feature/AVRIG-00001` | be | Identifier taxonomy, indicator rules, candidate tag gate, 32 rule policy, per-repository default branch rule, and the corrected sentence that names `plan.md` as the workflow authority |
 | `avrig-ai/AGENTS.md` | `avrig-ai`, tracked, default `main` | branch `feature/AVRIG-00001` | be | Same policy, plus the indicator declaration and the four-repository publish rule |
 | `avrig-ai/plans/PLAN-INDEX.md` | `avrig-ai` | authoring commit on `main`, then maintain | Architect | Ledger with indicator, allocation rule and indicator filter, status vocabulary, and the `AVRIG-00001` row. Maintained at stages 8, 12, 13, 14 and 16 |
 | `avrig-ai/plans/2026-11-19-AVRIG-00001-agent-workflow-update.md` | `avrig-ai` | authoring commit on `main` | Architect | This plan |
@@ -834,7 +841,7 @@ Authored and attached by `tester` at stage 3. Attached as of 2026-11-19 under st
 
 This plan changes instruction documents, a ledger, and two `AGENTS.md` files. It writes no Rust, TypeScript, or SQL, and it adds no HTTP route. There is therefore no compile-and-run target and no API surface to exercise, and this matrix does not pretend otherwise: it is a document conformance matrix plus one live browser pass. Every check below names a command that has been executed at least once during authoring, so the command is known to run rather than assumed to run. Where a check legitimately fails against the current text, the failure is called out here rather than smoothed over, because a matrix that only passes is not a measurement.
 
-Commands are cited by ID (`C01` to `C18`) and their verbatim bodies follow the table. Each writes its output to the evidence folder, so a pass is a file rather than a claim.
+Commands are cited by ID (`C01` to `C20`) and their verbatim bodies follow the table. Each writes its output to the evidence folder, so a pass is a file rather than a claim.
 
 The seven instruction files are untracked by resolved decision 2, so a candidate tag cannot cover them. Their verification is a SHA-256 manifest plus a read-back (`D13`), which is the strongest statement available without version control, not a substitute for it.
 
@@ -858,6 +865,8 @@ The seven instruction files are untracked by resolved decision 2, so a candidate
 | D16 | The plan itself carries no em-dash and no en-dash, since it mandates that rule | `C16` (count U+2014 and U+2013 in the plan file) | 0 and 0 | `rc.<NNN>/D16-dash-scan.txt` |
 | D17 | `Architect.md` states the pre-branch reconciliation gate, naming release tags only, and forbids merging a candidate tag into a default branch | `C17` (token counts in the replacement region) | `merge-base --is-ancestor refs/tags/` present; `--no-ff` present in the reconciliation step; a prohibition on merging `rc.<NNN>` into a default branch present; a prohibition on moving or forcing a tag present; no wording that permits merging a candidate tag | `rc.<NNN>/D17-pre-branch-reconcile.txt` |
 | D18 | Every release tag is an ancestor of its repository's default branch, so the plan branch is not cut from stale code | `C18` (`git fetch origin --tags --prune`, then per-tag `git merge-base --is-ancestor` across all repositories) | Zero stranded release tags, or every stranded tag named with its repository and merged before branching. Candidate tags are excluded from the check by design | `rc.<NNN>/D18-release-tag-ancestry.txt` |
+| D19 | The instruction text states the feature request gate: created after approval, generated from the plan, and checked for an existing issue first | `C19` (token counts in the replacement region) | `gh issue create` present; the code in the issue title required; generated-from-plan wording present; duplicate check present; close-at-release present; a prohibition on creating before approval present | `rc.<NNN>/D19-feature-request-gate.txt` |
+| D20 | The feature request exists on the project repository, or its absence is recorded as blocked with the recovery command | `C20` (`gh auth status`, then `gh issue list --search`) | Authenticated host, and an issue whose title carries `AVRIG-00001`, or the verdict `BLOCKED` recorded in the ledger with the exact recovery command. `D20` being blocked does not fail the matrix | `rc.<NNN>/D20-feature-request-exists.txt` |
 
 ### Preconditions and measured environment baseline
 
@@ -1417,6 +1426,67 @@ $out | Set-Content -LiteralPath "<rc>\D18-release-tag-ancestry.txt" -Encoding ut
 $out
 ```
 
+**C19, feature request gate in the instruction text**
+
+```powershell
+$plan = '<plan>'; $rc = '<rc>'
+$raw = Get-Content -LiteralPath $plan -Raw
+$a = $raw.IndexOf('#### Exact replacement text, `Architect.md`')
+$b = $raw.IndexOf('### Target Program Files (Mandatory)')
+$out = @()
+if ($a -lt 0 -or $b -le $a) {
+    'RESULT FAIL region-not-found' | Set-Content -LiteralPath "<rc>\D19-feature-request-gate.txt" -Encoding utf8
+} else {
+    $region = $raw.Substring($a, $b - $a)
+    $checks = [ordered]@{
+        'issue creation command'      = 'gh issue create'
+        'duplicate check'            = 'gh issue edit'
+        'generated from the plan'    = 'generated from the plan'
+        'close at release'           = 'close the GitHub Issue'
+        'blocked not skipped'        = 'gh auth status'
+        'forbidden before approval'  = 'Never create a feature request before approval'
+    }
+    $fail = 0
+    foreach ($k in $checks.Keys) {
+        $present = $region.Contains($checks[$k])
+        if (-not $present) { $fail++ }
+        $out += '{0} present={1}' -f $k, $present
+    }
+    $out += "missing=$fail"
+    $out += if ($fail -eq 0) { 'RESULT PASS' } else { 'RESULT FAIL' }
+    $out | Set-Content -LiteralPath "<rc>\D19-feature-request-gate.txt" -Encoding utf8
+}
+$out
+```
+
+**C20, feature request exists on the project repository**
+
+This check reports `BLOCKED` rather than `FAIL` when the tool is not authenticated, because the issue is a communication artifact and its absence must not stall the release.
+
+```powershell
+$rc = '<rc>'; $code = 'AVRIG-00001'
+$repo = 'D:\Cloud\OneDrive\AI\Agentic\avrig-ai'
+$out = @()
+$auth = & gh auth status 2>&1
+if ($LASTEXITCODE -ne 0) {
+    $out += 'auth=NONE'
+    $out += 'recovery=run: gh auth login'
+    $out += 'RESULT BLOCKED'
+} else {
+    $out += 'auth=OK'
+    $found = & gh issue list --repo (git -C $repo remote get-url origin) --search "$code in:title" --state all --json number,title,state,url 2>$null | ConvertFrom-Json
+    if ($found -and $found.Count -gt 0) {
+        foreach ($i in $found) { $out += 'issue={0} state={1} title={2} url={3}' -f $i.number, $i.state, $i.title, $i.url }
+        $out += 'RESULT PASS'
+    } else {
+        $out += 'issue=NONE'
+        $out += 'RESULT FAIL create the feature request'
+    }
+}
+$out | Set-Content -LiteralPath "<rc>\D20-feature-request-exists.txt" -Encoding utf8
+$out
+```
+
 ### What the matrix already finds wrong
 
 Run during authoring, so the plan inherits the defects rather than discovering them after a candidate tag. Findings 1, 2, 3 and 5 are closed in the current revision and the closure is recorded under `## Review Findings`, `Pass 5`. Finding 4 amended the drift outcome. Finding 6 is a correction to a pass criterion, not a defect in the plan.
@@ -1433,13 +1503,13 @@ Run during authoring, so the plan inherits the defects rather than discovering t
 One line per run, written to `plans/evidence/AVRIG-00001/rc.<NNN>/RESULT.txt` and reported to `build`:
 
 ```text
-rc.<NNN> @ <commit SHA> | verdict PASS or FAIL | <n>/18 checks | evidence plans/evidence/AVRIG-00001/rc.<NNN>/
+rc.<NNN> @ <commit SHA> | verdict PASS or FAIL | <n>/20 checks | evidence plans/evidence/AVRIG-00001/rc.<NNN>/
 ```
 
 Rules that keep the line honest:
 
 - The tag and the commit SHA come from `git rev-parse <code-lower>/<NNNNN>/rc.<NNN>^{commit}`, not from the working tree, because the working tree is not what was tested.
-- `PASS` requires all 18 checks PASS. Any `BLOCKED` check makes the verdict `FAIL` unless this matrix explicitly permits that check to be blocked, which it does only for the `wmux` leg inside `D15`, and only while its Playwright leg is PASS and the blocker is recorded with its reason.
+- `PASS` requires all 20 checks PASS. Any `BLOCKED` check makes the verdict `FAIL` unless this matrix explicitly permits that check to be blocked. Two checks carry that permission and no others: `D15`, and only for its `wmux` leg while its Playwright leg is PASS and the blocker is recorded with its reason; and `D20`, and only when the recorded reason is missing or unauthenticated `gh` and the exact recovery command is written in the ledger. A blocked `D20` never blocks a release, because the feature request is a communication artifact rather than a correctness gate.
 - A check that could not run is reported as `BLOCKED` with its reason, never as `PASS`.
 - The verdict is reported to `build` and to no one else's authority: `tester` creates no tag, bumps no version, and pushes nothing.
 
@@ -1547,6 +1617,8 @@ Also closed in the same pass:
 | Test matrix authored before approval | Closed | Stage 3 and stream P2b |
 | Branch cut after approval, from the resolved default | Closed | Stage 5, goals 5, 9 and 12, per-repository resolution |
 | Release tags reconciled before branching | Closed | Stage 5a, policy rules 13 to 15, goal 6, ledger pre-branch section, matrix `D17` and `D18` |
+| Approved plan published as a feature request | Closed | Stage 5c, policy rules 29 to 32, goal 13, ledger Feature request column, matrix `D19` and `D20` |
+| Version bump command actually runs | Closed | Line 164 corrected to `make bump-version VERSION=<X.Y.Z>`, matching the Makefile guard at line 27 and its help text at line 10, mirrors corrected by `A7-M1` |
 | Candidate tag exists before every test, fresh per fix | Closed | Stages 8 and 10 |
 | Release artifact is the tested artifact | Closed | Bump on branch, candidate the bump, ancestry assertion, tree equality, hand-made tag, `-SkipBump` reuse |
 | Live browser testing is mandatory | Closed | `tester.md` block with real `wmux` call forms and per-candidate evidence |
@@ -1597,6 +1669,22 @@ Four prohibitions close the obvious ways this could go wrong: never merge a cand
 Where it is now stated: stage 5 is split into 5a reconciliation and 5b branch creation, policy rules 13 to 15 cover the gate and both prohibitions, goal 6 states it, the branch gate measurable outcome requires it, the ledger carries a `## Pre-branch reconciliation` section, and the matrix adds `D17` (the rule is present in the instruction text) and `D18` (the rule passes against real state).
 
 Measured on 2026-11-19 with `C18` executed: all sixteen release tags across `avrig-ai`, `avrig-api`, `avrig-lib` and `avrig-ui` (four each, `0.2.0` through `0.4.0`) are ancestors of `main`, the Agentic repository carries no SemVer tags, and `stranded_release_tags=0`. Every default branch is also in sync with its remote. So no reconciliation merge is required before this plan branches; the gate exists for the case where one is, and it now fails loudly instead of silently producing a stale base.
+
+### Pass 7, feature request gate and a defective command in the plan
+
+Two findings, one raised by the user and one surfaced by the `be` implementer.
+
+**A7-B1. The plan produced no feature request, so approved work existed only as a local file.** The user asked for approved plans to be published as feature requests on the repository. Nothing in any earlier revision produced one, so an approved plan was visible only in `plans/` on the machine that wrote it. Closed at stage 5c, which runs after approval and after the branch exists, so the 16 stages keep their numbers and the already-written `Architect.md` did not need renumbering. The issue is titled with the work item code, its body is generated from the plan rather than authored twice, an existing issue carrying the code is updated rather than duplicated, and stage 16 closes it with the release version so the request and the shipped artifact link in both directions. Policy rules 29 to 32 cover it, goal 13 states it, the ledger gained a Feature request column, and `D19` and `D20` test it.
+
+The failure mode that mattered here is environmental, not conceptual. `gh` is installed at `C:\Program Files\GitHub CLI\gh.exe` but has never been authenticated on this machine: `gh auth status` reports no host, `hosts.yml` does not exist, and no `GH_TOKEN`, `GITHUB_TOKEN` or `GH_ENTERPRISE_TOKEN` is set. A gate that fails hard there would have blocked every future plan on a credential. So `D20` reports `BLOCKED` rather than `FAIL`, the ledger records the exact recovery command `gh auth login`, and rule 32 states that a missing credential never stalls implementation, because the issue is a communication artifact rather than a correctness gate.
+
+**A7-M1. The plan carried a command that would fail if anyone ran it.** The release sequence at line 164 read `make bump-version 1.1.0`. The real target is `make bump-version VERSION=1.1.0`: the Makefile declares the guard `@if [ -z "$(VERSION)" ]; then ...` and its own help text at line 10 states the usage as `make bump-version VERSION=1.2.3`. The positional form would have hit the empty-variable guard and aborted. Found by the `be` implementer while writing `AGENTS.md`, corrected in the plan and reflected in both `AGENTS.md` files. This is the class of defect the matrix exists to catch, and it survived five audit passes because nobody executed it.
+
+**A7-M2. The plan's own rule count changed and every reference had to move with it.** Adding rules 29 to 32 took the policy from 28 to 32 rules, so the two "28 rule policy" references in the target file table and the `Architect.md` replacement fence were updated to 32. Verified by counting: `rules=32`, `first=1`, `last=32`, `non_sequential=0`. The stray `3.` that appeared in a naive count is the numbered item inside the `tester.md` fence, not a policy rule.
+
+### Pass 7a, downstream sync after the gate was added
+
+Adding stage 5c after `Architect.md` had already been written left that file stale at 28 rules and a two-part stage 5. Rather than leave the drift for `P9` to find, the correction was dispatched immediately and `P9` still verifies it. This is the concrete reason `P9` exists: a plan that changes after an instruction file is written will silently diverge from it, and the read-back is what catches that.
 
 ### Preserved audit evidence
 
