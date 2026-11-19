@@ -433,7 +433,7 @@ Because the definition being edited is untracked in the Agentic checkout, `.open
 
 | Repository | Default branch, and the step that decided it | Plan branch | Feature request |
 |---|---|---|---|
-| `avrig-ai` | `main`, by step 3: `origin/HEAD` resolves to `origin/main` and local `main` exists | `chore/AVRIG-00003-agent-desktop-uat-tooling` from `main` | Recorded in the ledger once published |
+| `avrig-ai` | `main`, by step 3: `origin/HEAD` resolves to `origin/main` and local `main` exists | `chore/AVRIG-00003-agent-desktop-uat-tooling` from `main` | [#4](https://github.com/wwidjaya/avrig-ai/issues/4), created before the branch and linked through `gh issue develop` |
 | `Agentic` (`wwidjaya/agentic`) | `master`, by step 1: the checkout tracks `origin/master` and it is the only long-lived local branch. `origin/HEAD` still advertises `main`, so the disagreement is recorded rather than resolved silently | `chore/AVRIG-00003-agent-desktop-uat-tooling` from `master` | Not opened. The Agentic repository is configuration, and the work item belongs to the `avrig-ai` ledger, so its issue lives there |
 
 ### Pre-branch reconciliation
@@ -451,3 +451,17 @@ Because the definition being edited is untracked in the Agentic checkout, `.open
 Every release tag is already an ancestor, so no reconciliation merge was performed and the plan branch is cut from a default branch that already contains all released content. Candidate tags `avrig/00001/rc.001` through `rc.005` were enumerated only to confirm they are not release tags and were not merged.
 
 The Agentic repository carries no SemVer tags, so its reconciliation table is empty and no merge is performed there.
+
+## Deviations Recorded During Implementation
+
+Each item below was found by running the real binary or by observing the real environment, not by reading documentation. None of them changes the plan's scope. All of them change what a future reader would otherwise believe.
+
+| ID | Planned assumption | What was measured | Resolution |
+|---|---|---|---|
+| D1 | The global install succeeds without elevation, because the prefix sits under `d:\nodejs` and `node` itself is usable | `EPERM` on the first non-elevated attempt. The prefix grants `BUILTIN\Users` and `Authenticated Users` only `(I)(OI)(CI)(RX)`, and write access belongs to Administrators and SYSTEM. Every pre-existing global CLI there is admin owned, so they were all installed elevated | Installed at High integrity with explicit user approval, same command, exit 0. The manifest records `installed_elevated: true`. Matrix check A1 is corrected from "installs without elevation" to "installs, and the elevation requirement is recorded" |
+| D2 | The manifest is committed on the plan branch | `plans/evidence/**` is gitignored by `.gitignore` line 50 | Staged with `git add -f`, which the ignore rule's own comment sanctions for an artifact a plan explicitly calls for. This is the first evidence file committed in this repository, so the practice is recorded rather than assumed |
+| D3 | The shared `avrig-ai` checkout can host the whole plan | A concurrent session moved that checkout to `main` mid-task | The plan branch moved to a dedicated worktree, `D:\Cloud\OneDrive\AI\Agentic\AVRIG-00003\avrig-ai`, matching the `AVRIG-00002` convention already in use. The shared checkout was left untouched, and the concurrent session's modified `plans/AVRIG-00002-2026-11-20-landing-console-unslop-redesign.md` was never staged |
+| D4 | `close-app "<App>.exe"` closes what the tester launched | It answers `APP_NOT_FOUND`, demanding the exact process identity, even while `list-windows --app "<App>.exe"` finds the window, because `--app` resolves against `list-apps` and a hosted application appears there as `ApplicationFrameHost.exe`. Reproduced against `CalculatorApp.exe` | The definition's `### Launch the tested artifact` was amended with the hosted application route: close through the window's own Close ref from a fresh snapshot, then confirm with `list-windows`. Amending an approved definition is a deviation, so it is recorded here and the manifest notes the single amendment |
+| D5 | Any harmless built-in application is a stable smoke target | A baseline Notepad process and a launched one both disappeared before any close command ran | The smoke moved to the documented fallback, and the behaviour is recorded rather than explained away. A target that exits on its own is a finding about the host, and the observe, act, verify loop reports it as such instead of retrying |
+
+Screenshot and `screenshot` by window are subject to the same hosted-application limit as `close-app`, so a hosted target is captured through its window ref or with the full surface rather than by process name.
