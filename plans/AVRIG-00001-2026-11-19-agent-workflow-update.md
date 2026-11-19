@@ -17,6 +17,7 @@ candidate_tags:
   - avrig/00001/rc.002 @ d23a7aa, build AVRIG-00001-build.002, FAIL 19/20 (D14, Agentic .gitignore)
   - avrig/00001/rc.003 @ 5ebede4, build AVRIG-00001-build.003, FAIL 19/20 (D14, __pycache__)
   - avrig/00001/rc.004 @ a908c7e, build AVRIG-00001-build.004, PASS 20/20
+  - avrig/00001/rc.005 @ 472dc04, build AVRIG-00001-build.005, PASS 20/20 (includes 0.5.0 bump)
 release_version:
 resolved_decisions: 6 (default branch per repo, instruction files local only, plans committed at approval, no code before approval, version blank until deployment, issue before branch)
 tags:
@@ -1890,6 +1891,20 @@ Two defects were found while running the bump, and both are recorded rather than
 2. **`scripts/bump-version.ps1` reports success without checking whether its lock sync worked.** Line 85 runs `cargo check --workspace` and line 90 prints `Successfully bumped version to 0.5.0` unconditionally, with no `$LASTEXITCODE` test between them. Measured: it printed that success line over a failing check. A future run could therefore announce a clean bump on a broken tree. Recorded as a latent defect and left for its own work item.
 
 A third friction point, which is a Makefile portability issue rather than a defect in this plan: the `bump-version` target guards with a POSIX test, `if [ -z "$(VERSION)" ]`, but `SHELL := sh.exe` is not on `PATH` by default here, so GNU Make falls back to `cmd.exe` and the guard fails with `-z was unexpected at this time`. The sanctioned target was re-run with Git's `usr\bin` on `PATH` so `sh.exe` resolved, rather than invoking the script directly, because bypassing the Makefile would have hidden the portability gap.
+
+### Pass 12, stage 9 QA of `rc.005` on the bumped tree
+
+Candidate `avrig/00001/rc.005` at `472dc04` returned **PASS, 20 of 20**, the second green candidate and the one carrying the `0.5.0` bump. This run exists because the bump itself must be candidate tested: a version change touches `Cargo.toml`, `apps/web/package.json` and `Cargo.lock`, and a green run on `rc.004` says nothing about the tree after those files moved.
+
+Measured, and the reason this run was worth its cost:
+
+- `D14` reported `agentic 38/38 new=0` and `avrig-ai 0/0 new=0`, with `new_paths_outside_edit_set=0`. The bump added no path outside the edit set, because the three version files are tracked and modified rather than new.
+- Tag tree `779caf4a` equals the `HEAD` tree at the tested commit, so the run was against the tagged content and not a worktree that had drifted from it.
+- `cargo check --workspace --exclude avrig-desktop` exits 0. The exclusion is the recorded pre-existing `avrig-desktop` scaffold defect, and `apps/desktop` is byte-identical to `a908c7e` with the same 22-byte `icon.ico`, so the bump caused none of it.
+- `D15` Playwright leg passed at HTTP 200 with the `Login: Rauthy` surface, 1 email and 1 password input, 0 failed requests, and both console errors reconciled by name as the anonymous OIDC session probe and a missing client logo. The wmux leg is BLOCKED on the unset `WMUX_SURFACE_ID`, which the matrix permits.
+- `D18` found 16 release tags across 4 repositories, all ancestors of their default branches, `stranded=0`.
+
+Stage 11 was re-checked before this candidate was accepted as the release candidate: `origin/main` is still an ancestor of the plan branch and carries no commit missing from it, so no resynchronization merge was needed and `rc.005` remains valid.
 
 ### Preserved audit evidence
 
