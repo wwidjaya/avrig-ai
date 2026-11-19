@@ -1,0 +1,41 @@
+{
+  "work_item": "AVRIG-00003",
+  "plan": "plans/AVRIG-00003-2026-11-20-agent-desktop-uat-tooling.md",
+  "generated_utc": "2026-11-19T23:39:12Z",
+  "generated_local": "2026-11-20 06:39:12 +07:00",
+  "purpose": "Proof of the tester definition edit. The target sits in the untracked .opencode/agents/ tree of the Agentic checkout, so no branch commit and no candidate tag can contain it.",
+  "repository": "avrig-ai",
+  "branch": "chore/AVRIG-00003-agent-desktop-uat-tooling",
+  "files": [
+    {
+      "File": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md",
+      "Status": "PRESENT",
+      "Bytes": 24386,
+      "Lines": 241,
+      "Sha256": "E8EE3EE738724120A2E8D284727DEECD1B6A3D91A0BA5B2C53E0170C0A64C8A7",
+      "Backup": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md.bak-20261120-062939",
+      "BackupStatus": "PRESENT",
+      "BackupBytes": 11496,
+      "BackupLines": 112,
+      "BackupSha256": "ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56",
+      "BackupGitIgnore": ".gitignore:35 *.bak-*"
+    }
+  ],
+  "agent_desktop": {
+    "cli_version": "1.3.1",
+    "envelope_schema_version": "2.6",
+    "install_command": "npm install -g agent-desktop@1.3.1",
+    "installed_elevated": true,
+    "dist_integrity": "sha512-5pBKkFkdB/VIAWRfqoA8lYp5/fenfxUHI15Pc4k8Nn2LmLxxo1PkAb0WLypknyOCczuIwuzFp/rZHGGawEV+hw==",
+    "dist_shasum": "7ec645dc27a3191ab6d0ab7fa23033ed1980a20a",
+    "shim_prefix": "d:\\nodejs\\.npm\\global",
+    "note": "The npm prefix grants Users and Authenticated Users only RX, so the pinned install ran from an elevated pwsh. Every pre-existing global CLI at the same prefix is owned by BUILTIN\\Administrators. The installed tree is byte identical to the published tarball, whose sha512 equals dist.integrity."
+  },
+  "definition_sections": {
+    "retitled_item": "Responsibilities item 3: UI Verification: Live Browser and Desktop Application UAT",
+    "browser_boundary_added": true,
+    "harness_choice_added": true,
+    "new_section": "## Desktop UAT Testing",
+    "new_section_subsections": 11
+  }
+}
