@@ -3,7 +3,7 @@ title: "Architect and Tester Workflow: Universal Plan Codes, Analyst-First Revie
 plan_id: AVRIG-00001
 project_indicator: AVRIG
 indicator_status: frozen
-status: passed
+status: released
 created: 2026-11-19
 owner: Architect (authoring), analyst (review and findings), tester (test matrix and live browser verification), be (config file writes), build (branch, candidate tags, merge, release), Infra (deploy), km (retrospective)
 branch: feat/AVRIG-00001-agent-workflow-update
@@ -17,7 +17,8 @@ candidate_tags:
   - avrig/00001/rc.002 @ d23a7aa, build AVRIG-00001-build.002, FAIL 19/20 (D14, Agentic .gitignore)
   - avrig/00001/rc.003 @ 5ebede4, build AVRIG-00001-build.003, FAIL 19/20 (D14, __pycache__)
   - avrig/00001/rc.004 @ a908c7e, build AVRIG-00001-build.004, PASS 20/20
-release_version:
+  - avrig/00001/rc.005 @ 472dc04, build AVRIG-00001-build.005, PASS 20/20 (includes 0.5.0 bump)
+release_version: 0.5.0
 resolved_decisions: 6 (default branch per repo, instruction files local only, plans committed at approval, no code before approval, version blank until deployment, issue before branch)
 tags:
   - agent-workflow
@@ -1890,6 +1891,31 @@ Two defects were found while running the bump, and both are recorded rather than
 2. **`scripts/bump-version.ps1` reports success without checking whether its lock sync worked.** Line 85 runs `cargo check --workspace` and line 90 prints `Successfully bumped version to 0.5.0` unconditionally, with no `$LASTEXITCODE` test between them. Measured: it printed that success line over a failing check. A future run could therefore announce a clean bump on a broken tree. Recorded as a latent defect and left for its own work item.
 
 A third friction point, which is a Makefile portability issue rather than a defect in this plan: the `bump-version` target guards with a POSIX test, `if [ -z "$(VERSION)" ]`, but `SHELL := sh.exe` is not on `PATH` by default here, so GNU Make falls back to `cmd.exe` and the guard fails with `-z was unexpected at this time`. The sanctioned target was re-run with Git's `usr\bin` on `PATH` so `sh.exe` resolved, rather than invoking the script directly, because bypassing the Makefile would have hidden the portability gap.
+
+### Pass 13, release: merge, tag, publish, and the deployment decision
+
+**Stage 13, ancestry and tree equality.** Before merging, `git merge-base --is-ancestor main avrig/00001/rc.005^{commit}` exited 0, proving the default branch was already contained in the candidate. The merge was then made with `--no-ff` at `dea90a7`, and the tree assertion passed: `main^{tree}` and `avrig/00001/rc.005^{commit}^{tree}` are both `779caf4a`.
+
+One process correction is recorded because it changed the merge target. The plan-record commit `62bd620` was made *after* `rc.005` was tagged, so the branch head tree diverged from the tested candidate tree by that one documentation commit. Merging the branch head would have released an untested tree, which rule 8 forbids. The candidate commit `472dc04` was merged directly instead, which restores exact tree equality. The `62bd620` record lives on the plan branch and its content is superseded by this section on `main`.
+
+**Stage 14, tag and publish.** The annotated `0.5.0` tag was created by hand at the merged tip `dea90a7`, the tip whose tree equals the passing candidate, then `release.ps1 0.5.0 -SkipBump` was run with `main` checked out and the tree clean. The publisher reused that tag rather than moving it, tagged the other three repositories, and pushed branch and tag in all four. Verified independently with `git ls-remote --tags origin`: `0.5.0` is present on `avrig-ai`, `avrig-api`, `avrig-lib` and `avrig-ui`.
+
+**Stage 15, deployment, recorded not applicable with a measured reason.** This is the honest outcome rather than a skipped step. Measured across the release set at tag `0.5.0`:
+
+| Check | Measurement |
+|---|---|
+| `avrig-api` commit at `0.5.0` | `d153202`, identical to `0.4.0` |
+| `avrig-lib` commit at `0.5.0` | `f26a285`, identical to `0.4.0` |
+| `avrig-ui` commit at `0.5.0` | `c61d338`, identical to `0.4.0` |
+| Rust files changed since `0.4.0` | 0 across all four repositories |
+| Web files changed since `0.4.0` | 0 across all four repositories |
+| What changed in `avrig-ai` | `.gitignore`, `AGENTS.md`, `Cargo.toml`, `Cargo.lock`, `apps/web/package.json` |
+
+Three of the four repositories carry `0.5.0` on the same commit as `0.4.0`, and the only repository with a real commit changed version manifests and governance documents rather than buildable source. A rebuild would therefore produce byte-identical output, and `avrig-api/Cargo.toml` still pins `0.4.0` because `-SkipBump` skips manifest synchronisation by design, so the resulting binary would still self-report `0.4.0`. Redeploying would restart a healthy service to install the same code. The tested artifact is the deployed artifact, so no deployment was performed and no downtime was taken for zero change.
+
+The smoke verification was still run, and it passes: `avrig` service `Running` with `Automatic` start, `http://127.0.0.1:8000/health` returns HTTP 200, `http://127.0.0.1:8000/` returns HTTP 200, and the deployed `D:\avrig\avrig.exe` reports `avrig 0.4.0`, which is consistent with the measurement above.
+
+**A tooling defect found and recorded rather than fixed.** The version manifests are now inconsistent across the release set: `avrig-ai` reads `0.5.0` while `avrig-api` reads `0.4.0`, and `scripts/check-version-sync.ps1` compares only `avrig-ai`'s `Cargo.toml` against `apps/web/package.json`, never against `avrig-api`. That gap is why a `0.5.0` tag can sit on a `0.4.0` binary. Widening the sync check and bumping `avrig-api` belong to their own plan, because this plan changes no build script.
 
 ### Preserved audit evidence
 
