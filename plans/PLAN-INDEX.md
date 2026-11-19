@@ -128,6 +128,7 @@ Empty. Populated only if the indicator ever changes after freezing.
 |---|---|---|---|---|---|---|---|---|---|
 | AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (approval), feat/AVRIG-00001-agent-workflow-update | released | **`avrig/00001/rc.005` @ `472dc04` PASS 20/20** (includes 0.5.0 bump); `rc.004` @ `a908c7e` PASS 20/20; `rc.003` @ `5ebede4` FAIL 19/20; `rc.002` @ `d23a7aa` FAIL 19/20; `rc.001` @ `d100017` FAIL 15/20 | `plans/evidence/AVRIG-00001/rc.005/` | [#3](https://github.com/wwidjaya/avrig-ai/issues/3), branch linked | **0.5.0** @ `dea90a7`, tagged in all four repositories |
 | AVRIG-00002 | 2026-11-20 | Landing and Console Unslop Redesign | avrig-ai, avrig-ui | main (approval), feat/AVRIG-00002-landing-console-unslop-redesign | approved | none yet | pending | not created | empty until deployment |
+| AVRIG-00003 | 2026-11-20 | Agent-Desktop as the Desktop UAT Harness for the Tester Agent | Agentic, avrig-ai | main (approval), chore/AVRIG-00003-agent-desktop-uat-tooling | approved | none yet | `plans/evidence/AVRIG-00003/` | pending | empty until deployment |
 
 ## Backfill
 
@@ -142,7 +143,7 @@ A coded plan also moves to `plans/done/` once it is released, and it keeps its c
 
 Archived coded plans: `plans/done/AVRIG-00001-2026-11-19-agent-workflow-update.md`.
 
-New work in this project starts at `AVRIG-00001`.
+New work in this project starts at `AVRIG-00004`. Allocated so far: `AVRIG-00001`, `AVRIG-00002`, `AVRIG-00003`.
 
 ## Deferred defects
 
@@ -155,3 +156,4 @@ Defects found while executing a plan but out of its scope. Each is recorded here
 | AVRIG-00001 | `scripts/check-version-sync.ps1` compares only `avrig-ai`'s `Cargo.toml` against `apps/web/package.json`, never against `avrig-api`, so the release set can hold a `0.5.0` tag on a `0.4.0` binary. | AVRIG-00001, Pass 13 |
 | AVRIG-00001 | The Agentic `.gitignore` rule `*.bak-*` requires a timestamp, so a bare `<file>.bak` backup is not ignored. `AGENTS.md.bak` (31 lines, modified 2026-11-12) sits untracked in the Agentic checkout. Not a regression, since it predates this plan and was inside the measured D14 baseline, but a `git add -A` would sweep it. | AVRIG-00001, stage 16 |
 | AVRIG-00001 | The `bump-version` Makefile target guards with a POSIX test, `if [ -z "$(VERSION)" ]`, but `SHELL := sh.exe` is not on `PATH` by default here, so GNU Make falls back to `cmd.exe` and the guard fails with `-z was unexpected at this time`. | AVRIG-00001, Pass 11 |
+| AVRIG-00003 | `D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\` is untracked in the Agentic repository: `git ls-files .opencode/agents` returns nothing and the directory shows as `??`. Every subagent definition, including the one this plan edits, therefore has no version history, so a definition change cannot be covered by a branch commit or a candidate tag and cannot be diffed after the fact. `AVRIG-00003` works around it with a hash manifest, which pins content but does not restore reviewability. Versioning the directory is a governance decision and needs its own plan. | AVRIG-00003, stage 4 |
