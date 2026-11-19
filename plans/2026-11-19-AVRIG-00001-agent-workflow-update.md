@@ -792,6 +792,32 @@ The authoring commit touched exactly two paths, `plans/PLAN-INDEX.md` and this p
 
 The Agentic plan branch is currently identical to `master` because `AGENTS.md` is not written until P7. Cutting it now satisfies the gate: P5 to P8 cannot start without it, and the branch must exist before `be` writes into it.
 
+### 5c, feature request publication
+
+`BLOCKED`, recorded with its reason and recovery command as rule 32 requires. `gh` is installed at `C:\Program Files\GitHub CLI\gh.exe`, but this machine has never authenticated it: `gh auth status` exits 1 reporting no host, `%APPDATA%\GitHub CLI\hosts.yml` does not exist, and `GH_TOKEN`, `GITHUB_TOKEN` and `GH_ENTERPRISE_TOKEN` are all unset. Recovery: run `gh auth login`, then execute stage 5c to create the issue on `https://github.com/wwidjaya/avrig-ai`.
+
+This does not block implementation, by design. The issue is a communication artifact; the plan remains the source of truth, so nothing about the work is lost while the credential is missing.
+
+### Stages 6 to 8, implementation and candidate tag
+
+**Stage 6, implementation.** Executed by `be` in three concurrent streams writing disjoint file sets. Backups were taken first, and no stream ran a git write command.
+
+| Stream | Files | Lines before and after |
+|---|---|---|
+| P5 | `.opencode/agents/Architect.md` | 89 to 189 |
+| P6 and P8 | `.opencode/agents/tester.md` | 39 to 112 |
+| P6 and P8 | `.opencode/agents/plan.md` | 68 to 72 |
+| P6 and P8 | `.opencode/agents/Infra.md` | 74 to 78 |
+| P6 and P8 | `.opencode/agents/build.md` | 49 to 75 |
+| P6 and P8 | `.opencode/agents/analyst.md` | 53 to 66 |
+| P7 | `AGENTS.md` (Agentic) | 104 to 202 |
+| P7 | `AGENTS.md` (avrig-ai) | 47 to 152 |
+| P7 | `avrig-ai/.gitignore` | 38 to 46 |
+
+**Stage 7, build gate. Not applicable, with reason.** This plan changes no buildable source. `git diff --name-only main..HEAD` returns `.gitignore`, `AGENTS.md`, the two plan files, and `plans/evidence/.gitkeep`: no Rust, TypeScript, SQL, `Cargo.toml` or lockfile is touched. `cargo check --workspace` and `pnpm build` would compile code this plan never modifies, so running them would produce a pass that says nothing about this change. The build id `AVRIG-00001-build.001` is therefore recorded against the candidate tag without a compile step.
+
+**Instruction manifest.** Because six of the nine files are untracked and cannot be covered by a candidate tag, their state is pinned by `plans/evidence/AVRIG-00001/instruction-manifest.json`, which records the SHA-256 of each file and of its `.bak-` sibling. Every hash differs from its backup, which proves each file was actually modified rather than silently left alone. This is the substitute for a tag on those files, and it is why decision 2 needed an explicit verification path.
+
 ## Resolved Implementation Decisions
 
 1. **The Agentic `AGENTS.md` working copy carries uncommitted drift that predates this plan, and it is committed as part of P7.** `git diff AGENTS.md` showed 54 insertions and 1 deletion: a new `## Environment & Directories` section, a `## Codebase Exploration & Navigation (graphify > grep)` section, a rewritten `## Subagent Delegation & Operational Workflows` section, and a `Local project AGENTS.md takes precedence` sentence. None of it is AVRIG-00001 content, and it still contains the stale sentence this plan exists to fix: "The Plan agent owns plan creation and lifecycle updates. Follow its instructions in `$env:OPENCODE_CONFIG_DIR/.opencode/agents/plan.md`".
