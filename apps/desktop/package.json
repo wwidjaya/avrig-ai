@@ -12,13 +12,15 @@
   },
   "dependencies": {
     "@avrig/api-client": "workspace:*",
+    "@avrig/tokens": "link:../../../avrig-ui/packages/tokens",
     "@avrig/types": "workspace:*",
     "@avrig/ui": "workspace:*",
     "@tauri-apps/api": "^2.0.0",
     "@tauri-apps/plugin-shell": "^2.0.0",
     "lucide-react": "^1.16.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.9",

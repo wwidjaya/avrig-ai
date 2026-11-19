@@ -10,9 +10,6 @@ import {
   LogOut,
   Radio,
   MessageSquareText,
-  Languages,
-  Moon,
-  Sun
 } from "lucide-react";
 import { useAuth } from "react-oidc-context";
 import {
@@ -26,9 +23,9 @@ import {
   DialogTitle,
 } from "@avrig/ui";
 import { useApi } from "../shared/api/ApiContext";
-import { useTheme } from "../shared/theme/ThemeContext";
-import { useI18n } from "../shared/i18n/I18nContext";
 import { SystemInfoDialog } from "../shared/components/SystemInfoDialog";
+import { ThemeSelector } from "../shared/components/ThemeSelector";
+import { LanguageSelector } from "../shared/components/LanguageSelector";
 
 export type ActiveDomain = "office" | "deliberations" | "sdlc" | "knowledge" | "chat";
 
@@ -51,16 +48,6 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
 }) => {
   const auth = useAuth();
   const { wsStatus } = useApi();
-  const { resolvedTheme, setTheme } = useTheme();
-  const { locale, setLocale } = useI18n();
-
-  const toggleLocale = () => {
-    setLocale(locale === "en" ? "id" : "en");
-  };
-
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  };
 
   const [signOutConfirmOpen, setSignOutConfirmOpen] = useState(false);
   const [systemInfoOpen, setSystemInfoOpen] = useState(false);
@@ -121,13 +108,23 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
+      {/* Accessible Skip Link */}
+      <a
+        href="#main-viewport"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg focus:outline-hidden"
+      >
+        Skip to main content
+      </a>
+
       {/* Sidebar Navigation */}
       <aside className="flex w-64 flex-col border-r border-border bg-sidebar-background text-sidebar-foreground">
         {/* Org Brand Header */}
-        <div
+        <button
+          type="button"
           onClick={onReturnHome}
-          className="flex h-16 items-center gap-3 border-b border-sidebar-border px-4 cursor-pointer hover:bg-sidebar-accent/50 transition-colors"
+          className="flex h-16 w-full items-center gap-3 border-b border-sidebar-border px-4 text-left cursor-pointer hover:bg-sidebar-accent/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden transition-colors"
           title="Return to Landing Page"
+          aria-label="avrig-ai Command Center, return to landing page"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
             <Cpu className="h-5 w-5" />
@@ -136,10 +133,10 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
             <h1 className="text-sm font-bold tracking-tight">avrig-ai</h1>
             <p className="text-xs text-muted-foreground">Autonomous Command</p>
           </div>
-        </div>
+        </button>
 
         {/* Navigation Section */}
-        <nav className="flex-1 space-y-1 px-3 py-2">
+        <nav className="flex-1 space-y-1 px-3 py-2" aria-label="Product Domains">
           <div className="px-2 pb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
             Product Domains
           </div>
@@ -149,8 +146,10 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
             return (
               <button
                 key={item.id}
+                type="button"
                 onClick={() => onSelectDomain(item.id)}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                aria-current={isActive ? "page" : undefined}
+                className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden cursor-pointer ${
                   isActive
                     ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
@@ -260,7 +259,7 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
       <SystemInfoDialog open={systemInfoOpen} onOpenChange={setSystemInfoOpen} />
 
       {/* Main Command Center Viewport */}
-      <main className="flex flex-1 flex-col overflow-hidden bg-background">
+      <main id="main-viewport" tabIndex={-1} className="flex flex-1 flex-col overflow-hidden bg-background focus:outline-hidden">
         {/* Top Operational Status Bar */}
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-card px-6">
           <div className="flex items-center gap-3">
@@ -282,34 +281,11 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
 
             <div className="h-4 w-px bg-border/60" />
 
-            {/* Language Switcher */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLocale}
-              className="gap-1.5 font-mono text-xs font-semibold cursor-pointer select-none h-8 px-2"
-              title={locale === "en" ? "Beralih ke Bahasa Indonesia (ID)" : "Switch to English (EN)"}
-              aria-label="Toggle language"
-            >
-              <Languages className="size-3.5 text-muted-foreground" />
-              <span className="uppercase font-bold tracking-wider">{locale}</span>
-            </Button>
+            {/* Language Selector */}
+            <LanguageSelector />
 
-            {/* Screen Mode Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="cursor-pointer size-8"
-              title={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              aria-label="Toggle theme mode"
-            >
-              {resolvedTheme === "dark" ? (
-                <Moon className="size-4 text-primary transition-transform duration-200 hover:rotate-12" />
-              ) : (
-                <Sun className="size-4 text-primary transition-transform duration-200 hover:rotate-45" />
-              )}
-            </Button>
+            {/* 3-Way Theme Selector */}
+            <ThemeSelector />
           </div>
         </header>
 

@@ -117,16 +117,16 @@ export class ApiClient {
         const params = new URLSearchParams({ q: query, limit: String(limit) });
         if (threshold !== undefined)
             params.set("threshold", String(threshold));
-        return this.get(`/api/v1/documents/search?${params.toString()}`);
+        return this.get(`/api/v1/knowledge/search?${params.toString()}`);
     }
     // SSE Event Streaming Listener
     async searchDocumentsStream(query, callbacks, options) {
         let url;
         if (!this.baseUrl || this.baseUrl === "/") {
-            url = "/api/v1/documents/search/stream";
+            url = "/api/v1/knowledge/search";
         }
         else {
-            url = `${this.baseUrl.replace(/\/$/, "")}/api/v1/documents/search/stream`;
+            url = `${this.baseUrl.replace(/\/$/, "")}/api/v1/knowledge/search`;
         }
         const headers = new Headers();
         headers.set("Content-Type", "application/json");
@@ -137,7 +137,8 @@ export class ApiClient {
         }
         const payload = {
             query,
-            limit: options?.limit ?? 5
+            limit: options?.limit ?? 5,
+            stream: true
         };
         if (options?.threshold !== undefined) {
             payload.threshold = options.threshold;

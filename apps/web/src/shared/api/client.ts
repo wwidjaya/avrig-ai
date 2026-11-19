@@ -110,7 +110,7 @@ export class ApiClient {
   public searchDocuments(query: string, limit = 5, threshold?: number): Promise<SearchDocumentsResponse> {
     const params = new URLSearchParams({ q: query, limit: String(limit) });
     if (threshold !== undefined) params.set("threshold", String(threshold));
-    return this.get<SearchDocumentsResponse>(`/api/v1/documents/search?${params.toString()}`);
+    return this.get<SearchDocumentsResponse>(`/api/v1/knowledge/search?${params.toString()}`);
   }
 
   public async searchDocumentsStream(
@@ -119,7 +119,7 @@ export class ApiClient {
     options?: { limit?: number; threshold?: number; signal?: AbortSignal }
   ): Promise<void> {
     const base = this.config.apiBaseUrl ? this.config.apiBaseUrl.replace(/\/$/, "") : "";
-    const url = `${base}/api/v1/documents/search/stream`;
+    const url = `${base}/api/v1/knowledge/search`;
     const headers = new Headers();
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "text/event-stream");
@@ -129,9 +129,10 @@ export class ApiClient {
       headers.set("Authorization", `Bearer ${token}`);
     }
 
-    const payload: { query: string; limit?: number; threshold?: number } = {
+    const payload: { query: string; limit?: number; threshold?: number; stream?: boolean } = {
       query,
-      limit: options?.limit ?? 5
+      limit: options?.limit ?? 5,
+      stream: true
     };
     if (options?.threshold !== undefined) {
       payload.threshold = options.threshold;

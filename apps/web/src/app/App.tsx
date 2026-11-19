@@ -26,6 +26,7 @@ import { KnowledgeView } from "../modules/knowledge/KnowledgeView";
 import { KnowledgeChat } from "../modules/knowledge/KnowledgeChat";
 import { LandingPage } from "../modules/landing/LandingPage";
 import { LoggedOutView } from "../modules/auth/LoggedOutView";
+import { ErrorBoundary } from "../shared/components/ErrorBoundary";
 
 const DOMAIN_PATHS: Record<string, ActiveDomain> = {
   "/console": "office",
@@ -252,14 +253,32 @@ export const App: React.FC = () => {
           navigateToPath("/logged-out", "logged-out");
         }}
       >
-        {activeDomain === "office" && <OfficeView />}
-        {activeDomain === "deliberations" && <DeliberationsView />}
-        {activeDomain === "sdlc" && <SdlcBoardView />}
-        {activeDomain === "knowledge" && <KnowledgeView />}
+        {activeDomain === "office" && (
+          <ErrorBoundary fallbackTitle="Office OS View Error">
+            <OfficeView />
+          </ErrorBoundary>
+        )}
+        {activeDomain === "deliberations" && (
+          <ErrorBoundary fallbackTitle="Deliberations View Error">
+            <DeliberationsView />
+          </ErrorBoundary>
+        )}
+        {activeDomain === "sdlc" && (
+          <ErrorBoundary fallbackTitle="SDLC Pipeline View Error">
+            <SdlcBoardView />
+          </ErrorBoundary>
+        )}
+        {activeDomain === "knowledge" && (
+          <ErrorBoundary fallbackTitle="Knowledge & Traceability View Error">
+            <KnowledgeView />
+          </ErrorBoundary>
+        )}
         {activeDomain === "chat" && (
-          <div className="flex flex-1 overflow-hidden p-6">
-            <KnowledgeChat />
-          </div>
+          <ErrorBoundary fallbackTitle="Knowledge Chat View Error">
+            <div className="flex flex-1 overflow-hidden p-6">
+              <KnowledgeChat />
+            </div>
+          </ErrorBoundary>
         )}
       </CommandCenterLayout>
 

@@ -31,3 +31,8 @@ skills/**/*.env
 skills/**/.env
 **/confluence.env
 
+# Lab scratch space: header-capture experiments write raw request material.
+# Default-deny, so a new artifact extension cannot leak by accident.
+# Reversible: delete this block once lab/ is curated for commit.
+lab/
+

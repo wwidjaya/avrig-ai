@@ -263,7 +263,7 @@ export const KnowledgeChat: React.FC = () => {
               </Badge>
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
-              Conversational hybrid query directly connected to /v1/documents/search/stream
+              Conversational hybrid query directly connected to /api/v1/knowledge/search
             </CardDescription>
           </div>
         </div>
@@ -412,8 +412,17 @@ export const KnowledgeChat: React.FC = () => {
                                 className="rounded-lg border border-border bg-card/70 p-3 text-xs transition-colors hover:border-primary/40"
                               >
                                 <div
-                                  className="flex items-center justify-between cursor-pointer gap-2"
+                                  role="button"
+                                  tabIndex={0}
+                                  aria-expanded={isExpanded}
+                                  className="flex items-center justify-between cursor-pointer gap-2 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded"
                                   onClick={() => toggleCitation(hit.id)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                      e.preventDefault();
+                                      toggleCitation(hit.id);
+                                    }
+                                  }}
                                 >
                                   <div className="flex items-center gap-2 truncate">
                                     <Badge variant="secondary" className="font-mono text-[10px] h-4 px-1.5">
@@ -499,6 +508,7 @@ export const KnowledgeChat: React.FC = () => {
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             disabled={isLoading}
+            aria-label="Query architectural documents, schemas, or decisions"
             placeholder="Query architectural documents, schemas, or decisions..."
             className="flex-1 rounded-md border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
           />

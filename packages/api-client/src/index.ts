@@ -157,7 +157,7 @@ export class ApiClient {
   public searchDocuments(query: string, limit = 5, threshold?: number): Promise<SearchDocumentsResponse> {
     const params = new URLSearchParams({ q: query, limit: String(limit) });
     if (threshold !== undefined) params.set("threshold", String(threshold));
-    return this.get<SearchDocumentsResponse>(`/api/v1/documents/search?${params.toString()}`);
+    return this.get<SearchDocumentsResponse>(`/api/v1/knowledge/search?${params.toString()}`);
   }
 
   // SSE Event Streaming Listener
@@ -168,9 +168,9 @@ export class ApiClient {
   ): Promise<void> {
     let url: string;
     if (!this.baseUrl || this.baseUrl === "/") {
-      url = "/api/v1/documents/search/stream";
+      url = "/api/v1/knowledge/search";
     } else {
-      url = `${this.baseUrl.replace(/\/$/, "")}/api/v1/documents/search/stream`;
+      url = `${this.baseUrl.replace(/\/$/, "")}/api/v1/knowledge/search`;
     }
 
     const headers = new Headers();
@@ -182,9 +182,10 @@ export class ApiClient {
       headers.set("Authorization", `Bearer ${token}`);
     }
 
-    const payload: { query: string; limit?: number; threshold?: number } = {
+    const payload: { query: string; limit?: number; threshold?: number; stream?: boolean } = {
       query,
-      limit: options?.limit ?? 5
+      limit: options?.limit ?? 5,
+      stream: true
     };
     if (options?.threshold !== undefined) {
       payload.threshold = options.threshold;

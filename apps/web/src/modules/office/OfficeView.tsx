@@ -156,8 +156,17 @@ export const OfficeView: React.FC = () => {
           {mockEmployees.map((emp) => (
             <Card
               key={emp.id}
+              role="button"
+              tabIndex={0}
               onClick={() => setSelectedEmployee(emp)}
-              className="cursor-pointer transition-all hover:border-primary/50 hover:shadow-md"
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelectedEmployee(emp);
+                }
+              }}
+              aria-label={`View details for ${emp.name}, ${emp.role}`}
+              className="cursor-pointer transition-all hover:border-primary/50 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden"
             >
               <CardHeader className="p-4 pb-3">
                 <div className="flex items-start justify-between gap-2">

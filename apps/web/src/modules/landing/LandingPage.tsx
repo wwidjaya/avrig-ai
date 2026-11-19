@@ -21,9 +21,6 @@ import {
   Users,
   Lock,
   ArrowRight,
-  Sun,
-  Moon,
-  Languages,
   Activity,
   Cpu,
   Workflow,
@@ -34,8 +31,9 @@ import {
   Radio,
   FileCheck2,
 } from "lucide-react";
-import { useTheme } from "../../shared/theme/ThemeContext";
 import { useI18n } from "../../shared/i18n/I18nContext";
+import { ThemeSelector } from "../../shared/components/ThemeSelector";
+import { LanguageSelector } from "../../shared/components/LanguageSelector";
 import { LoginModal } from "./LoginModal";
 
 interface LandingPageProps {
@@ -45,8 +43,7 @@ interface LandingPageProps {
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }) => {
   const auth = useAuth();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
-  const { locale, setLocale, t } = useI18n();
+  const { t } = useI18n();
 
   // Active simulated stage in the hero interactive rig
   const [activeStage, setActiveStage] = useState<"RE" | "SA" | "DV" | "TE">("RE");
@@ -86,14 +83,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }
     }
   };
 
-  const toggleLocale = () => {
-    setLocale(locale === "en" ? "id" : "en");
-  };
-
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  };
-
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -103,6 +92,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/20 selection:text-primary transition-colors duration-300">
+      {/* Accessible Skip Link */}
+      <a
+        href="#main-landing"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg focus:outline-hidden"
+      >
+        Skip to main content
+      </a>
+
       {/* 1. Industrial Hairline Navigation Bar */}
       <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/90 backdrop-blur-md">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -126,62 +123,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-7 text-xs font-mono font-medium text-muted-foreground">
+          <nav className="hidden md:flex items-center gap-7 text-xs font-mono font-medium text-muted-foreground" aria-label="Landing Navigation">
             <button
+              type="button"
               onClick={() => scrollToSection("sdlc-cockpit")}
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
             >
               <span className="text-primary font-bold mr-1">01.</span>{t.nav.sdlc}
             </button>
             <button
+              type="button"
               onClick={() => scrollToSection("architecture")}
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
             >
               <span className="text-primary font-bold mr-1">02.</span>{t.nav.architecture}
             </button>
             <button
+              type="button"
               onClick={() => scrollToSection("workflow")}
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
             >
               <span className="text-primary font-bold mr-1">03.</span>{t.nav.office}
             </button>
             <button
+              type="button"
               onClick={() => scrollToSection("deliberations")}
-              className="hover:text-foreground transition-colors cursor-pointer"
+              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
             >
               <span className="text-primary font-bold mr-1">04.</span>{t.nav.deliberations}
             </button>
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLocale}
-              className="gap-1.5 font-mono text-xs font-semibold cursor-pointer select-none"
-              title={locale === "en" ? "Beralih ke Bahasa Indonesia (ID)" : "Switch to English (EN)"}
-              aria-label="Toggle language"
-            >
-              <Languages className="size-4 text-muted-foreground" />
-              <span className="uppercase font-bold tracking-wider">{locale}</span>
-            </Button>
+            {/* Language Selector */}
+            <LanguageSelector />
 
-            {/* Theme Mode Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="cursor-pointer"
-              title={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              aria-label="Toggle theme mode"
-            >
-              {resolvedTheme === "dark" ? (
-                <Moon className="size-4 text-primary transition-transform duration-200 hover:rotate-12" />
-              ) : (
-                <Sun className="size-4 text-primary transition-transform duration-200 hover:rotate-45" />
-              )}
-            </Button>
+            {/* 3-Way Theme Selector */}
+            <ThemeSelector />
 
             {/* Console CTA */}
             <Button
@@ -197,7 +175,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }
       </header>
 
       {/* 2. Asymmetric Hero Composition ("The Sovereign Rig") */}
-      <section className="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-border/80">
+      <section id="main-landing" tabIndex={-1} className="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-border/80 focus:outline-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left 7 Columns: Rig Manifest & Command Directives */}

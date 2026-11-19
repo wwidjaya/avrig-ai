@@ -1,5 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 @import "@avrig/tokens/theme.css";
+
+@source "../../../../packages/ui/src";
 
 @layer base {
   * {
