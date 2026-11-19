@@ -17,7 +17,7 @@ Running-number ledger and indicator declaration for every plan in this project.
 
 ```yaml
 project_indicator: AVRIG
-dynamic_status: frozen
+indicator_status: frozen
 ```
 
 - Shape: `^[A-Z][A-Z0-9]{1,9}$`. Two to ten characters, starting with a letter, with no hyphens or spaces.
@@ -126,7 +126,7 @@ Empty. Populated only if the indicator ever changes after freezing.
 
 | Plan | Created | Title | Repos | Claiming branch | Status | Passing candidate tag | Evidence path | Feature request | Release version |
 |---|---|---|---|---|---|---|---|---|---|
-| AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (approval), feat/AVRIG-00001-agent-workflow-update | testing | `avrig/00001/rc.003` @ `5ebede4` FAIL 19/20 (D14, `__pycache__`); `rc.002` @ `d23a7aa` FAIL 19/20 (D14); `rc.001` @ `d100017` FAIL 15/20 | `plans/evidence/AVRIG-00001/rc.003/` | [#3](https://github.com/wwidjaya/avrig-ai/issues/3), branch linked | blank until deployment |
+| AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (approval), feat/AVRIG-00001-agent-workflow-update | passed | **`avrig/00001/rc.004` @ `a908c7e` PASS 20/20**; `rc.003` @ `5ebede4` FAIL 19/20; `rc.002` @ `d23a7aa` FAIL 19/20; `rc.001` @ `d100017` FAIL 15/20 | `plans/evidence/AVRIG-00001/rc.004/` | [#3](https://github.com/wwidjaya/avrig-ai/issues/3), branch linked | blank until deployment |
 
 ## Backfill
 
