@@ -36,13 +36,17 @@ function AlertDialogDescription({ className, ...props }) {
 function AlertDialogMedia({ className, ...props }) {
     return (_jsx("div", { "data-slot": "alert-dialog-media", className: cn("mb-2 inline-flex size-16 items-center justify-center rounded-md bg-muted sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-8", className), ...props }));
 }
-function AlertDialogAction({ className, variant = "default", size = "default", ...props }) {
+function AlertDialogAction({ className, variant = "default", size = "default", children, ...props }) {
     // The shared Button has no asChild support, so the slot direction is inverted:
     // Radix Action renders asChild into Button instead of Button into Action.
-    return (_jsx(AlertDialogPrimitive.Action, { asChild: true, ...props, children: _jsx(Button, { "data-slot": "alert-dialog-action", variant: variant, size: size, className: className }) }));
+    // Because the Button is the slot target, the caller's children must land on the
+    // Button itself. Children written as JSX here would override the ones arriving
+    // through prop spreading, which is what silently dropped the button labels, so
+    // `children` is destructured out of `props` and passed to the Button explicitly.
+    return (_jsx(AlertDialogPrimitive.Action, { asChild: true, ...props, children: _jsx(Button, { "data-slot": "alert-dialog-action", variant: variant, size: size, className: className, children: children }) }));
 }
-function AlertDialogCancel({ className, variant = "outline", size = "default", ...props }) {
-    return (_jsx(AlertDialogPrimitive.Cancel, { asChild: true, ...props, children: _jsx(Button, { "data-slot": "alert-dialog-cancel", variant: variant, size: size, className: className }) }));
+function AlertDialogCancel({ className, variant = "outline", size = "default", children, ...props }) {
+    return (_jsx(AlertDialogPrimitive.Cancel, { asChild: true, ...props, children: _jsx(Button, { "data-slot": "alert-dialog-cancel", variant: variant, size: size, className: className, children: children }) }));
 }
 export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger };
 //# sourceMappingURL=AlertDialog.js.map

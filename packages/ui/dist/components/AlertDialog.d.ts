@@ -13,7 +13,7 @@ declare function AlertDialogFooter({ className, ...props }: React.ComponentProps
 declare function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Title>): React.JSX.Element;
 declare function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Description>): React.JSX.Element;
 declare function AlertDialogMedia({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
-declare function AlertDialogAction({ className, variant, size, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action> & Pick<React.ComponentProps<typeof Button>, "variant" | "size">): React.JSX.Element;
-declare function AlertDialogCancel({ className, variant, size, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel> & Pick<React.ComponentProps<typeof Button>, "variant" | "size">): React.JSX.Element;
+declare function AlertDialogAction({ className, variant, size, children, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action> & Pick<React.ComponentProps<typeof Button>, "variant" | "size">): React.JSX.Element;
+declare function AlertDialogCancel({ className, variant, size, children, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel> & Pick<React.ComponentProps<typeof Button>, "variant" | "size">): React.JSX.Element;
 export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger };
 //# sourceMappingURL=AlertDialog.d.ts.map

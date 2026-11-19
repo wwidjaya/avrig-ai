@@ -133,14 +133,21 @@ function AlertDialogAction({
   className,
   variant = "default",
   size = "default",
+  children,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action> &
   Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
   // The shared Button has no asChild support, so the slot direction is inverted:
   // Radix Action renders asChild into Button instead of Button into Action.
+  // Because the Button is the slot target, the caller's children must land on the
+  // Button itself. Children written as JSX here would override the ones arriving
+  // through prop spreading, which is what silently dropped the button labels, so
+  // `children` is destructured out of `props` and passed to the Button explicitly.
   return (
     <AlertDialogPrimitive.Action asChild {...props}>
-      <Button data-slot="alert-dialog-action" variant={variant} size={size} className={className} />
+      <Button data-slot="alert-dialog-action" variant={variant} size={size} className={className}>
+        {children}
+      </Button>
     </AlertDialogPrimitive.Action>
   );
 }
@@ -149,12 +156,15 @@ function AlertDialogCancel({
   className,
   variant = "outline",
   size = "default",
+  children,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel> &
   Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
   return (
     <AlertDialogPrimitive.Cancel asChild {...props}>
-      <Button data-slot="alert-dialog-cancel" variant={variant} size={size} className={className} />
+      <Button data-slot="alert-dialog-cancel" variant={variant} size={size} className={className}>
+        {children}
+      </Button>
     </AlertDialogPrimitive.Cancel>
   );
 }
