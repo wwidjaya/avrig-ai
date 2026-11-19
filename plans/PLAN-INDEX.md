@@ -135,6 +135,10 @@ Plans authored before this ledger existed have no code and keep their legacy fil
 - `2026-11-18-release-0.3.0-consolidated.md`
 - `2026-11-19-fix-0.3.0-plan-audit-findings.md`
 - `2026-11-19-gateway-opencode-header-passthrough.md`
-- everything under `plans/done/`
+- every uncoded file under `plans/done/`
+
+A coded plan also moves to `plans/done/` once it is released, and it keeps its code and its ledger row there permanently. So `plans/done/` holds two kinds of file: legacy plans from before this ledger, which are uncoded and exempt from the filename rule, and released coded plans, which keep the code-first filename they were approved under. The bullet above refers only to the first kind.
+
+Archived coded plans: `plans/done/AVRIG-00001-2026-11-19-agent-workflow-update.md`.
 
 New work in this project starts at `AVRIG-00001`.
