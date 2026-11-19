@@ -13,7 +13,9 @@ repos:
 default_branches_resolved: true
 instruction_files_tracked: false
 candidate_tags:
-  - avrig/00001/rc.001 @ d100017, build AVRIG-00001-build.001
+  - avrig/00001/rc.001 @ d100017, build AVRIG-00001-build.001, FAIL 15/20
+  - avrig/00001/rc.002 @ d23a7aa, build AVRIG-00001-build.002, FAIL 19/20 (D14)
+  - avrig/00001/rc.003 pending
 release_version:
 resolved_decisions: 6 (default branch per repo, instruction files local only, plans committed at approval, no code before approval, version blank until deployment, issue before branch)
 tags:
@@ -735,6 +737,7 @@ The repository column matters, because the target files live in two repositories
 | `avrig-ai/plans/AVRIG-00001-2026-11-19-agent-workflow-update.md` | `avrig-ai` | approval commit on `main` | Architect | This plan, renamed to code-first at approval under decision 4 |
 | `avrig-ai/plans/evidence/` | `avrig-ai` | create folder, gitignore entry | be | Retention policy plus the SHA-256 instruction manifest for the local-only files |
 | `avrig-ai/.gitignore` | `avrig-ai`, tracked | branch `feat/AVRIG-00001-agent-workflow-update` | be | Two default-deny rules: evidence contents so `git add -A` cannot sweep screenshots into releases, and `*.bak-*` so timestamped rollback copies cannot be swept in either |
+| `.gitignore` | Agentic, tracked, default `master` | branch `feat/AVRIG-00001-agent-workflow-update` | be | The same `*.bak-*` default-deny rule the `avrig-ai` row mandates, because the Agentic checkout generates the same timestamped rollback copies and had no rule to hide them. Added after `rc.002` measured two `AGENTS.md.bak-*` copies as the only paths outside the edit set |
 
 The six `local only` rows are untracked by decision 2. They are edited in place on the working checkout, backed up as `<file>.bak-<timestamp>` first, and verified by the SHA-256 manifest rather than by a candidate tag. Only `AGENTS.md`, `avrig-ai/AGENTS.md`, the plans tree, and `.gitignore` are covered by the branch and the tag.
 
@@ -896,7 +899,9 @@ Non-blocking. Each has a recommended default, and execution proceeds on the reco
 
 1. **Indicator confirmation.** Closed: the user confirmed `AVRIG`, so the ledger and this plan now carry `indicator_status: frozen`. The rule and the artifact agree.
 2. **Indicator derivation policy.** Deriving from the folder name produces `AVRIGAIGAT` for the worktree, which truncates a word, and `API` or `WEB` for generic folders. Should the Architect always require the user to supply the indicator, with derivation offered only as a hint, and never truncate inside a word? Recommended: yes on both.
-3. **Test evidence retention.** Commit `plans/evidence/` (which `git add -A` sweeps into releases), keep it local with a manifest checksum recorded in the ledger, or store it outside both repositories? Recommended: local plus checksum, with a `.gitignore` entry. Resolved: the evidence contents are default-denied by `.gitignore` while the folder itself is kept, so the evidence path always resolves and a release cannot sweep screenshots in. The same reasoning was later applied to `<file>.bak-<timestamp>` rollback copies, which are also generated rather than authored and are now default-denied by `*.bak-*`, because a release running `git add -A` would otherwise commit nine of them.
+3. **Test evidence retention.** Commit `plans/evidence/` (which `git add -A` sweeps into releases), keep it local with a manifest checksum recorded in the ledger, or store it outside both repositories? Recommended: local plus checksum, with a `.gitignore` entry. Resolved: the evidence contents are default-denied by `.gitignore` while the folder itself is kept, so the evidence path always resolves and a release cannot sweep screenshots in. The same reasoning was later applied to `<file>.bak-<timestamp>` rollback copies, which are also generated rather than authored and are now default-denied by `*.bak-*` in `avrig-ai`, because a release running `git add -A` would otherwise commit nine of them.
+
+   Correction, measured at `rc.002`. Two distinct reasons were being conflated, and the distinction decides which repositories need the rule. In `avrig-ai` the rule is load bearing for release safety: `release.ps1` pins its release set to `avrig-ai`, `avrig-api`, `avrig-lib` and `avrig-ui` (line 30, `$RepoOrder`), and its bump step runs `git add -A` in those repositories, so an unignored backup there really could reach a release commit. The Agentic configuration repository is **not** in that release set, so the `git add -A` sweep never runs against it and the rule there is repository hygiene rather than release safety. It is still required, because the same rollback copies accumulate in the Agentic checkout and a future release or a manual `git add -A` would otherwise pick them up. File-table row 738 named only `avrig-ai/.gitignore`, so `be` correctly implemented an incomplete table and the Agentic copies were never denied. `rc.002` measured exactly that: two `AGENTS.md.bak-*` copies at the Agentic root were the only paths outside the edit set, while `avrig-ai/AGENTS.md.bak-*` stayed invisible because its rule already existed. The file table now carries a `.gitignore` row for each repository.
 4. **Release set scope.** The retained script tags all four repositories regardless of what a plan touched. Accept that the release set is always all four, or lift the non-goal and add a repository filter to `release.ps1`? Recommended: accept all four, since the script tags HEAD of repositories with no pending change, which is harmless.
 5. **Candidate tag namespace.** `<code-lower>/<NNNNN>/rc.<NNN>` versus flat `<CODE>-<NNNNN>-rc.<NNN>`. Both are provably disjoint from SemVer, so this is readability only. Recommended: namespaced.
 6. **Indicator uniqueness registry.** Adopt `<OPENCODE_CONFIG_DIR>/.opencode/plan-projects.json` now, or only when a second project adopts plans? Recommended: write the rule now, create the file when needed.
@@ -928,7 +933,7 @@ The seven instruction files are untracked by resolved decision 2, so a candidate
 | D11 | No edited instruction file carries the stale status value `completed` | `C11` (count `status:\s*completed` and the backticked token across all eight files) | 0 status assignments and 0 backticked `completed` tokens. Prose such as "completed history" is exempt and reported separately, because it is not a status value | `rc.<NNN>/D11-stale-status.txt` |
 | D12 | Every recorded default branch equals the value the four step resolution contract actually returns, including the disagreeing case, with this plan's own branches excluded from the branch count | `C12` (apply the contract per repository, then compare to the plan's table, printing the deciding step for each) | The resolved value for each repository matches the plan's recorded default branch, and the deciding step is recorded. The Agentic repository must resolve to `master` by the sole-local-branch step while `origin/HEAD` reports `origin/main`, so a run that returns `main` there is a BLOCKER, not a warning. Branches matching the plan branch pattern `<type>/<CODE>-<NNNNN>-<slug>` and any slice beneath them are excluded from the count, because otherwise cutting this plan's own branch makes the sole-local-branch step inapplicable and the check fails as a direct consequence of the work starting | `rc.<NNN>/D12-default-branch.txt` |
 | D13 | A SHA-256 instruction manifest exists for the local-only files and every file whose only recovery path is a backup has a `.bak-` sibling | `C13` (hash eight files, write manifest, then re-hash from the manifest, then assert a backup per untracked file) | Manifest exists at the recorded path; read-back verifies 8 of 8 hashes; no `MISSING` placeholder row; every untracked file has a `.bak-` sibling, and the two tracked `AGENTS.md` files are exempt because Git recovers them | `rc.<NNN>/instruction-manifest.txt`, `rc.<NNN>/D13-manifest-readback.txt` |
-| D14 | Tracked edits are confined to `plans/`, the two `AGENTS.md` files, `.gitignore`, and `.opencode/`, observed per repository with absolute paths | `C14` (capture the dirty path set before implementation, then subtract it from the dirty path set after) | The after-minus-before delta contains no path outside the allowed set, in both `Agentic` and `avrig-ai`. Pre-existing drift is subtracted by path, not tolerated by allow-list | `rc.<NNN>/D14-baseline-agentic.txt`, `rc.<NNN>/D14-baseline-avrig-ai.txt`, `rc.<NNN>/D14-new-agentic.txt`, `rc.<NNN>/D14-new-avrig-ai.txt`, `rc.<NNN>/D14-drift-summary.txt` |
+| D14 | Tracked edits are confined to `plans/`, the two `AGENTS.md` files, `.gitignore`, and `.opencode/`, observed per repository with absolute paths | `C14` (capture the dirty path set before implementation, then subtract it from the dirty path set after) | The after-minus-before delta contains no path outside the allowed set, in both `Agentic` and `avrig-ai`. Pre-existing drift is subtracted by path, not tolerated by allow-list. The command reads `git status --porcelain`, which includes untracked paths, and that reading is deliberate: an unignored backup copy is exactly the release-sweep risk this check exists to catch | `rc.<NNN>/D14-baseline-agentic.txt`, `rc.<NNN>/D14-baseline-avrig-ai.txt`, `rc.<NNN>/D14-new-agentic.txt`, `rc.<NNN>/D14-new-avrig-ai.txt`, `rc.<NNN>/D14-after-drift-summary.txt` |
 | D15 | Live browser verification is actually executable, with a screenshot, a stated URL, and a stated verdict | `C15` (Playwright journey against the platform login surface) | Page reaches HTTP 200, the login form renders with one email and one password input, both viewport screenshots exist and are non-empty, zero requests failed, and every console error is reconciled by name. A surface that cannot be served is recorded BLOCKED with a reason, never PASS | `rc.<NNN>/browser-login-1440x900.png`, `rc.<NNN>/browser-login-390x844.png`, `rc.<NNN>/D15-browser-report.json` |
 | D16 | The plan itself carries no em-dash and no en-dash, since it mandates that rule | `C16` (count U+2014 and U+2013 in the plan file) | 0 and 0 | `rc.<NNN>/D16-dash-scan.txt` |
 | D17 | `Architect.md` states the pre-branch reconciliation gate, naming release tags only, and forbids merging a candidate tag into a default branch | `C17` (token counts in the replacement region) | `merge-base --is-ancestor refs/tags/` present; `--no-ff` present in the reconciliation step; a prohibition on merging `rc.<NNN>` into a default branch present; a prohibition on moving or forcing a tag present; no wording that permits merging a candidate tag | `rc.<NNN>/D17-pre-branch-reconcile.txt` |
@@ -1413,17 +1418,22 @@ foreach ($k in $repos.Keys) {
 }
 $out += "new_paths_outside_edit_set=$bad"
 $out += if ($bad -eq 0) { 'RESULT PASS' } else { 'RESULT FAIL' }
-$out | Set-Content -LiteralPath "$rc\D14-drift-summary.txt" -Encoding utf8
+$out | Set-Content -LiteralPath "$rc\D14-after-drift-summary.txt" -Encoding utf8
 $out
 ```
+
+The after-state filename is deliberately distinct from the baseline half's output. An earlier revision wrote the after-state to `D14-drift-summary.txt`, the same name a baseline-time verification run had already used, so the two artifacts overwrote each other and a reader could mistake a baseline-time PASS for the run's real verdict. The after-state now always lands in `D14-after-drift-summary.txt`, and `D14-drift-summary.txt` is left to the baseline-time sanity run only.
 
 **C15, live browser journey**
 
 Run from `D:\Cloud\OneDrive\AI\Agentic\test`, because the harness resolves `@playwright/test` only from that directory. Measured: the module fails to resolve from any other working directory, including with `NODE_PATH` set.
 
+The script itself must also be **written inside** that directory, not to `$env:TEMP`. Node resolves a bare specifier relative to the importing file's own location, not the process working directory, so `Push-Location` cannot rescue a script that lives in `$env:TEMP`: measured on Node v26.7.0, a temp-resident script fails with `ERR_MODULE_NOT_FOUND` because no `node_modules` exists anywhere on that ancestor chain. The body below writes the script into the harness directory and deletes it afterwards, which is the only placement that resolves. A future run that follows this body verbatim gets a real browser result rather than a false BLOCKED.
+
 ```powershell
 $rc = '<rc>'
-$js = "$env:TEMP\avrig-login-check.mjs"
+$harness = 'D:\Cloud\OneDrive\AI\Agentic\test'
+$js = Join-Path $harness 'avrig-login-check.mjs'
 @'
 import { chromium } from '@playwright/test'
 import fs from 'node:fs'
@@ -1455,11 +1465,9 @@ console.log(JSON.stringify(report, null, 2))
 await browser.close()
 '@ | Set-Content -LiteralPath $js -Encoding utf8
 
-Push-Location 'D:\Cloud\OneDrive\AI\Agentic\test'
-node $js $rc
-$exit = $LASTEXITCODE
-Pop-Location
-Remove-Item -LiteralPath $js -Force
+Push-Location $harness
+try { node $js $rc; $exit = $LASTEXITCODE }
+finally { Pop-Location; Remove-Item -LiteralPath $js -Force -ErrorAction SilentlyContinue }
 "node_exit=$exit"
 ```
 
@@ -1831,6 +1839,24 @@ The failure mode that mattered here is environmental, not conceptual. `gh` is in
 ### Pass 7a, downstream sync after the gate was added
 
 Adding stage 5c after `Architect.md` had already been written left that file stale at 28 rules and a two-part stage 5. Rather than leave the drift for `P9` to find, the correction was dispatched immediately and `P9` still verifies it. This is the concrete reason `P9` exists: a plan that changes after an instruction file is written will silently diverge from it, and the read-back is what catches that. The same drift happened twice more, and both were caught the same way: the code moved from authoring to approval, and stage 5 was reordered so the branch is created through the issue. `Architect.md` was synced for the first and the second is pending the same treatment, which is exactly what a read-back gate is for.
+
+### Pass 8, stage 9 QA of `rc.002`, and the two plan gaps it exposed
+
+Candidate `avrig/00001/rc.002` at `d23a7aa` returned **FAIL, 19 of 20**, with `D14` the only failure. Every other check passed, including `D12` (Agentic resolved to `master` by the sole-local-branch step with `disagreements=0`), `D15` (Playwright PASS at HTTP 200 with the `Login: Rauthy` surface and 0 failed requests, wmux leg BLOCKED by the permitted reason), and `D20` (issue 3 OPEN and carrying the code).
+
+The failure was real and its root cause is a plan gap, not an implementation error:
+
+1. **`D14` found two paths outside the edit set:** `AGENTS.md.bak-20261119-175652` and `AGENTS.md.bak-20261119-175822` at the Agentic root. File-table row 738 mandated `*.bak-*` in `avrig-ai/.gitignore` only, so `be` implemented the table exactly and the Agentic repository never received the rule. The asymmetry is visible in the measurement: `avrig-ai/AGENTS.md.bak-*` exists but never appears in the delta because its rule hides it, while the Agentic copies appear because nothing does. **Closed:** the file table now carries a `.gitignore` row per repository, and the rationale in clarification 3 no longer conflates the two.
+
+2. **The plan's own justification was wrong about the Agentic repository.** Clarification 3 claimed the rule exists because "a release running `git add -A` would otherwise commit nine of them". Measured: `release.ps1` line 30 pins `$RepoOrder` to `avrig-ai`, `avrig-api`, `avrig-lib` and `avrig-ui`, so the release `git add -A` never touches the Agentic checkout. The rule is still required there, but as repository hygiene rather than release safety, and the plan now says which reason applies to which repository instead of asserting one reason for both.
+
+3. **`C15` could not run as written, and this was a matrix defect rather than a surface failure.** The body wrote its script to `$env:TEMP`, but Node resolves a bare specifier relative to the importing file, not the process working directory, so `Push-Location` cannot help. Measured on Node v26.7.0: `ERR_MODULE_NOT_FOUND`, `node_exit=1`, with no `node_modules` anywhere on that ancestor chain. The identical journey inside the harness directory returns HTTP 200 cleanly. **Closed:** the body now writes into `$harness` and cleans up in a `finally` block, so a future run following it verbatim records a real browser result instead of a false BLOCKED.
+
+4. **`C14` overwrote a baseline artifact.** Its after-state wrote to `D14-drift-summary.txt`, the same name a baseline-time sanity run had already used, so a reader could mistake a baseline-time PASS for the run's verdict. **Closed:** the after-state now lands in `D14-after-drift-summary.txt` and the matrix row names that file.
+
+5. **Two readings the tester resolved correctly and that are now written down rather than left implicit.** `D14` says "tracked edits" while `C14` reads `git status --porcelain`, which includes untracked paths; the command reading is right, because an unignored backup is precisely the sweep risk the check exists to catch, and the criterion now says so. And `D14-drift-summary.txt` in the `rc.002` folder still holds a stale baseline-time PASS, so it must not be read as that run's result.
+
+None of this was fixed by moving a tag. `rc.002` is immutable and stays in history carrying its FAIL, and the corrections land on the branch to be verified by `rc.003`, which is the behaviour the plan mandates.
 
 ### Preserved audit evidence
 
