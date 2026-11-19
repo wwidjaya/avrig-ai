@@ -3,7 +3,7 @@ title: "Architect and Tester Workflow: Universal Plan Codes, Analyst-First Revie
 plan_id: AVRIG-00001
 project_indicator: AVRIG
 indicator_status: pending-user-confirmation
-status: approved
+status: testing
 created: 2026-11-19
 owner: Architect (authoring), analyst (review and findings), tester (test matrix and live browser verification), be (config file writes), build (branch, candidate tags, merge, release), Infra (deploy), km (retrospective)
 branch: feature/AVRIG-00001
@@ -12,7 +12,8 @@ repos:
   - Agentic (default master)
 default_branches_resolved: true
 instruction_files_tracked: false
-candidate_tags: []
+candidate_tags:
+  - avrig/00001/rc.001 @ d100017, build AVRIG-00001-build.001
 release_version: undecided until the user approves a version at stage 12
 version_target: none, project codes never imply a SemVer
 resolved_decisions: 3 (default branch per repo, instruction files local only, plans committed)

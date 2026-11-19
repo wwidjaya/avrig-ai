@@ -121,7 +121,7 @@ Empty. Populated only if the indicator ever changes after freezing.
 
 | Plan | Created | Title | Repos | Claiming branch | Status | Passing candidate tag | Evidence path | Feature request | Release version |
 |---|---|---|---|---|---|---|---|---|---|
-| AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (authoring), feature/AVRIG-00001 | approved | none | none | BLOCKED: `gh` is unauthenticated, run `gh auth login` | undecided until UAT |
+| AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (authoring), feature/AVRIG-00001 | testing | `avrig/00001/rc.001` @ `d100017` | `plans/evidence/AVRIG-00001/rc.001/` | BLOCKED: `gh` is unauthenticated, run `gh auth login` | undecided until UAT |
 
 ## Backfill
 
