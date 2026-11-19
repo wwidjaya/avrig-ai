@@ -1,0 +1,9 @@
+# Allowlist for TK-02: raw hex values that legitimately survive in presentation code.
+# One entry per line: path (optionally path:line) followed by a reason after a "#".
+# Entries here are read by apps/web/scripts/qa/tokens.mjs and are never edited by the app.
+
+apps/web/src/main.tsx:18 # fatal-error fallback: inline background, rendered before React mounts so no stylesheet or token class exists yet
+apps/web/src/main.tsx:20 # fatal-error fallback: inline meta-text colour, same pre-mount constraint
+apps/web/src/main.tsx:23 # fatal-error fallback: inline error-detail block, same pre-mount constraint
+apps/web/src/modules/landing/LandingPage.tsx # false positive: "#004" and "#012" are work item numbers inside copy, not colours
+apps/web/src/shared/i18n/translations.ts # false positive: "#001" is a role identifier inside translated copy, not a colour

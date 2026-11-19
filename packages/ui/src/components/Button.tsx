@@ -9,20 +9,23 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", ...props }, ref) => {
     const baseClasses =
-      "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
+      "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer";
 
     const variantClasses = {
-      default: "bg-blue-600 text-white shadow hover:bg-blue-700 active:bg-blue-800",
-      secondary: "bg-slate-800 text-slate-100 shadow-sm hover:bg-slate-700 active:bg-slate-900",
-      outline: "border border-slate-700 bg-transparent shadow-sm hover:bg-slate-800 hover:text-slate-100",
-      ghost: "hover:bg-slate-800 hover:text-slate-100",
-      destructive: "bg-red-600 text-white shadow-sm hover:bg-red-700 active:bg-red-800"
+      default: "bg-primary text-primary-foreground shadow hover:bg-primary/90 active:bg-primary/80",
+      secondary:
+        "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:bg-secondary/70",
+      outline:
+        "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
+      ghost: "hover:bg-accent hover:text-accent-foreground",
+      destructive:
+        "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 active:bg-destructive/80"
     };
 
     const sizeClasses = {
       default: "h-9 px-4 py-2",
-      sm: "h-8 rounded-md px-3 text-xs",
-      lg: "h-10 rounded-md px-8",
+      sm: "h-8 rounded-lg px-3 text-xs",
+      lg: "h-10 rounded-lg px-8",
       icon: "h-9 w-9"
     };
 

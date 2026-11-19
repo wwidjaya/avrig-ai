@@ -45,7 +45,7 @@ export const SheetContent = React.forwardRef<
       <SheetPrimitive.Content
         ref={ref}
         className={cn(
-          "fixed z-50 gap-4 bg-slate-900 p-6 shadow-lg transition ease-in-out border-slate-800 text-slate-100",
+          "fixed z-50 gap-4 bg-popover p-6 shadow-lg transition ease-in-out border-border text-popover-foreground",
           sideClasses[side],
           className
         )}
@@ -79,7 +79,7 @@ export const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-semibold text-slate-100", className)}
+    className={cn("text-lg font-semibold text-popover-foreground", className)}
     {...props}
   />
 ));
@@ -91,7 +91,7 @@ export const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-slate-400", className)}
+    className={cn("text-sm text-text-secondary", className)}
     {...props}
   />
 ));
