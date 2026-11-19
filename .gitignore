@@ -13,6 +13,12 @@ logs/
 data/
 *.log
 
+# Python bytecode: the interpreter writes `__pycache__/` and `*.pyc` as a side
+# effect of running a script, so they appear mid-run and are never source.
+# Default-deny them so `git add -A` cannot sweep a cache into a release commit.
+__pycache__/
+*.pyc
+
 # Secrets and local environment
 .secrets/
 .env
@@ -36,3 +42,15 @@ skills/**/.env
 # Reversible: delete this block once lab/ is curated for commit.
 lab/
 
+# Plan test evidence: per candidate screenshots, traces, console logs, and browser
+# reports are generated, not authored. Default-deny the contents so `git add -A`
+# cannot sweep them into a release, while keeping the folder itself so the
+# evidence path in the plan always resolves. Commit a specific artifact only by
+# explicit `git add -f` when a plan calls for it.
+plans/evidence/**
+!plans/evidence/.gitkeep
+
+# Agent edit backups: `<file>.bak-<timestamp>` rollback copies are local, not source.
+# Default-deny so `git add -A` cannot sweep them into a release. A backup is a
+# recovery aid for an untracked file edit, never a committed artifact.
+*.bak-*
