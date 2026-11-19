@@ -15,7 +15,7 @@ instruction_files_tracked: false
 candidate_tags:
   - avrig/00001/rc.001 @ d100017, build AVRIG-00001-build.001, FAIL 15/20
   - avrig/00001/rc.002 @ d23a7aa, build AVRIG-00001-build.002, FAIL 19/20 (D14)
-  - avrig/00001/rc.003 pending
+  - avrig/00001/rc.003 @ 5ebede4, build AVRIG-00001-build.003, under test
 release_version:
 resolved_decisions: 6 (default branch per repo, instruction files local only, plans committed at approval, no code before approval, version blank until deployment, issue before branch)
 tags:
