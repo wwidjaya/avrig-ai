@@ -22,6 +22,14 @@ function passFocusRead(read, resting) {
 // mouse click" therefore means the shadow and the outline are unchanged from
 // the resting state, which is the only reading that can distinguish a focus
 // ring from a shadow that was always there.
+//
+// This applies to non-text controls only. Chromium matches :focus-visible for
+// any focused text-entry control however focus arrived, so a text field is read
+// symmetrically with passFocusRead on both paths: a missing ring on click there
+// would mean the indicator is absent altogether, not correctly suppressed.
+const NON_TEXT = "non-text";
+const TEXT_ENTRY = "text-entry";
+
 function noRing(read, resting) {
   if (!read) return false;
   if (read.focusVisible !== false) return false;
@@ -108,7 +116,7 @@ async function sc10(ctx) {
         });
 
         if (!buttonFound) {
-          record.targets.push({ target: "button", status: "not-present", note: "no button painted with bg-primary on this route" });
+          record.targets.push({ target: "button", control: NON_TEXT, status: "not-present", optional: true, note: "no button painted with bg-primary on this route" });
         } else {
           const buttonResting = await readResting(page, '[data-qa-target="button"]');
           await page.locator('[data-qa-target="button"]').first().click();
@@ -118,6 +126,7 @@ async function sc10(ctx) {
           const keyboard = await readActive(page, '[data-qa-target="button"]');
           record.targets.push({
             target: "button",
+            control: NON_TEXT,
             label: buttonFound,
             resting: buttonResting,
             click,
@@ -146,7 +155,7 @@ async function sc10(ctx) {
           return (badge.textContent || "").trim().slice(0, 40);
         });
         if (!badgeLabel) {
-          record.targets.push({ target: "badge", status: "not-present" });
+          record.targets.push({ target: "badge", control: NON_TEXT, status: "not-present" });
         } else {
           const badgeResting = await readResting(page, '[data-qa-target="badge"]');
           await page.locator('[data-qa-target="badge"]').first().click();
@@ -158,6 +167,7 @@ async function sc10(ctx) {
           const keyboard = await readActive(page, '[data-qa-target="badge"]');
           record.targets.push({
             target: "badge",
+            control: NON_TEXT,
             label: badgeLabel,
             resting: badgeResting,
             click,
@@ -180,7 +190,7 @@ async function sc10(ctx) {
           return { opened: true, close: close.getAttribute("aria-label") || (close.textContent || "").trim() };
         });
         if (!dialog || !dialog.close) {
-          record.targets.push({ target: "dialog-close", status: dialog ? "close-not-found" : "dialog-not-opened" });
+          record.targets.push({ target: "dialog-close", control: NON_TEXT, status: dialog ? "close-not-found" : "dialog-not-opened" });
         } else {
           const closeResting = await readResting(page, '[data-qa-target="dialog-close"]');
           await page.locator('[data-qa-target="dialog-close"]').first().click();
@@ -199,6 +209,7 @@ async function sc10(ctx) {
           }
           record.targets.push({
             target: "dialog-close",
+            control: NON_TEXT,
             label: dialog.close,
             resting: closeResting,
             click,
@@ -236,13 +247,44 @@ async function sc10(ctx) {
         });
         record.targets.push({
           target: "input",
+          control: TEXT_ENTRY,
           status: keyboardIsPaletteInput ? "measured" : "palette-not-focused",
           resting: inputResting,
           click: clickInput,
           keyboard: keyboardInput,
-          clickOk: noRing(clickInput, inputResting),
+          clickOk: passFocusRead(clickInput, inputResting),
           keyboardOk: passFocusRead(keyboardInput, inputResting)
         });
+
+        // A Textarea inside the open surface is a text-entry control too, so it
+        // is read symmetrically. This candidate's palette renders none, which is
+        // recorded rather than silently skipped.
+        const textareaLabel = await page.evaluate(() => {
+          const el = document.querySelector('[role="dialog"] textarea, [cmdk-input] textarea');
+          if (!el) return null;
+          el.setAttribute("data-qa-target", "textarea");
+          return (el.getAttribute("placeholder") || el.getAttribute("aria-label") || "").trim().slice(0, 40);
+        });
+        if (!textareaLabel) {
+          record.targets.push({ target: "textarea", control: TEXT_ENTRY, status: "not-present", optional: true, note: "the open surface renders no textarea" });
+        } else {
+          const textareaResting = await readResting(page, '[data-qa-target="textarea"]');
+          await page.locator('[data-qa-target="textarea"]').first().click();
+          const click = await readActive(page, '[data-qa-target="textarea"]');
+          await page.keyboard.press("Tab");
+          await page.keyboard.press("Shift+Tab");
+          const keyboard = await readActive(page, '[data-qa-target="textarea"]');
+          record.targets.push({
+            target: "textarea",
+            control: TEXT_ENTRY,
+            label: textareaLabel,
+            resting: textareaResting,
+            click,
+            keyboard,
+            clickOk: passFocusRead(click, textareaResting),
+            keyboardOk: passFocusRead(keyboard, textareaResting)
+          });
+        }
         await page.keyboard.press("Escape").catch(() => {});
 
         await screenshot(page, ctx.evidence, `sc10-${route.replace(/\//g, "")}-${theme}.png`, { fullPage: true });
@@ -257,29 +299,41 @@ async function sc10(ctx) {
 
   const failures = [];
   let checks = 0;
+  let textEntryTargets = 0;
   for (const record of records) {
     for (const target of record.targets) {
       if (target.status && target.status !== "measured") {
-        // A target the route does not render is recorded, not silently dropped.
-        if (target.status === "not-present" && target.target === "button") continue;
+        // A target the surface does not render is recorded, not silently
+        // dropped, and only an optional target decides nothing.
+        if (target.status === "not-present" && target.optional) continue;
         failures.push(`${record.route}/${record.theme} ${target.target}: ${target.status}`);
         continue;
       }
       checks += 2;
+      if (target.control === TEXT_ENTRY) textEntryTargets += 1;
+      const where = `${record.route}/${record.theme} ${target.target} (${target.control})`;
       if (!target.clickOk) {
         failures.push(
-          `${record.route}/${record.theme} ${target.target} on mouse click: focus-visible=${target.click && target.click.focusVisible}, boxShadow=${target.click && target.click.boxShadow}, outline=${target.click && target.click.outlineStyle}`
+          `${where} on mouse click: focus-visible=${target.click && target.click.focusVisible}, boxShadow=${target.click && target.click.boxShadow}, outline=${target.click && target.click.outlineStyle}`
         );
       }
       if (!target.keyboardOk) {
         failures.push(
-          `${record.route}/${record.theme} ${target.target} on keyboard focus: focus-visible=${target.keyboard && target.keyboard.focusVisible}, boxShadow=${target.keyboard && target.keyboard.boxShadow}, outline=${target.keyboard && target.keyboard.outlineStyle}`
+          `${where} on keyboard focus: focus-visible=${target.keyboard && target.keyboard.focusVisible}, boxShadow=${target.keyboard && target.keyboard.boxShadow}, outline=${target.keyboard && target.keyboard.outlineStyle}`
         );
       }
     }
   }
 
-  return [row("SC-10", failures.length === 0, failures.length ? failures.join("; ") : `${checks} focus readings across 4 surfaces: no ring on mouse click, a visible ring on keyboard focus`)];
+  return [
+    row(
+      "SC-10",
+      failures.length === 0,
+      failures.length
+        ? failures.join("; ")
+        : `${checks} focus readings across ${records.length} surfaces: no ring on mouse click and a ring on keyboard focus for non-text controls; a ring and :focus-visible on both paths for ${textEntryTargets} text-entry control(s)`
+    )
+  ];
 }
 
 async function contrast(ctx) {
