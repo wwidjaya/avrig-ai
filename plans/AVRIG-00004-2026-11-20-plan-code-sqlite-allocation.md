@@ -3,9 +3,10 @@ title: Plan Code Allocation via a SQLite Allocation Ledger
 plan_id: AVRIG-00004
 project_indicator: AVRIG
 branch: feat/AVRIG-00004-plan-code-sqlite-allocation
-candidate_tags: []
+candidate_tags:
+  - avrig/00004/rc.001 @ 38ff2b7, build AVRIG-00004-build.001, PASS 21/21 (495 assertions)
 release_version:
-status: in-progress
+status: testing
 created: 2026-11-20
 owner: Architect
 tags:
