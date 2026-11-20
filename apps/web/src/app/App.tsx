@@ -177,8 +177,8 @@ export const App: React.FC = () => {
   if (auth.isLoading) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-3 bg-background text-foreground">
-        <RefreshCw className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm font-mono text-muted-foreground tracking-wide">
+        <RefreshCw className="h-8 w-8 animate-spin text-accent-text" />
+        <p className="text-sm font-mono text-muted-foreground">
           Validating OpenID Connect credentials...
         </p>
       </div>

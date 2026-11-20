@@ -73,7 +73,7 @@ function renderInline(text: string, onCitationClick?: (index: number) => void): 
         <span
           key={index}
           onClick={() => onCitationClick?.(citationNum)}
-          className="font-mono text-primary font-semibold hover:underline cursor-pointer select-none inline-block px-0.5"
+          className="font-mono text-accent-text font-semibold hover:underline cursor-pointer select-none inline-block px-0.5"
           title={`Citation [${citationNum}]`}
         >
           [{citationNum}]
@@ -225,10 +225,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
     sections.push(
       <div
         key={`code-${sectionCount++}`}
-        className="my-3 rounded-lg border border-border/80 bg-zinc-950 dark:bg-zinc-900/90 p-3 overflow-x-auto text-xs font-mono text-zinc-100 shadow-xs"
+        className="my-3 rounded-lg border border-border/80 bg-muted p-3 overflow-x-auto text-xs font-mono text-foreground shadow-xs"
       >
         {language && (
-          <div className="text-[10px] uppercase font-semibold text-zinc-400 mb-1 tracking-wider">
+          <div className="text-[10px] font-semibold text-muted-foreground mb-1">
             {language}
           </div>
         )}

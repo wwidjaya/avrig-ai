@@ -13,7 +13,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   if (auth.isLoading) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-3 bg-background text-foreground">
-        <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+        <RefreshCw className="h-8 w-8 animate-spin text-accent-text" />
         <p className="text-sm text-muted-foreground">Validating authentication credentials...</p>
       </div>
     );
@@ -22,10 +22,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   if (auth.error) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-background p-6 text-foreground">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
           <ShieldAlert className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold">Authentication Error</h2>
+        <h2 className="text-xl font-semibold">Authentication Error</h2>
         <p className="max-w-md text-center text-sm text-muted-foreground">
           {auth.error.message || "An unexpected error occurred during OpenID Connect authentication."}
         </p>
@@ -45,10 +45,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   if (!auth.isAuthenticated) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-background p-6 text-foreground">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-accent-text">
           <LogIn className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold">avrig Command Center</h2>
+        <h2 className="text-xl font-semibold">avrig Command Center</h2>
         <p className="max-w-md text-center text-sm text-muted-foreground">
           Autonomous organizational command requires authorized founder or operator authentication.
         </p>

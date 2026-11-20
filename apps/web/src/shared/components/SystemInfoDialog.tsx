@@ -63,7 +63,7 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-2 text-base font-semibold">
-              <ShieldCheck className="h-5 w-5 text-primary" />
+              <ShieldCheck className="h-5 w-5 text-accent-text" />
               System Telemetry & Architecture
             </DialogTitle>
             <Button
@@ -108,7 +108,7 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
                     v{backendVersion.semver}
                   </Badge>
                   {backendVersion.dirty && (
-                    <Badge variant="outline" className="text-amber-500 border-amber-500/30 text-[10px]">
+                    <Badge variant="outline" className="text-warning border-warning/30 text-[10px]">
                       dirty
                     </Badge>
                   )}
@@ -119,7 +119,7 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
             </div>
 
             {backendVersion && !isVersionSynced && (
-              <div className="flex items-center gap-2 rounded-md bg-amber-500/10 p-2 text-amber-500">
+              <div className="flex items-center gap-2 rounded-md bg-warning/10 p-2 text-warning">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span className="text-[11px] leading-tight">
                   Client version (v{clientVersion}) differs from backend (v{backendVersion.semver}). A browser refresh or rebuild may be required.
@@ -146,7 +146,7 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
                     onClick={() => copyToClipboard(backendVersion.commit_sha)}
                     title={`Copy full SHA: ${backendVersion.commit_sha}`}
                   >
-                    {copiedSha ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3 text-muted-foreground" />}
+                    {copiedSha ? <Check className="h-3 w-3 text-positive" /> : <Copy className="h-3 w-3 text-muted-foreground" />}
                   </Button>
                 </div>
               </div>
