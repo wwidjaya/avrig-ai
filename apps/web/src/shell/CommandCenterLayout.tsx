@@ -5,10 +5,7 @@ import {
   Kanban,
   Database,
   Cpu,
-  Layers,
-  Activity,
   LogOut,
-  Radio,
   MessageSquareText,
 } from "lucide-react";
 import { useAuth } from "react-oidc-context";
@@ -21,7 +18,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  Badge,
   Button,
 } from "@avrig/ui";
 import { useApi } from "../shared/api/ApiContext";
@@ -40,6 +36,17 @@ interface CommandCenterLayoutProps {
   children: React.ReactNode;
 }
 
+/** The stamped approval seal. Neutral by default, accent when it marks an approved gate. */
+const Seal: React.FC<{ approved?: boolean }> = ({ approved }) => (
+  <span
+    className={`inline-flex items-center rounded-[4px] border-[1.5px] px-1.5 py-0.5 font-mono text-[10px] leading-none tracking-normal ${
+      approved ? "border-accent-text text-accent-text" : "border-border text-muted-foreground"
+    }`}
+  >
+    AVRIG-00002
+  </span>
+);
+
 export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
   currentDomain,
   onSelectDomain,
@@ -54,6 +61,9 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
   const [signOutConfirmOpen, setSignOutConfirmOpen] = useState(false);
   const [systemInfoOpen, setSystemInfoOpen] = useState(false);
   const clientAppVersion = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "0.1.0";
+
+  const operatorName =
+    auth.user?.profile?.name || auth.user?.profile?.preferred_username || "Operator";
 
   const handleConfirmSignOut = async () => {
     setSignOutConfirmOpen(false);
@@ -100,47 +110,57 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
     }
   };
 
-  const navItems: Array<{ id: ActiveDomain; label: string; icon: React.ComponentType<{ className?: string }>; tag: string }> = [
-    { id: "office", label: "Office & Org", icon: Building2, tag: "OG/WF" },
-    { id: "deliberations", label: "Deliberation Rooms", icon: Users, tag: "MT" },
-    { id: "sdlc", label: "SDLC Pipeline", icon: Kanban, tag: "RE-TE" },
-    { id: "knowledge", label: "Knowledge & Trace", icon: Database, tag: "KM/TR" },
-    { id: "chat", label: "Knowledge Chat", icon: MessageSquareText, tag: "KM/AI" }
+  const navItems: Array<{ id: ActiveDomain; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }> }> = [
+    { id: "office", label: "Office and org", icon: Building2 },
+    { id: "deliberations", label: "Deliberations", icon: Users },
+    { id: "sdlc", label: "SDLC pipeline", icon: Kanban },
+    { id: "knowledge", label: "Knowledge and trace", icon: Database },
+    { id: "chat", label: "Knowledge chat", icon: MessageSquareText }
   ];
 
+  const wsTone =
+    wsStatus === "connected"
+      ? "bg-positive"
+      : wsStatus === "connecting" || wsStatus === "reconnecting"
+        ? "bg-warning"
+        : "bg-muted-foreground/60";
+
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-background md:flex-row">
       {/* Accessible Skip Link */}
       <a
         href="#main-viewport"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg focus:outline-hidden"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:shadow-lg focus:outline-hidden"
       >
         Skip to main content
       </a>
 
       {/* Sidebar Navigation */}
-      <aside className="flex w-64 flex-col border-r border-border bg-sidebar-background text-sidebar-foreground">
+      <aside className="flex shrink-0 flex-col border-b border-sidebar-border bg-sidebar-background text-sidebar-foreground md:h-full md:w-64 md:border-r md:border-b-0">
         {/* Org Brand Header */}
         <button
           type="button"
           onClick={onReturnHome}
-          className="flex h-16 w-full items-center gap-3 border-b border-sidebar-border px-4 text-left cursor-pointer hover:bg-sidebar-accent/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden transition-colors"
-          title="Return to Landing Page"
-          aria-label="avrig-ai Command Center, return to landing page"
+          className="flex h-14 w-full items-center gap-3 border-b border-sidebar-border px-4 text-left transition-colors duration-[120ms] ease-out hover:bg-sidebar-accent/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
+          title="Return to landing page"
+          aria-label="avrig-ai command center, return to landing page"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-            <Cpu className="h-5 w-5" />
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Cpu className="size-4" strokeWidth={1.5} aria-hidden="true" />
           </div>
-          <div>
-            <h1 className="text-sm font-bold tracking-tight">avrig-ai</h1>
-            <p className="text-xs text-muted-foreground">Autonomous Command</p>
+          <div className="min-w-0">
+            <h1 className="text-sm font-semibold tracking-tight">avrig-ai</h1>
+            <p className="truncate text-xs text-muted-foreground">Command center</p>
           </div>
         </button>
 
         {/* Navigation Section */}
-        <nav className="flex-1 space-y-1 px-3 py-2" aria-label="Product Domains">
-          <div className="px-2 pb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-            Product Domains
+        <nav
+          className="flex gap-1 overflow-x-auto px-3 py-2 md:flex-1 md:flex-col md:gap-0.5 md:overflow-visible"
+          aria-label="Product domains"
+        >
+          <div className="mb-2 hidden px-2 text-xs text-muted-foreground md:mt-4 md:block">
+            Product domains
           </div>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -151,82 +171,74 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
                 type="button"
                 onClick={() => onSelectDomain(item.id)}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden cursor-pointer ${
+                className={`flex h-[34px] w-auto shrink-0 items-center gap-3 rounded-lg px-3 text-sm transition-colors duration-[180ms] ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden md:w-full ${
                   isActive
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-xs font-semibold"
+                    ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
                     : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-                  <span>{item.label}</span>
-                </div>
-                <Badge variant={isActive ? "default" : "outline"} className="text-[10px] py-0 px-1.5 h-4">
-                  {item.tag}
-                </Badge>
+                <Icon
+                  className={`size-4 shrink-0 ${
+                    isActive ? "text-sidebar-accent-foreground" : "text-muted-foreground"
+                  }`}
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
+                <span className="whitespace-nowrap">{item.label}</span>
               </button>
             );
           })}
         </nav>
 
         {/* System & Connection Telemetry */}
-        <div className="border-t border-sidebar-border p-4">
-          <div className="mb-2 flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Gateway Stream</span>
-            <div className="flex items-center gap-1.5">
-              <Radio
-                className={`h-3 w-3 ${
-                  wsStatus === "connected"
-                    ? "text-emerald-500 animate-pulse"
-                    : wsStatus === "reconnecting"
-                    ? "text-amber-500 animate-spin"
-                    : "text-muted-foreground"
-                }`}
-              />
-              <span className="capitalize font-mono text-[11px]">{wsStatus}</span>
-            </div>
-          </div>
-
-          <div className="mb-3 flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Version</span>
-            <button
-              type="button"
-              data-testid="sidebar-version-badge"
-              onClick={() => setSystemInfoOpen(true)}
-              className="group flex items-center gap-1.5 rounded-md px-1.5 py-0.5 hover:bg-sidebar-accent/50 transition-colors cursor-pointer"
-              title="System Information & Telemetry"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <span className="font-mono text-[11px] text-muted-foreground group-hover:text-sidebar-foreground">
-                v{clientAppVersion}
+        <div className="border-t border-sidebar-border px-4 py-3 md:p-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 md:block md:space-y-3">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="hidden text-muted-foreground md:inline">Gateway stream</span>
+              <span className="flex items-center gap-1.5">
+                <span className={`size-1.5 rounded-full ${wsTone}`} aria-hidden="true" />
+                <span className="font-mono text-[11px] text-text-secondary">{wsStatus}</span>
               </span>
-            </button>
-          </div>
-
-          {/* Active Operator / Logout */}
-          <div className="flex items-center justify-between pt-2 border-t border-sidebar-border">
-            <div className="flex items-center gap-2 overflow-hidden">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary font-mono text-xs font-semibold">
-                {auth.user?.profile?.name?.[0] || auth.user?.profile?.preferred_username?.[0] || "O"}
-              </div>
-              <div className="overflow-hidden text-left">
-                <div className="truncate text-xs font-medium">
-                  {auth.user?.profile?.name || auth.user?.profile?.preferred_username || "Operator"}
-                </div>
-                <div className="truncate text-[10px] text-muted-foreground">
-                  {auth.user?.profile?.email || "Founder / Lead"}
-                </div>
-              </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="size-7 p-0 text-muted-foreground hover:text-destructive cursor-pointer"
-              title="Sign Out"
-              onClick={() => setSignOutConfirmOpen(true)}
-            >
-              <LogOut className="size-4" />
-            </Button>
+
+            <div className="flex items-center gap-2 text-xs">
+              <span className="hidden text-muted-foreground md:inline">Version</span>
+              <button
+                type="button"
+                data-testid="sidebar-version-badge"
+                onClick={() => setSystemInfoOpen(true)}
+                className="flex items-center rounded-md px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors duration-[120ms] ease-out hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                title="System information and telemetry"
+              >
+                v{clientAppVersion}
+              </button>
+              <Seal approved />
+            </div>
+
+            {/* Active Operator / Logout */}
+            <div className="flex items-center justify-between gap-2 md:border-t md:border-sidebar-border md:pt-3">
+              <div className="flex min-w-0 items-center gap-2">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-muted font-mono text-[11px] font-medium">
+                  {auth.user?.profile?.name?.[0] || auth.user?.profile?.preferred_username?.[0] || "O"}
+                </div>
+                <div className="hidden min-w-0 md:block">
+                  <div className="truncate text-xs font-medium">{operatorName}</div>
+                  <div className="truncate text-[11px] text-muted-foreground">
+                    {auth.user?.profile?.email || "Founder"}
+                  </div>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="size-7 p-0 text-muted-foreground hover:text-negative"
+                title="Sign out"
+                aria-label="Sign out"
+                onClick={() => setSignOutConfirmOpen(true)}
+              >
+                <LogOut className="size-4" strokeWidth={1.5} aria-hidden="true" />
+              </Button>
+            </div>
           </div>
         </div>
       </aside>
@@ -235,15 +247,15 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
       <AlertDialog open={signOutConfirmOpen} onOpenChange={setSignOutConfirmOpen}>
         <AlertDialogContent size="sm">
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
+            <AlertDialogTitle>Confirm sign out</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to end your active command session and return to the main landing page?
+              This ends the current session and returns you to the landing page.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction variant="destructive" onClick={handleConfirmSignOut}>
-              Sign Out
+              Sign out
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -253,39 +265,34 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
       <SystemInfoDialog open={systemInfoOpen} onOpenChange={setSystemInfoOpen} />
 
       {/* Main Command Center Viewport */}
-      <main id="main-viewport" tabIndex={-1} className="flex flex-1 flex-col overflow-hidden bg-background focus:outline-hidden">
-        {/* Top Operational Status Bar */}
-        <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-card px-6">
-          <div className="flex items-center gap-3">
-            <Layers className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-semibold tracking-wide">
-              {navItems.find((n) => n.id === currentDomain)?.label}
-            </h2>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-xs text-muted-foreground font-mono">
-              Autonomous Governance
-            </span>
-          </div>
+      <main
+        id="main-viewport"
+        tabIndex={-1}
+        className="flex min-w-0 flex-1 flex-col overflow-hidden bg-background focus:outline-hidden"
+      >
+        {/* Top operational bar */}
+        <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-card px-4 md:px-8">
+          <h2 className="min-w-0 truncate text-sm font-semibold">
+            {navItems.find((n) => n.id === currentDomain)?.label}
+          </h2>
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
-              <Activity className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Consensus Engine: Active</span>
+          <div className="flex shrink-0 items-center gap-3">
+            <div className="flex items-center gap-2 text-xs text-text-secondary">
+              <span className="hidden truncate sm:inline">{operatorName}</span>
+              <Seal />
             </div>
 
-            <div className="h-4 w-px bg-border/60" />
+            <div className="hidden h-4 w-px bg-border sm:block" aria-hidden="true" />
 
-            {/* Language Selector */}
             <LanguageSelector />
 
-            {/* 3-Way Theme Selector */}
             <ThemeSelector />
           </div>
         </header>
 
-        {/* Content Canvas */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {children}
+        {/* Content canvas */}
+        <div className="flex-1 overflow-y-auto px-4 py-6 md:px-8 md:py-8">
+          <div className="mx-auto w-full max-w-[1440px]">{children}</div>
         </div>
       </main>
     </div>

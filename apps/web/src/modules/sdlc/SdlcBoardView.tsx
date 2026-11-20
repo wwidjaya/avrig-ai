@@ -16,9 +16,6 @@ import {
 } from "@avrig/ui";
 import {
   ShieldCheck,
-  AlertTriangle,
-  CheckCircle2,
-  Lock,
   GitBranch,
   FileCode,
   Hash,
@@ -160,6 +157,16 @@ const canonicalStages: SdlcStage[] = [
   }
 ];
 
+const STATUS_META: Record<
+  SdlcStage["status"],
+  { label: string; variant: "default" | "secondary" | "success" | "warning" }
+> = {
+  completed: { label: "Passing", variant: "success" },
+  in_progress: { label: "In progress", variant: "default" },
+  review_required: { label: "Gate review", variant: "warning" },
+  pending: { label: "Pending", variant: "secondary" }
+};
+
 export const SdlcBoardView: React.FC = () => {
   const [stages, setStages] = useState<SdlcStage[]>(canonicalStages);
   const [selectedStage, setSelectedStage] = useState<SdlcStage | null>(null);
@@ -167,16 +174,8 @@ export const SdlcBoardView: React.FC = () => {
   const [diffVerified, setDiffVerified] = useState(false);
 
   const getStatusBadge = (status: SdlcStage["status"]) => {
-    switch (status) {
-      case "completed":
-        return <Badge variant="default" className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 gap-1"><CheckCircle2 className="h-3 w-3" /> Passing</Badge>;
-      case "in_progress":
-        return <Badge variant="default" className="bg-blue-500/20 text-blue-400 border border-blue-500/30 gap-1">In Progress</Badge>;
-      case "review_required":
-        return <Badge variant="default" className="bg-amber-500/20 text-amber-400 border border-amber-500/30 gap-1 animate-pulse"><AlertTriangle className="h-3 w-3" /> Gate Review</Badge>;
-      case "pending":
-        return <Badge variant="secondary" className="gap-1"><Lock className="h-3 w-3" /> Pending</Badge>;
-    }
+    const meta = STATUS_META[status];
+    return <Badge variant={meta.variant}>{meta.label}</Badge>;
   };
 
   const openGateModal = (stage: SdlcStage) => {
@@ -195,63 +194,62 @@ export const SdlcBoardView: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight">Agentic SDLC Pipeline</h1>
-          <p className="text-sm text-muted-foreground">
-            Canonical 16-stage autonomous lifecycle, gate reviews, and SHA-256 baseline verification.
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-[28px] leading-tight font-semibold tracking-tight">Agentic SDLC pipeline</h1>
+          <p className="text-sm text-text-secondary">
+            The canonical 16-stage lifecycle, its gate reviews, and the baseline hash behind each stage.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="font-mono text-xs">
-            Framework: 16-Stage Canonical SDLC
-          </Badge>
-        </div>
+        <span className="font-mono text-xs text-muted-foreground">16-stage canonical SDLC</span>
       </div>
 
       {/* SDLC Stage Board Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {stages.map((stage) => (
           <Card
             key={stage.id}
-            className={`transition-all ${
-              stage.status === "review_required"
-                ? "border-amber-500/50 shadow-md shadow-amber-500/5"
-                : ""
+            className={`transition-colors duration-[180ms] ease-out ${
+              stage.status === "review_required" ? "border-warning/50" : ""
             }`}
           >
-            <CardHeader className="p-4 pb-2">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="font-mono text-xs font-bold text-primary">{stage.code}</span>
-                  <CardTitle className="text-sm font-semibold mt-1">{stage.name}</CardTitle>
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="font-mono text-[11px] font-medium tracking-normal text-accent-text">
+                    {stage.code}
+                  </span>
+                  <CardTitle className="mt-1 text-sm font-semibold">{stage.name}</CardTitle>
                 </div>
                 {getStatusBadge(stage.status)}
               </div>
-              <CardDescription className="text-xs">Phase: {stage.phase}</CardDescription>
+              <CardDescription className="text-xs">{stage.phase}</CardDescription>
             </CardHeader>
 
-            <CardContent className="p-4 pt-2 space-y-3">
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <GitBranch className="h-3 w-3" /> {stage.leadAgent}
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <GitBranch className="size-3.5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
+                  <span className="truncate">{stage.leadAgent}</span>
                 </span>
-                <span className="flex items-center gap-1 font-mono">
-                  <FileCode className="h-3 w-3" /> {stage.artifactsCount} items
+                <span className="flex shrink-0 items-center gap-1.5 font-mono tabular-nums">
+                  <FileCode className="size-3.5" strokeWidth={1.5} aria-hidden="true" />
+                  {stage.artifactsCount}
                 </span>
               </div>
 
-              <div className="rounded bg-muted/50 p-2 font-mono text-[10px] text-muted-foreground truncate">
-                SHA: {stage.baselineSha}
+              <div className="truncate rounded border border-border/70 bg-muted/40 px-2 py-1.5 font-mono text-[11px] text-muted-foreground">
+                {stage.baselineSha}
               </div>
 
               {stage.status === "review_required" ? (
                 <Button
                   size="sm"
-                  className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold gap-1.5"
+                  className="w-full gap-1.5 font-medium"
                   onClick={() => openGateModal(stage)}
                 >
-                  <ShieldCheck className="h-4 w-4" /> Review Stage Gate
+                  <ShieldCheck className="size-4" strokeWidth={1.5} aria-hidden="true" />
+                  Review stage gate
                 </Button>
               ) : (
                 <Button
@@ -260,7 +258,7 @@ export const SdlcBoardView: React.FC = () => {
                   className="w-full text-xs"
                   onClick={() => openGateModal(stage)}
                 >
-                  Inspect Stage
+                  Inspect stage
                 </Button>
               )}
             </CardContent>
@@ -273,31 +271,31 @@ export const SdlcBoardView: React.FC = () => {
         {selectedStage && (
           <DialogContent className="sm:max-w-xl">
             <DialogHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-primary" />
-                  <DialogTitle>Stage Gate Review: {selectedStage.code}</DialogTitle>
+                  <ShieldCheck className="size-4 shrink-0 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
+                  <DialogTitle>Stage gate: {selectedStage.code}</DialogTitle>
                 </div>
                 {getStatusBadge(selectedStage.status)}
               </div>
               <DialogDescription>
-                Formal gate sign-off for {selectedStage.name} under autonomous governance.
+                Sign-off record for {selectedStage.name}.
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-2 text-xs">
               {/* Checklist */}
               <div>
-                <h4 className="font-semibold text-foreground uppercase tracking-wider mb-2">
-                  Verification Checklist
-                </h4>
-                <div className="space-y-1.5 rounded-md border border-border p-3 bg-card">
+                <h4 className="mb-2 text-xs font-medium text-text-secondary">Verification checklist</h4>
+                <div className="space-y-1.5 rounded border border-border bg-muted/30 p-3">
                   {selectedStage.checklist.map((item) => (
                     <div key={item.id} className="flex items-center gap-2">
                       <CheckSquare
-                        className={`h-4 w-4 ${
-                          item.verified ? "text-emerald-400" : "text-muted-foreground"
+                        className={`size-4 shrink-0 ${
+                          item.verified ? "text-positive" : "text-muted-foreground"
                         }`}
+                        strokeWidth={1.5}
+                        aria-hidden="true"
                       />
                       <span className={item.verified ? "text-foreground" : "text-muted-foreground"}>
                         {item.label}
@@ -309,27 +307,30 @@ export const SdlcBoardView: React.FC = () => {
 
               {/* Cryptographic Baseline Diff Check */}
               <div>
-                <h4 className="font-semibold text-foreground uppercase tracking-wider mb-2">
-                  Cryptographic Baseline Verification
+                <h4 className="mb-2 text-xs font-medium text-text-secondary">
+                  Baseline verification
                 </h4>
-                <div className="rounded-md border border-border p-3 bg-muted/40 font-mono text-[11px] space-y-2">
-                  <div className="flex items-center justify-between text-muted-foreground">
-                    <span className="flex items-center gap-1"><Hash className="h-3 w-3" /> Target Stage Hash:</span>
-                    <span className="text-foreground">{selectedStage.baselineSha.slice(0, 16)}...</span>
+                <div className="space-y-2 rounded border border-border bg-muted/30 p-3 font-mono text-[11px]">
+                  <div className="flex items-center justify-between gap-3 text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <Hash className="size-3.5" strokeWidth={1.5} aria-hidden="true" />
+                      Stage hash
+                    </span>
+                    <span className="truncate text-foreground">{selectedStage.baselineSha.slice(0, 16)}</span>
                   </div>
-                  <div className="flex items-center justify-between text-muted-foreground">
-                    <span>Artifact Provenance:</span>
-                    <span className="text-emerald-400 font-semibold">100% Traceable</span>
+                  <div className="flex items-center justify-between gap-3 text-muted-foreground">
+                    <span>Recorded artifacts</span>
+                    <span className="text-foreground tabular-nums">{selectedStage.artifactsCount}</span>
                   </div>
-                  <div className="pt-2 border-t border-border flex items-center justify-between">
-                    <span className="text-muted-foreground">Cryptographic Tree Integrity:</span>
+                  <div className="flex items-center justify-between gap-3 border-t border-border pt-2">
+                    <span className="text-muted-foreground">Tree integrity</span>
                     <Button
                       size="sm"
                       variant="outline"
                       className="h-6 text-[11px]"
                       onClick={() => setDiffVerified(true)}
                     >
-                      {diffVerified ? "Verified (Clean)" : "Verify SHA-256 Tree"}
+                      {diffVerified ? "Verified clean" : "Verify tree hash"}
                     </Button>
                   </div>
                 </div>
@@ -341,12 +342,8 @@ export const SdlcBoardView: React.FC = () => {
                 Cancel
               </Button>
               {selectedStage.status === "review_required" && (
-                <Button
-                  disabled={!diffVerified}
-                  onClick={handleApproveGate}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
-                >
-                  Founder Ratify & Advance Stage
+                <Button disabled={!diffVerified} onClick={handleApproveGate}>
+                  Ratify and advance stage
                 </Button>
               )}
             </DialogFooter>

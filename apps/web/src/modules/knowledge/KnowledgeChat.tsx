@@ -6,7 +6,6 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-  Badge,
   Button,
   ScrollArea,
   Avatar,
@@ -16,12 +15,9 @@ import {
   Bot,
   User,
   Send,
-  Sparkles,
   ChevronDown,
   ChevronUp,
-  FileText,
   Trash2,
-  Database,
   ExternalLink,
   Copy,
   Check,
@@ -53,7 +49,7 @@ export const KnowledgeChat: React.FC = () => {
     {
       id: "welcome-1",
       sender: "assistant",
-      text: "Welcome to the avrig-ai Knowledge Assistant. Ask any question to query the live vector embeddings, technical architecture specs, and Obsidian Vault artifacts.",
+      text: "Ask about the architecture, the data model, or any decision recorded in the vault. Answers cite the chunks they come from.",
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
@@ -187,9 +183,9 @@ export const KnowledgeChat: React.FC = () => {
         const resp = await api.searchDocuments(q, 5);
         let summaryText = "";
         if (resp.results.length === 0) {
-          summaryText = `No grounded documents were found matching "${q}". Try rephrasing or checking your query against the system architecture specifications.`;
+          summaryText = `No documents matched "${q}". Try different words.`;
         } else {
-          summaryText = `Found ${resp.count} relevant document chunk(s) across the knowledge repository. Grounded context and matching excerpts are referenced below:`;
+          summaryText = `Found ${resp.count} relevant chunks. The excerpts are cited below.`;
         }
 
         setMessages((prev) =>
@@ -208,14 +204,14 @@ export const KnowledgeChat: React.FC = () => {
       } catch (err) {
         console.error("Knowledge search fallback error:", err);
         const errMsg =
-          err instanceof Error ? err.message : "Failed to query epistemic knowledge base.";
+          err instanceof Error ? err.message : "the search endpoint did not answer";
 
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === assistantMsgId
               ? {
                   ...msg,
-                  text: `Error connecting to knowledge search endpoint: ${errMsg}. Please verify that the API service is reachable and your authentication token is valid.`,
+                  text: `Could not reach the search endpoint: ${errMsg}. The API service or your session token may be unavailable.`,
                   isStreaming: false,
                 }
               : msg
@@ -242,287 +238,285 @@ export const KnowledgeChat: React.FC = () => {
       {
         id: "welcome-reset",
         sender: "assistant",
-        text: "Session cleared. What would you like to investigate in the knowledge repository?",
+        text: "Session cleared. What would you like to look up?",
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       },
     ]);
   };
 
   return (
-    <Card className="flex flex-col h-[680px] border-border bg-card shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-border py-3 px-5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
-            <Sparkles className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <CardTitle className="text-base font-semibold tracking-tight flex items-center gap-2">
-              Knowledge Assistant
-              <Badge variant="outline" className="text-[10px] font-mono py-0 h-4 border-primary/30 text-primary">
-                v1 / sse + pgvector
-              </Badge>
+    <div className="flex w-full flex-col gap-6">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-[28px] leading-tight font-semibold tracking-tight">Knowledge chat</h1>
+        <p className="text-sm text-text-secondary">
+          Ask the knowledge base in plain words. Every answer cites the chunks it was built from.
+        </p>
+      </div>
+
+      <Card className="flex h-[680px] flex-col">
+        <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-border pb-4">
+          <div className="min-w-0">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+              Knowledge assistant
+              <span className="font-mono text-[11px] font-normal text-muted-foreground">
+                sse + pgvector
+              </span>
             </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground">
-              Conversational hybrid query directly connected to /api/v1/knowledge/search
+            <CardDescription className="text-xs text-text-secondary">
+              Ask the knowledge base. Answers cite the chunks they came from.
             </CardDescription>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
             onClick={clearHistory}
-            className="h-8 px-2.5 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
-            title="Clear Chat History"
+            className="h-8 shrink-0 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+            title="Clear chat history"
           >
-            <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+            <Trash2 className="mr-1.5 size-3.5" strokeWidth={1.5} aria-hidden="true" />
             Clear
           </Button>
+        </CardHeader>
+
+        {/* Suggested Quick Queries Banner */}
+        <div className="flex items-center gap-2 overflow-x-auto border-b border-border bg-muted/30 px-6 py-2">
+          <span className="shrink-0 text-xs text-muted-foreground">Try</span>
+          <div className="flex items-center gap-1.5">
+            {SUGGESTED_QUERIES.map((sq, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSend(sq)}
+                disabled={isLoading}
+                className="whitespace-nowrap rounded-lg bg-secondary px-3 py-1.5 text-xs text-secondary-foreground transition-colors duration-[120ms] ease-out hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+              >
+                {sq}
+              </button>
+            ))}
+          </div>
         </div>
-      </CardHeader>
 
-      {/* Suggested Quick Queries Banner */}
-      <div className="flex items-center gap-2 px-5 py-2 border-b border-border/60 bg-muted/20 overflow-x-auto text-xs">
-        <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider shrink-0 flex items-center gap-1">
-          <Database className="h-3 w-3" />
-          Suggestions:
-        </span>
-        <div className="flex items-center gap-1.5">
-          {SUGGESTED_QUERIES.map((sq, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleSend(sq)}
-              disabled={isLoading}
-              className="text-[11px] whitespace-nowrap rounded-md bg-secondary px-2.5 py-1 text-secondary-foreground hover:bg-primary/20 hover:text-primary transition-colors cursor-pointer disabled:opacity-50"
-            >
-              {sq}
-            </button>
-          ))}
-        </div>
-      </div>
+        {/* Messages Scroll Area */}
+        <CardContent className="relative flex-1 overflow-hidden p-0">
+          <ScrollArea className="h-full p-6">
+            <div className="space-y-5">
+              {messages.map((msg) => {
+                const isUser = msg.sender === "user";
+                const isCopied = copiedMessageId === msg.id;
 
-      {/* Messages Scroll Area */}
-      <CardContent className="flex-1 p-0 overflow-hidden relative">
-        <ScrollArea className="h-full p-5">
-          <div className="space-y-5">
-            {messages.map((msg) => {
-              const isUser = msg.sender === "user";
-              const isCopied = copiedMessageId === msg.id;
-
-              return (
-                <div
-                  key={msg.id}
-                  className={`flex gap-3 group/msg ${isUser ? "flex-row-reverse" : "flex-row"}`}
-                >
-                  <Avatar className="h-8 w-8 shrink-0 mt-0.5">
-                    <AvatarFallback
-                      className={`text-xs font-semibold ${
-                        isUser
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-secondary text-secondary-foreground border border-border"
-                      }`}
-                    >
-                      {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4 text-primary" />}
-                    </AvatarFallback>
-                  </Avatar>
-
-                  <div className={`flex flex-col max-w-[85%] space-y-2 ${isUser ? "items-end" : "items-start"}`}>
-                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground px-1">
-                      <span>{isUser ? "Operator" : "Knowledge Assistant"}</span>
-                      <span>•</span>
-                      <span>{msg.timestamp}</span>
-                      <button
-                        onClick={() => handleCopy(msg.id, msg.text)}
-                        title={isCopied ? "Copied" : isUser ? "Copy prompt" : "Copy response"}
-                        className="ml-1 opacity-0 group-hover/msg:opacity-100 hover:text-foreground text-muted-foreground transition-opacity cursor-pointer p-0.5 rounded"
+                return (
+                  <div
+                    key={msg.id}
+                    className={`group/msg flex gap-3 ${isUser ? "flex-row-reverse" : "flex-row"}`}
+                  >
+                    <Avatar className="mt-0.5 size-8 shrink-0">
+                      <AvatarFallback
+                        className={
+                          isUser
+                            ? "bg-primary text-primary-foreground"
+                            : "border border-border bg-secondary text-secondary-foreground"
+                        }
                       >
-                        {isCopied ? (
-                          <Check className="h-3 w-3 text-emerald-500" />
+                        {isUser ? (
+                          <User className="size-4" strokeWidth={1.5} aria-hidden="true" />
                         ) : (
-                          <Copy className="h-3 w-3" />
+                          <Bot className="size-4 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
                         )}
-                      </button>
-                    </div>
+                      </AvatarFallback>
+                    </Avatar>
 
-                    <div
-                      className={`rounded-xl px-4 py-3 text-sm leading-relaxed shadow-xs ${
-                        isUser
-                          ? "bg-primary text-primary-foreground whitespace-pre-wrap"
-                          : "bg-muted/60 text-foreground border border-border/70"
-                      }`}
-                    >
-                      {isUser ? (
-                        msg.text
-                      ) : msg.text ? (
-                        <MarkdownRenderer
-                          content={msg.text}
-                          onCitationClick={(idx) => {
-                            if (msg.results && msg.results[idx - 1]) {
-                              toggleCitation(msg.results[idx - 1].id);
-                            }
-                          }}
-                        />
-                      ) : msg.isStreaming ? (
-                        <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                          Generating grounded response...
-                        </span>
-                      ) : null}
-                    </div>
-
-                    {/* Grounded Document Citations */}
-                    {msg.results && msg.results.length > 0 && (
-                      <div className="w-full mt-2 space-y-2 pt-2 border-t border-border/50">
-                        <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
-                          <span className="flex items-center gap-1.5 font-semibold text-foreground">
-                            <FileText className="h-3.5 w-3.5 text-primary" />
-                            Grounded Citations ({msg.results.length})
-                          </span>
-                          {msg.reranked && (
-                            <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-500 border-emerald-500/30">
-                              Reranked
-                            </Badge>
+                    <div className={`flex max-w-[85%] flex-col space-y-2 ${isUser ? "items-end" : "items-start"}`}>
+                      <div className="flex items-center gap-2 px-1 text-[11px] text-muted-foreground">
+                        <span>{isUser ? "Operator" : "Knowledge assistant"}</span>
+                        <span aria-hidden="true">·</span>
+                        <span className="tabular-nums">{msg.timestamp}</span>
+                        <button
+                          onClick={() => handleCopy(msg.id, msg.text)}
+                          title={isCopied ? "Copied" : isUser ? "Copy prompt" : "Copy response"}
+                          aria-label={isCopied ? "Copied" : isUser ? "Copy prompt" : "Copy response"}
+                          className="ml-1 rounded p-0.5 text-muted-foreground transition-colors duration-[120ms] ease-out hover:text-foreground"
+                        >
+                          {isCopied ? (
+                            <Check className="size-3 text-positive" strokeWidth={1.5} aria-hidden="true" />
+                          ) : (
+                            <Copy className="size-3" strokeWidth={1.5} aria-hidden="true" />
                           )}
-                        </div>
+                        </button>
+                      </div>
 
-                        <div className="space-y-2">
-                          {msg.results.map((hit) => {
-                            const isExpanded = Boolean(expandedCitations[hit.id]);
-                            // Handle both direct percentage [0, 100] and ratio [0, 1] gracefully
-                            const rawScore = typeof hit.score === "number" && !isNaN(hit.score) ? hit.score : 0;
-                            const scorePercent = rawScore <= 1.0 && rawScore > 0 ? rawScore * 100 : rawScore;
-                            const formattedScore = scorePercent % 1 === 0 ? scorePercent.toFixed(0) : scorePercent.toFixed(1);
+                      <div
+                        className={`rounded-xl px-4 py-3 text-sm leading-relaxed ${
+                          isUser
+                            ? "bg-primary text-primary-foreground whitespace-pre-wrap"
+                            : "border border-border bg-muted/40 text-foreground"
+                        }`}
+                      >
+                        {isUser ? (
+                          msg.text
+                        ) : msg.text ? (
+                          <MarkdownRenderer
+                            content={msg.text}
+                            onCitationClick={(idx) => {
+                              if (msg.results && msg.results[idx - 1]) {
+                                toggleCitation(msg.results[idx - 1].id);
+                              }
+                            }}
+                          />
+                        ) : msg.isStreaming ? (
+                          <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                            <span className="size-1.5 rounded-full bg-text-secondary" aria-hidden="true" />
+                            Searching the knowledge base
+                          </span>
+                        ) : null}
+                      </div>
 
-                            // Badge variant / color-coding:
-                            // >= 70%: default (emerald/green accent)
-                            // 30% - 69.9%: secondary (amber/yellow accent)
-                            // < 30%: outline (muted)
-                            const badgeVariant = scorePercent >= 70 ? "default" : scorePercent >= 30 ? "secondary" : "outline";
-                            const badgeClass =
-                              scorePercent >= 70
-                                ? "bg-emerald-600/90 text-white hover:bg-emerald-600"
-                                : scorePercent >= 30
-                                ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30"
-                                : "text-muted-foreground";
+                      {/* Grounded Document Citations */}
+                      {msg.results && msg.results.length > 0 && (
+                        <div className="mt-2 w-full space-y-2 border-t border-border pt-3">
+                          <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                            <span className="font-medium text-text-secondary">
+                              Citations ({msg.results.length})
+                            </span>
+                            {msg.reranked && (
+                              <span className="font-mono text-[11px] text-muted-foreground">
+                                reranked
+                              </span>
+                            )}
+                          </div>
 
-                            return (
-                              <div
-                                key={hit.id}
-                                className="rounded-lg border border-border bg-card/70 p-3 text-xs transition-colors hover:border-primary/40"
-                              >
+                          <div className="space-y-2">
+                            {msg.results.map((hit) => {
+                              const isExpanded = Boolean(expandedCitations[hit.id]);
+                              // Handle both direct percentage [0, 100] and ratio [0, 1] gracefully
+                              const rawScore = typeof hit.score === "number" && !isNaN(hit.score) ? hit.score : 0;
+                              const scorePercent = rawScore <= 1.0 && rawScore > 0 ? rawScore * 100 : rawScore;
+                              const formattedScore = scorePercent % 1 === 0 ? scorePercent.toFixed(0) : scorePercent.toFixed(1);
+
+                              // Match tone: strong, usable, weak
+                              const scoreTone =
+                                scorePercent >= 70
+                                  ? "bg-positive"
+                                  : scorePercent >= 30
+                                    ? "bg-warning"
+                                    : "bg-muted-foreground/60";
+
+                              return (
                                 <div
-                                  role="button"
-                                  tabIndex={0}
-                                  aria-expanded={isExpanded}
-                                  className="flex items-center justify-between cursor-pointer gap-2 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded"
-                                  onClick={() => toggleCitation(hit.id)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter" || e.key === " ") {
-                                      e.preventDefault();
-                                      toggleCitation(hit.id);
-                                    }
-                                  }}
+                                  key={hit.id}
+                                  className="rounded border border-border bg-card p-3 text-xs transition-colors duration-[120ms] ease-out hover:border-text-secondary/40"
                                 >
-                                  <div className="flex items-center gap-2 truncate">
-                                    <Badge variant="secondary" className="font-mono text-[10px] h-4 px-1.5">
-                                      Chunk #{hit.chunk_index}
-                                    </Badge>
-                                    <span className="font-medium text-foreground truncate">
-                                      {hit.title || `Document ${hit.document_id}`}
-                                    </span>
-                                  </div>
-
-                                  <div className="flex items-center gap-2 shrink-0">
-                                    <Badge
-                                      variant={badgeVariant}
-                                      className={`font-mono text-[10px] h-4 px-1.5 ${badgeClass}`}
-                                    >
-                                      {formattedScore}% match
-                                    </Badge>
-                                    {isExpanded ? (
-                                      <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
-                                    ) : (
-                                      <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-                                    )}
-                                  </div>
-                                </div>
-
-                                {isExpanded && (
-                                  <div className="mt-2.5 space-y-2 border-t border-border/60 pt-2 text-muted-foreground">
-                                    <p className="font-mono text-[11px] leading-relaxed whitespace-pre-wrap bg-muted/40 p-2.5 rounded border border-border/50 text-foreground">
-                                      {hit.content}
-                                    </p>
-                                    <div className="flex items-center justify-between text-[10px] font-mono text-muted-foreground pt-1">
-                                      <span>ID: {hit.document_id}</span>
-                                      <span className="text-primary hover:underline cursor-pointer flex items-center gap-1">
-                                        View in Vault <ExternalLink className="h-2.5 w-2.5" />
+                                  <div
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-expanded={isExpanded}
+                                    className="flex cursor-pointer items-center justify-between gap-2 rounded focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
+                                    onClick={() => toggleCitation(hit.id)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        toggleCitation(hit.id);
+                                      }
+                                    }}
+                                  >
+                                    <div className="flex min-w-0 items-center gap-2">
+                                      <span className="shrink-0 font-mono text-[11px] text-muted-foreground tabular-nums">
+                                        #{hit.chunk_index}
+                                      </span>
+                                      <span className="truncate font-medium text-foreground">
+                                        {hit.title || `Document ${hit.document_id}`}
                                       </span>
                                     </div>
+
+                                    <div className="flex shrink-0 items-center gap-2">
+                                      <span className="flex items-center gap-1.5 font-mono text-[11px] text-text-secondary tabular-nums">
+                                        <span className={`size-1.5 rounded-full ${scoreTone}`} aria-hidden="true" />
+                                        {formattedScore}%
+                                      </span>
+                                      {isExpanded ? (
+                                        <ChevronUp className="size-3.5 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
+                                      ) : (
+                                        <ChevronDown className="size-3.5 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
+                                      )}
+                                    </div>
                                   </div>
-                                )}
-                              </div>
-                            );
-                          })}
+
+                                  {isExpanded && (
+                                    <div className="mt-3 space-y-2 border-t border-border pt-3 text-muted-foreground">
+                                      <p className="whitespace-pre-wrap rounded border border-border bg-muted/40 p-3 font-mono text-[11px] leading-relaxed text-foreground">
+                                        {hit.content}
+                                      </p>
+                                      <div className="flex items-center justify-between gap-2 pt-1 font-mono text-[11px]">
+                                        <span className="truncate">ID: {hit.document_id}</span>
+                                        <span className="flex shrink-0 cursor-pointer items-center gap-1 text-accent-text hover:underline">
+                                          View in vault
+                                          <ExternalLink className="size-3" strokeWidth={1.5} aria-hidden="true" />
+                                        </span>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Loading indicator */}
+              {isLoading && !messages.some((m) => m.isStreaming && m.text.length > 0) && (
+                <div className="flex items-center gap-3">
+                  <Avatar className="size-8 shrink-0">
+                    <AvatarFallback className="border border-border bg-secondary text-secondary-foreground">
+                      <Bot className="size-4 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-4 py-3">
+                    <span className="size-1.5 rounded-full bg-text-secondary" aria-hidden="true" />
+                    <span className="font-mono text-xs text-muted-foreground">
+                      Searching vector embeddings and documents
+                    </span>
                   </div>
                 </div>
-              );
-            })}
+              )}
 
-            {/* Pulsing Loading Indicator */}
-            {isLoading && !messages.some((m) => m.isStreaming && m.text.length > 0) && (
-              <div className="flex gap-3 items-center">
-                <Avatar className="h-8 w-8 shrink-0">
-                  <AvatarFallback className="bg-secondary text-secondary-foreground border border-border">
-                    <Bot className="h-4 w-4 text-primary animate-pulse" />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="rounded-xl bg-muted/60 px-4 py-3 border border-border/70 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
-                  <span className="text-xs text-muted-foreground font-mono">
-                    Searching vector embeddings & documents...
-                  </span>
-                </div>
-              </div>
-            )}
+              <div ref={messagesEndRef} />
+            </div>
+          </ScrollArea>
+        </CardContent>
 
-            <div ref={messagesEndRef} />
-          </div>
-        </ScrollArea>
-      </CardContent>
-
-      {/* Query Input Box */}
-      <CardFooter className="border-t border-border p-3 bg-card">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-          className="flex w-full items-center gap-2"
-        >
-          <input
-            type="text"
-            value={inputQuery}
-            onChange={(e) => setInputQuery(e.target.value)}
-            disabled={isLoading}
-            aria-label="Query architectural documents, schemas, or decisions"
-            placeholder="Query architectural documents, schemas, or decisions..."
-            className="flex-1 rounded-md border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
-          />
-          <Button
-            type="submit"
-            size="sm"
-            disabled={!inputQuery.trim() || isLoading}
-            className="gap-1.5 px-4 h-9 cursor-pointer"
+        {/* Query Input Box */}
+        <CardFooter className="border-t border-border bg-card p-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="flex w-full items-center gap-2"
           >
-            <span>Ask</span>
-            <Send className="h-3.5 w-3.5" />
-          </Button>
-        </form>
-      </CardFooter>
-    </Card>
+            <input
+              type="text"
+              value={inputQuery}
+              onChange={(e) => setInputQuery(e.target.value)}
+              disabled={isLoading}
+              aria-label="Ask about documents, schemas, or decisions"
+              placeholder="Ask about documents, schemas, or decisions"
+              className="flex-1 rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:opacity-50"
+            />
+            <Button
+              type="submit"
+              size="sm"
+              disabled={!inputQuery.trim() || isLoading}
+              className="h-9 gap-1.5 px-4"
+            >
+              <span>Ask</span>
+              <Send className="size-3.5" strokeWidth={1.5} aria-hidden="true" />
+            </Button>
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
