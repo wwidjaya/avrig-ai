@@ -10,9 +10,9 @@
     {
       "File": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md",
       "Status": "PRESENT",
-      "Bytes": 26974,
-      "Lines": 246,
-      "Sha256": "FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6",
+      "Bytes": 27455,
+      "Lines": 248,
+      "Sha256": "6ECAE1E8B9B39DF06A2BE3031AA32B96357779B4BDE929ED6719411CAF217CC3",
       "Backup": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md.bak-20261120-062939",
       "BackupStatus": "PRESENT",
       "BackupBytes": 11496,
@@ -78,6 +78,22 @@
       "bytes_after": 26974,
       "lines_before": 247,
       "lines_after": 246
+    },
+    {
+      "sequence": 5,
+      "amended_utc": "2026-11-20T01:49:31Z",
+      "amended_local": "2026-11-20 08:49:31 +07:00",
+      "sections": [
+        "## Desktop UAT Testing > ### The observe, act, verify loop",
+        "## Desktop UAT Testing > ### Launch the tested artifact"
+      ],
+      "reason": "Two contract level hazards measured in the rc.004 run, neither of which the definition warned about. A saved ref can resolve onto an identical sibling instead of raising STALE_REF: with two Notepad windows open, a Close Tab ref captured from one snapshot was acted on after its own tab had been removed, the act returned ok true and InvokePattern.Invoke succeeded, and the click landed on the identical Close Tab in the sibling window, closing that window's document. The clean case does raise STALE_REF with details.kind saved_ref_absent, so the fresh snapshot advice stands while its implied guarantee does not, and the section now states that a successful act is not proof the ref addressed the intended node. Separately, closing a window whose document has unsaved changes discards that work with no prompt while returning ok true and delivered_verified, verified twice on this host through the positional close-app and through the window's own Close ref. Both hazards were added as two bullets and nothing else in the definition changed.",
+      "sha256_before": "FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6",
+      "sha256_after": "6ECAE1E8B9B39DF06A2BE3031AA32B96357779B4BDE929ED6719411CAF217CC3",
+      "bytes_before": 26974,
+      "bytes_after": 27455,
+      "lines_before": 246,
+      "lines_after": 248
     }
   ]
 }
