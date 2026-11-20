@@ -402,6 +402,14 @@ AVRIG-00002 rc.<NNN> avrig-ai@<sha> avrig-ui@<sha> PASS 39/39 evidence plans/evi
 
 A green run must name the candidate tag, both commit SHAs, the count of passing rows, and the evidence folder. If any row is blocked, the line reads BLOCKED with the row id and the reason, and the release trigger is not reported.
 
+Result for this candidate:
+
+```text
+AVRIG-00002 rc.001 avrig-ai@4e6900b7e1528b588d2968f24cf8693f4d59ecb0 avrig-ui@777bbb6ee0e36a8db96980490b1cd637257ac7e4 FAIL 33/39 evidence plans/evidence/AVRIG-00002/rc.001/
+```
+
+Six rows fail, none is blocked. Two are product defects (`SC-10`, `KB-04`) and four are rows whose criterion cannot hold as written (`TK-03`, `BR-04`, `I18-02`, `KB-02`), so no release trigger is reported. The per-row table, the measured values and the root cause of each failure are in `plans/evidence/AVRIG-00002/rc.001/RESULT.md`.
+
 ## Traceability
 
 - Design artifact: `design/ui/AVRIG-00002/design.md`
@@ -530,6 +538,40 @@ Build id is **`AVRIG-00002-build.001`**, anchored to the candidate commit rather
 Both annotated tags are pushed and resolve on the remote to exactly those commits (`ls-remote` confirms `^{}` dereferences). Candidate identity for this plan is the pair, not either SHA alone, because the token CSS lives in `avrig-ui` while the consuming app lives in `avrig-ai` and `@avrig/tokens` resolves through a `link:` symlink that no tag in `avrig-ai` can describe.
 
 `avrig/00002/rc.001` is immutable from this point. Any fix produces `rc.002`, never a moved tag. The taxonomy defines slice branches as `<type>/<CODE>-<NNNNN>-<slug>/<slice>`, nested under the plan branch. Git refs form a tree, so `refs/heads/feat/X` and `refs/heads/feat/X/landing` cannot coexist: `git worktree add -b feat/X/landing` fails with `cannot lock ref ... exists; cannot create`. The convention only works if the plan branch exists solely as a remote ref, which it cannot, because the plan branch is what gets checked out to work on. Consequence for this plan: the two surfaces run sequentially in the single plan-branch worktree rather than as concurrent slices, with explicit-path staging so no commit sweeps up the other agent's files. Both slices still live logically on the plan branch, which is what the merge expectations require; only the nested ref names were dropped. This is worth fixing in the taxonomy, and it is recorded here rather than silently worked around.
+
+## Stage 9, Test Verification
+
+### Candidate rc.001
+
+Tested `2026-11-20` against the pair, both tagged `avrig/00002/rc.001`:
+
+| Repository | Commit |
+|---|---|
+| `avrig-ai` | `4e6900b7e1528b588d2968f24cf8693f4d59ecb0` |
+| `avrig-ui` | `777bbb6ee0e36a8db96980490b1cd637257ac7e4` |
+
+Served at `http://127.0.0.1:5176` from the candidate checkout, Playwright `1.65.1`, Chromium headless, Node `v26.7.0`. The tree-equality gate before testing printed an empty diff between the candidate commit and the plan branch head, excluding `plans/` and `design/`.
+
+Coverage: all 7 routes in both themes. Journeys at `1440x900` and `390x844`; layout at `360x800`, `768x1024`, `1280x900`, `1920x1080`; computed-style, seal, token and focus rows at 1280. No row was run in one theme only.
+
+**Verdict: `FAIL 33/39`.** 33 rows pass, 6 fail, 0 blocked. No release trigger is reported.
+
+| Row | Class | Finding |
+|---|---|---|
+| `SC-10` | product | The command palette input `[cmdk-input]` paints no focus indicator on keyboard focus (`boxShadow: none`, `outlineStyle: none`) and matches `:focus-visible` on mouse click. `CommandPalette.tsx` styles it `outline-none` with no `ring`. WCAG 2.4.7. Button, Badge and Dialog close pass both halves |
+| `KB-04` | product | Closing `SystemInfoDialog` with `Escape` leaves focus on `BODY` instead of the `button[data-testid="sidebar-version-badge"]` that opened it. The dialog is driven controlled with no `DialogTrigger`, so Radix has no `onCloseAutoFocus` target |
+| `TK-03` | row | All six `--color-*` reads return empty because `@theme inline` inlines the value into the utility instead of emitting the custom property, which `TK-01` in the same matrix requires. The utilities resolve correctly, so the row contradicts `TK-01` |
+| `BR-04` | row | One `console.error` recurs 14 times on the WebSocket handshake to `wss://app.avrig.ai/ws/ws/command-center`, and `apps/web/scripts/qa/console-allow.txt` does not exist at the candidate, so it cannot be allowlisted |
+| `I18-02` | row | 11 `id` values equal their `en` value (product names, `[RE]`..`[TE]`, `01`..`04`, `Pin`), and `apps/web/scripts/qa/i18n-allow.txt` does not exist at the candidate |
+| `KB-02` | row | 23 visible focusables on `/`, 19 Tab-reached. The 4 unreached are the landing showcase Radix tab group, which the row's selector re-admits through `button:not([disabled])`; `ArrowRight` moves through all four |
+
+**What passed, including the rows that fail first.** `SC-04`: the `Review stage gate` button paints `rgb(36, 99, 235)`, equal to the `bg-primary` probe, and the card paints the `bg-card` probe with `backdropFilter: none`, in both themes. `SC-06`: the mounted closure is 26 files, 20 of them `.tsx`, and 0 fall outside a scan root. `SC-07`: all 4 locale read-backs and all 14 surface read-backs agree on theme, locale, auth and viewport before any measurement. `SC-05`: 0 of the 10 dist primitives carry a palette class or `focus:ring`. `SC-01`, `SC-02`, `SC-03`, `TK-02` and `SC-08`'s placement census return 0 matches or exact counts. `CT-01` 5.17:1, `CT-02` 7.41 to 8.12:1, `CT-03` 6.07 to 6.45:1, `CT-04` 0 forbidden text. `I18-01` 150 keys in both locales with no baseline key removed. `EX-01` 76 exports before and after. `PIL-01` 0 pills in the shell on all six console routes. `CP-01` exactly one visible `v0.5.0` badge per console route. Fonts, reduced motion (0 animations), skip links, layout at four widths and 24 console journeys all clean.
+
+Seals: 1 on `/`, 2 on each of the five console views, 3 on `/sdlc` (top bar, sidebar, `TA-03 approved` on the Technology Architecture card). Every seal is `h=16px`, `fs=10px`, `lh=10px`, `radius=4px`, `borderTopWidth=1px`. The `/sdlc` seal is 98px wide and occupies exactly 1 line box in both themes, measured as distinct `y` values of `Range.getClientRects()`.
+
+**Deviations from the matrix, all disclosed per row in `RESULT.md`.** The named harness scripts and the two allowlist files do not exist at the candidate (only `hex-allow.txt` does), so every row ran through a purpose-written Playwright driver in `plans/evidence/AVRIG-00002/rc.001/_runner/`. The port is 5176 rather than 5173. `[data-testid="main-viewport"]` does not exist, so `SC-04`, `SC-07` and `SC-08` read `#main-viewport`. `ST-05` was measured as `transition-duration > 0` together with `transitionProperty: all`, because the literal test matches 162 to 294 elements per surface purely from the property's initial value; the literal counts are preserved. `SC-08`'s `/sdlc` seal gates on the furthest-along `completed` stage (`TA-03`), not a `review_required` stage (`ED-04`), while the count criterion holds exactly.
+
+Next: two product fixes on a fresh candidate `rc.002` (`fe`), and four row amendments before the rerun. `plans/evidence/AVRIG-00002/rc.001/` holds the 44 screenshots, 38 result artifacts, the five static scan transcripts and the drivers.
 
 ## Review Findings
 
