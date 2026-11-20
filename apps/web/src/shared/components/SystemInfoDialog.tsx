@@ -16,9 +16,14 @@ import type { VersionInfo } from "../types/version";
 interface SystemInfoDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  returnFocusRef?: React.RefObject<HTMLElement | null>;
 }
 
-export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpenChange }) => {
+export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({
+  open,
+  onOpenChange,
+  returnFocusRef
+}) => {
   const { api } = useApi();
   const [backendVersion, setBackendVersion] = useState<VersionInfo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -59,7 +64,15 @@ export const SystemInfoDialog: React.FC<SystemInfoDialogProps> = ({ open, onOpen
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent
+        className="sm:max-w-md"
+        onCloseAutoFocus={(event) => {
+          if (returnFocusRef?.current) {
+            event.preventDefault();
+            returnFocusRef.current.focus();
+          }
+        }}
+      >
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-2 text-base font-semibold">

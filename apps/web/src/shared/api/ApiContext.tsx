@@ -31,7 +31,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
 
     if (auth.isAuthenticated) {
-      ws.connect("/ws/command-center");
+      ws.connect("/command-center");
     } else {
       ws.disconnect();
     }

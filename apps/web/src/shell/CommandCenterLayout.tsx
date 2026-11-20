@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Building2,
   Users,
@@ -60,6 +60,7 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
 
   const [signOutConfirmOpen, setSignOutConfirmOpen] = useState(false);
   const [systemInfoOpen, setSystemInfoOpen] = useState(false);
+  const versionBadgeRef = useRef<HTMLButtonElement>(null);
   const clientAppVersion = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "0.1.0";
 
   const operatorName =
@@ -204,6 +205,7 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
             <div className="flex items-center gap-2 text-xs">
               <span className="hidden text-muted-foreground md:inline">Version</span>
               <button
+                ref={versionBadgeRef}
                 type="button"
                 data-testid="sidebar-version-badge"
                 onClick={() => setSystemInfoOpen(true)}
@@ -262,7 +264,11 @@ export const CommandCenterLayout: React.FC<CommandCenterLayoutProps> = ({
       </AlertDialog>
 
       {/* System Telemetry & Information Dialog */}
-      <SystemInfoDialog open={systemInfoOpen} onOpenChange={setSystemInfoOpen} />
+      <SystemInfoDialog
+        open={systemInfoOpen}
+        onOpenChange={setSystemInfoOpen}
+        returnFocusRef={versionBadgeRef}
+      />
 
       {/* Main Command Center Viewport */}
       <main
