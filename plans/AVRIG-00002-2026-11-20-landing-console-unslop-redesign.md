@@ -604,3 +604,28 @@ Audited by `analyst` at stage 2 against the coding principles and the universal 
 | 21 | note | Plan identity, indicator match, draft-number safety, status vocabulary, EDM not-applicable reasoning, direction gate ordering, CC BY 4.0 attribution and the `rounded-md` version badge placement all verified clean | No action |
 
 The `rounded-md` detail matters for the signature seal: `data-testid="sidebar-version-badge"` is a `rounded-md` button, not a pill, so placing the seal beside it does not collide with the pill reduction.
+
+### Stage 9 goals audit
+
+Audited from the rc.001 evidence rather than from this plan's own claims. `analyst` could not be dispatched from the testing session (`subagent depth limit reached`), so this pass is first-party by `tester` and should be re-audited by `analyst` before any release decision.
+
+| Goal | Verdict | Deciding rows |
+|---|---|---|
+| 1, zero unslop signs and zero palette or hex hardcodes | achieved | `ST-01` 0 gradient backgrounds, `ST-02` 0 gradient text, `ST-04` 0 pulse or spin outside a live element, `ST-06` 0 coloured glow, 0 emoji, 0 uppercase tracked, `ST-05` 0 declared `transition-all`, `SC-01` 0 `bg-slate-`, `SC-02` 0 `bg-gradient`, `SC-03` 0 whole-palette matches, `TK-02` 0 raw hex with no allowlist |
+| 2, one warm neutral ramp, three text roles, one accent, HSL triplets | achieved, one caveat | `TK-01` 32 `:root` and 32 `.dark` triplets, 32 `hsl()` mappings, 0 violations; `SC-04` renders `bg-primary` as `rgb(36, 99, 235)` and `bg-card` as `rgb(28, 26, 23)` / `rgb(253, 251, 247)`; `CT-02` and `CT-03` read the accent as `rgb(128, 168, 255)` and `rgb(29, 79, 215)`. Caveat: `TK-03` cannot read the `--color-*` mapping because `@theme inline` inlines it, so the goal rests on the utilities the surfaces actually paint, which resolve |
+| 3, no heading above weight 600, no uppercase tracked label | achieved | `ST-03` max 500 on landing and 600 on all six console routes; `ST-06` 0 elements combining uppercase with letter spacing |
+| 4, pills drop to at most 2 with live state | achieved | `PIL-01` 0 pills inside `aside, header` on all six console routes, both themes, so 0 survivors need a live-state marker |
+| 5, every accent-as-text pair reaches 4.5:1 | achieved | `CT-01` 5.17:1, `CT-02` 7.41 to 8.12:1, `CT-03` 6.07 to 6.45:1, `CT-04` 0 text elements in the forbidden primary colour |
+| 6, layout holds at 360, 768, 1280 and 1920 with real proportions | achieved | `LY-01` 0 overflow at all four widths in both themes, `LY-02` 0 of 56 console combinations, `LY-03` aside 256 and main 1664 at 1920 |
+| 7, version badge resolves and the export surface is unchanged | achieved | `CP-01` exactly one visible `v0.5.0` badge per console route, still `rounded-md` at radius 6px and not a pill; `EX-01` 76 exports at `main` and 76 at the candidate, missing set empty |
+| 8, landing copy in both locales with no key removed and none untranslated | partially achieved | `I18-01` 150 keys in each locale, 129 in the baseline, 0 removed. `I18-02` flags 11 `id` values identical to `en` with no allowlist file at the candidate: `OIDC`, `Rauthy, Keycloak, Authentik`, `Pin`, `[RE]` to `[TE]`, `01` to `04` |
+
+The preamble claim holds: the rebuild does not change what the product claims or the order of its sections. `BR-01` finds the four landing sections in strictly ascending order with non-empty headings in both themes at `1440x900` and `390x844`, and the CTA lands on the console; `BR-02` renders each console route's own heading across 24 journeys with no `View Error` fallback.
+
+Two gaps in this goals section, both exposed by the evidence rather than by opinion.
+
+First, keyboard accessibility is asserted by the matrix and by nothing in this list. `SC-10` and `KB-01` to `KB-04` encode WCAG 2.4.7 and 2.4.3, and two of them fail on the product: the command palette input paints no focus indicator, and closing `SystemInfoDialog` drops focus to `body` instead of returning it to the version badge. A plan whose goals never name the property cannot claim it, so a keyboard-accessibility goal belongs here before the rerun.
+
+Second, goal 8's second clause is untestable as written, because the allowlist the matrix delegates to (`apps/web/scripts/qa/i18n-allow.txt`) does not exist at the candidate. Eleven values are identical across locales and every one is a product name, a stage code or a numeral, which is the shape an allowlist exists to admit. The goal is satisfiable, the row is not.
+
+Standing: `rc.001` fails 33 of 39 rows. Two product defects and four row amendments stand between this candidate and a release trigger, and no goal here is blocked outright.
