@@ -1,0 +1,13 @@
+=== G13: manifest readback ===
+file=D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md
+  manifest_sha256=7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6
+  live_sha256    =7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6
+  match=True
+  bytes_manifest=25014 bytes_live=25014
+  backup=D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md.bak-20261120-062939 exists=True
+  backup_manifest_sha256=ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56
+  backup_live_sha256    =ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56
+  backup_match=True
+  backup_bytes_manifest=11496 bytes_live=11496
+  status=PRESENT
+any_row_MISSING=0

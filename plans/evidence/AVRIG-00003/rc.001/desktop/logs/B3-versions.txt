@@ -1,0 +1,3 @@
+envelope_schema_version = 2.6
+binary_cli_version      = 1.3.1
+note: two different numbers, neither is a product release version, neither appears in tester.md

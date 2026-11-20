@@ -1,0 +1,3 @@
+=== H3: wmux fallback subsection, current vs backup ===
+current subsection lines 71..92; backup subsection lines 68..89
+IDENTICAL

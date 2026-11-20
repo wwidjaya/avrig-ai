@@ -1,0 +1,58 @@
+# C4: definition call forms against the shipped guides and `--help`
+
+Method: every command the new `## Desktop UAT Testing` section states was run with `--help` (`logs/D6-get-help.txt`, `logs/F2-set-value-help.txt`, `logs/D9-screenshot-help.txt`, `logs/D10-close-app-help.txt`, `logs/F3-batch-help.txt`), and the two guides were read (`guide-desktop.txt`, `guide-platform.txt`).
+
+## Forms that agree
+
+| Definition form | Evidence | Agrees |
+|---|---|---|
+| `agent-desktop status` | `skills get platform` names status as the first contact command | yes |
+| `agent-desktop version` | envelope, `command: version` | yes |
+| `agent-desktop list-surfaces` | platform guide capability table | yes |
+| `agent-desktop skills get desktop` / `skills get platform` | both retrieved with exit 0 | yes |
+| `agent-desktop snapshot --app "Notepad" -i` | `-i` is documented in the desktop guide loop and works | yes |
+| `snapshot --app ... --skeleton --compact`, `--root '<ref>'` | desktop guide loop and Refs section | yes |
+| `agent-desktop click '<ref>'`, `set-value`, `toggle`, `select`, `scroll-to` | platform guide ref-interaction row | yes |
+| `agent-desktop press`, `wait`, `focus-window` | platform guide, wait help | yes |
+| `agent-desktop launch <app>` | platform guide first contact: absolute path or bare name under System32 | yes |
+| `agent-desktop close-app "<App>.exe"` | close-app --help takes a positional `<APP>`; the definition uses the positional form | yes |
+| `agent-desktop list-apps`, `list-windows --app`, `--window-id` | platform guide app and window row, help | yes |
+| `agent-desktop type '<ref>' ... --headed` | platform guide: type needs --headed, returns POLICY_DENIED headless; F7 confirms | yes |
+| `agent-desktop set-value '<ref>' --stdin` | set-value --help documents `--stdin`, Read up to 128 KiB | yes |
+| `agent-desktop clipboard-set --stdin` | clipboard-set --help documents `--stdin` | yes |
+| `clipboard-get`, `clipboard-clear` | platform guide clipboard row | yes |
+| `agent-desktop list-notifications --headed` | platform guide: needs --headed when the Action Center is closed; D11 confirms POLICY_DENIED | yes |
+| `agent-desktop batch '<json array>'` | batch --help: positional `<JSON>` array of {command, args}; F3 confirms | yes |
+| `INVALID_ARGS`, `STALE_REF`, `AMBIGUOUS_TARGET`, `error.disposition.retry` | both guides, and E1, E2, E6 observed each | yes |
+| `agent-desktop wait` for a condition | wait --help offers ms, --element, --window, --text, --menu, --menu-closed, --event, --notification | yes |
+
+## Two forms that disagree, and are raised as definition defects
+
+### 1. `agent-desktop get '<ref>'` does not read declared actions
+
+The definition says: "Read the ref's declared actions with `agent-desktop get '<ref>'` before acting, so the action you choose is one the node offers."
+
+`agent-desktop get --help` (logs/D6-get-help.txt) reads:
+
+```text
+Read an element property (text, value, title, bounds, role, states)
+--property <PROPERTY>  text, value, title, bounds, role, states
+```
+
+Observed: `agent-desktop get '@sug7y9zevns7f:e1'` returned `{"command":"get","data":{"property":"text","ref":"...","value":"Text editor"}}` (envelopes/D6-get-ref.json). There is no `available_actions` property and no flag that produces one.
+
+`available_actions` is a field of a snapshot node (`snapshots/D4b-snapshot-newtab.json` shows `"available_actions":["SetValue","Scroll","SetFocus"]` on the textfield). So the instruction as written sends a reader to a command that cannot answer the question it asks.
+
+### 2. `snapshot --app` with two windows does not produce `AMBIGUOUS_TARGET`
+
+The definition says: "When a snapshot returns `AMBIGUOUS_TARGET` and lists candidate windows, pin one with `--window-id <id>` taken from that list rather than guessing which window was meant."
+
+Observed (envelopes/E3-ambiguous.json): with two Notepad windows open (`logs/E3-list-windows.txt`: w-11274556 focused, w-395428 unfocused), `snapshot --app "Notepad" -i` returned `ok: true`, `window.id: w-11274556`, and no error at all. It snapped the focused window silently.
+
+The definition's rule therefore guards a branch that this binary does not take, while the real hazard is the opposite: an ambiguous multi-window app is resolved silently, so a ref taken from an unfocused window is never seen and no error tells the reader which window was read. The definition's advice to pin with `--window-id` is still correct and works (E4), but the trigger sentence is wrong about when the reader needs it.
+
+Note this is a guide/behaviour disagreement too: the platform guide documents `AMBIGUOUS_TARGET` only for ref identity (`identity_not_unique`, `saved_ref_ambiguous`), never for window selection, so the definition is the party that overstates it.
+
+## Also noted, but not a definition defect
+
+`agent-desktop permissions --guide` returns `PLATFORM_NOT_SUPPORTED` on Windows (logs/B4-permissions-guide.txt). The definition already says not to reach for it on Windows, and the platform guide agrees. No action.

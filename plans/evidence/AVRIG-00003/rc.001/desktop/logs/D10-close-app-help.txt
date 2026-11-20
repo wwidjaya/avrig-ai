@@ -1,0 +1,12 @@
+Quit an application gracefully (--force to terminate)
+
+Usage: agent-desktop-win32-x64.exe close-app [OPTIONS] <APP>
+
+Arguments:
+  <APP>  Application name
+
+Options:
+      --force                          Terminate matching app processes instead of quitting gracefully
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)

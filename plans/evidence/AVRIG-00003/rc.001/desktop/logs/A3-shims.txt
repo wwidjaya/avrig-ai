@@ -1,0 +1,9 @@
+
+Name              Length LastWriteTime
+----              ------ -------------
+agent-desktop        431 11/20/2026 6:34:08 AM
+agent-desktop.cmd    120 11/20/2026 6:34:09 AM
+agent-desktop.ps1    112 11/20/2026 6:34:09 AM
+
+TestPath node_modules: True
+TestPath adapter: True

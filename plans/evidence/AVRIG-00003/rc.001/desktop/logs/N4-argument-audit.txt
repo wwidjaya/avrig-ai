@@ -1,0 +1,36 @@
+# N4: a token never travels as a process argument
+
+Every recorded invocation of a value-carrying command, in full.
+
+## set-value
+
+| Source | Invocation | Where the value went |
+|---|---|---|
+| logs/D7-invocation.txt | `agent-desktop set-value '@sug7y9zevns7f:e1' --stdin` | stdin |
+| logs/D7-invocation-cmdshim.txt | `agent-desktop.cmd set-value '@s4owxx7cy36dm:e1' --stdin` | stdin |
+| logs/F1-invocation.txt | `agent-desktop set-value '@s2rmxan5a69em5:e1' --stdin` | stdin |
+| logs/F1-invocation.txt | `agent-desktop.cmd set-value '@s2rmxan5a69em5:e1' --stdin` | stdin |
+
+The ref is the only argument in all four, and the value arrives on the pipe.
+
+## clipboard-set
+
+| Source | Invocation | Where the value went |
+|---|---|---|
+| envelopes/F2-clipboard-set.json | `agent-desktop clipboard-set --stdin` | stdin |
+| envelopes/F2b-clipboard-set-cmdshim.json | `agent-desktop.cmd clipboard-set --stdin` | stdin |
+
+## type
+
+| Source | Invocation | Where the value went | Verdict |
+|---|---|---|---|
+| envelopes/F7-type-headless.json | `agent-desktop type '@s2rmxan5a69em5:e1' "uat-secret-0002"` | **argument list** | violation, and the matrix's own F7 row prescribes exactly this form |
+
+## Two invocations carried a fake sentinel as an argument
+
+1. `envelopes/F7-type-headless.json`. The matrix's F7 row specifies `agent-desktop type '<ref>' "uat-secret-0002"` to prove the headless refusal. That form places the value in argv, which N4 forbids. The check cannot be run any other way as written, because the point is that the command is refused before delivery. Both rows are the matrix's, and they contradict each other.
+2. `logs/F1-diag-positional.txt`. `agent-desktop set-value '@s21hsyt8z7thav:e1' "agent-desktop-uat-0001"` was run once, deliberately, to isolate the `--stdin` defect: the same act via argv returns `delivered_verified` with `post_state.value` populated, while the same act via the `.ps1` shim returns `delivered_verified` with an empty value. Without that contrast, the defect would have been indistinguishable from an application that refuses SetValue.
+
+Both values are fakes. No real credential was ever placed in an argument list, and no credential exists anywhere in this evidence folder (logs/F5-secret-audit.txt).
+
+**N4 verdict: FAIL by its letter, for those two recorded invocations.** The secret-path steps themselves, F1 and F2, kept the value on stdin on every route tested.

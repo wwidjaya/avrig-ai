@@ -1,0 +1,16 @@
+=== G11: desktop Evidence per run section ===
+### Evidence per run
+
+Capture evidence under `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/`, keyed by the same candidate number as the browser evidence for the same run:
+
+```text
+plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/
+  snapshots/          every snapshot envelope, exactly as printed
+  screens/            one screenshot per asserted state
+  version.json        agent-desktop version output
+  status.json         agent-desktop status output
+  guide-desktop.txt
+  guide-platform.txt
+  RESULT.md           one result line
+```
+

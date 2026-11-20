@@ -1,0 +1,4 @@
+=== F1a: the definition's stated invocation, plain agent-desktop in pwsh (resolves to the .ps1 shim) ===
+pwsh command: 'uat-secret-0002' | agent-desktop set-value '@s2rmxan5a69em5:e1' --stdin
+=== F1b: same value through the .cmd shim, stdin inherited ===
+agent-desktop.cmd set-value '@s2rmxan5a69em5:e1' --stdin   <== value uat-secret-0002 piped on stdin, ref is the only argument

@@ -1,0 +1,10 @@
+=== N8: envelope schema version is never written up as a release version ===
+RESULT.md first line of substance: 
+**Verdict: FAIL.** Tag `avrig/00003/rc.001`, commit `68520e980a10a220fed78b7a86b6ba36e63e0e36`, agent-desktop CLI `1.3.1`, 63 of 72 checks PASS, 9 FAIL, 0 BLOCKED, evidence at `plans/evidence/AVRIG-00003/rc.001/desktop/`.
+checks in RESULT.md:
+  tag avrig/00003/rc.001 -> present
+  commit 68520e98... -> present: True
+  CLI version 1.3.1 -> present: True
+  verdict -> present: True
+  folder path -> present: True
+separate numbers: envelope schema 2.6 stated as a schema number, CLI 1.3.1 stated as the installed binary. No SemVer release version appears anywhere in this run, because none was released.

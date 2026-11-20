@@ -1,0 +1,2 @@
+=== H2: harness path, configs, Makefile targets ===
+line 68: 4. This workspace keeps its harness in `D:\Cloud\OneDrive\AI\Agentic\test`, with `playwright.config.ts`, `playwright.keycloak.config.ts`, and a `Makefile` carrying `test`, `keycloak`, `report` and `summary` targets. Its module resolution only works from that directory, so run every Node command with it as the working directory.

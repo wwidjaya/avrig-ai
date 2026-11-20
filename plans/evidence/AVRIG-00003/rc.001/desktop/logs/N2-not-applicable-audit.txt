@@ -1,0 +1,5 @@
+=== N2: no desktop row recorded as not applicable (refined) ===
+verdict values present: FAIL, PASS
+rows whose verdict field is anything other than PASS or FAIL: 0
+the two rows whose text contains the phrase 'not applicable' are G7 and N2: G7 quotes the definition's own rule, and N2 is this audit. Neither is a desktop row recorded as not applicable.
+no desktop row is BLOCKED either: every row ran. The mandatory desktop failures D7 and E3 are recorded as FAIL with the envelope attached, never downgraded to not applicable and never redirected to a browser check.
