@@ -5,8 +5,9 @@ project_indicator: AVRIG
 branch: feat/AVRIG-00004-plan-code-sqlite-allocation
 candidate_tags:
   - avrig/00004/rc.001 @ 38ff2b7, build AVRIG-00004-build.001, PASS 21/21 (495 assertions)
+  - avrig/00004/rc.002 @ 94b48a2, build AVRIG-00004-build.002, PASS 21/21 (495 assertions), carries the 0.6.0 bump
 release_version:
-status: testing
+status: release-version-decided
 created: 2026-11-20
 owner: Architect
 tags:
@@ -871,6 +872,14 @@ The suite was then run three times rather than once, against the tool commit `82
 Those are working-tree runs, and the plan says so rather than calling them evidence: no candidate tag existed when they were made, so they describe a commit and not a candidate. Stage 9 repeats the run at `avrig/00004/rc.001` and that result is the one that counts.
 
 This is recorded because a plan that claimed a green suite before one existed would be false, and because the first two failures are the evidence that the constraint set works: a weaker `ck_branch_carries_code` would have let both writers claim the same number silently.
+
+### The 0.6.0 bump and the instruction change
+
+`rc.002` carries the version bump at `94b48a2`, with the Agentic side unchanged at `5f7c794` because no tool line moved. `build002.md` records the gate measurements and shows `plan-code.ps1` and `001-plan.sql` hashing to the same values as `rc.001`, so `rc.002` is a re-score of the artifact that had already passed rather than a test of new code. QA reported `ROLLUP 21/21 PASS exit=0`, 495 assertions, and nine version surfaces reading `0.6.0`, with `avrig-desktop` correctly staying at its own `0.1.0`.
+
+Two defects in the bump path were recorded rather than worked around. `make bump-version VERSION=0.6.0` cannot run from Windows PowerShell, because the recipe's first line is POSIX shell and the ezwinports `make` hands it to `cmd.exe`, which exits 2 with `-z was unexpected at this time`. And `scripts/bump-version.ps1` prints success and exits 0 after its own `cargo check` fails on the known `avrig-desktop` icon defect, because a failing native command does not throw. The bump itself was applied by running the script directly, and the lock was confirmed with `cargo check --workspace --exclude avrig-desktop`.
+
+The branch also carries a communication rule added to all twelve agent definitions under `.opencode/agents/`, at the user's direction: a heading or a report line must be readable without the paragraph under it, a report answers what happened, what it means, and what the reader must do, and filler wording is cut. Because that directory is untracked in the Agentic repository, the proof is a manifest of before and after SHA-256 values at `plans/evidence/AVRIG-00004/instruction-manifest-comms.json`, with `.bak-20261120-110418` siblings beside each file.
 
 ### Not applicable in this plan
 
