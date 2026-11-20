@@ -144,7 +144,7 @@ A coded plan also moves to `plans/done/` once it is released, and it keeps its c
 
 Archived coded plans: `plans/done/AVRIG-00001-2026-11-19-agent-workflow-update.md`.
 
-New work in this project starts at `AVRIG-00004`. Allocated so far: `AVRIG-00001`, `AVRIG-00002`, `AVRIG-00003`.
+New work in this project starts at `AVRIG-00005`. Allocated so far: `AVRIG-00001`, `AVRIG-00002`, `AVRIG-00003`, `AVRIG-00004`.
 
 ## Deferred defects
 
