@@ -178,6 +178,16 @@ export const SdlcBoardView: React.FC = () => {
     return <Badge variant={meta.variant}>{meta.label}</Badge>;
   };
 
+  // The approved gate is the furthest-along completed stage. The seal marks that one
+  // gate, so the board carries a single seal rather than one per completed stage.
+  const approvedGate = stages.reduce<SdlcStage | null>(
+    (furthest, stage) =>
+      stage.status === "completed" && (!furthest || stage.number > furthest.number)
+        ? stage
+        : furthest,
+    null
+  );
+
   const openGateModal = (stage: SdlcStage) => {
     setSelectedStage(stage);
     setDiffVerified(false);
@@ -221,7 +231,13 @@ export const SdlcBoardView: React.FC = () => {
                   </span>
                   <CardTitle className="mt-1 text-sm font-semibold">{stage.name}</CardTitle>
                 </div>
-                {getStatusBadge(stage.status)}
+                {approvedGate?.id === stage.id ? (
+                  <span className="inline-flex shrink-0 items-center rounded-[4px] border-[1.5px] border-accent-text px-1.5 py-0.5 font-mono text-[10px] leading-none tracking-normal text-accent-text">
+                    {stage.code} approved
+                  </span>
+                ) : (
+                  getStatusBadge(stage.status)
+                )}
               </div>
               <CardDescription className="text-xs">{stage.phase}</CardDescription>
             </CardHeader>
