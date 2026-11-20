@@ -1,0 +1,7 @@
+=== H1 browser ### headings ===
+line 57: ### When it applies
+line 63: ### Choose the harness, then name the command
+line 71: ### The `wmux browser` fallback, in real call forms
+line 93: ### What to test and how to assert
+line 102: ### Evidence per run
+line 113: ### Reporting a browser failure

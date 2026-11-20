@@ -1,0 +1,3 @@
+D13 envelope audit - files: 45
+failures: 0
+all parse with version/ok/command present

@@ -1,0 +1,7 @@
+N2 not-applicable audit
+-----------------------
+Desktop rows examined: A through N (73 rows, 72 PASS, 1 BLOCKED).
+Rows recorded as 'not applicable': 0.
+A8 is BLOCKED, not not-applicable, and carries its EPERM output at logs/A8-reinstall-unelevated.txt.
+D11 is POLICY_DENIED headless, recorded as a preflight state with its envelope, not as not-applicable.
+No native-window row was excused on the grounds that a browser harness cannot see it.

@@ -1,0 +1,53 @@
+D14 RECORDED COMMAND SEQUENCE for avrig/00003/rc.002 @ 60835fa209e6482b10bf9fc4e66878b775ab14a1 (agent-desktop 1.3.1, envelope schema 2.6)
+Every step below is followed by its envelope or log. No Start-Sleep appears anywhere in this run, and no --headed run was started or left alive.
+
+PREFLIGHT
+ 01 where.exe agent-desktop / (Get-Command agent-desktop).Source              -> logs/A2-where.txt
+ 02 agent-desktop version                                                     -> version.json, envelopes/B1-version.json
+ 03 agent-desktop status                                                      -> status.json, envelopes/B2-status.json, envelopes/B6-status.json (stderr empty)
+ 04 agent-desktop permissions / permissions --guide                           -> envelopes/B4-permissions.json, logs/B4-permissions-guide.txt
+ 05 agent-desktop list-surfaces                                               -> envelopes/B5-list-surfaces.json
+ 06 agent-desktop skills get desktop / skills get platform                    -> guide-desktop.txt, guide-platform.txt, logs/C1-*, logs/C2-*
+ 07 agent-desktop list-windows / list-apps (baseline before anything opened)  -> logs/D0-windows-baseline.json, logs/D0-apps-baseline.json
+
+OBSERVE, ACT, VERIFY (D)
+ 08 agent-desktop launch notepad.exe --activate                               -> envelopes/D1-launch.json
+ 09 agent-desktop list-apps --app notepad.exe                                 -> envelopes/D2-list-apps.json   (Notepad.exe, pid 2700)
+ 10 agent-desktop list-windows --app Notepad                                  -> envelopes/D3-list-windows.json (w-5965524, Untitled - Notepad)
+ 11 agent-desktop snapshot --app Notepad -i                                   -> envelopes/D4-snapshot-observe.json (s1tc00hf3lvakv, 27 refs), logs/D4-refs.txt
+ 12 agent-desktop get '@s1tc00hf3lvakv:e1' --property value                    -> envelopes/D6-get-ref.json (value '', SetValue|Scroll|SetFocus come from the snapshot, not from get)
+ 13 'agent-desktop-uat-0001' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s1tc00hf3lvakv:e1' --stdin -> envelopes/D7-act.json (ACTION_FAILED, delivered_unverified, retry unsafe; logs/D7-invocation-cmdshim.txt)
+ 14 agent-desktop snapshot --app Notepad -i                                   -> snapshots/D8-snapshot-verify.json (s33z6o07a5ypnb, value carries the sentinel, title '*agent-desktop-uat-0001 - Notepad')
+ 15 agent-desktop screenshot --window-id w-5965524 screens/D9-after-act.png    -> envelopes/D9-screenshot.json, screens/D9-after-act.png
+ 16 agent-desktop wait --element '@s33z6o07a5ypnb:e1' --predicate value --value 'agent-desktop-uat-0001' --app Notepad --timeout 5000 -> envelopes/D12-wait-value.json (found true, 157 ms)
+ 17 agent-desktop get '@s33z6o07a5ypnb:e1' --property value                    -> envelopes/D12-get-value.json (the sentinel, asserted by get and not by wait --text)
+
+SECRET HANDLING (F)
+ 18 agent-desktop snapshot --app Notepad -i                                    -> snapshots/F2-snapshot-before.json (field holds agent-desktop-uat-0001, no sentinel)
+ 19 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.ps1 set-value '@s36v6n2oftajd2:e1' --stdin -> envelopes/F2-ps1-set-value.json (ok true, delivered_verified, verified true) and then snapshots/F2-snapshot-readback.json + envelopes/F2-readback.json show value '' -> the piped value was lost (logs/F2-routes.txt)
+ 20 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s3h8fpmxub039w:e1' --stdin -> envelopes/F1-cmd-set-value.json (ACTION_FAILED, delivered_unverified) and then snapshots/F1-snapshot-after-cmd.json + envelopes/F1-readback.json show the sentinel -> the route carries it (logs/F1-invocation.txt)
+ 21 agent-desktop type '@s2xk05yvc53sa2:e1' 'uat-probe-0003'                   -> envelopes/F7-type-headless.json (POLICY_DENIED, no --headed retry; the literal is the declared non-secret probe, logs/F7-invocation.txt)
+ 22 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd clipboard-set --stdin -> envelopes/F4-clipboard-set.json
+ 23 agent-desktop clipboard-get                                               -> envelopes/F4-clipboard-get.json (holds uat-secret-0002 + CRLF added by the PowerShell pipe)
+ 24 agent-desktop clipboard-clear ; clipboard-get                             -> envelopes/F4-clipboard-clear.json, envelopes/F4-clipboard-get-after-clear.json (found false)
+ 25 agent-desktop clear '@s2xk05yvc53sa2:e1'                                  -> envelopes/F4-clear-field.json (post_state.value '')
+ 26 agent-desktop snapshot --app Notepad -i ; get value ; screenshot          -> snapshots/F4-snapshot-cleared.json, envelopes/F4-readback-empty.json, screens/F4-cleared.png
+
+REF LIFECYCLE (E)
+ 27 agent-desktop click '@e8'                                                 -> envelopes/E1-bare-ref.json (INVALID_ARGS, retry safe)
+ 28 agent-desktop snapshot --app Notepad -i -> snapshots/E2-snapshot-before-change.json (s1pq1m6yiwffa8, tab ref e10 captured)
+ 29 agent-desktop snapshot --root '@s1pq1m6yiwffa8:e9' -i --compact           -> snapshots/E2-snapshot-root-redrill.json (refs inside the drill replaced with e28..e32)
+ 30 agent-desktop click '@s1pq1m6yiwffa8:e10'                                 -> envelopes/E2-stale-ref.json (STALE_REF, retry safe, logs/E2-tree-change.txt)
+ 31 agent-desktop snapshot --app Notepad -i (recovery, before the next action) -> snapshots/E5-fresh-snapshot-after-stale.json (s3rgt4zpi62vl7, logs/E5-recovery-order.txt)
+ 32 agent-desktop launch notepad.exe --activate ; list-windows                 -> logs/E3-launch-second-notepad.json, logs/E3-list-windows.txt (two windows, same pid)
+ 33 agent-desktop focus-window --window-id w-1444236                           -> logs/E3-focus-a.json (ACTION_FAILED, did not become foreground before headed delivery, not_delivered, retry safe)
+ 34 agent-desktop snapshot --app Notepad -i                                    -> envelopes/E3-focused-a.json (AMBIGUOUS_TARGET candidate_count 2, both window ids)
+ 35 agent-desktop maximize --window-id ; list-windows ; restore --window-id     -> logs/E3-maximize-a.json, logs/E3-list-windows-after-max.json, logs/E3-restore-a.json (is_focused stays false: focus is not obtainable headless)
+ 36 agent-desktop open-system-surface --surface taskbar                         -> logs/E3-taskbar-open.json (POLICY_DENIED headless; no --headed used)
+ 37 agent-desktop focus-window --title 'Notepad'                               -> envelopes/E7-ambiguous-focus-window.json (AMBIGUOUS_TARGET, candidates listed)
+ 38 agent-desktop find --app Notepad --name 'File'                             -> envelopes/E7-ambiguous-find.json (AMBIGUOUS_TARGET, candidates listed)
+ 39 agent-desktop snapshot --app Notepad -i --window-id w-4589872              -> envelopes/E4-window-id.json (covers exactly that window)
+ 40 agent-desktop close-app 'notepad.exe' ; list-apps                          -> envelopes/D10-close-app-positional.json (process_instance_exited), envelopes/D10-list-apps-after.json (empty)
+ 41 agent-desktop close-app --app 'notepad.exe'                                -> envelopes/D10-close-app-app-flag.json (INVALID_ARGS, recorded not used)
+ 42 agent-desktop list-notifications                                           -> envelopes/D11-notifications.json (POLICY_DENIED, Action Center closed: preflight state)
+ 43 list-notifications was not retried with --headed; no headed run was started

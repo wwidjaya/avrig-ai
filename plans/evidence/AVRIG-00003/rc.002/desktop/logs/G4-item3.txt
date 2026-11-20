@@ -1,0 +1,2 @@
+G4 RESPONSIBILITIES ITEM 3 HEADING
+line 33: 3. **UI Verification: Live Browser and Desktop Application UAT:**

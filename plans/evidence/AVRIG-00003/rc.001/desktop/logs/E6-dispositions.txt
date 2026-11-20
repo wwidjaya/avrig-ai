@@ -1,0 +1,12 @@
+=== E6: error.disposition.retry recorded verbatim per error envelope (E1 to E3) ===
+E1-bare-ref.json -> code=INVALID_ARGS delivery=not_delivered retry=safe
+E2-stale-ref.json -> code=STALE_REF delivery=not_delivered retry=safe
+E3-ambiguous.json -> ok=True no error block (this is the E3 finding: no ambiguity was raised)
+additional error envelopes captured outside E1-E3:
+  D7-act-cmdshim.json -> code=ACTION_FAILED delivery=delivered_unverified retry=unsafe
+  F1b-stdin-set-value-cmdshim.json -> code=ACTION_FAILED delivery=delivered_unverified retry=unsafe
+  F7-type-headless.json -> code=POLICY_DENIED delivery=not_delivered retry=safe
+  D11-notifications.json -> code=POLICY_DENIED delivery=not_delivered retry=safe
+  D10-close-app.json -> code=INVALID_ARGS delivery=not_delivered retry=safe
+  E1-bare-ref.json -> code=INVALID_ARGS delivery=not_delivered retry=safe
+the only retries performed were: INVALID_ARGS on close-app --app (retry=safe, substituted the documented positional form), INVALID_ARGS on the empty ref from a scripting error (retry=safe), and APP_NOT_FOUND on 'Character Map' (retry=safe, retried with the process identity charmap.exe). Every other failure was read once and reported without retry.

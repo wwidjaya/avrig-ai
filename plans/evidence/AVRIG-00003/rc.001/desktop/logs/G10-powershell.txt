@@ -1,0 +1,7 @@
+=== G10: Windows and PowerShell specifics ===
+### Windows and PowerShell specifics
+
+- Quote every ref as a single quoted string: `agent-desktop click '@s8f3k2p9:e8'`. PowerShell treats a leading `@token` as the splatting operator, so an unquoted ref is parsed as a variable before the CLI ever sees it.
+- `type`, `focus`, `right-click`, `double-click`, and `triple-click` need `--headed` on this platform, and they drive physical input. `type` synthesizes keystrokes through SendInput, so it is a permissioned exception rather than the default text path.
+- The headless path for text is `set-value --stdin`, piped so the value never enters the argument list:
+

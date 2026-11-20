@@ -1,0 +1,15 @@
+--- G9 forms ---
+agent-desktop status         total=2   inDesktopSection=2
+skills get desktop           total=1   inDesktopSection=1
+skills get platform          total=1   inDesktopSection=1
+snapshot --app               total=4   inDesktopSection=4
+-i                           total=7   inDesktopSection=4
+--window-id                  total=2   inDesktopSection=2
+close-app                    total=2   inDesktopSection=2
+--stdin                      total=6   inDesktopSection=6
+agent-desktop.cmd            total=3   inDesktopSection=3
+delivered_verified           total=2   inDesktopSection=2
+INVALID_ARGS                 total=2   inDesktopSection=2
+STALE_REF                    total=2   inDesktopSection=2
+AMBIGUOUS_TARGET             total=2   inDesktopSection=2
+error.disposition.retry      total=1   inDesktopSection=1

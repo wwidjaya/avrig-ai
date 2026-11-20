@@ -1,0 +1,13 @@
+=== G3: ### headings under ## Desktop UAT Testing ===
+### When it applies
+### Preflight
+### Read the bundled guides before the first action
+### The observe, act, verify loop
+### Windows and PowerShell specifics
+### Launch the tested artifact
+### Secrets
+### Retry discipline
+### What to assert
+### Evidence per run
+### Reporting a desktop failure
+count=11

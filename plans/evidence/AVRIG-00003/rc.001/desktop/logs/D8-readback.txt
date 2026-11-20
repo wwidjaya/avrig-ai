@@ -1,0 +1,4 @@
+--- read live state after set-value ---
+{"version":"2.6","ok":true,"command":"get","data":{"property":"text","ref":"@s2a79rcbwhrx8p:e1","value":"Text editor"}}
+{"version":"2.6","ok":true,"command":"get","data":{"property":"value","ref":"@s2a79rcbwhrx8p:e1","value":""}}
+{"version":"2.6","ok":true,"command":"is","data":{"applicable":true,"property":"focused","ref":"@s2a79rcbwhrx8p:e1","result":true}}

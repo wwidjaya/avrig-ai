@@ -1,0 +1,41 @@
+=== A1: npm install -g agent-desktop@1.3.1 from an unelevated pwsh ===
+elevated=False (logs/A0-elevation.txt); the ACL grants Users/Authenticated Users RX only (logs/A1-acl.txt)
+npm error code EPERM
+npm error syscall mkdir
+npm error path d:\nodejs\.npm\global\node_modules\.agent-desktop-jpia8Jsv
+npm error errno -4048
+npm error Error: EPERM: operation not permitted, mkdir 'd:\nodejs\.npm\global\node_modules\.agent-desktop-jpia8Jsv'
+npm error     at async Object.mkdir (node:internal/fs/promises:1605:10)
+npm error     at async moveFile (d:\nodejs\.npm\global\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:27:3)
+npm error     at async Promise.all (index 0)
+npm error     at async moveFile (d:\nodejs\.npm\global\node_modules\npm\node_modules\@npmcli\fs\lib\move-file.js:36:9)
+npm error     at async Promise.allSettled (index 0)
+npm error     at async #reifyPackages (d:\nodejs\.npm\global\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:321:11)
+npm error     at async Arborist.reify (d:\nodejs\.npm\global\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:127:5)
+npm error     at async Install.exec (d:\nodejs\.npm\global\node_modules\npm\lib\commands\install.js:149:5)
+npm error     at async Npm.exec (d:\nodejs\.npm\global\node_modules\npm\lib\npm.js:193:9)
+npm error     at async module.exports (d:\nodejs\.npm\global\node_modules\npm\lib\cli\entry.js:67:5) {
+npm error   errno: -4048,
+npm error   code: 'EPERM',
+npm error   syscall: 'mkdir',
+npm error   path: 'd:\\nodejs\\.npm\\global\\node_modules\\.agent-desktop-jpia8Jsv'
+npm error }
+npm error
+npm error The operation was rejected by your operating system.
+npm error It's possible that the file was already in use (by a text editor or antivirus), or that you lack permissions to access it.
+npm error
+npm error If you believe this might be a permissions issue, please double-check the permissions of the file and its containing directories, or try running the command again as root/Administrator.
+npm error A complete log of this run can be found in: d:\nodejs\.npm\cache\_logs\2026-11-20T00_35_09_812Z-debug-0.log
+
+=== installed tree produced by the elevated install recorded in the manifest (installed_elevated: true) ===
+postinstall platform binary: d:\nodejs\.npm\global\node_modules\agent-desktop\bin\agent-desktop-win32-x64.exe exists=True bytes=4037120 sha256=A7EF5E539FB97287A35EB9ED49D3803B4D6BD705BC4106EB28617229F9BE679E
+
+Name         Length
+----         ------
+bin          
+lib          
+scripts      
+package.json 856
+README.md    10105
+
+

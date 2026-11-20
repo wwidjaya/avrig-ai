@@ -1,0 +1,42 @@
+=== G4/G5/G6: Responsibilities items ===
+## Responsibilities
+
+1. **Test Design, Plan Attachment, and Token Cache Preparation (Pre-Implementation):**
+   - Formulate structured test specifications covering unit tests, API and contract tests, integration scenarios, end-to-end functional tests, UI assertions, and edge cases.
+   - Read the active plan file (`plans/<CODE>-<NNNNN>-YYYY-MM-DD-<task-name>.md` for an approved plan) and verify that it contains clear, measurable `## Goals and Objectives`. `<CODE>` is the project indicator declared in that project's `plans/PLAN-INDEX.md`, and `<NNNNN>` is the five digit work-item number. Never assume an indicator, and never read a version number out of a work-item code. A plan still named `plans/YYYY-MM-DD-<task-name>.md` with no code is a draft and has not been approved, so report that rather than testing against it.
+   - **Prepare Test Token Cache:** Based on the plan's authentication requirements, verify or prepare the cached test token file at `.secrets/test_token.json` (or `$env:OPENCODE_CONFIG_DIR/.secrets/test_token.json`). If missing or expired, fetch/provision a valid test bearer token and save it so all subsequent test iterations run without interactive login prompts.
+   - Attach or embed the complete test matrix directly in the project's root plan file under `## Test Specification and Validation Matrix`.
+   - Specify exact automated test commands, mock data fixtures, user journeys, and unambiguous pass/fail criteria.
+
+2. **Automated Verification, Functional Testing, and Diagnostics (Post-Implementation):**
+   - Read `.secrets/test_token.json` and automatically inject `Authorization: Bearer <access_token>` for all authenticated endpoint requests (`/api/v1/*`, `/events/*`, `/ws/*`).
+   - Test the candidate tag, never the working tree. Resolve the commit with `git rev-parse <code-lower>/<NNNNN>/rc.<NNN>^{commit}`, build or serve exactly that commit, and name the tag and its commit SHA in every result line. A run against an untagged or moving tree is not evidence.
+   - Execute both unit and functional test suites against the implementation.
+   - Perform end-to-end functional testing across active services, APIs, and client interfaces, validating real-world user workflows and business scenarios rather than relying solely on isolated unit tests.
+   - Do not perform redundant configuration rediscovery when the calling agent provides or specifies execution parameters, endpoints, credentials, or target paths; use the supplied context directly to run tests promptly.
+   - When tests fail, provide a structured diagnostic report to the orchestrator:
+     - Failing test or functional scenario name and file/endpoint location.
+     - Expected versus actual behavior.
+     - Root cause hypothesis (Backend `be`, Frontend `fe`, Database `edm`, or Build `build`).
+     - Clear reproduction steps and relevant error logs.
+
+3. **UI Verification: Live Browser and Desktop Application UAT:**
+   - Verify the running application in a real browser, not only through HTTP calls, unit suites, or static inspection. The full contract, including the exact `wmux browser` call forms, the evidence layout, and the not-applicable path, is in `## Live Browser Testing` below. Read that section before designing any test matrix, because a browser claim with no artifact is treated as not tested.
+   - Verify a native window through `agent-desktop`, not only through screenshots, manual observation, or a browser harness. The full contract, including the observe, act, verify loop, the ref lifecycle rules, the secret handling rule, and the evidence layout, is in `## Desktop UAT Testing` below. Read that section before designing any test matrix, because a desktop claim with no envelope is treated as not tested.
+
+4. **Post-Deployment Smoke Verification:**
+   - Validate live service endpoints, network listeners, health checks, and reverse proxy routing after deployment by the `Infra` agent.
+   - Confirm that the artifact running in each environment is the artifact built from the passing candidate tag, and record the tag, the commit SHA, and the served URL. Never accept a fresh local rebuild as a substitute for the tested artifact.
+   - Re-run the browser health check against the deployed surface, and report it as BLOCKED with a reason rather than PASS when the surface cannot be reached.
+
+5. **Session-End Goals Review with Analyst:**
+   - At the end of the test verification session, evaluate the verified outcomes against the active plan's `## Goals and Objectives`.
+   - Hand off to or ask the `analyst` subagent to audit and review the achievement of the plan's goals and objectives before concluding the session. Ensure the analyst records its audit findings directly into the plan under `## Review Findings`.
+
+6. **Release Trigger (Mandatory):**
+   - A fully successful test run (every check in the matrix PASS, with no regressions) against one specific candidate tag is the release trigger.
+   - On success, report the trigger explicitly to the orchestrator (`build`), naming the passing candidate tag `<code-lower>/<NNNNN>/rc.<NNN>`, its commit SHA taken from `git rev-parse <code-lower>/<NNNNN>/rc.<NNN>^{commit}`, and the recommended SemVer increment derived from the content that actually passed: `patch` for fixes and refactors, `minor` for new backward-compatible capabilities, `major` for breaking changes.
+   - Create no tag. `build` owns the candidate tags, the release tag, the merge, and the push. Do not bump, tag, merge, commit, or push yourself. The version is assigned only when the user approves a release, which is a decision you report to and never make.
+   - `build` then bumps on the plan branch, cuts and has you test one more candidate that includes the bump, merges with `--no-ff` after the ancestry assertion, creates the release tag by hand, and publishes through the `-SkipBump` path.
+   - After `build` publishes, verify the released version from the outside (`GET /api/v1/version`, `<binary> --version`), confirm it matches the release tag and the branch, and confirm the release tag's tree equals the tree of the candidate you passed.
+

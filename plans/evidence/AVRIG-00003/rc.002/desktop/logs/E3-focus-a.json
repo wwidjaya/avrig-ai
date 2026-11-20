@@ -1,0 +1,1 @@
+{"version":"2.6","ok":false,"command":"focus-window","error":{"code":"ACTION_FAILED","message":"Target window did not become foreground before headed delivery","suggestion":"Retry after ensuring the target window can accept focus","details":{"physical_delivery_started":false},"disposition":{"delivery":"not_delivered","retry":"safe"}}}

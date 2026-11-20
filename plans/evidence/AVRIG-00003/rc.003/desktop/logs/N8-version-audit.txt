@@ -1,0 +1,6 @@
+N8 version audit
+----------------
+RESULT.md names: candidate tag avrig/00003/rc.003, commit 04ee97c6a6709869787f50883bbb782cfc8b8990,
+installed CLI version 1.3.1, verdict, pass count and folder path.
+Envelope schema version 2.6 is described only as the JSON shape version and appears in no version claim.
+Neither 1.3.1 nor 2.6 appears in the definition (G12).

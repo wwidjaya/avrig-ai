@@ -1,0 +1,1 @@
+INVOCATION: 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s3h8fpmxub039w:e1' --stdin (sentinel on stdin; the ref is the only argv entry)

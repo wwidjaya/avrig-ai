@@ -1,0 +1,10 @@
+# N7: the tester installed nothing, edited nothing, and created only evidence
+
+| Ownership question | Evidence | Result |
+|---|---|---|
+| Did the tester install the CLI? | Two `npm install -g agent-desktop@1.3.1` attempts, both refused with EPERM before any file was written (logs/A1-install.txt, logs/A8-reinstall.txt). The shim count stayed at three and the package tree is the one Infra installed at 06:34. | no install performed by the tester |
+| Did the tester edit the definition? | `Get-FileHash -Algorithm SHA256` of `.opencode/agents/tester.md` is 7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6 before the first check and after the last one, equal to the manifest row. Nothing was reformatted, retitled or repaired. | untouched |
+| Did the tester edit the plan or the matrix? | No. The candidate commit 68520e980a10a220fed78b7a86b6ba36e63e0e36 is checked out, the working tree was clean before the run, and the only added paths are under `plans/evidence/AVRIG-00003/`. | plan unchanged |
+| Did the tester create anything outside evidence? | No. No branch, no tag, no push, no product source, no schema, no harness change. | clean |
+
+A tester-side edit of `tester.md` would have voided the run. The hash read-back at both ends is the proof that it did not happen.

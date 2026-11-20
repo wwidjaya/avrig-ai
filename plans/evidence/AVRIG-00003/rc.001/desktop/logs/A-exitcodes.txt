@@ -1,0 +1,2 @@
+A5-version-noprofile.json exit code recorded: EXITCODE=0
+A7-status-second-shell.json exit code recorded: EXITCODE=0

@@ -1,0 +1,5 @@
+=== N1: every PASS row names an artefact that exists on disk ===
+rows=72 pass=63 fail=9
+artefact paths resolved=95
+missing or empty: 0
+no PASS row is withheld and no FAIL row is presented as tested evidence without an artefact; every row that claims a result names a file that exists.

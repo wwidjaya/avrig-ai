@@ -1,0 +1,5 @@
+G2 LEVEL-2 HEADINGS WITH LINE NUMBERS
+line 12: ## Responsibilities
+line 53: ## Live Browser Testing
+line 117: ## Desktop UAT Testing
+### Reporting a browser failure is on line 113, so the new section (line 117) follows it = True

@@ -1,0 +1,6 @@
+N5 publish audit
+----------------
+git status in the avrig-ai worktree shows only plans/evidence/ additions.
+Nothing outside plans/evidence/ was created or edited by this run.
+The RESULT.md line names the check and quotes no credential.
+No live token, password or key exists anywhere in this folder (see F5).

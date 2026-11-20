@@ -1,0 +1,20 @@
+N6 EMPTY-TREE CHECK: no window returned a tree with zero interactive refs
+
+D4-snapshot-observe.json                 ok=True  command=snapshot snapshot_id=s1tc00hf3lvakv   ref_count=27
+D8-snapshot-verify.json                  ok=True  command=snapshot snapshot_id=s33z6o07a5ypnb   ref_count=26
+E2-snapshot-after-addtab.json            ok=True  command=snapshot snapshot_id=s32um0k4qa58as   ref_count=28
+E2-snapshot-before-addtab.json           ok=True  command=snapshot snapshot_id=s3u80jkjmqkod6   ref_count=27
+E2-snapshot-before-change.json           ok=True  command=snapshot snapshot_id=s1pq1m6yiwffa8   ref_count=27
+E2-snapshot-opencode-selected.json       ok=False command=snapshot snapshot_id=                 ref_count=
+E2-snapshot-root-redrill.json            ok=True  command=snapshot snapshot_id=s1pq1m6yiwffa8   ref_count=28
+E3-focused-a.json                        ok=False command=snapshot snapshot_id=                 ref_count=
+E4-window-id.json                        ok=True  command=snapshot snapshot_id=s24riefhg4yy5c   ref_count=26
+E5-fresh-snapshot-after-stale.json       ok=True  command=snapshot snapshot_id=s3rgt4zpi62vl7   ref_count=27
+F1-snapshot-after-cmd.json               ok=True  command=snapshot snapshot_id=s2xk05yvc53sa2   ref_count=26
+F2-snapshot-after.json                   ok=True  command=snapshot snapshot_id=slgv0d67j5jlq    ref_count=27
+F2-snapshot-before.json                  ok=True  command=snapshot snapshot_id=s36v6n2oftajd2   ref_count=26
+F2-snapshot-readback.json                ok=True  command=snapshot snapshot_id=s3h8fpmxub039w   ref_count=27
+F4-snapshot-cleared.json                 ok=True  command=snapshot snapshot_id=s2zpp73l0ed8nd   ref_count=27
+
+zero-ref snapshots = 0
+The first Notepad process later exited on its own and the resulting WINDOW_NOT_FOUND is recorded as a host finding in logs/E0-notepad-exit.txt, not as an empty-tree result from a live window.

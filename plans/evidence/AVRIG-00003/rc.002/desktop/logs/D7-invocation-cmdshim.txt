@@ -1,0 +1,1 @@
+INVOCATION: 'agent-desktop-uat-0001' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s1tc00hf3lvakv:e1' --stdin   (sentinel arrives on stdin, ref is the only argument)

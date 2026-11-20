@@ -1,0 +1,9 @@
+=== G1: frontmatter lines 1..8 ===
+---
+description: Designs test specifications, appends test matrices to plans, runs automated test suites, performs functional and end-to-end verification, and validates deployment health
+mode: subagent
+permissions:
+  - action: edit
+    resource: "**/plans/evidence/**"
+    effect: allow
+---

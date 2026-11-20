@@ -1,0 +1,12 @@
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL
+--- where.exe agent-desktop (unpiped, capture) ---
+count=2
+d:\nodejs\.npm\global\agent-desktop
+d:\nodejs\.npm\global\agent-desktop.cmd
+--- cmd /c where agent-desktop ---
+count=2
+d:\nodejs\.npm\global\agent-desktop
+d:\nodejs\.npm\global\agent-desktop.cmd
+--- residency ---
+all_inside_prefix=True
+Get-Command agent-desktop Source=d:\nodejs\.npm\global\agent-desktop.ps1

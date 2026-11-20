@@ -1,0 +1,1 @@
+d:\nodejs\.npm\global\agent-desktop.ps1

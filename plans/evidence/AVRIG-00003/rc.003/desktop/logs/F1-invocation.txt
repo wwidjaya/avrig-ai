@@ -1,0 +1,2 @@
+INVOCATION (F1): 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s1qqj0g1iex8ij:e1' --stdin
+ref is the only argument; the value arrives on stdin; route is the .cmd shim, never the .ps1

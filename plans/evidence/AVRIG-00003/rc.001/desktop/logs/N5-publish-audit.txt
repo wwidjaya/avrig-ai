@@ -1,0 +1,11 @@
+# N5: nothing sensitive reaches a commit, an issue, or a result line
+
+| Question | Answer |
+|---|---|
+| Does evidence stay under `plans/evidence/`? | Yes. `plans/evidence/AVRIG-00003/rc.001/desktop/` is the only folder written besides the plan's existing manifest one level up. |
+| Does the result line quote any value? | No. RESULT.md names the checks and the tag, commit SHA and CLI version, and never a sentinel value. |
+| Is any snapshot or screenshot staged for a public artifact? | Every snapshot and screenshot sits inside `plans/evidence/`, which is gitignored in this repository, and the commit for this run used `git add -f` only for that folder. |
+| Are real credentials present anywhere? | No. The only values in the evidence are the two fakes, `agent-desktop-uat-0001` and `uat-secret-0002`, and logs/F5-secret-audit.txt records zero JWT-shaped and zero credential-field matches other than the definition's own prose. |
+| Is the concurrent AVRIG-00002 plan touched? | No. `plans/AVRIG-00002-2026-11-20-landing-console-unslop-redesign.md` is never opened, never edited and never staged. |
+
+Repository status at audit time: logs/A4-git-status.txt.

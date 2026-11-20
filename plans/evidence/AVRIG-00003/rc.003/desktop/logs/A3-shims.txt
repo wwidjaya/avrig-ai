@@ -1,0 +1,43 @@
+
+Name              Length LastWriteTime
+----              ------ -------------
+agent-desktop        431 11/20/2026 6:34:08 AM
+agent-desktop.cmd    120 11/20/2026 6:34:09 AM
+agent-desktop.ps1    112 11/20/2026 6:34:09 AM
+
+Test-Path node_modules\agent-desktop: True
+
+Name
+----
+bin
+lib
+scripts
+package.json
+README.md
+
+---bin---
+
+Name                                                    Length
+----                                                    ------
+agent-desktop                                             5070
+agent-desktop-darwin-arm64                             4039520
+agent-desktop-darwin-arm64.sha256                           65
+agent-desktop-darwin-x64                               4736308
+agent-desktop-darwin-x64.sha256                             65
+agent-desktop-linux-arm64                              5988776
+agent-desktop-linux-arm64.sha256                            65
+agent-desktop-linux-clipboard-owner-linux-arm64         512640
+agent-desktop-linux-clipboard-owner-linux-arm64.sha256      65
+agent-desktop-linux-clipboard-owner-linux-x64           586512
+agent-desktop-linux-clipboard-owner-linux-x64.sha256        65
+agent-desktop-linux-x64                                7385656
+agent-desktop-linux-x64.sha256                              65
+agent-desktop-macos-helper-darwin-arm64                 529616
+agent-desktop-macos-helper-darwin-arm64.sha256              65
+agent-desktop-macos-helper-darwin-x64                   571156
+agent-desktop-macos-helper-darwin-x64.sha256                65
+agent-desktop-win32-arm64.exe                          3553280
+agent-desktop-win32-arm64.exe.sha256                        65
+agent-desktop-win32-x64.exe                            4037120
+agent-desktop-win32-x64.exe.sha256                          65
+

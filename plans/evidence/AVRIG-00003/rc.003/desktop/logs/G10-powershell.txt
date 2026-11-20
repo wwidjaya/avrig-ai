@@ -1,0 +1,4 @@
+=== G10 PowerShell quoting (line 177) ===
+- Quote every ref as a single quoted string: `agent-desktop click '@s8f3k2p9:e8'`. PowerShell treats a leading `@token` as the splatting operator, so an unquoted ref is parsed as a variable before the CLI ever sees it.
+single quoted string rule: True
+splatting reason: True

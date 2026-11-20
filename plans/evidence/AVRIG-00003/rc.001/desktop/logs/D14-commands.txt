@@ -1,0 +1,96 @@
+# D14: command sequence actually executed, in order, mapped to the envelope it produced
+
+Candidate under test: tag avrig/00003/rc.001, commit 68520e980a10a220fed78b7a86b6ba36e63e0e36
+Working directory: D:\Cloud\OneDrive\AI\Agentic\AVRIG-00003\avrig-ai
+Shell: pwsh 7, not elevated (IsElevated: False, logs/A0-elevation.txt)
+
+## Preflight and install group
+
+| # | Command | Envelope or log |
+|---|---|---|
+| 1 | `Get-FileHash -Algorithm SHA256 .opencode/agents/tester.md` (before any check) | logs/G13-manifest-readback.txt |
+| 2 | `npm install -g agent-desktop@1.3.1` (not elevated) | logs/A1-install.txt, EXITCODE=-4048 EPERM |
+| 3 | `where.exe agent-desktop` | logs/A2-where.txt (3 paths) |
+| 4 | `Get-Command agent-desktop` | logs/A2-getcommand.txt (resolves to the .ps1 shim) |
+| 5 | `Get-ChildItem d:\nodejs\.npm\global -Filter 'agent-desktop*'` | logs/A3-shims.txt |
+| 6 | `git status --porcelain` in both repositories | logs/A4-git-status.txt |
+| 7 | `pwsh -NoProfile -Command "agent-desktop version"` | envelopes/A5-version-noprofile.json |
+| 8 | `npm list -g agent-desktop --depth=0`, `npm view agent-desktop@1.3.1 dist.integrity dist.shasum` | logs/A6-npm-list.txt, logs/A6-integrity.txt |
+| 9 | `pwsh -NoProfile -Command "agent-desktop status"` | envelopes/A7-status-second-shell.json |
+| 10 | `npm install -g agent-desktop@1.3.1` (second time) | logs/A8-reinstall.txt, EXITCODE=-4048 EPERM |
+
+## B and C groups
+
+| # | Command | Envelope or log |
+|---|---|---|
+| 11 | `agent-desktop status 2> stderr` | envelopes/B6-status.json, envelopes/B2-status.json, status.json |
+| 12 | `agent-desktop permissions` | envelopes/B4-permissions.json |
+| 13 | `agent-desktop permissions --guide` | logs/B4-permissions-guide.txt (PLATFORM_NOT_SUPPORTED, expected) |
+| 14 | `agent-desktop list-surfaces` | envelopes/B5-list-surfaces.json |
+| 15 | `agent-desktop skills get desktop` | guide-desktop.txt, logs/C1-desktop-guide-content.txt |
+| 16 | `agent-desktop skills get platform` | guide-platform.txt |
+| 17 | `agent-desktop get --help`, `agent-desktop set-value --help`, `agent-desktop screenshot --help`, `agent-desktop wait --help`, `agent-desktop clipboard-set --help`, `agent-desktop close-app --help`, `agent-desktop batch --help` | logs/D6-get-help.txt, logs/F2-set-value-help.txt, logs/D9-screenshot-help.txt, logs/F3-batch-help.txt, logs/D10-close-app-help.txt |
+
+## D group, the live loop (observe, act, verify)
+
+| # | Command | Envelope |
+|---|---|---|
+| 18 | `agent-desktop launch notepad.exe` | envelopes/D1-launch.json |
+| 19 | `agent-desktop list-apps` | envelopes/D2-list-apps.json (Notepad.exe, pid 39736) |
+| 20 | `agent-desktop list-windows --app "Notepad"` | envelopes/D3-list-windows.json (w-395428) |
+| 21 | `agent-desktop snapshot --app "Notepad" -i` | envelopes/D4-snapshot-observe.json (s1qt7zn7dzx3em, 25 refs) |
+| 22 | `agent-desktop click '@s1qt7zn7dzx3em:e12'` (Add New Tab, so the sentinel never touches a real file buffer) | envelopes/D7a-add-tab.json |
+| 23 | `agent-desktop snapshot --app "Notepad" -i` | envelopes/D4b-snapshot-newtab.json (sug7y9zevns7f, 27 refs) |
+| 24 | `agent-desktop get '@sug7y9zevns7f:e1'` | envelopes/D6-get-ref.json |
+| 25 | `'agent-desktop-uat-0001' | agent-desktop set-value '@sug7y9zevns7f:e1' --stdin` (the definition's stated path) | envelopes/D7-act.json |
+| 26 | `agent-desktop wait --text "agent-desktop-uat-0001" --app "Notepad"` | envelopes/D12-wait.json (TIMEOUT) |
+| 27 | `agent-desktop snapshot --app "Notepad" -i` | envelopes/D8-snapshot-verify.json (s2a79rcbwhrx8p) |
+| 28 | `agent-desktop get '@s2a79rcbwhrx8p:e1'`, `get --property value`, `is --property focused` | logs/D8-readback.txt |
+| 29 | `agent-desktop screenshot --app "Notepad" ...\screens\D9-after-act.png` | envelopes/D9-screenshot.json |
+| 30 | `agent-desktop press ctrl+f --app "Notepad"`, `list-windows`, `snapshot` | envelopes/D7b-press-find.json, D7c, D7d (no Find surface appears) |
+| 31 | `agent-desktop snapshot --app "Notepad" -i` then `agent-desktop.cmd set-value '@s4owxx7cy36dm:e1' --stdin` (stdin through the .cmd shim) | snapshots/D7e-snapshot-before-act.json, envelopes/D7-act-cmdshim.json |
+| 32 | `agent-desktop get --property value '@s4owxx7cy36dm:e1'`, `get` | logs/D8-readback-cmdshim.txt (value present) |
+| 33 | `agent-desktop snapshot --app "Notepad" -i` | envelopes/D8-snapshot-verify-cmdshim.json (s1v5c43jpqg29b, sentinel in tree) |
+| 34 | `agent-desktop screenshot --app "Notepad" ...\screens\F4-cleared.png` (after the F4 clear) | envelopes/F4-screenshot.json |
+| 35 | `agent-desktop clipboard-clear`, `clipboard-get` | envelopes/F4-clipboard-clear.json, F4-clipboard-get.json |
+| 36 | `agent-desktop clear '@s2rmxan5a69em5:e1'` | envelopes/F4-clear-field.json |
+| 37 | `agent-desktop list-notifications` | envelopes/D11-notifications.json (POLICY_DENIED, Action Center closed) |
+| 38 | `agent-desktop close-app "Notepad.exe"` (positional form) | envelopes/D10-close-app-positional.json |
+| 39 | `agent-desktop list-windows --app "Notepad"` | logs/D10-windows-after-close.txt (empty) |
+| 40 | `agent-desktop close-app "charmap.exe"`, `list-apps`, `list-windows` | envelopes/D10b-close-charmap.json, D10-list-apps-final.json, logs/D10-list-windows-final.txt |
+
+## E group, ref lifecycle
+
+| # | Command | Envelope |
+|---|---|---|
+| 41 | `agent-desktop click '@e8'` (bare ref) | envelopes/E1-bare-ref.json (INVALID_ARGS) |
+| 42 | `agent-desktop click '@s1v5c43jpqg29b:e5'` (Add New Tab) | logs/E2-step1-add-tab.json |
+| 43 | `agent-desktop snapshot --app "Notepad" -i` | snapshots/E2-snapshot-before-close.json (s22zc1maxume78) |
+| 44 | `agent-desktop click '@s22zc1maxume78:e6'` (Close Tab, tree changes) | logs/E2-step2-close-tab.json |
+| 45 | `agent-desktop snapshot --app "Notepad" -i` | snapshots/E2-snapshot-after-close.json (s1c5w665s653jr) |
+| 46 | `agent-desktop click '@s22zc1maxume78:e6'` (same ref after the tree change) | envelopes/E2-stale-ref.json (STALE_REF / saved_ref_absent) |
+| 47 | `agent-desktop snapshot --app "Notepad" -i` (fresh snapshot, the recovery) | snapshots/E5-fresh-snapshot-after-stale.json (skm1oq1qjfaf2) |
+| 48 | `agent-desktop launch notepad.exe` (second window), `list-windows --app "Notepad"` | logs/E3-launch-second-notepad.json, logs/E3-list-windows.txt (2 windows) |
+| 49 | `agent-desktop snapshot --app "Notepad" -i` (two windows open) | envelopes/E3-ambiguous.json (ok: true, silent pick, no AMBIGUOUS_TARGET) |
+| 50 | `agent-desktop snapshot --app "Notepad" -i --window-id w-395428` | envelopes/E4-window-id.json |
+| 51 | `agent-desktop click '@s26m95dnj8mgm9:e26'` (close the extra window) | logs/E3-close-extra-window.json |
+
+## F group, secret handling
+
+| # | Command | Envelope |
+|---|---|---|
+| 52 | `agent-desktop snapshot --app "Notepad" -i` | snapshots/F1-snapshot-before.json (s2rmxan5a69em5) |
+| 53 | `'uat-secret-0002' | agent-desktop set-value '@s2rmxan5a69em5:e1' --stdin` | envelopes/F1-stdin-set-value-ps1shim.json (ok, delivered_verified) |
+| 54 | `agent-desktop get --property value '@s2rmxan5a69em5:e1'` | logs/F1-readback-ps1shim.txt (empty) |
+| 55 | `'uat-secret-0002' | agent-desktop.cmd set-value '@s2rmxan5a69em5:e1' --stdin` | envelopes/F1b-stdin-set-value-cmdshim.json (ACTION_FAILED, value landed) |
+| 56 | `agent-desktop snapshot --app "Notepad" -i` | snapshots/F1-snapshot-after-cmdshim.json (sentinel present) |
+| 57 | `'uat-secret-0002' | agent-desktop clipboard-set --stdin`, `clipboard-get` | envelopes/F2-clipboard-set.json, F2-clipboard-get.json (empty) |
+| 58 | `'uat-secret-0002' | agent-desktop.cmd clipboard-set --stdin`, `clipboard-get` | envelopes/F2b-clipboard-set-cmdshim.json, F2b-clipboard-get-cmdshim.json (value plus CRLF) |
+| 59 | `agent-desktop type '@s2rmxan5a69em5:e1' "uat-secret-0002"` (headless) | envelopes/F7-type-headless.json (POLICY_DENIED) |
+
+## Notes on method
+
+- The one `Start-Sleep -Milliseconds 1200` in this run sat between the Notepad close and the window-listing confirmation, as a settle delay for a read-only check. It was not used as an action wait, and it is recorded here rather than hidden. D12 is reported FAIL for a separate reason: `wait --text` cannot match text held in a textfield's `value`.
+- The charmap.exe diagnostics (logs/F1-diag-*) are root-cause isolation for the `--stdin` defect, not substitute rows. They live under `logs/` for that reason.
+- No `--headed` run was started. `type`, `focus`, `right-click`, `double-click`, and `triple-click` were not attempted, because none is needed by the matrix and physical input was not permitted.
+- No application this run opened is still on screen: logs/D10-list-windows-final.txt is the confirmation.

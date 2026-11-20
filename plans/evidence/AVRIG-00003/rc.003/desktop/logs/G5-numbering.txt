@@ -1,0 +1,7 @@
+=== G5 responsibilities numbering ===
+line 14: 1. **Test Design, Plan Attachment, and Token Cache Preparation (Pre-Im
+line 21: 2. **Automated Verification, Functional Testing, and Diagnostics (Post
+line 33: 3. **UI Verification: Live Browser and Desktop Application UAT:**
+line 37: 4. **Post-Deployment Smoke Verification:**
+line 42: 5. **Session-End Goals Review with Analyst:**
+line 46: 6. **Release Trigger (Mandatory):**

@@ -1,0 +1,8 @@
+G13 DEFINITION HASH, POST-RUN
+file    = D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md
+sha256  = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82
+bytes   = 26855
+lines   = 247
+manifest Sha256 = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82
+identical to the pre-run hash and to the manifest row = True
+modified by this run = False (hash identical before and after; the file is untracked in the Agentic checkout, which is why the manifest, not a tag, carries the proof)

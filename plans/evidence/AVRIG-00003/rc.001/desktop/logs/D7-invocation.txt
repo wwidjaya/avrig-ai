@@ -1,0 +1,1 @@
+agent-desktop set-value '@sug7y9zevns7f:e1' --stdin   <== value piped on stdin (17 bytes), ref is the only argument

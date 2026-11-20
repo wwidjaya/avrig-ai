@@ -1,0 +1,7 @@
+Get-Command source: d:\nodejs\.npm\global\agent-desktop.ps1
+
+Name        : agent-desktop.ps1
+CommandType : ExternalScript
+Source      : d:\nodejs\.npm\global\agent-desktop.ps1
+Version     : 
+

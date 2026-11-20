@@ -1,0 +1,8 @@
+=== H1: ### headings under ## Live Browser Testing ===
+### When it applies
+### Choose the harness, then name the command
+### The `wmux browser` fallback, in real call forms
+### What to test and how to assert
+### Evidence per run
+### Reporting a browser failure
+count=6

@@ -1,0 +1,1 @@
+agent-desktop click '@e8'   (bare ref, single quoted so PowerShell passes it literally)

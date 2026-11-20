@@ -1,0 +1,3 @@
+--- tree changed: act on the captured ref again (this is the assertion, not a retry) ---
+tab: opencode.json. Unmodified. ref=@s1c5w665s653jr:e3 states=
+tab: agent-desktop-uat-0001. Modified. ref=@s1c5w665s653jr:e4 states=selected

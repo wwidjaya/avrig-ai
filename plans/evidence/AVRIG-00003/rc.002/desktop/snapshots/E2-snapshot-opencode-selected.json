@@ -1,0 +1,1 @@
+{"version":"2.6","ok":false,"command":"snapshot","error":{"code":"WINDOW_NOT_FOUND","message":"The window's identity no longer matches its stored evidence","suggestion":"Run 'list-windows' to refresh window identifiers, then retry.","platform_detail":"HWND 0x5B06D4 failed process-instance corroboration","disposition":{"delivery":"not_delivered","retry":"safe"}}}

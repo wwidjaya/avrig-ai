@@ -1,0 +1,5 @@
+=== C3: version in guides ===
+desktop guide dotted-version matches: 0
+platform guide dotted-version matches: 0
+binary version (from B1): 1.3.1 ; envelope schema: 2.6
+guides state no version line: version agreement not assertable from text; recorded as silent

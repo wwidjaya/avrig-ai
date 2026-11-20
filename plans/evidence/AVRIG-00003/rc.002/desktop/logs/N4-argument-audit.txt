@@ -1,0 +1,13 @@
+N4 ARGUMENT AUDIT: no secret in an argument list
+
+The three secret steps this run took, quoted from their invocation logs:
+  logs/D7-invocation-cmdshim.txt  'agent-desktop-uat-0001' | agent-desktop.cmd set-value '<ref>' --stdin
+  logs/F2-routes.txt              'uat-secret-0002' | agent-desktop.ps1 set-value '<ref>' --stdin
+  logs/F1-invocation.txt          'uat-secret-0002' | agent-desktop.cmd set-value '<ref>' --stdin
+  logs/F4-invocation.txt          'uat-secret-0002' | agent-desktop.cmd clipboard-set --stdin
+
+In each, the value arrives on stdin and the ref is the only argument. See logs/F5-secret-audit.txt for the full scan.
+real invocation lines passing the sentinel to set-value, clipboard-set or type WITHOUT --stdin: 0
+
+batch invocations: 0 (logs/F3-batch-audit.txt), so no secret travelled in a batch JSON argument.
+the only argv literal that looks like a probe is uat-probe-0003, declared non-secret in the plan and labelled as a probe in logs/F7-invocation.txt.

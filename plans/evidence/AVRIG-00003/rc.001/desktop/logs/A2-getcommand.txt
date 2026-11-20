@@ -1,0 +1,9 @@
+
+Name        : agent-desktop.ps1
+CommandType : ExternalScript
+Source      : d:\nodejs\.npm\global\agent-desktop.ps1
+Path        : d:\nodejs\.npm\global\agent-desktop.ps1
+Definition  : d:\nodejs\.npm\global\agent-desktop.ps1
+
+
+SourceValue: [d:\nodejs\.npm\global\agent-desktop.ps1]

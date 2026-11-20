@@ -1,0 +1,21 @@
+total_lines=242
+12: ## Responsibilities
+53: ## Live Browser Testing
+57: ### When it applies
+63: ### Choose the harness, then name the command
+71: ### The `wmux browser` fallback, in real call forms
+93: ### What to test and how to assert
+102: ### Evidence per run
+113: ### Reporting a browser failure
+117: ## Desktop UAT Testing
+121: ### When it applies
+128: ### Preflight
+143: ### Read the bundled guides before the first action
+154: ### The observe, act, verify loop
+174: ### Windows and PowerShell specifics
+189: ### Launch the tested artifact
+197: ### Secrets
+205: ### Retry discipline
+212: ### What to assert
+219: ### Evidence per run
+240: ### Reporting a desktop failure

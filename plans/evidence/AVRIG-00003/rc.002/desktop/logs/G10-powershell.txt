@@ -1,0 +1,18 @@
+G10 ### Windows and PowerShell specifics (lines 175-190)
+### Windows and PowerShell specifics
+
+- Quote every ref as a single quoted string: `agent-desktop click '@s8f3k2p9:e8'`. PowerShell treats a leading `@token` as the splatting operator, so an unquoted ref is parsed as a variable before the CLI ever sees it.
+- `type`, `focus`, `right-click`, `double-click`, and `triple-click` need `--headed` on this platform, and they drive physical input. `type` synthesizes keystrokes through SendInput, so it is a permissioned exception rather than the default text path.
+- `get '<ref>'` reads one named property, one of `text`, `value`, `title`, `bounds`, `role`, or `states`, and it never reports `available_actions`. Take the actions a node offers from the snapshot instead.
+- The headless path for text is `set-value --stdin`, called through `agent-desktop.cmd` or the native executable rather than the `.ps1` shim, and piped so the value never enters the argument list:
+
+```powershell
+'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+```
+
+- A `POLICY_DENIED` from a headless command is a finding about the headless path. It is never a reason to rerun the same step with `--headed`, which is used only where the plan permitted physical input and the application demands real keystrokes.
+- `snapshot --app` does not raise `AMBIGUOUS_TARGET` when an application has several windows. It silently takes the focused window and returns `ok: true`, so a run can read the wrong window while looking healthy. Whenever `list-windows --app "<app name>"` shows more than one window, pin the intended one with `--window-id <id>` rather than relying on focus.
+- When a snapshot does return `AMBIGUOUS_TARGET` and lists candidate windows, pin one with `--window-id <id>` taken from that list rather than guessing which window was meant.
+- `list-apps` and `list-windows` confirm what is on screen before acting. `list-windows --app "<app name>"` gives window ids usable as `--window-id`.
+- A window with no interactive children is a finding about the application, not a tool failure. Record it with the snapshot attached. A transparent, always-on-top Bevy overlay is the usual case, because a GPU canvas exposes almost nothing to UI Automation.
+single_quoted_ref_rule=True  splatting_reason=True

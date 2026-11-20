@@ -1,0 +1,14 @@
+N3 RETRY AUDIT: the stale ref, and whether it was ever retried
+
+textual occurrences of @s1pq1m6yiwffa8:e10 across the evidence, classified rather than counted:
+  1  envelopes/E2-stale-ref.json       the single attempted act, ok false, STALE_REF, retry safe
+  1  snapshots/E2-snapshot-before-change.json  the snapshot that minted the ref (it is inside a 27-ref tree)
+  1  logs/D14-commands.txt             the recorded sequence naming the step
+  3  logs/E2-tree-change.txt           the capture annotation and the invocation record
+  3  logs/E5-recovery-order.txt        the recovery narration
+  = 9 total, of which exactly ONE is an act and it failed
+
+envelopes in which that ref appears with ok true: 1 (the snapshot that defines it, which is not an act on it)
+second attempt with the same ref: none. The next call after the failure was a fresh snapshot, s3rgt4zpi62vl7 (snapshots/E5-fresh-snapshot-after-stale.json).
+Lines matching 'Start-Sleep' anywhere in the evidence: 6, and every one of them is a statement that it is absent (ledger D12 note, RESULT.md, logs/D14-commands.txt, logs/E5-recovery-order.txt, logs/H4-diff.txt quoting the definition, and this line itself). No recorded step contains a Start-Sleep, and no desktop call was wrapped in a sleep or a retry loop: the only wait in the run is agent-desktop wait in D12.
+No loop wraps a desktop call anywhere in this run: each act is one command, and the wait in D12 is agent-desktop wait, not a sleep.
