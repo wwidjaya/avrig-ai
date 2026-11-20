@@ -287,6 +287,9 @@ One script, `plan-code.ps1`, run from any project root. Every subcommand takes `
 - Values are emitted with SQLite's own `quote()`: integers bare, `NULL` bare, text single quoted with doubled quotes. Escaping is therefore SQLite's problem rather than the tool's, and a title containing a quote, a backslash, or a semicolon round trips unchanged.
 - The column list comes from `PRAGMA table_info`, which omits generated columns, so `work_item.code` is never inserted. Measured on sqlite3 3.51.2: `table_info` does not return `code` at all, while `table_xinfo` returns it with `hidden = 3`, which is why the dumper uses `table_info`.
 - No export timestamp appears anywhere in the file. Determinism is what makes the dump reviewable: two exports of one database are byte identical, and an export of an imported dump reproduces that dump exactly.
+- No machine specific value appears either. The `project` row's `repo_root` is written as `NULL` rather than as the absolute path `init` was handed, because the dump is committed and an absolute path would differ on every clone, machine, and worktree while telling the file nothing it cannot derive. `project_key` stays, since the folder leaf is portable and identifies the project to a human reader.
+
+Measured on the real repository, which is the only run that counts: `init` created the database and an empty dump, the migration seeded the four rows, and `export` wrote 118 lines. `export --check` then reported no change, `verify --strict` exited `0` agreeing across the database, the dump, `PLAN-RULES.md`, and the git union, and a full round trip (`import` to rebuild from the dump, then `export`) reproduced the dump byte for byte at SHA-256 `191ECE6B...E07C49F0`. So the determinism claim is a measured fact on this project's own data rather than only on a fixture.
 
 Driving the dumper from `sqlite_master` rather than from a hardcoded table list means a future table dumps without a code change, which matters because this schema is version 1 and will not be the last. Adding `deferred_defect` and `indicator_alias` to it during this plan is the first demonstration: the dumper needed no edit to carry them.
 
@@ -387,7 +390,7 @@ Agentic repository (default branch `master`):
 | `plans/PLAN-INDEX.md` | delete | `Architect` | replaced by the database, the dump, and `PLAN-RULES.md` |
 | `.gitignore` | edit | `be` | add `plans/_plan.db*` |
 | `plans/_plan.db` | runtime artifact, never committed | `be` | created by `init`, loaded by `import`, written by `assign` |
-| `plans/evidence/AVRIG-00004/migrate-legacy-ledger.sql` | create | `be` | the one-off insert of the four historical rows, kept as evidence because it is the only record of how the deleted table became rows |
+| `plans/evidence/AVRIG-00004/migrate-legacy-ledger.sql` | create | `Architect` | the one-off insert of the four historical rows, and of the six deferred defect rows, generated from the deleted table rather than retyped. `plans/evidence/**` is ignored in this repository, so it is scaffolding rather than a tracked artifact: the seeded rows are reviewable in the dump itself, and the mapping is recoverable from the file's git history |
 
 `.opencode/agents/Architect.md` is untracked in the Agentic repository, the defect deferred from `AVRIG-00003`. The edit is therefore not reviewable through git. It is recorded with a SHA-256 manifest at `plans/evidence/<CODE>-<NNNNN>/instruction-manifest.json`, written once stage 4 assigns the code, with a `.bak-<timestamp>` sibling beside every edited instruction file, so the content is pinned and can be restored. The normative rule also lands in the tracked `AGENTS.md`, so a lost agent file degrades convenience rather than correctness.
 
