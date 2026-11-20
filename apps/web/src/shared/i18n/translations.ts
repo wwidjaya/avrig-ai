@@ -43,6 +43,8 @@ export interface Translations {
     dvCheck2: string;
     teCheck1: string;
     teCheck2: string;
+    approvalGiven: string;
+    approvalPending: string;
   };
   showcase: {
     badge: string;
@@ -72,6 +74,9 @@ export interface Translations {
     office: {
       title: string;
       desc: string;
+      tier1: string;
+      tier2: string;
+      tier3: string;
       role1: string;
       role1Desc: string;
       role2: string;
@@ -103,15 +108,19 @@ export interface Translations {
     card1Badge: string;
     card1Title: string;
     card1Desc: string;
+    card1Footer: string;
     card2Badge: string;
     card2Title: string;
     card2Desc: string;
+    card2Footer: string;
     card3Badge: string;
     card3Title: string;
     card3Desc: string;
+    card3Footer: string;
     card4Badge: string;
     card4Title: string;
     card4Desc: string;
+    card4Footer: string;
   };
   workflow: {
     badge: string;
@@ -223,6 +232,8 @@ export const translations: Record<Locale, Translations> = {
       dvCheck2: "Commits signed by the agent",
       teCheck1: "48 cases in the suite",
       teCheck2: "OIDC assertion checked",
+      approvalGiven: "Signed by the founder",
+      approvalPending: "Awaiting founder approval",
     },
     showcase: {
       badge: "The console",
@@ -231,7 +242,7 @@ export const translations: Record<Locale, Translations> = {
         "Four views of the same record: the stage board, the office, the deliberation rooms and the knowledge graph.",
       tabSdlc: "Stages",
       tabOffice: "Office",
-      tabDeliberations: "Deliberations",
+      tabDeliberations: "Rooms",
       tabKnowledge: "Knowledge",
       sdlc: {
         title: "A fixed sequence of sixteen stages",
@@ -254,6 +265,9 @@ export const translations: Record<Locale, Translations> = {
       office: {
         title: "Roles that persist between runs",
         desc: "An agent is an employee with a role and a reporting line. Identity persists across inference runs.",
+        tier1: "Executive tier",
+        tier2: "Operational tier",
+        tier3: "Specialist tier",
         role1: "Chief executive",
         role1Desc: "Sets the project charter, allocates work and reports to the founder.",
         role2: "Architecture lead",
@@ -289,18 +303,22 @@ export const translations: Record<Locale, Translations> = {
       card1Title: "The founder, then three tiers of agents",
       card1Desc:
         "The founder holds approval. Executives, operational leads and specialists work inside delegated boundaries, and every action is attributable to a role.",
+      card1Footer: "Founder approval, delegated authority",
       card2Badge: "Version pins",
       card2Title: "An artifact is pinned to a version",
       card2Desc:
         "Each stage artifact carries a version, and every traceability link pins both of its ends, so a link is a statement about two versions rather than about artifacts in general.",
+      card2Footer: "Version pins, immutable history",
       card3Badge: "One runtime",
       card3Title: "Office, board and rooms share an event bus",
       card3Desc:
         "The office, the stage board and the deliberation rooms publish and subscribe on the same Rust event bus, so a state change happens once and is read everywhere.",
+      card3Footer: "Rust, Axum, one event bus",
       card4Badge: "OIDC",
       card4Title: "Any standards-compliant identity provider",
       card4Desc:
         "Discovery, PKCE and bearer tokens over plain OpenID Connect. Rauthy, Keycloak and Authentik work without a provider-specific SDK.",
+      card4Footer: "Rauthy, Keycloak, Authentik",
     },
     workflow: {
       badge: "The sequence",
@@ -384,8 +402,8 @@ export const translations: Record<Locale, Translations> = {
     },
     hero: {
       badge: "Pengiriman perangkat lunak, dikelola seperti perusahaan",
-      titleStart: "Pengiriman perangkat lunak dengan",
-      titleHighlight: "tanda tangan",
+      titleStart: "Perangkat lunak",
+      titleHighlight: "bertanda tangan",
       titleEnd: "di setiap tahap",
       subtitle:
         "Agen merencanakan, mengeksekusi dan memverifikasi setiap tahap dalam urutan tetap. Setiap tahap meninggalkan artefak dengan pin versi, dan hanya founder yang dapat menyetujuinya.",
@@ -399,7 +417,7 @@ export const translations: Record<Locale, Translations> = {
       telemetry: {
         activeAgents: "Tahap dalam pipeline",
         sdlcGates: "Pemberi persetujuan",
-        routingLatency: "Persetujuan oleh agen",
+        routingLatency: "Persetujuan agen diizinkan",
         securityStatus: "Pin versi per artefak",
         enforced: "Selalu",
       },
@@ -417,6 +435,8 @@ export const translations: Record<Locale, Translations> = {
       dvCheck2: "Commit ditandatangani oleh agen",
       teCheck1: "48 kasus dalam rangkaian uji",
       teCheck2: "Asersi OIDC diperiksa",
+      approvalGiven: "Ditandatangani founder",
+      approvalPending: "Menunggu persetujuan founder",
     },
     showcase: {
       badge: "Konsol",
@@ -425,7 +445,7 @@ export const translations: Record<Locale, Translations> = {
         "Empat tampilan dari catatan yang sama: papan tahap, kantor, ruang musyawarah dan graf pengetahuan.",
       tabSdlc: "Tahapan",
       tabOffice: "Kantor",
-      tabDeliberations: "Musyawarah",
+      tabDeliberations: "Ruang",
       tabKnowledge: "Pengetahuan",
       sdlc: {
         title: "Urutan tetap enam belas tahap",
@@ -448,6 +468,9 @@ export const translations: Record<Locale, Translations> = {
       office: {
         title: "Peran yang bertahan antar proses",
         desc: "Agen adalah pegawai dengan peran dan garis pelaporan. Identitasnya bertahan antar proses inferensi.",
+        tier1: "Tingkat 2, eksekutif",
+        tier2: "Tingkat 3, operasional",
+        tier3: "Tingkat 4, spesialis",
         role1: "Direktur utama",
         role1Desc: "Menyusun piagam proyek, membagi pekerjaan dan melapor kepada founder.",
         role2: "Kepala arsitektur",
@@ -483,18 +506,22 @@ export const translations: Record<Locale, Translations> = {
       card1Title: "Founder, lalu tiga tingkat agen",
       card1Desc:
         "Founder memegang persetujuan. Eksekutif, pimpinan operasional dan spesialis bekerja dalam batas yang didelegasikan, dan setiap tindakan dapat dilacak ke sebuah peran.",
+      card1Footer: "Persetujuan founder, kewenangan didelegasikan",
       card2Badge: "Pin versi",
       card2Title: "Artefak dipin ke satu versi",
       card2Desc:
         "Setiap artefak tahap membawa versi, dan setiap tautan keterlacakan memin kedua ujungnya, sehingga tautan adalah pernyataan tentang dua versi tertentu.",
+      card2Footer: "Pin versi, riwayat tak berubah",
       card3Badge: "Satu runtime",
       card3Title: "Kantor, papan dan ruang berbagi bus peristiwa",
       card3Desc:
         "Kantor, papan tahap dan ruang musyawarah menerbitkan dan berlangganan pada bus peristiwa Rust yang sama, sehingga satu perubahan dibaca di mana-mana.",
+      card3Footer: "Rust, Axum, satu bus peristiwa",
       card4Badge: "OIDC",
       card4Title: "Penyedia identitas apa pun yang sesuai standar",
       card4Desc:
         "Discovery, PKCE dan token bearer lewat OpenID Connect biasa. Rauthy, Keycloak dan Authentik berjalan tanpa SDK khusus penyedia.",
+      card4Footer: "Rauthy, Keycloak, Authentik",
     },
     workflow: {
       badge: "Urutannya",
