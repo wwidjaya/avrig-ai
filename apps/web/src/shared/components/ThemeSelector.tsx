@@ -37,7 +37,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className = "" }) 
     };
   }, [open]);
 
-  const themeOptions: Array<{ id: Theme; label: string; icon: React.ComponentType<{ className?: string }> }> = [
+  const themeOptions: Array<{ id: Theme; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }> }> = [
     { id: "light", label: t.theme.light, icon: Sun },
     { id: "dark", label: t.theme.dark, icon: Moon },
     { id: "system", label: t.theme.system, icon: Monitor },
@@ -54,17 +54,17 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className = "" }) 
         aria-label="Select theme"
         aria-haspopup="true"
         aria-expanded={open}
-        className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background/80 text-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden cursor-pointer"
-        title={`Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`}
+        className="flex size-9 items-center justify-center rounded-lg border border-border bg-background text-text-secondary transition-colors duration-[120ms] ease-out hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring active:scale-[0.99]"
+        title={`Theme: ${theme}`}
       >
-        <CurrentIconComponent className="h-4 w-4 text-primary transition-transform duration-200" />
+        <CurrentIconComponent className="size-4" strokeWidth={1.5} />
       </button>
 
       {open && (
         <div
           role="menu"
           aria-label="Theme options"
-          className="absolute right-0 mt-1.5 w-36 origin-top-right rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md backdrop-blur-md z-50 focus:outline-hidden"
+          className="absolute right-0 z-50 mt-1.5 w-40 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-sm focus:outline-hidden"
         >
           {themeOptions.map((opt) => {
             const Icon = opt.icon;
@@ -79,17 +79,19 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ className = "" }) 
                   setTheme(opt.id);
                   setOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                className={`flex w-full items-center justify-between rounded p-2 text-xs transition-colors duration-[120ms] ease-out ${
                   isSelected
-                    ? "bg-accent text-accent-foreground font-semibold"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-text-secondary hover:bg-accent/60 hover:text-foreground"
                 }`}
               >
-                <div className="flex items-center gap-2">
-                  <Icon className="h-3.5 w-3.5" />
+                <span className="flex items-center gap-2">
+                  <Icon className="size-4" strokeWidth={1.5} />
                   <span>{opt.label}</span>
-                </div>
-                {isSelected && <Check className="h-3.5 w-3.5 text-primary" />}
+                </span>
+                {isSelected && (
+                  <Check className="size-4 text-accent-text" strokeWidth={1.5} aria-hidden="true" />
+                )}
               </button>
             );
           })}

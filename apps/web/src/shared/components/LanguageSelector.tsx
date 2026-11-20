@@ -49,18 +49,18 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ className = 
         aria-label="Select language"
         aria-haspopup="true"
         aria-expanded={open}
-        className="flex h-8 items-center gap-1.5 rounded-md border border-border bg-background/80 px-2 text-xs font-mono font-semibold text-foreground shadow-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden cursor-pointer"
-        title="Select Language"
+        className="flex h-9 items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-xs text-text-secondary transition-colors duration-[120ms] ease-out hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring active:scale-[0.99]"
+        title="Select language"
       >
-        <Languages className="h-3.5 w-3.5 text-muted-foreground" />
-        <span className="uppercase tracking-wider">{locale}</span>
+        <Languages className="size-4" strokeWidth={1.5} />
+        <span className="font-mono">{locale}</span>
       </button>
 
       {open && (
         <div
           role="menu"
           aria-label="Language options"
-          className="absolute right-0 mt-1.5 w-44 origin-top-right rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md backdrop-blur-md z-50 focus:outline-hidden"
+          className="absolute right-0 z-50 mt-1.5 w-44 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-sm focus:outline-hidden"
         >
           {languages.map((lang) => {
             const isSelected = locale === lang.code;
@@ -74,17 +74,19 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ className = 
                   setLocale(lang.code);
                   setOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                className={`flex w-full items-center justify-between rounded p-2 text-left text-xs transition-colors duration-[120ms] ease-out ${
                   isSelected
-                    ? "bg-accent text-accent-foreground font-semibold"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-text-secondary hover:bg-accent/60 hover:text-foreground"
                 }`}
               >
-                <div className="flex flex-col text-left">
-                  <span className="font-medium text-foreground">{lang.nativeName}</span>
-                  <span className="text-[10px] text-muted-foreground">{lang.name}</span>
-                </div>
-                {isSelected && <Check className="h-3.5 w-3.5 text-primary" />}
+                <span className="flex flex-col gap-0.5">
+                  <span className="text-foreground">{lang.nativeName}</span>
+                  <span className="text-[11px] text-muted-foreground">{lang.name}</span>
+                </span>
+                {isSelected && (
+                  <Check className="size-4 text-accent-text" strokeWidth={1.5} aria-hidden="true" />
+                )}
               </button>
             );
           })}
