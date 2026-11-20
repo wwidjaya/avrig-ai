@@ -7,6 +7,7 @@ candidate_tags:
   - avrig/00004/rc.001 @ 38ff2b7, build AVRIG-00004-build.001, PASS 21/21 (495 assertions)
   - avrig/00004/rc.002 @ 94b48a2, build AVRIG-00004-build.002, PASS 21/21 (495 assertions), carries the 0.6.0 bump
   - avrig/00004/rc.003 @ 1f97baf, build AVRIG-00004-build.003, PASS 21/21 (495 assertions), the release candidate after the resync to main 41bc05a
+  - avrig/00004/rc.004 @ 3f86d62, build AVRIG-00004-build.004, PASS 21/21 (495 assertions), the Agentic tool landed on main at 962b3c2 with a tree equal to the candidate
 release_version: 0.6.0
 status: released
 created: 2026-11-20
@@ -889,6 +890,12 @@ The branch also carries a communication rule added to all twelve agent definitio
 The publisher was not run, and the reason is recorded rather than smoothed over. `scripts/release.ps1` opens each repository with `git add -A`, and the `avrig-ai` working tree still carries the abandoned `AVRIG-00002` leftovers: 21 paths, including a modified `LandingPage.tsx` with 23 changed content lines. Publishing through the script would have committed another plan's dead work inside the `0.6.0` tag, so the annotated tag was created by hand at the merge commit and the branch and tag were pushed per repository. The cost is that the publisher's credential range scan did not run. Nothing else differs.
 
 The tool itself lives in Agentic, which the release set does not include, so `0.6.0` names this plan's process change but tags the tool only through the candidate tags `avrig/00004/rc.001` to `rc.003`. That gap is left as it is by the user's direction rather than fixed inside a release.
+
+The Agentic side was finished separately, after the release, because the tool was not on that repository's default branch at all. `main` advanced by two commits while the plan branch was open (`96c7b4d` dropped the `wmux` definitions, `df5b1b8` recorded `main` as the only long-lived branch), so the branch no longer contained current default content. `main` was merged into the branch at `3f86d62`, `avrig/00004/rc.004` was cut there, and QA scored it `ROLLUP 21/21 PASS exit=0` with 495 assertions. All four tool files are byte-identical between `rc.003` and `rc.004` by git blob id, so the candidate re-scored the same artifact against a newer tree rather than testing new code.
+
+That merge landed on Agentic `main` at `962b3c2`, a `--no-ff` merge of `rc.004` whose tree equals the candidate's at `704efe47`. The repository now carries `shared/skills/plan-code/` with its `SKILL.md`, the allocator, the schema, and the suite, which is what makes the tool available to every agent that loads this configuration. No version was assigned for that landing: Agentic is outside the release set and `0.6.0` is immutable, so the landing is traceable through the candidate tags rather than through a release tag.
+
+One fault belongs in the record rather than in a footnote. The first `rc.004` run reported `19/21` because I switched the Agentic checkout from the plan branch to `main` while it was executing, which removed `shared/skills/plan-code` from disk mid-run. T20 and T21 died on a missing path, not on a failing subject. The suite was re-run after the merge restored the files and passed at full count, and the interrupted attempt is preserved under `plans/evidence/AVRIG-00004/rc.004/attempt1-churn/` with no verdict attached. Testing a checkout that another process is moving is the mistake; the tag was never in question, since the suite resolves the tag and verifies blob ids.
 
 ### Not applicable in this plan
 
