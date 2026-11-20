@@ -421,6 +421,19 @@ Sequential constraints: S1 before S2's final schema check, and S1 through S3 all
 
 Stage mapping: this is Stage 1 output now, then Stage 2 analyst review and Stage 3 test scenarios in parallel, Stage 4 approval, Stage 5a reconciliation (nothing to merge, recorded above), 5b issue, 5c branches in both repositories, Stage 6 implementation on the plan branch, Stage 7 build gate, Stage 8 candidate tag `avrig/<NNNNN>/rc.001`, Stage 9 test at the tagged commit, Stage 10 remediation with a fresh tag per fix, 11 resync, 12 UAT and version decision, 13 ancestry assertion and merge, 14 release tag, 15 deployment, 16 publication and archival.
 
+### Stage 7, what the build gate means here
+
+This plan ships no compiled target. `plan-code.ps1` is a single PowerShell script, `001-plan.sql` is a schema asset, and `Test-Allocation.ps1` is a test harness, so `cargo check` and `pnpm build` have nothing to say about it and a claimed workspace build would be theatre. The gate is four measured checks instead:
+
+| Check | How | Pass |
+|---|---|---|
+| syntax | `[System.Management.Automation.Language.Parser]::ParseFile` over both `.ps1` files, collecting the error list rather than testing for a null | zero errors in both, with the token count reported as evidence that the file was actually parsed |
+| schema asset | `sqlite3 <scratch> ".read schema/001-plan.sql"` | exit `0`, `PRAGMA integrity_check` returns `ok`, `user_version` reads `1`, and `sqlite_master` shows five tables, four triggers, and one index |
+| dump round trip | `import` from `plans/_plan.sql`, then `export --check` | `export --check` exits `0`, and the regenerated dump is byte identical to the committed one |
+| real ledger | `verify --strict` on the working checkout | exit `0`, with the row count it reports recorded |
+
+The build id is `<CODE>-<NNNNN>-build.<NNN>` with `<NNN>` matching the candidate it precedes, and it lives in the evidence folder rather than as a Git tag, because there is no artifact to tag. A null check on the parser's error variable is not a substitute for the check itself: a parse that never ran leaves that variable unset, which reads as clean.
+
 ## Risks and Mitigations
 
 - OneDrive touching a live SQLite file. Mitigated by WAL, short transactions, `integrity_check` in `verify`, and a rebuild path that makes corruption recoverable. Accepted, because the file is disposable by design.
