@@ -291,7 +291,9 @@ node apps/web/scripts/qa/run.mjs --base $BASE --evidence $EVIDENCE --pair $AI`:$
 ```
 
 - `--only` selects rows for development and prints a line beginning `SUBSET` instead of the verdict line, so a green subset can never be read as a green candidate. The plan's verdict line is printed only by a full run.
-- Exit code 0 means every selected row passed, 1 means at least one row failed, 2 means the run could not be performed (base URL unreachable) or a row is blocked. A blocked row is never a pass.
+- Exit code 0 means every selected row passed, 1 means at least one row failed, 2 means the run produced nothing anyone can act on: the base URL is unreachable, a row is blocked, or a structural problem was found. A blocked row is never a pass, and a structural problem is never advisory.
+- Structural covers four failures: a row missing, a row duplicated, a row not in the matrix, and `HEAD` not equal to the pair's avrig-ai commit. Each one prints a `HARNESS` line, forces the verdict to `BLOCKED` with a `structural=<codes>` suffix, and exits 2, because evidence describing a tree nobody can check out again is not evidence.
+- `--tag <name>` is optional. When given, the harness asserts the tag resolves in both repositories to exactly the commits in `--pair`, so the run proves the candidate is the commit the tag names rather than only that the working tree matches the pair. A tag that does not resolve, or that resolves to anything else in either repository, is a structural problem and is therefore fatal. When omitted, `run.json` records `"tag": null` and `RESULT.md` states the candidate tag was not asserted.
 - Screenshots and JSON are written only under the `--evidence` directory, in absolute paths, and one `RESULT.md` carries the verdict line and the per-row table. Writes to `%TEMP%` fail silently while Playwright still returns bytes, so `%TEMP%` is never an evidence target.
 - Served tree is the candidate, never the working tree. Two repositories carry the change, so both SHAs are recorded:
 
@@ -306,7 +308,7 @@ pnpm -C D:\Cloud\OneDrive\AI\Agentic\.rc\AVRIG-00002-rc<NNN>\apps\web dev -- --p
 ```
 
 - Base URL is an argument rather than a constant, so the same harness serves a local worktree and a deployment. `http://127.0.0.1:5173` is the conventional local value. Routes under test: `/`, `/console`, `/office`, `/deliberations`, `/sdlc`, `/knowledge`, `/chat`.
-- `run.json` records the base URL, both SHAs, the resolved default branch and the deciding step, the `HEAD` at run time, and the row coverage assertion: every declared row produced exactly once, none missing, none duplicated, none invented.
+- `run.json` records the base URL, both SHAs, the resolved default branch and the deciding step, the `HEAD` at run time, the candidate tag with the two commits it resolved to and whether each matched when `--tag` was given, and the row coverage assertion: every declared row produced exactly once, none missing, none duplicated, none invented. When a structural problem is found it also records `fatal: true` and the list of codes.
 
 ### Preconditions
 
