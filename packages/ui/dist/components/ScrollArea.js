@@ -6,6 +6,6 @@ export const ScrollArea = React.forwardRef(({ className, children, ...props }, r
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 export const ScrollBar = React.forwardRef(({ className, orientation = "vertical", ...props }, ref) => (_jsx(ScrollAreaPrimitive.ScrollAreaScrollbar, { ref: ref, orientation: orientation, className: cn("flex touch-none select-none transition-colors", orientation === "vertical" &&
         "h-full w-2.5 border-l border-l-transparent p-[1px]", orientation === "horizontal" &&
-        "h-2.5 flex-col border-t border-t-transparent p-[1px]", className), ...props, children: _jsx(ScrollAreaPrimitive.ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-slate-700" }) })));
+        "h-2.5 flex-col border-t border-t-transparent p-[1px]", className), ...props, children: _jsx(ScrollAreaPrimitive.ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" }) })));
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 //# sourceMappingURL=ScrollArea.js.map

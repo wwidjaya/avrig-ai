@@ -1,14 +1,15 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { cn } from "../lib/utils";
 export function Badge({ className, variant = "default", ...props }) {
+    const dot = "before:size-1.5 before:shrink-0 before:rounded-[2px] before:content-['']";
     const variantClasses = {
-        default: "border-transparent bg-blue-600 text-white hover:bg-blue-700",
-        secondary: "border-transparent bg-slate-800 text-slate-100 hover:bg-slate-700",
-        outline: "text-slate-300 border-slate-700",
-        destructive: "border-transparent bg-red-600 text-white hover:bg-red-700",
-        success: "border-transparent bg-emerald-600 text-white hover:bg-emerald-700",
-        warning: "border-transparent bg-amber-600 text-white hover:bg-amber-700"
+        default: "border-transparent bg-muted text-foreground",
+        secondary: "border-transparent bg-muted text-text-secondary",
+        outline: "border-border text-foreground",
+        destructive: `border-transparent bg-muted text-foreground before:bg-negative ${dot}`,
+        success: `border-transparent bg-muted text-foreground before:bg-positive ${dot}`,
+        warning: `border-transparent bg-muted text-foreground before:bg-warning ${dot}`
     };
-    return (_jsx("div", { className: cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", variantClasses[variant], className), ...props }));
+    return (_jsx("div", { className: cn("inline-flex items-center gap-1.5 rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", variantClasses[variant], className), ...props }));
 }
 //# sourceMappingURL=Badge.js.map

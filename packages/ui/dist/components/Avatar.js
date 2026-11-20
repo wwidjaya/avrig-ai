@@ -6,6 +6,6 @@ export const Avatar = React.forwardRef(({ className, ...props }, ref) => (_jsx(A
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 export const AvatarImage = React.forwardRef(({ className, ...props }, ref) => (_jsx(AvatarPrimitive.Image, { ref: ref, className: cn("aspect-square h-full w-full", className), ...props })));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
-export const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => (_jsx(AvatarPrimitive.Fallback, { ref: ref, className: cn("flex h-full w-full items-center justify-center rounded-full bg-slate-800 text-sm font-medium text-slate-200", className), ...props })));
+export const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => (_jsx(AvatarPrimitive.Fallback, { ref: ref, className: cn("flex h-full w-full items-center justify-center rounded-full bg-muted text-sm font-medium text-foreground", className), ...props })));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 //# sourceMappingURL=Avatar.js.map
