@@ -476,3 +476,30 @@ Screenshot and `screenshot` by window are subject to the same hosted-application
 | 9, QA | Verdict recorded once the run completes, against the tag rather than the tree |
 
 The tag covers the manifest, and the manifest covers the definition. That chain is the only evidence available for a file the Agentic repository does not version, which is why check G13 recomputes the live hash instead of trusting the recorded one.
+
+## QA Result and Remediation
+
+`avrig/00003/rc.001` at `68520e980a10a220fed78b7a86b6ba36e63e0e36` returned **FAIL, 63 of 72 checks PASS, 9 FAIL, 0 BLOCKED**. The definition hash was confirmed unchanged before and after the run, and groups G and H were fully green, so the edit under test is present and intact. The failures are about the tool and the matrix, not about whether the section was written.
+
+### The finding that matters
+
+`agent-desktop` resolves to `agent-desktop.ps1` on this host, and that shim is `& ...agent-desktop-win32-x64.exe @args`. A PowerShell script does not forward its own pipeline into a native command it invokes, so the binary reads EOF, writes an empty string, reads the empty string back, and returns `ok: true` with `delivered_verified`. Through `agent-desktop.cmd` the value does land, but the same act reports `ACTION_FAILED` with no `value` in `post_state`.
+
+Both directions are dangerous in a different way. The first silently loses a secret and every envelope looks healthy. The second reports failure over success and invites a retry that writes twice. The approved definition taught `set-value --stdin` as the headless secret path, which on this host is the first behaviour, so the definition as approved would have had a tester believe a credential was delivered when an empty string was.
+
+Neither behaviour is fixable here, because the tool is a pinned third party binary. So the contract changes at the only place it can: `delivered_verified` stops being evidence, and the next snapshot becomes the assertion. That rule is correct for every shim, every platform, and every version, which is why it is the right fix rather than a workaround for one bug.
+
+### Remediation, stage 10
+
+| Target | Change |
+|---|---|
+| Definition, `### Secrets` | `--stdin` goes through `agent-desktop.cmd` or the native executable, never the `.ps1` shim, and the value is always read back |
+| Definition, `### The observe, act, verify loop` | `delivered_verified` is not evidence. The following snapshot is, for every act, not only for secrets |
+| Definition, `### Windows and PowerShell specifics` | `get '<ref>'` reads one named property and never reports `available_actions`, which come from the snapshot. `snapshot --app` does not raise `AMBIGUOUS_TARGET` when an application has several windows, it silently takes the focused one, so `--window-id` is pinned whenever more than one window exists |
+| Definition, `### What to assert` | `wait --text` cannot match a value held in a control, so a value is asserted with `get`, not with `wait` |
+| Matrix | A1 corrected for the elevation requirement, A2 for three shim lines, D6 for the `get` property contract, D10 for the positional `close-app` form, E3 for the silent window choice, D12 for the `wait` limit, and the F7 against N4 contradiction resolved so no row mandates a sentinel in an argument list |
+| Candidate | `rc.002` recut at the corrected head. `rc.001` stays in history as a failed candidate and is never moved |
+
+`rc.002` also absorbs the bookkeeping commit that landed after `rc.001` was cut, so the tree that is finally merged is the tree that was finally tested. `rc.001` was a valid run against `68520e9` and it is not a pass for any later tree.
+
+Two process facts were disclosed by the testing agent rather than hidden, and both are recorded rather than tidied away: a `Select-String` over the evidence logs matched its own output and grew one file to 25 GB before being killed and rewritten, and one `Start-Sleep` was used between a close and its verification instead of `wait`. Neither affects a verdict, and both are in `logs/D14-commands.txt`.
