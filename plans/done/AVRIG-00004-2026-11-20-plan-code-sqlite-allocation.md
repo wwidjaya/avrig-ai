@@ -6,8 +6,9 @@ branch: feat/AVRIG-00004-plan-code-sqlite-allocation
 candidate_tags:
   - avrig/00004/rc.001 @ 38ff2b7, build AVRIG-00004-build.001, PASS 21/21 (495 assertions)
   - avrig/00004/rc.002 @ 94b48a2, build AVRIG-00004-build.002, PASS 21/21 (495 assertions), carries the 0.6.0 bump
-release_version:
-status: release-version-decided
+  - avrig/00004/rc.003 @ 1f97baf, build AVRIG-00004-build.003, PASS 21/21 (495 assertions), the release candidate after the resync to main 41bc05a
+release_version: 0.6.0
+status: released
 created: 2026-11-20
 owner: Architect
 tags:
@@ -880,6 +881,14 @@ This is recorded because a plan that claimed a green suite before one existed wo
 Two defects in the bump path were recorded rather than worked around. `make bump-version VERSION=0.6.0` cannot run from Windows PowerShell, because the recipe's first line is POSIX shell and the ezwinports `make` hands it to `cmd.exe`, which exits 2 with `-z was unexpected at this time`. And `scripts/bump-version.ps1` prints success and exits 0 after its own `cargo check` fails on the known `avrig-desktop` icon defect, because a failing native command does not throw. The bump itself was applied by running the script directly, and the lock was confirmed with `cargo check --workspace --exclude avrig-desktop`.
 
 The branch also carries a communication rule added to all twelve agent definitions under `.opencode/agents/`, at the user's direction: a heading or a report line must be readable without the paragraph under it, a report answers what happened, what it means, and what the reader must do, and filler wording is cut. Because that directory is untracked in the Agentic repository, the proof is a manifest of before and after SHA-256 values at `plans/evidence/AVRIG-00004/instruction-manifest-comms.json`, with `.bak-20261120-110418` siblings beside each file.
+
+### Release
+
+`0.6.0` is tagged at `a3acd1d` in `avrig-ai`, the `--no-ff` merge of `avrig/00004/rc.003` whose tree hash equals the candidate's at `4d0cc4b3`, and at the `main` tip of `avrig-api` (`d153202`), `avrig-lib` (`f26a285`), and `avrig-ui` (`c61d338`). All four tags are present on `origin`, checked with `git ls-remote --tags`.
+
+The publisher was not run, and the reason is recorded rather than smoothed over. `scripts/release.ps1` opens each repository with `git add -A`, and the `avrig-ai` working tree still carries the abandoned `AVRIG-00002` leftovers: 21 paths, including a modified `LandingPage.tsx` with 23 changed content lines. Publishing through the script would have committed another plan's dead work inside the `0.6.0` tag, so the annotated tag was created by hand at the merge commit and the branch and tag were pushed per repository. The cost is that the publisher's credential range scan did not run. Nothing else differs.
+
+The tool itself lives in Agentic, which the release set does not include, so `0.6.0` names this plan's process change but tags the tool only through the candidate tags `avrig/00004/rc.001` to `rc.003`. That gap is left as it is by the user's direction rather than fixed inside a release.
 
 ### Not applicable in this plan
 
