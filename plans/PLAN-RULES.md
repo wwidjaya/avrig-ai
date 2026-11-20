@@ -39,7 +39,7 @@ The candidate number is the maximum over five sources, plus one, computed inside
 4. filenames, from `git ls-tree -r --name-only origin/<default> -- plans/` plus local `plans/*.md` and `plans/done/**/*.md`;
 5. branch names, from `git branch --all`.
 
-A row that exists only on the remote, or only on an unpushed branch, still claims its number. Because the dump carries a row for every allocation it usually dominates the maximum, and sources 4 and 5 are what catch a claim whose dump was never exported.
+A row that exists only on the remote still claims its number, through the remote dump and the remote filename scan. A claim that exists only on an unpushed branch is claimed by that checkout and is invisible to a clone that has never fetched it, which is not a gap to close but the reason the push is the cross-machine gate. Because the dump carries a row for every allocation it usually dominates the maximum, and sources 4 and 5 are what catch a claim whose dump was never exported.
 
 Allocation runs at **approval**, and at no other time. Authoring a draft allocates nothing, so a draft has no number to hold and a discarded draft leaves no gap.
 
