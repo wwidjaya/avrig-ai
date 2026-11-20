@@ -1,7 +1,0 @@
-# Allowlist for TK-02: raw hex values that legitimately survive in presentation code.
-# One entry per line: path (optionally path:line) followed by a reason after a "#".
-#
-# This list is empty on purpose. Every raw hex value that used to be listed here has
-# been removed rather than excused: the pre-mount bootstrap error screen now uses token
-# classes, and the work item numbers in landing copy carry a prefix so they are not
-# colour literals. An entry added back here is a regression, not a decision.
