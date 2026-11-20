@@ -402,10 +402,10 @@ Agentic repository (default branch `master`):
 |---|---|---|---|---|
 | S1 schema | `edm` | `schema/001-plan.sql`, constraint and trigger validation query set | none | starts immediately |
 | S2 allocator | `be` | `plan-code.ps1`, `SKILL.md`, `.gitignore`, `AGENTS.md` | S1 for the final DDL, proceeds against the DDL in this plan meanwhile | overlaps S1, gates on it |
-| S3 ledger replacement | `Architect` | `plans/PLAN-RULES.md`, deletion of `plans/PLAN-INDEX.md`, `plans/_plan.sql`, the migration evidence, and the four instruction file references that point at the deleted file | the CLI contract frozen in this plan | parallel with S1 and S2 |
+| S3 ledger replacement | `Architect` | `plans/PLAN-RULES.md`, deletion of `plans/PLAN-INDEX.md`, `plans/_plan.sql`, the migration evidence | the CLI contract frozen in this plan | parallel with S1 and S2 |
 | S4 tests | `tester` | `tests/Test-Allocation.ps1`, `## Test Specification and Validation Scenarios`, evidence under `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/` | S4 authoring parallel, execution after S1 to S3 | author parallel, run last |
 | S5 build and candidates | `build` | build gate, build id, candidate tags and pushes | S1 to S4 | sequential after S4 |
-| S6 wiring | `be` | Architect stage 4 runbook, AGENTS.md paragraph verified in place | S2, S3 | sequential after S3 |
+| S6 wiring | `be` | the ten `PLAN-INDEX.md` references across `AGENTS.md` and the four `.opencode/agents` definitions, rewritten to name `PLAN-RULES.md` and the tool; the Architect stage 4 runbook now calls `assign` then `export` | S2, S3 | sequential after S3 |
 
 Sequential constraints: S1 before S2's final schema check, and S1 through S3 all complete before S4 executes. S3 and S2 are independent because the CLI contract is fully specified above, which is the point of settling it in the plan.
 
@@ -1470,7 +1470,8 @@ Pass: the same indicator re-runs at exit `0` with one `project` row and `user_ve
 | Surface | Verdict | Reason |
 |---|---|---|
 | Live browser UAT | not applicable | the plan ships a PowerShell CLI and a SQLite file, with no rendered page, no route, and no login journey to load |
-| Desktop UAT through `agent-desktop` | not applicable | no native window, tray, dialog, or installer is started, clicked, or read; `plans/PLAN-INDEX.md` is read in an editor, not in a window the plan owns |
+| Desktop UAT through `agent-desktop` | not applicable | no native window, tray, dialog, or installer is started, clicked, or read; the ledger is a SQLite file queried by a CLI, not a surface the plan owns |
+| `cargo check --workspace` and `pnpm build` as a code gate | not applicable | the artifacts are one PowerShell script, one SQL schema, three markdown documents, and a SQL dump. No Rust or TypeScript source changes, so a workspace build would exercise code this plan never touched. The equivalent gate for what did change is a PowerShell parse check of `plan-code.ps1`, a `.read` of the schema into a scratch database with `PRAGMA integrity_check`, and the tool's own scratch suite, all recorded under the execution order |
 
 If a later stage adds a page or a window, these two rows must be replaced by executed cases, not by silence.
 
