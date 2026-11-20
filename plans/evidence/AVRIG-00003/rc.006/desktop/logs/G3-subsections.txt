@@ -1,0 +1,13 @@
+G3, the ### subsections under ## Desktop UAT Testing (line 117), in file order.
+count = 11, expected 11
+   1  When it applies                                  MATCH
+   2  Preflight                                        MATCH
+   3  Read the bundled guides before the first action  MATCH
+   4  The observe, act, verify loop                    MATCH
+   5  Windows and PowerShell specifics                 MATCH
+   6  Launch the tested artifact                       MATCH
+   7  Secrets                                          MATCH
+   8  Retry discipline                                 MATCH
+   9  What to assert                                   MATCH
+  10  Evidence per run                                 MATCH
+  11  Reporting a desktop failure                      MATCH

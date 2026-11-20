@@ -1,0 +1,81 @@
+G13, the edit proven three ways, because no candidate tag can contain an untracked file.
+Run at 2026-11-20 09:50:05 +07:00
+
+manifest files[0]:
+{
+  "File": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md",
+  "Status": "PRESENT",
+  "Bytes": 27513,
+  "Lines": 248,
+  "Sha256": "46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2",
+  "Backup": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md.bak-20261120-062939",
+  "BackupStatus": "PRESENT",
+  "BackupBytes": 11496,
+  "BackupLines": 112,
+  "BackupSha256": "ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56",
+  "BackupGitIgnore": ".gitignore:35 *.bak-*"
+}
+
+WAY 1, live vs manifest files[0].Sha256:
+  live   46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+  manifest 46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+  equal  True
+WAY 2, live vs the pinned copy tester.md.tested:
+  pinned 46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+  equal  True
+WAY 3, text diff of live against pinned:
+  differing lines: 0  (an empty diff is the requirement)
+Backup:
+  exists True   sha256 ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56   matches BackupSha256 True
+Live size:
+  27513 bytes, 248 lines; the manifest records the same figures in its fields Bytes=27513 and Lines=248
+  size match True (27513 = 27513) and lines match True (248 = 248). Any earlier False line was a reader error against the wrong field names; the values agree.
+Last amendment sha256_after:
+  sequence 6 sha256_after 46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+  equals live: True
+MISSING rows: 0
+
+
+=== drift recheck at run close, 2026-11-20 09:56 ===
+
+  measured at 09:50:05, the run-time reading the G row is scored on:
+    live 46EC68BE... = pinned = manifest Sha256 = amendments[-1].sha256_after, 0 differing lines,
+    27513 bytes, 248 lines. No drift at that moment.
+
+  measured again at 09:56, after the run:
+    live sha256 1E52D9ACF121AF4C0594239822C18B8CB3F19616102C628820AF3BC593B24C3D
+    pinned      46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+    equal       False
+    size 27556 bytes, 248 lines
+    mtime 2026-11-20 09:53:50
+    differing lines against pinned: 2
+
+  THE DEFINITION MOVED AFTER THIS RUN FINISHED. This is recorded rather than tidied, because
+  a reader of a NO DRIFT line would otherwise be told something that was true at 09:50 and
+  false at 09:56.
+
+  What changed, in full, one line, Responsibilities item 1:
+    DEL  <CODE> is the project indicator declared in that project s `plans/PLAN-INDEX.md`
+    ADD  <CODE> is the project indicator declared as `project_indicator:` in the frontmatter
+         of that project s `plans/PLAN-RULES.md`
+  One line edited, two lines in the diff, size +43 bytes, line count unchanged at 248.
+  That edit is not this work item s scope and was not made by this session. The tester wrote
+  no byte of this file at any point: the only writes it performed are files under
+  plans/evidence/. The file is untracked in the Agentic repository, so git records no author.
+
+  Consequence for this run, stated precisely:
+    - Every G, H and N row was scored against the 46EC68BE bytes, and the run-time reading at
+      09:50:05 proves that. G1 through G12, H1 through H5 and the drift read-back itself were
+      all written before 09:53:50.
+    - H4 s carve-out was computed at 09:51:48, against the .bak baseline and the 46EC68BE
+      bytes, so it describes the file this run measured.
+    - The current live bytes, 1E52D9AC, have NOT been scored by this run, and this run makes
+      no claim about them. The one changed line sits inside Responsibilities item 1, which H4
+      lists as an already-carved-out line, so the change would not alter H4 s shape even if it
+      were in scope.
+    - The tester did not revert the file. Reverting another writer s work to make a hash line
+      read clean would be worse than reporting the drift.
+
+  Recovery for the next run: re-pin tester.md.tested and the manifest Sha256 to whatever the
+  file is meant to be once the concurrent edit settles, then re-score G13. Until then G13 s
+  PASS belongs to the 09:50 reading and to no later one.

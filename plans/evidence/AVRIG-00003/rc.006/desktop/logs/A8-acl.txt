@@ -1,0 +1,7 @@
+=== icacls d:\nodejs\.npm\global ===
+d:\nodejs\.npm\global BUILTIN\Users:(I)(OI)(CI)(RX)
+                      NT AUTHORITY\Authenticated Users:(I)(OI)(CI)(RX)
+                      BUILTIN\Administrators:(I)(OI)(CI)(F)
+                      NT AUTHORITY\SYSTEM:(I)(OI)(CI)(F)
+
+Successfully processed 1 files; Failed processing 0 files

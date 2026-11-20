@@ -1,0 +1,9 @@
+=== F1 invocation record ===
+route:        d:\nodejs\.npm\global\agent-desktop.cmd (never the .ps1 shim)
+argv (ref only):   set-value '@s9c74ay9zu1e6:e1' --stdin
+value transport:   the sentinel arrives on stdin, from a shell variable, never in the argument list
+--- shim content (proof it forwards stdin to the native exe) ---
+@echo off
+"d:\nodejs\.npm\global\node_modules\agent-desktop\bin\agent-desktop-win32-x64.exe" %*
+exit /b %errorlevel%
+uat-secret-0002

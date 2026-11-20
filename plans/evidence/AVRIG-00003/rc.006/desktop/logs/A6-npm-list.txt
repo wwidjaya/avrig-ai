@@ -1,0 +1,3 @@
+d:\nodejs\.npm\global
+`-- agent-desktop@1.3.1
+

@@ -1,0 +1,3 @@
+=== agent-desktop permissions --guide (expected macOS-only refusal on Windows) ===
+{"version":"2.6","ok":false,"command":"permissions","error":{"code":"PLATFORM_NOT_SUPPORTED","message":"start_permission_guide is not supported on this platform","suggestion":"Use a platform/build that advertises this capability or choose a supported command","disposition":{"delivery":"not_delivered","retry":"safe"}}}
+exit=1

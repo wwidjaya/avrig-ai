@@ -1,0 +1,590 @@
+=== C4 help dump: agent-desktop <cmd> --help ===
+
+########## snapshot ##########
+Capture accessibility tree as structured JSON with @ref IDs
+
+Usage: agent-desktop-win32-x64.exe snapshot [OPTIONS]
+
+Options:
+      --app <APP>                      Filter to application by name
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --window-id <window-id>          Scope to a single window ID (from list-windows)
+      --max-depth <MAX_DEPTH>          Maximum tree depth (default 10) [default: 10]
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --include-bounds                 Include element bounds (x, y, width, height)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+  -i, --interactive-only               Include interactive elements only
+      --compact                        Collapse single-child unnamed nodes to reduce tree depth
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --skeleton                       Shallow overview with children_count on truncated containers
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+      --surface <SURFACE>              Surface to snapshot [default: window] [possible values: window, focused, menu, menubar, sheet, popover, alert, desktop, taskbar, system-tray, quick-settings, notification-center, toolbar, dock, spotlight, menu-bar-extras, system-tray-overflow, start-menu, action-center]
+      --root <ROOT>                    Start traversal from this ref instead of window root
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --timeout-ms <MS>                Observation deadline in milliseconds (default 3000; raise for slow Chromium settles)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --force-electron-a11y            Assume Chromium renderer accessibility is forced (skips activation guidance)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## get ##########
+Read an element property (text, value, title, bounds, role, states)
+
+Usage: agent-desktop-win32-x64.exe get [OPTIONS] <REF>
+
+Arguments:
+  <REF>  Qualified ref from snapshot (@<snapshot_id>:eN)
+
+Options:
+      --property <PROPERTY>            Property: text (what a person reads: content for text-bearing roles, otherwise the name), value, title, bounds, role, states [default: text]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## click ##########
+Click element via accessibility press action
+
+Usage: agent-desktop-win32-x64.exe click [OPTIONS] <REF>
+
+Arguments:
+  <REF>  Qualified ref from snapshot (@<snapshot_id>:eN)
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum ref-resolution and transient-actionability wait in milliseconds; terminal failures return immediately [default: 5000]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## find ##########
+Search elements by role, name, value, or text content
+
+Usage: agent-desktop-win32-x64.exe find [OPTIONS]
+
+Options:
+      --app <APP>                      Filter to application by name
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --window-id <window-id>          Scope to a single window ID (from list-windows)
+      --role <ROLE>                    Match by accessibility role (button, textfield, checkbox ...)
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --name <NAME>                    Match by accessible name or label
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --value <VALUE>                  Match by current value
+      --text <TEXT>                    Match by text in name, value, title, or description
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --description <DESCRIPTION>      Match by accessible description
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+      --native-id <NATIVE_ID>          Match by native automation id (AXIdentifier)
+      --exact                          Require exact (case-insensitive) name/description/value matches
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --root <ROOT>                    Search only inside this ref's subtree, not the whole window
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --surface <SURFACE>              Surface to search (menubar, menu, sheet ...) instead of the window [default: window] [possible values: window, focused, menu, menubar, sheet, popover, alert, desktop, taskbar, system-tray, quick-settings, notification-center, toolbar, dock, spotlight, menu-bar-extras, system-tray-overflow, start-menu, action-center]
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+      --state <TOKEN[=BOOL]>           Filter by state token (repeatable); append =true or =false
+      --timeout-ms <MS>                Traversal deadline in milliseconds (default 5000; raise for a large tree such as a shell file dialog)
+      --count                          Return match count only
+      --first                          Return first match only
+      --last                           Return last match only
+      --nth <NTH>                      Return Nth match (0-indexed)
+      --limit <LIMIT>                  Return at most N matches; defaults to 50 when omitted, use 0 for all
+  -h, --help                           Print help
+
+
+########## is ##########
+Check element state (visible, enabled, checked, focused, expanded, selected)
+
+Usage: agent-desktop-win32-x64.exe is [OPTIONS] <REF>
+
+Arguments:
+  <REF>  Qualified ref from snapshot (@<snapshot_id>:eN)
+
+Options:
+      --property <PROPERTY>            State: visible, enabled, checked, focused, expanded, selected [default: visible]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## set-value ##########
+Set element value directly via accessibility attribute
+
+Usage: agent-desktop-win32-x64.exe set-value [OPTIONS] <REF> [VALUE]
+
+Arguments:
+  <REF>    Qualified ref from snapshot (@<snapshot_id>:eN)
+  [VALUE]  Value to set
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum ref-resolution and transient-actionability wait in milliseconds; terminal failures return immediately [default: 5000]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --stdin                          Read up to 128 KiB of UTF-8 text from a pipe or file
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## type ##########
+Insert text into a text target
+
+Usage: agent-desktop-win32-x64.exe type [OPTIONS] <REF> [TEXT]
+
+Arguments:
+  <REF>   Qualified ref from snapshot (@<snapshot_id>:eN)
+  [TEXT]  Text to type
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum wait in milliseconds, covering ref resolution, actionability and delivery of the text; default 5000 plus 30 per character of TEXT; 0 disables the wait
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --stdin                          Read up to 10,000 bytes of UTF-8 text from a pipe or file
+      --interval-ms <INTERVAL_MS>      Type one keystroke every N ms (1-2000) instead of inserting TEXT at once; --timeout-ms then applies to each keystroke, and 0 makes each keystroke try once
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## wait ##########
+Wait for time (ms), element presence, text, or window appearance
+
+Usage: agent-desktop-win32-x64.exe wait [OPTIONS] [MS]
+
+Arguments:
+  [MS]  Milliseconds to pause
+
+Options:
+      --element <ELEMENT>              Block until this element ref appears in the tree
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --window <WINDOW>                Block until a window with this title appears; with --event, narrows the event wait to that window title instead of selecting a mode
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --text <TEXT>                    Block until text appears in the app's accessibility tree; with --notification, filter notification text
+      --menu                           Block until a menu surface is open
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --menu-closed                    Block until the menu surface is dismissed
+      --notification                   Block until a new notification arrives
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --event <EVENT>                  Block until a desktop lifecycle signal, detected by baseline diff without needing to know the id/title up front: window-opened, window-closed, app-launched, app-terminated, focus-changed, surface-appeared, surface-dismissed
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+      --window-id <window-id>          Optional: narrow --event window-opened/window-closed/focus-changed to one window ID
+      --predicate <PREDICATE>          Element wait predicate: exists, enabled, visible, actionable, or value
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --value <VALUE>                  Expected value for --predicate value
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --action <ACTION>                Action for --predicate actionable: click (default), type, set-value, or clear
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+      --count <COUNT>                  Expected match count for --text waits
+      --timeout <TIMEOUT>              Timeout in milliseconds for element/window/text waits [default: 30000]
+      --app <APP>                      Scope element, window, or text wait to this application
+  -h, --help                           Print help
+
+
+########## focus-window ##########
+Bring a window to front and confirm OS focus
+
+Usage: agent-desktop-win32-x64.exe focus-window [OPTIONS]
+
+Options:
+  -v, --verbose                        Enable debug logging to stderr
+      --window-id <window-id>          Window ID from list-windows
+      --app <APP>                      Application name
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --title <TITLE>                  Window title (partial match accepted)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## launch ##########
+Launch application and return once its process is running; --activate waits for a window, --cdp verifies a DevTools endpoint
+
+Usage: agent-desktop-win32-x64.exe launch [OPTIONS] <APP>
+
+Arguments:
+  <APP>  Application name or bundle ID
+
+Options:
+      --timeout <TIMEOUT>              Upper bound in ms for the whole launch [default: 30000]
+  -v, --verbose                        Enable debug logging to stderr
+      --arg <ARGS>                     Command-line argument passed to the launched app; repeatable, order preserved. For values starting with '-', use --arg=<value>
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --env <KEY=VALUE>                Environment variable for the launched process
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --cwd <CWD>                      Working directory for the launched process
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --no-attach                      Start a fresh instance instead of attaching to a running one (Windows fails if the app is already running)
+      --activate                       Bring the app forward so it presents a window, and wait for one
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --cdp [<PORT>]                   Expose the app's DevTools protocol endpoint on this port (0 or omitted picks a free port)
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## close-app ##########
+Quit an application gracefully (--force to terminate)
+
+Usage: agent-desktop-win32-x64.exe close-app [OPTIONS] <APP>
+
+Arguments:
+  <APP>  Application name
+
+Options:
+      --force                          Terminate matching app processes instead of quitting gracefully
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## list-windows ##########
+List all visible windows (--app to filter by application)
+
+Usage: agent-desktop-win32-x64.exe list-windows [OPTIONS]
+
+Options:
+      --app <APP>                      Filter to application by exact case-insensitive name
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --timeout-ms <MS>                Inventory deadline in milliseconds (default 5000)
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## list-apps ##########
+List all running GUI applications (--app to filter)
+
+Usage: agent-desktop-win32-x64.exe list-apps [OPTIONS]
+
+Options:
+      --app <APP>                      Filter to application by name
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --timeout-ms <MS>                Inventory deadline in milliseconds (default 5000)
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## batch ##########
+Execute a bounded, sequential, non-atomic JSON command batch
+
+Usage: agent-desktop-win32-x64.exe batch [OPTIONS] <JSON>
+
+Arguments:
+  <JSON>  JSON array of {command, args} objects
+
+Options:
+      --stop-on-error                  Halt the batch on the first failed command
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --timeout-ms <TIMEOUT_MS>        Absolute wall-clock budget for the whole non-atomic batch [default: 60000]
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## clipboard-set ##########
+Write text to the clipboard
+
+Usage: agent-desktop-win32-x64.exe clipboard-set [OPTIONS] [TEXT]
+
+Arguments:
+  [TEXT]  Text to write to the clipboard (ignored if --image or --file-url is given)
+
+Options:
+      --image <PATH>                   Path to a PNG file to write to the clipboard
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --file-url <PATH>                File path to write to the clipboard as a file reference; repeatable
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --stdin                          Read up to 128 KiB of UTF-8 text from a pipe or file
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## clipboard-clear ##########
+Clear the clipboard
+
+Usage: agent-desktop-win32-x64.exe clipboard-clear [OPTIONS]
+
+Options:
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## clipboard-get ##########
+Read plain-text or typed clipboard contents
+
+Usage: agent-desktop-win32-x64.exe clipboard-get [OPTIONS]
+
+Options:
+      --format <FORMAT>                Clipboard format to read: text (default), auto, image, file-urls
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --out <PATH>                     Where to write image content; defaults to a private temp file under the session dir
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## list-notifications ##########
+List notifications from Notification Center
+
+Usage: agent-desktop-win32-x64.exe list-notifications [OPTIONS]
+
+Options:
+      --app <APP>                      Filter to notifications from this app
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --text <TEXT>                    Filter to notifications containing this text
+      --limit <LIMIT>                  Maximum number of notifications to return
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## select ##########
+Select an option in a list or dropdown
+
+Usage: agent-desktop-win32-x64.exe select [OPTIONS] <REF> <VALUE>
+
+Arguments:
+  <REF>    Qualified ref from snapshot (@<snapshot_id>:eN)
+  <VALUE>  Option to select
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum ref-resolution and transient-actionability wait in milliseconds; terminal failures return immediately [default: 5000]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## toggle ##########
+Toggle a checkbox or switch
+
+Usage: agent-desktop-win32-x64.exe toggle [OPTIONS] <REF>
+
+Arguments:
+  <REF>  Qualified ref from snapshot (@<snapshot_id>:eN)
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum ref-resolution and transient-actionability wait in milliseconds; terminal failures return immediately [default: 5000]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## scroll-to ##########
+Scroll element into visible area
+
+Usage: agent-desktop-win32-x64.exe scroll-to [OPTIONS] <REF>
+
+Arguments:
+  <REF>  Qualified ref from snapshot (@<snapshot_id>:eN)
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum ref-resolution and transient-actionability wait in milliseconds; terminal failures return immediately [default: 5000]
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## press ##########
+Send a key combo: return, escape, cmd+c, shift+tab ...
+
+Usage: agent-desktop-win32-x64.exe press [OPTIONS] <COMBO>
+
+Arguments:
+  <COMBO>  Key combo: return, escape, cmd+c, shift+tab ...
+
+Options:
+      --app <APP>                      Target application name; keys go to its process without focusing it (--headed focuses its window first)
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --window-id <WINDOW_ID>          Target the application instance that owns this window (from list-windows); use it when several instances share one name
+      --force                          Send the combo even if the adapter flags it as a dangerous shortcut
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+
+
+########## permissions ##########
+Check nested permission states: accessibility/screen_recording/automation each return {state,...}
+
+Usage: agent-desktop-win32-x64.exe permissions [OPTIONS]
+
+Options:
+      --request                        Request missing permissions in the bounded isolated helper
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --guide                          Open System Settings with an on-screen guide for granting the missing permissions (macOS)
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help
+

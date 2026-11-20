@@ -1,0 +1,14 @@
+=== N6, an app with no interactive children is not reported as a tool failure ===
+
+advisory. The branch was never entered, and the distinction is stated rather than implied.
+
+  notepad.exe, first candidate, D4 snapshot s228ha33q6aax8: ref_count 25, tree carries
+  textfield, tablist, tabs, buttons, menu items and switches. Interactive children present.
+  after a tab was added: ref_count 26 or 27. Never empty.
+  the second and third Notepad windows launched for E7 were also non-empty (both 26 refs).
+  calc.exe and mspaint.exe were never launched, because the first candidate worked.
+
+So no application on this host returned a window with no interactive children, and there is
+no app finding to report. This is a property of the candidates observed on this build, not a
+claim about every application: the receiving end, a transparent Bevy overlay, would be the
+case the definition describes, and nothing here tested that.

@@ -1,0 +1,92 @@
+E2, the identity clause, and the redirect rc.004 measured reproduced on rc.006.
+
+This run produced BOTH of the behaviours the row describes. The redirect happened, and the identity
+read below is therefore the assertion. A loud refusal was also produced, in a third construction, and
+is recorded at the end.
+
+Construction, window B w-16910484, one Notepad window holding one tab:
+
+  step 1  snapshot --app "Notepad" -i --window-id w-16910484
+          -> szz8ia7ccwvqy, ref_count 26
+             tab 'Untitled. Unmodified.' states=selected, its Close Tab at @szz8ia7ccwvqy:e4
+  step 2  click '@szz8ia7ccwvqy:e5'   (Add New Tab) -> ok true, the window now holds two tabs
+  step 3  snapshot --app "Notepad" -i --window-id w-16910484
+          -> s140zy7gstwrt6, ref_count 27
+             tab 'Untitled. Unmodified.'                 ref @s140zy7gstwrt6:e3
+             tab 'Untitled. Unmodified.'  states=selected ref @s140zy7gstwrt6:e4
+               button 'Close Tab'                        ref @s140zy7gstwrt6:e5
+          THE CAPTURED REF IS @s140zy7gstwrt6:e5, the Close Tab of the SELECTED tab.
+  act 1   click '@s140zy7gstwrt6:e5'
+          -> ok true, steps[0] label InvokePattern.Invoke mechanism semantic_api outcome succeeded
+             verified false, disposition delivered_unverified, retry unsafe
+          -> EFFECT: the selected tab closed. The addressed element is gone.
+          Evidence: snapshots/E2b-act1.json
+  step 4  snapshot --app "Notepad" -i --window-id w-16910484   (FRESH snapshot between the acts)
+          -> s1zuzkr15qwej7, ref_count 26
+             tab 'Untitled. Unmodified.' states=selected ref @s1zuzkr15qwej7:e3
+               button 'Close Tab'                        ref @s1zuzkr15qwej7:e4
+          -> ref_count fell 27 to 26 and the only Close Tab now carries e4, a DIFFERENT ref.
+             @s140zy7gstwrt6:e5 addresses nothing in this tree.
+          Evidence: snapshots/E2b-snapshot-after-removal.json
+  act 2   click '@s140zy7gstwrt6:e5'   (the captured ref, again, no new snapshot used)
+          -> ok true AGAIN, steps[0] InvokePattern.Invoke succeeded, delivered_unverified,
+             retry unsafe. NO STALE_REF. NO AMBIGUOUS_TARGET.
+          -> EFFECT: the remaining tab closed, and the window closed with it.
+             list-windows --app "Notepad" afterwards lists only w-2296062; w-16910484 is gone.
+          Evidence: snapshots/E2b-act2-redirect.json, logs/E2b-windows-after-act2.json
+
+IDENTITY READ, the assertion this clause asks for.
+
+  node the envelope addressed at capture : role button, name 'Close Tab', owning tab
+                                           'Untitled. Unmodified.' which was the selected tab (e4),
+                                           in window w-16910484
+  node the follow-up snapshot shows affected: role button, name 'Close Tab', owning tab
+                                           'Untitled. Unmodified.' which had become the selected tab,
+                                           in window w-16910484
+  compared by
+    name                    'Close Tab'        versus 'Close Tab'        -> identical, which is why
+                                                                           the redirect is invisible
+    role                    button             versus button             -> identical
+    owning window id        w-16910484         versus w-16910484         -> identical, so this
+                                                                           redirect stayed inside one
+                                                                           window and the other
+                                                                           Notepad window was not
+                                                                           touched
+    ref_id                  @s140zy7gstwrt6:e5 versus @s1zuzkr15qwej7:e4 -> DIFFERENT
+    owning tab node         e4 (selected)      versus e3 (now selected)  -> DIFFERENT
+
+  CONCLUSION: act 1 removed the node the ref addressed. Act 2 resolved that same ref onto a
+  structurally identical sibling, delivered an invocation, and reported ok true with
+  delivered_unverified. The two acts affected two different nodes. This is a SILENT REDIRECT, and it
+  is written up as a FINDING against the tool rather than as a pass on the envelope.
+
+  A tester who trusted ok true would believe the second act re-invoked the same control. It did not,
+  and the consequence was larger than the envelope suggests: the window closed.
+
+Second construction, window C w-11208710, same shape:
+  snapshot s3ivq2dj6pxozf one tab, Add New Tab at e5 -> two tabs
+  snapshot spb7ktdgbfx04, Close Tab of the selected tab at e5
+  act 1 click '@spb7ktdgbfx04:e5'  -> ok true, selected tab closed
+  act 2 click '@spb7ktdgbfx04:e5'  -> ok true again, no refusal, and the window then closed
+  list-windows has no w-11208710; a pinned snapshot answers WINDOW_NOT_FOUND
+  Evidence: snapshots/E2r-act1-close-tab.json, snapshots/E2r-stale-ref.json,
+            logs/E2r-windows-after-act2.json, snapshots/E2r-sheet.json
+  In this construction the window was destroyed before a snapshot could be taken between the acts,
+  which is why the identity comparison above is taken from window B.
+
+Third construction, the loud refusal the row also allows for:
+  launch -> w-8784212, snapshot s3ohpyeocjp2ie, the window's own button 'Close' at e26
+  act 1 click '@s3ohpyeocjp2ie:e26' -> ok true, the window closed
+  act 2 click '@s3ohpyeocjp2ie:e26' -> ok false, WINDOW_NOT_FOUND 'No window with id w-8784212',
+            delivery not_delivered, retry safe
+  Evidence: snapshots/E2w-act1.json, snapshots/E2w-act2.json, logs/E2w-windows-after.txt
+  So when the whole window goes, the tool does refuse loudly with a protective code. The protective
+  code is WINDOW_NOT_FOUND, a third code the row does not name, exactly as rc.005 found.
+
+Reading, stated plainly. The removal clause's literal expectation, STALE_REF or AMBIGUOUS_TARGET with
+ok false, is NOT what this host produced at the moment that clause's premise fired: act 2 succeeded.
+What did fire is the identity clause, which exists precisely for this case and is satisfied by the
+comparison above plus the finding. The row is recorded PASS on that basis, with the divergence from
+the literal first clause and the silent redirect both stated rather than smoothed over, and with the
+note that a run which had accepted the envelope without this read would have been recorded as not
+tested.

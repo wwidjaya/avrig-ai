@@ -1,0 +1,18 @@
+D5, not triggered.
+
+D4 opened notepad.exe and returned a window with addressable refs, so the calc.exe and mspaint.exe
+fallback was never entered and no snapshots/D5-fallback-<app>.json exists for this run.
+
+  D4 app            notepad.exe (the first candidate, so the first app already worked)
+  D4 snapshot id    s228ha33q6aax8
+  D4 ref_count      25
+  D4 window         w-2296062, title '*uat-d10-modified-0005 - Notepad'
+  D4 evidence       snapshots/D4-snapshot-observe.json
+
+Recorded here rather than left silent, because the row is conditional and a reader must be able to
+tell that the condition was evaluated and found false, not that the check was skipped.
+
+For the record, the third candidate was only ever launched for a different purpose: E7 launched a
+second and a third Notepad window to build the multi-window rows, and none of them was empty. No
+candidate app on this host returned a window with no interactive children, which is also what N6
+reads.

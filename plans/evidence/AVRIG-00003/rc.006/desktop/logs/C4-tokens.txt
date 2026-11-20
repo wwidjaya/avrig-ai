@@ -1,0 +1,29 @@
+agent-desktop
+powershell
+'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+
+text
+agent-desktop skills get desktop     # the loop, the ref rules, the retry rule
+agent-desktop skills get platform    # this platform's specifics, the Windows guide on this host
+
+text
+agent-desktop snapshot --app "Notepad" -i
+agent-desktop get '@s8f3k2p9:e8'
+agent-desktop click '@s8f3k2p9:e8'
+agent-desktop snapshot --app "Notepad" -i
+
+text
+agent-desktop status            # platform, permission state, and supported surfaces, expect ok: true
+agent-desktop version
+agent-desktop list-surfaces
+
+text
+plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/
+  snapshots/          every snapshot envelope, exactly as printed
+  screens/            one screenshot per asserted state
+  version.json        agent-desktop version output
+  status.json         agent-desktop status output
+  guide-desktop.txt
+  guide-platform.txt
+  RESULT.md           one result line
+

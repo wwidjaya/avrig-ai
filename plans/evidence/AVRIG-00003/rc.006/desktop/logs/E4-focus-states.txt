@@ -1,0 +1,4 @@
+=== E4 focus states (supplementary, not the assertion) ===
+E3-pin-a: root role=window name='*uat-d12-wait-0006 - Notepad' ref= states=''
+E3-pin-b: root role=window name='Untitled - Notepad' ref= states=''
+note: on this host nothing can be foregrounded headless (D7 in the plan), so is_focused is false for every window and that absence is an environment limit, not a failure

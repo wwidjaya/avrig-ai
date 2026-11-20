@@ -1,0 +1,39 @@
+E5, the recovery order after a ref that no longer resolves.
+
+Three separate ref failures were produced in this run, and each is followed by a new snapshot rather
+than by a retry of the same ref.
+
+  E1, a bare ref, refused before any act:
+    seq 48  agent-desktop click '@e8'                  -> INVALID_ARGS, not_delivered
+            '@e8' appears exactly once in the whole run. There is no second attempt.
+
+  E2b, a captured ref whose own element was removed, act 2 lands (the redirect):
+    seq 61  click '@s140zy7gstwrt6:e5'                 -> act 1, ok true, the selected tab closed
+    seq 62  snapshot --window-id w-16910484            -> s1zuzkr15qwej7, a FRESH snapshot between
+                                                          the two acts, which is what makes the
+                                                          identity comparison possible
+    seq 63  click '@s140zy7gstwrt6:e5'                 -> act 2, ok true, closed the remaining tab
+                                                          and the window with it. The window is gone;
+                                                          the ref is never reused again.
+    seq 63  ... after it, the next command is list-windows (seq in logs/E2b-windows-after-act2.json),
+            then a pinned snapshot on the surviving window. '@s140zy7gstwrt6:e5' appears twice in the
+            whole run, once per act, and never a third time.
+
+  E2w, the same window Close ref acted twice:
+    seq 94  click '@s3ohpyeocjp2ie:e26'                -> act 1, ok true, the window closed
+    seq 95  click '@s3ohpyeocjp2ie:e26'                -> WINDOW_NOT_FOUND, not_delivered, retry safe
+            Nothing follows seq 95 at all. The ref is not retried and no fourth attempt was made.
+
+  D10 close-app TIMEOUT, the one non safe disposition that was followed by further work:
+    seq 75  close-app "notepad.exe"                    -> TIMEOUT, delivered_unverified, retry unsafe
+    seq 78  snapshot --window-id w-7342734             -> a FRESH snapshot that shows the pending save
+                                                          prompt in the tree
+    seq 79  click <Don't save ref from that snapshot>  -> the prompt was dismissed through its own ref
+    seq 81  click <the window's own Close ref>         -> the window closed
+    No command was re-issued unchanged after the TIMEOUT: the state that caused it was read first and
+    cleared through the application's own controls.
+
+Rule check, mechanically: in logs/D14-commands.txt the ref '@s140zy7gstwrt6:e5' occurs on two lines,
+'@s3ohpyeocjp2ie:e26' on two lines, '@e8' on one line, and every one of those pairs is separated by a
+snapshot or by the end of the run. No ref is issued twice without a new snapshot in between, and no
+ref is issued a third time at all.

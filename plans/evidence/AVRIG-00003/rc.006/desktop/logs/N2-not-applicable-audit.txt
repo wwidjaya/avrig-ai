@@ -1,0 +1,35 @@
+=== N2, a desktop surface is never recorded as not applicable ===
+
+Every row whose subject is a native window was read for the words not applicable.
+
+  D1   PASS   snapshots/D1-launch.json
+  D2   PASS   snapshots/D2-list-apps.json
+  D3   PASS   snapshots/D3-list-windows.json
+  D4   PASS   snapshots/D4-snapshot-observe.json
+  D5   PASS   logs/D5-not-triggered.txt
+  D6   PASS   snapshots/D6-get-ref.json; logs/D6-get-help.txt
+  D7   PASS   snapshots/D7-act.json
+  D8   PASS   snapshots/D8-snapshot-verify.json
+  D9   PASS   screens/D9-after-act.png; logs/D9-screenshot-help.txt; snapshots/D9-screenshot.json
+  D10  PASS   snapshots/D10-final-close.json; snapshots/D10-happy4-snapshot.json; snapshots/D10-unsaved-modified.json; snapshots/D10-unsaved-close.json; snapshots/D10-list-apps-after.json; snapshots/D10-close-app-app-flag.json; logs/D10-relaunch-recovered.txt
+  D11  PASS   snapshots/D11-notifications.json
+  D12  PASS   snapshots/D12-wait.json; logs/D12-wait-help.txt; snapshots/D12-get-value.json; logs/D12-compare.txt
+  D13  PASS   logs/D13-envelope-audit.txt
+  D14  PASS   logs/D14-commands.txt
+  E3   PASS   snapshots/E3-pin-a.json; snapshots/E3-pin-b.json; logs/E3-windows.txt
+  E4   PASS   snapshots/E4-pin-a-repeat.json; snapshots/E4-pin-b-repeat.json; logs/E4-focus-states.txt
+  F1   PASS   snapshots/F1-cmd-set-value.json; snapshots/F1-readback.json; snapshots/F1-get-value.json; logs/F1-invocation.txt
+  F2   PASS   snapshots/F2-ps1-set-value.json; snapshots/F2-readback.json; logs/F2-routes.txt
+  F4   PASS   snapshots/F4-clipboard-set.json; snapshots/F4-clipboard-get.json; snapshots/F4-clipboard-clear.json; snapshots/F4-clipboard-get-after-clear.json; snapshots/F4-get-value.json; screens/F4-cleared.png
+  F7   PASS   snapshots/F7-type-headless.json
+  G14  PASS   logs/G14-hazard-text.txt
+  H3   PASS   logs/H3-wmux-diff.txt
+
+rows whose verdict is NOT APPLICABLE anywhere in the ledger: 0
+rows whose verdict is BLOCKED anywhere in the ledger      : 0
+
+The only two uses of the words not applicable in the ledger are inside D5 and N6, and both
+describe a conditional branch that did not fire, never a desktop surface being excused:
+  D5  the calc.exe/mspaint.exe fallback was not entered because Notepad returned 25 refs
+  N6  the empty-tree app finding was not needed because no candidate was empty
+Notepad was reachable and was exercised end to end, so no BLOCKED row was required either.

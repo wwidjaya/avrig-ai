@@ -1,0 +1,9 @@
+Get-ChildItem d:\nodejs\.npm\global -Filter 'agent-desktop*'
+
+Name              Length
+----              ------
+agent-desktop        431
+agent-desktop.cmd    120
+agent-desktop.ps1    112
+
+Test-Path d:\nodejs\.npm\global\node_modules\agent-desktop => True

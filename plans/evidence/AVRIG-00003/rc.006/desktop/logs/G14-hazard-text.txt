@@ -1,0 +1,50 @@
+G14, the two hazards stated as rules a reader can follow, read from the two subsections.
+
+CLAUSE 1, ### The observe, act, verify loop (lines 154 to 175).
+
+  Present, verbatim at line 169:
+    'A successful act is not proof that the ref addressed the intended node. Confirm the target by an
+     identity bearing property (title, name, or value) from a fresh snapshot, and treat a redirect
+     onto a different node as a finding even when the envelope says ok: true.'
+  This is imperative, it names the identity bearing properties, and it names the exact failure mode,
+  a redirect that reports ok true.
+
+  Present at line 171:
+    'STALE_REF and AMBIGUOUS_TARGET both mean take a new snapshot. They never mean retry the same ref.'
+  Both protective codes are kept and given a rule rather than a mention, which is what the clause asks
+  for.
+
+  Also present at line 170, which matters for clause 2's split below:
+    'delivered_verified in an envelope is not evidence and never satisfies a check on its own ... because
+     the tool has been observed certifying an empty value as delivered.'
+
+CLAUSE 1 VERDICT: satisfied in full. Not a prose mention; both parts tell the reader what to do.
+
+CLAUSE 2, ### Launch the tested artifact (lines 192 to 200).
+
+  Present, verbatim at line 197:
+    'Closing a window can discard unsaved work silently, so never close a window you have written into
+     without confirming the document is saved or deliberately abandoned, and record which of the two
+     you chose.'
+  So: the discard hazard is stated, the check before closing is stated as a prohibition, and the
+  obligation to record saved versus abandoned is stated. Both halves of the actionable requirement are
+  there.
+
+  Two elements of the clause's literal wording are NOT in this subsection, and this is recorded rather
+  than smoothed over:
+    - the phrase 'and still report delivered_verified'. The launch subsection does not mention
+      delivered_verified at all. The rule that delivered_verified is never evidence lives one
+      subsection earlier, at line 170 in the loop subsection, and applies to every act.
+    - the word 'hazard'. It appears nowhere in the file. The requirement it encodes, that a discarded
+      document is recorded rather than reported as a clean close, is carried by 'record which of the
+      two you chose', which forces the reader to write down that the document was abandoned.
+
+  CLAUSE 2 VERDICT: satisfied on the row's operative test, which is whether the text tells the reader
+  what to do, and it does. Recorded with the qualification that the delivered_verified element is
+  placed in the loop subsection rather than repeated in the launch subsection, and that the word
+  hazard is not used. A reader following both subsections, which the row's own command says to read,
+  gets every element; a reader reading only the launch subsection does not get the delivered_verified
+  half.
+
+  This placement gap is reported in RESULT.md as a definition wording item for the next amendment
+  rather than silently waived, because the row enumerates it against this subsection specifically.

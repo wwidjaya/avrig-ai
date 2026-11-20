@@ -1,0 +1,17 @@
+G9, the literal call forms the section must carry, searched in lines 117 to 248.
+  agent-desktop status         PRESENT
+  skills get desktop           PRESENT
+  skills get platform          PRESENT
+  snapshot --app               PRESENT
+  -i                           PRESENT
+  --window-id                  PRESENT
+  close-app                    PRESENT
+  --stdin                      PRESENT
+  agent-desktop.cmd            PRESENT
+  delivered_verified           PRESENT
+  INVALID_ARGS                 PRESENT
+  STALE_REF                    PRESENT
+  AMBIGUOUS_TARGET             PRESENT
+  error.disposition.retry      PRESENT
+
+Every string above is required as literal text; a prose paraphrase fails the row.

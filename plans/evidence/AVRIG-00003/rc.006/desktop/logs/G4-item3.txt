@@ -1,0 +1,2 @@
+G4, the ## Responsibilities item 3 heading line.
+line 33: 3. **UI Verification: Live Browser and Desktop Application UAT:**

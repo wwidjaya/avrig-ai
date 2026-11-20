@@ -1,0 +1,16 @@
+G1, the frontmatter block, lines 1 to 8.
+Verbatim:
+---
+description: Designs test specifications, appends test scenarios to plans, runs automated test suites, performs functional and end-to-end verification, and validates deployment health
+mode: subagent
+permissions:
+  - action: edit
+    resource: "**/plans/evidence/**"
+    effect: allow
+---
+
+Assertions:
+  description:                             PRESENT
+  mode: subagent                           PRESENT
+  resource: "**/plans/evidence/**"         PRESENT
+  effect: allow                            PRESENT

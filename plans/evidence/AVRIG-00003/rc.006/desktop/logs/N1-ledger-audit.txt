@@ -1,0 +1,20 @@
+=== N1, no green verdict without an envelope behind it ===
+
+rows in ledger.csv: 74
+rows marked PASS   : 74
+
+
+rows with an empty evidence column : 0
+rows naming a file that is absent   : 0
+
+Every row names at least one artefact and every named artefact exists on disk.
+No verdict is claimed without something behind it, so no row is rewritten as not tested.
+
+
+=== second pass, every file path cited anywhere in logs, RESULT.md or ledger.csv ===
+
+distinct artefact paths cited: 141
+cited and absent from disk   : 0
+
+Every snapshot, log, screenshot and probe path any evidence file names exists on disk.
+So a claim in a log can be followed to its artefact, not just a claim in the ledger.

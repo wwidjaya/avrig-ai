@@ -117,6 +117,30 @@
       "bytes_after": 27513,
       "lines_before": 248,
       "lines_after": 248
+    },
+    {
+      "sequence": 7,
+      "amended_utc": "2026-11-20T02:53:50Z",
+      "amended_local": "2026-11-20 09:53:50",
+      "change_mtime_local": "2026-11-20 09:53:50",
+      "author": "external writer, unattributed: the definition is untracked, so git names no author",
+      "scope": "Responsibilities item 1",
+      "accepted": false,
+      "reason": "The `<CODE>` source in Responsibilities item 1 moved from `plans/PLAN-INDEX.md` to `project_indicator:` in the frontmatter of `plans/PLAN-RULES.md`, matching the global AGENTS.md change made at the same time. It is authority aligned and deliberately not reversed, but it landed after every row of rc.006 had been scored, so it is recorded here and NOT adopted into the tested set. The tested bytes stay 46EC68BE. Re-pinning the tested copy to follow the live file was rejected, because a pinned copy that tracks the live file proves nothing about what was tested.",
+      "sha256_before": "46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2",
+      "sha256_after": "1E52D9ACF121AF4C0594239822C18B8CB3F19616102C628820AF3BC593B24C3D",
+      "bytes_before": 27513,
+      "bytes_after": 27556,
+      "lines_before": 248,
+      "lines_after": 248,
+      "measured_delta": "One differing line, not two as first reported. Compare-Object of the tested copy against the live file returns a single pair, Responsibilities item 1, and the 43 byte growth is that line alone."
     }
-  ]
+  ],
+  "live_after_merge": {
+    "Sha256": "1E52D9ACF121AF4C0594239822C18B8CB3F19616102C628820AF3BC593B24C3D",
+    "Bytes": 27556,
+    "Lines": 248,
+    "ObservedLocal": "2026-11-20 09:53:50",
+    "Note": "The live definition at merge time. It is newer than the tested bytes and differs by one line in Responsibilities item 1. The verdict of record describes 46EC68BE, not this hash. Recorded so a later reader can tell which bytes passed and which shipped."
+  }
 }

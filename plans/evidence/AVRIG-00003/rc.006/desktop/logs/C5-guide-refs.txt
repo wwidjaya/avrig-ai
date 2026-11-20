@@ -1,0 +1,11 @@
+=== C5: guide statements on stale ref / ambiguous target ===
+--- guide-desktop.txt ---
+  match: AMBIGUOUS_TARGET
+  match: identity_not_unique
+  match: saved_ref_absent
+  match: STALE_REF
+--- guide-platform.txt ---
+  match: AMBIGUOUS_TARGET
+  match: identity_not_unique
+  match: saved_ref_absent
+  match: STALE_REF

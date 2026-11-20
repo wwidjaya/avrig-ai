@@ -1,0 +1,24 @@
+=== N5, nothing sensitive reaches a commit, an issue or a result line ===
+
+advisory.
+
+1. Working tree state, avrig-ai:
+   git status --porcelain is EMPTY. Nothing is staged and nothing is modified.
+
+2. The evidence folder is not committable at all:
+   git check-ignore -v plans/evidence/AVRIG-00003/rc.006/desktop/ledger.csv
+   -> .gitignore:50:plans/evidence/**	plans/evidence/AVRIG-00003/rc.006/desktop/ledger.csv
+   So every file this run produced is covered by the ignore rule and cannot be staged by
+   accident. That is the project evidence retention policy, not a promise.
+
+3. The result line:
+   RESULT: tag avrig/00003/rc.006 | commit e006c0dc10b551f93abbb401b4caf6218a6517d7 | CLI agent-desktop 1.3.1 (envelope schema 2.6, not a product version) | verdict PASS | 74 of 74 checks passed | 54 of 54 mandatory passed | 0 blocked | evidence plans/evidence/AVRIG-00003/rc.006/desktop/
+   It contains no token, password, key or header, and it names the checks rather than quoting a value.
+
+4. Agentic configuration repository:
+   49 entries in git status --porcelain, all of them pre-existing.
+   .opencode/agents/ is listed as untracked, which is the definition this plan edits and is
+   the recorded Deferred defect. This run added no file to that repository: every artefact
+   it wrote lives under the avrig-ai worktree.
+
+5. Nothing was committed, tagged, merged or pushed. The candidate tag was read, never written.

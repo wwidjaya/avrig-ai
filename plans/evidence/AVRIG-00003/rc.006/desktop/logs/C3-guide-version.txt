@@ -1,0 +1,8 @@
+=== C3: guide version lines vs binary version ===
+binary version = 1.3.1
+desktop guide version-string matches:
+platform guide version-string matches:
+skill frontmatter 'requirements: agent-desktop' pins no version; guides carry no release line => noted
+envelope data.skill values:
+  desktop: skill=agent-desktop full=False
+  platform: skill=agent-desktop-windows full=False

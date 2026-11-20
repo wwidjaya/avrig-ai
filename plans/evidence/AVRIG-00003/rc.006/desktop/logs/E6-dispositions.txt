@@ -1,0 +1,71 @@
+=== every envelope with ok:false ===
+file	command	code	delivery	retry
+D10-close-app-app-flag.json	close-app	INVALID_ARGS	not_delivered	safe
+D10-close-app.json	close-app	TIMEOUT	delivered_unverified	unsafe
+D10-raise-save-bar-2.json	close-app	TIMEOUT	delivered_unverified	unsafe
+D10-unsaved-snapshot-after.json	snapshot	WINDOW_NOT_FOUND	not_delivered	safe
+D10-unsaved-write.json	set-value	ACTION_FAILED	delivered_unverified	unsafe
+D11-notifications.json	list-notifications	POLICY_DENIED	not_delivered	safe
+D12-set-value.json	set-value	ACTION_FAILED	delivered_unverified	unsafe
+E1-bare-ref.json	click	INVALID_ARGS	not_delivered	safe
+E2r-menu-surface.json	snapshot	WINDOW_NOT_FOUND	not_delivered	safe
+E2r-sheet.json	snapshot	WINDOW_NOT_FOUND	not_delivered	safe
+E2w-act2.json	click	WINDOW_NOT_FOUND	not_delivered	safe
+E7-ambiguous-focus-window.json	focus-window	AMBIGUOUS_TARGET	not_delivered	safe
+E7-snapshot-unpinned.json	snapshot	AMBIGUOUS_TARGET	not_delivered	safe
+F1-cmd-set-value.json	set-value	ACTION_FAILED	delivered_unverified	unsafe
+F7-type-headless.json	type	POLICY_DENIED	not_delivered	safe
+--- total error envelopes: 15 ---
+
+E6, retry discipline read from the envelopes rather than judged by eye.
+
+15 envelopes carry ok false in this run. Ten are not_delivered with retry safe. Five are
+delivered_unverified with retry unsafe, and none of those five was ever re-issued unchanged.
+
+The five unsafe dispositions, and what actually followed each:
+
+  1. F1-cmd-set-value.json         set-value   ACTION_FAILED   delivered_unverified  unsafe
+     The documented false negative: the .cmd route lands the value and the post-action state check
+     cannot read a UIA text field's value back, so the envelope fails while the write succeeded.
+     Followed by snapshots/F1-get-value.json and F1-readback.json, which read the sentinel back.
+     No retry: a retry would have been an unnecessary second write.
+
+  2. D10-unsaved-write.json        set-value   ACTION_FAILED   delivered_unverified  unsafe
+     Same mechanism, same handling: snapshots/D10-unsaved-modified.json reads the marker back.
+     No retry.
+
+  3. D12-set-value.json            set-value   ACTION_FAILED   delivered_unverified  unsafe
+     Same mechanism. snapshots/D12-get-value.json reads 'uat-d12-wait-0006' back.
+     No retry.
+
+  4. D10-close-app.json            close-app   TIMEOUT         delivered_unverified  unsafe
+     The process still held a restored modified document. Not re-issued unchanged: the live state was
+     read with snapshots/D10-raise-save-bar.json and snapshots/D10-prompt-tree.json, which showed
+     the pending save prompt, and that prompt was dismissed through its own button ref
+     (@s2t3ndfjqwkpic:e3, snapshots/D10-dont-save.json). Only then was the close completed, through
+     the window's own Close ref (@s2nupnysmtz1k3:e29), which is a different command rather than a
+     retry.
+
+  5. D10-raise-save-bar-2.json     close-app   TIMEOUT         delivered_unverified  unsafe
+     Same situation on the second construction. Read first (snapshots/D10-prompt-tree.json showed
+     Save / Don't save / Cancel), dismissed through @sid8cdfbu9pdk:e3, then the app was closed by
+     a fresh positional close on a clean window later. Again a different command, not a retry.
+
+The ten safe dispositions were each followed by the recovery the guide names, a fresh snapshot or an
+explicitly recorded decision to stop, never by a blind repeat of the same argument:
+
+  E1-bare-ref            bare ref rejected, then never reused
+  D10-close-app-app-flag --app rejected, the positional form used instead
+  D10-unsaved-snapshot-after / E2r-sheet / E2r-menu-surface   WINDOW_NOT_FOUND, each followed by a
+                         list-windows or a snapshot on a window that still exists
+  E2w-act2               WINDOW_NOT_FOUND, and nothing followed it at all
+  E7-ambiguous-focus-window / E7-snapshot-unpinned            AMBIGUOUS_TARGET, recovered by pinning
+                         --window-id (snapshots/E3-pin-a.json onward), never by repeating the title
+  D11-notifications / F7-type-headless                        POLICY_DENIED, recorded as a preflight
+                         state and a headless-path finding; the --headed invitation declined
+
+One judgement is stated plainly rather than buried: the two close-app TIMEOUTs were followed by
+further work on the same application. That is not a retry of an unsafe command, because the state
+that produced the timeout was removed first and the subsequent close was issued against a different
+window state. But a reader is entitled to see the reasoning rather than a claim that no action ever
+followed an unsafe disposition, so it is stated here and repeated in RESULT.md.

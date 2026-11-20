@@ -1,0 +1,1 @@
+compare-in-shell: expected='uat-d12-wait-0006' actual='uat-d12-wait-0006' equal=True

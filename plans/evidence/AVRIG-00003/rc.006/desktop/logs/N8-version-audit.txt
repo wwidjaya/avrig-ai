@@ -1,0 +1,20 @@
+=== N8, the envelope version is never written up as the release version ===
+
+advisory.
+
+The result line, verbatim:
+  RESULT: tag avrig/00003/rc.006 | commit e006c0dc10b551f93abbb401b4caf6218a6517d7 | CLI agent-desktop 1.3.1 (envelope schema 2.6, not a product version) | verdict PASS | 74 of 74 checks passed | 54 of 54 mandatory passed | 0 blocked | evidence plans/evidence/AVRIG-00003/rc.006/desktop/
+
+It names, in order:
+  the candidate tag            avrig/00003/rc.006
+  the commit SHA               e006c0dc10b551f93abbb401b4caf6218a6517d7
+  the installed CLI version    agent-desktop 1.3.1
+  the verdict                  PASS, 74 of 74, 54 of 54 mandatory, 0 blocked
+  the evidence folder          plans/evidence/AVRIG-00003/rc.006/desktop/
+
+The envelope schema number appears once, in parentheses, explicitly labelled "envelope schema
+2.6, not a product version". It is never presented as a release version and no SemVer is
+claimed anywhere in the artefact for this candidate.
+
+Read against logs/B3-versions.txt: envelope 2.6 and CLI 1.3.1 are kept as two separate facts,
+and G12 confirms no version string is written into the definition itself.
