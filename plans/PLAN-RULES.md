@@ -89,6 +89,14 @@ Approval commit: no code is assigned while a plan is a draft. A draft carries no
 
 Worktree rule: a linked worktree inherits the indicator of its main checkout, detected with `git rev-parse --git-common-dir`, and never proposes one of its own. It merges or fast-forwards the default branch before allocating.
 
+## Advancing a row
+
+A row is written once, at approval, and advanced afterwards. The only sanctioned writer is `update`; a hand `UPDATE` against `plans/_plan.db` is prohibited, and for a concrete reason rather than tidiness. The triggers that make a number permanent guard `indicator` and `number`, so ad hoc SQL could set `state = 'committed'` on a voided row and un-burn a number this document calls permanent, and it would leave no audit event.
+
+`update --code <CODE>` takes the six delivery fields, `--status`, `--candidate-tag`, `--evidence`, `--issue`, `--release-version`, and `--plan-path`, and writes one `allocation_event` per call. It refuses `indicator`, `number`, `state`, `assigned_at`, `committed_at`, `voided_at`, and `voided_reason` by name, refuses a voided row outright, and does not regenerate the dump. The cycle is `update`, then `export`, then `verify --strict`, and skipping the middle step is exactly the drift `verify --strict` reports.
+
+`--plan-path` exists because a path rots and a record must be repairable without renaming a committed file. It accepts a relative path directly under `plans/` or `plans/done/` whose basename begins with the row's own code followed by a hyphen, and the file must exist. `verify` checks the same thing in the other direction: a committed row naming a file that is not there is drift, and the message names the repair.
+
 ## Status vocabulary
 
 `draft`, `under-review`, `awaiting-approval`, `approved`, `in-progress`, `testing`, `passed`, `release-version-decided`, `merged`, `deployed`, `released`, `abandoned`.
