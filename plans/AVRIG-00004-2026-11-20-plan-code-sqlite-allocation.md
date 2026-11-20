@@ -5,7 +5,7 @@ project_indicator: AVRIG
 branch: feat/AVRIG-00004-plan-code-sqlite-allocation
 candidate_tags: []
 release_version:
-status: approved
+status: in-progress
 created: 2026-11-20
 owner: Architect
 tags:
@@ -296,7 +296,23 @@ Measured 2026-11-20:
 | `avrig-ai` | `0.2.0`, `0.2.1`, `0.3.0`, `0.4.0`, `0.5.0` | all ancestors of `refs/heads/main`, `--is-ancestor` returned 0 for each; no merge needed |
 | Agentic | none | the repository carries no SemVer tags; trivially reconciled |
 
-Candidate tags were enumerated and excluded by rule: `avrig/00001/rc.001` through `rc.005`, `avrig/00002/rc.001`, `avrig/00003/rc.001` through `rc.003`.
+Candidate tags were enumerated and excluded by rule: `avrig/00001/rc.001` through `rc.005`, `avrig/00002/rc.001`, `avrig/00003/rc.001` through `rc.003`. The gate was re-run at branch creation time after `git fetch origin --tags --prune` in both repositories, with the same result: nothing to merge.
+
+### Feature request and branch record
+
+Allocated and published on 2026-11-20, after user approval:
+
+| Item | Value |
+|---|---|
+| Work item | `AVRIG-00004` |
+| Approval commit on `main` | `8a5e5db`, carrying only the renamed plan file and `plans/PLAN-INDEX.md`, pushed as `415650d..8a5e5db` |
+| Feature request | [#6](https://github.com/wwidjaya/avrig-ai/issues/6), title `AVRIG-00004 Plan Code Allocation via a SQLite Allocation Ledger`, label `enhancement` |
+| `avrig-ai` branch | `feat/AVRIG-00004-plan-code-sqlite-allocation` from `main`, created and linked through `gh issue develop`, tracking `origin` |
+| Agentic branch | `feat/AVRIG-00004-plan-code-sqlite-allocation` from `master`, created and linked through `gh issue develop --branch-repo`, tracking `origin` |
+
+The issue was created before either branch, so both were created already linked. `gh issue develop --list 6` reports both, one per repository, which is the state that a branch created first with `git switch -c` could never reach. The issue body carries the plan's goals, scope, target files, and measurable outcomes, with a traceability footer whose release version line is present and deliberately empty.
+
+The Agentic checkout was on `chore/AVRIG-00003-agent-desktop-uat-tooling`, which holds zero commits beyond `master`, so switching to the new branch was tree-neutral and its 21 tracked modifications and 75 untracked files carried across untouched. That matters because `.opencode/agents/Architect.md` is untracked and exists nowhere else, so the implementation has to happen in this checkout rather than in a clean worktree.
 
 ### Failure modes and recovery
 
