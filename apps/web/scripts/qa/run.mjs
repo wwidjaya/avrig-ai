@@ -100,6 +100,23 @@ function sortByExpected(results) {
   return [...results].sort((a, b) => (index.get(a.id) ?? 999) - (index.get(b.id) ?? 999));
 }
 
+// HEAD proves the working tree is the candidate. It does not prove the candidate
+// is the commit the candidate tag names, so --tag is resolved in both
+// repositories and compared with the pair. An untagged tree is not a candidate.
+function resolveTag(ctx) {
+  const resolve = (repo) => {
+    const result = git(repo, ["rev-parse", "--verify", "--quiet", `${ctx.tag}^{commit}`]);
+    return result.status === 0 ? result.stdout.trim() : null;
+  };
+  const ai = resolve(ctx.repo);
+  const ui = resolve(ctx.uiRepo);
+  return {
+    name: ctx.tag,
+    ai: { commit: ai, matchesPair: Boolean(ai) && ai.startsWith(ctx.aiSha) },
+    ui: { commit: ui, matchesPair: Boolean(ui) && ui.startsWith(ctx.uiSha) }
+  };
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const ctx = buildContext(args);
@@ -123,12 +140,14 @@ async function main() {
   const headMatches = Boolean(headSha) && headSha.startsWith(ctx.aiSha);
   const resolved = resolveDefaultBranch(ctx.repo);
   ctx.defaultBranch = resolved.name;
+  const tag = ctx.tag ? resolveTag(ctx) : null;
 
   const preflight = {
     base: ctx.base,
     evidence: ctx.evidenceLabel,
     candidate: ctx.candidate,
     pair: `${ctx.aiSha}:${ctx.uiSha}`,
+    tag,
     repo: ctx.repo,
     uiRepo: ctx.uiRepo,
     head: headSha,
@@ -182,8 +201,34 @@ async function main() {
   const total = selected.length;
   const failed = ordered.filter((result) => !result.ok && !result.blocked);
 
-  const status = !probe.ok || blockedRows.length ? "BLOCKED" : failed.length ? "FAIL" : "PASS";
-  const extra = blockedRows.length ? ` blocked=${blockedRows.map((r) => r.id).join(",")}` : "";
+  // A structural problem is not an advisory: evidence that describes a tree
+  // nobody can check out again, or a tree the candidate tag does not name, is
+  // not evidence. Each one forces BLOCKED and exit 2 rather than printing a
+  // warning above a green verdict line.
+  const structural = [];
+  if (missing.length) structural.push({ code: "rows-missing", message: `rows missing: ${missing.join(",")}` });
+  if (duplicated.length) structural.push({ code: "rows-duplicated", message: `rows duplicated: ${duplicated.join(",")}` });
+  if (unexpected.length) structural.push({ code: "rows-unexpected", message: `rows not in the matrix: ${unexpected.join(",")}` });
+  if (!headMatches) structural.push({ code: "head-mismatch", message: `HEAD ${headSha} does not equal the pair's avrig-ai commit ${ctx.aiSha}` });
+  if (tag) {
+    if (!tag.ai.commit) {
+      structural.push({ code: "tag-ai-missing", message: `--tag ${tag.name} does not resolve in avrig-ai (${ctx.repo})` });
+    } else if (!tag.ai.matchesPair) {
+      structural.push({ code: "tag-ai-mismatch", message: `--tag ${tag.name} resolves to ${tag.ai.commit} in avrig-ai, not the pair's ${ctx.aiSha}` });
+    }
+    if (!tag.ui.commit) {
+      structural.push({ code: "tag-ui-missing", message: `--tag ${tag.name} does not resolve in avrig-ui (${ctx.uiRepo})` });
+    } else if (!tag.ui.matchesPair) {
+      structural.push({ code: "tag-ui-mismatch", message: `--tag ${tag.name} resolves to ${tag.ui.commit} in avrig-ui, not the pair's ${ctx.uiSha}` });
+    }
+  }
+  const fatalStructural = structural.length > 0;
+
+  const status = !probe.ok || blockedRows.length || fatalStructural ? "BLOCKED" : failed.length ? "FAIL" : "PASS";
+  const extraParts = [];
+  if (blockedRows.length) extraParts.push(`blocked=${blockedRows.map((r) => r.id).join(",")}`);
+  if (fatalStructural) extraParts.push(`structural=${structural.map((p) => p.code).join(",")}`);
+  const extra = extraParts.length ? ` ${extraParts.join(" ")}` : "";
   const verdict = ctx.only
     ? `SUBSET ${selected.join(",")} ${verdictLine(ctx, status, passed, total, extra)}`
     : verdictLine(ctx, status, passed, total, extra);
@@ -193,12 +238,7 @@ async function main() {
     process.stdout.write(`${result.id.padEnd(6)} ${label.padEnd(5)} ${result.detail}\n`);
   }
 
-  const structural = [];
-  if (missing.length) structural.push(`rows missing: ${missing.join(",")}`);
-  if (duplicated.length) structural.push(`rows duplicated: ${duplicated.join(",")}`);
-  if (unexpected.length) structural.push(`rows not in the matrix: ${unexpected.join(",")}`);
-  if (!headMatches) structural.push(`HEAD ${headSha} does not equal the pair's avrig-ai commit ${ctx.aiSha}`);
-  for (const problem of structural) process.stdout.write(`HARNESS ${problem}\n`);
+  for (const problem of structural) process.stdout.write(`HARNESS ${problem.message}\n`);
 
   process.stdout.write(`\n${verdict}\n`);
 
@@ -209,7 +249,9 @@ async function main() {
     passed,
     total,
     subset: ctx.only ? selected : null,
-    structural
+    fatal: fatalStructural,
+    structural,
+    structuralCodes: structural.map((problem) => problem.code)
   });
   writeJson(
     ctx.evidence,
@@ -231,18 +273,21 @@ async function main() {
       `Base URL: ${ctx.base}`,
       `Pair: avrig-ai@${ctx.aiSha} avrig-ui@${ctx.uiSha}`,
       `HEAD at run time: ${headSha ?? "unknown"}`,
+      `Candidate tag: ${tag ? `${tag.name} avrig-ai=${tag.ai.commit ?? "unresolved"} avrig-ui=${tag.ui.commit ?? "unresolved"}` : "not asserted (--tag was not given)"}`,
       `Default branch: ${resolved.name ?? "unresolved"} (${resolved.decided})`,
       "",
       "| Row | Verdict | Detail |",
       "|---|---|---|",
       ...ordered.map((result) => `| ${result.id} | ${result.blocked ? "block" : result.ok ? "pass" : "fail"} | ${result.detail.replace(/\|/g, "\\|")} |`),
       "",
-      structural.length ? `Harness: ${structural.join("; ")}` : "Harness: every declared row was produced exactly once",
+      structural.length
+        ? `Harness: FATAL, ${structural.map((problem) => problem.message).join("; ")}`
+        : "Harness: every declared row was produced exactly once",
       ""
     ].join("\n")
   );
 
-  if (!probe.ok || blockedRows.length) process.exit(2);
+  if (!probe.ok || blockedRows.length || fatalStructural) process.exit(2);
   process.exit(failed.length ? 1 : 0);
 }
 

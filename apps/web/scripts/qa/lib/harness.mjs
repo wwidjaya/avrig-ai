@@ -17,7 +17,8 @@ const FLAGS = {
   "--candidate": "candidate",
   "--repo": "repo",
   "--ui-repo": "uiRepo",
-  "--only": "only"
+  "--only": "only",
+  "--tag": "tag"
 };
 
 export function fail(message) {
@@ -35,7 +36,8 @@ export function usage() {
     "  --candidate   candidate label used in the verdict line (default: evidence folder name)",
     "  --repo        avrig-ai checkout (default: this repository)",
     "  --ui-repo     avrig-ui checkout (default: sibling ../avrig-ui)",
-    "  --only        comma separated row ids, for working on a failing row"
+    "  --only        comma separated row ids, for working on a failing row",
+    "  --tag         candidate tag asserted against --pair in both repositories, for example avrig/00002/rc.002"
   ].join("\n");
 }
 
@@ -142,6 +144,7 @@ export function buildContext(args) {
     uiRepo,
     aiSha,
     uiSha,
+    tag: args.tag ? String(args.tag) : null,
     only: args.only ? args.only.split(",").map((s) => s.trim()).filter(Boolean) : null
   };
 }
