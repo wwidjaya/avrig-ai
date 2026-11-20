@@ -160,6 +160,8 @@ Repository `avrig-ai`, presentation surfaces:
 | `apps/web/src/shared/auth/ProtectedRoute.tsx` | edit | 2, 3, 5, 7 | line 16 `animate-spin text-primary`; lines 25 and 48 `rounded-full` icon containers with `bg-primary/10 text-primary` and `bg-destructive/10 text-destructive`; lines 28 and 51 `font-bold` |
 | `apps/web/src/modules/knowledge/MarkdownRenderer.tsx` | edit | 2, 3, 5 | line 76 `text-primary`; line 228 `bg-zinc-950 dark:bg-zinc-900/90 text-zinc-100`; line 231 `uppercase font-semibold text-zinc-400 tracking-wider`. Rendered inside `KnowledgeChat`, so it is console surface |
 | `apps/web/src/shared/components/SystemInfoDialog.tsx` | edit | 2, 5 | line 66 `text-primary`; line 111 `text-amber-500 border-amber-500/30`; line 122 `bg-amber-500/10 text-amber-500`; line 149 `text-emerald-500` |
+| `apps/web/src/shared/api/ApiContext.tsx` | edit | none | line 34 passed `/ws/command-center` to a manager whose base already ends in `/ws`, so every client requested `/ws/ws/command-center` and never connected. Not a design defect: found by `BR-04` at rc.001 because the row asserts the constructed URL rather than the absence of console noise |
+| `apps/web/scripts/qa/**` | create | none | the harness the matrix itself names. Before this, every row referenced a script that did not exist, so the matrix could only be executed by a session that reinvented the drivers, which is why four rows had rotted into assertions that could not be evaluated |
 
 Repository `avrig-ai`, foundation:
 
@@ -597,6 +599,30 @@ Seals: 1 on `/`, 2 on each of the five console views, 3 on `/sdlc` (top bar, sid
 **Deviations from the matrix, all disclosed per row in `RESULT.md`.** The named harness scripts and the two allowlist files do not exist at the candidate (only `hex-allow.txt` does), so every row ran through a purpose-written Playwright driver in `plans/evidence/AVRIG-00002/rc.001/_runner/`. The port is 5176 rather than 5173. `[data-testid="main-viewport"]` does not exist, so `SC-04`, `SC-07` and `SC-08` read `#main-viewport`. `ST-05` was measured as `transition-duration > 0` together with `transitionProperty: all`, because the literal test matches 162 to 294 elements per surface purely from the property's initial value; the literal counts are preserved. `SC-08`'s `/sdlc` seal gates on the furthest-along `completed` stage (`TA-03`), not a `review_required` stage (`ED-04`), while the count criterion holds exactly.
 
 Next: two product fixes on a fresh candidate `rc.002` (`fe`), and four row amendments before the rerun. `plans/evidence/AVRIG-00002/rc.001/` holds the 44 screenshots, 38 result artifacts, the five static scan transcripts and the drivers.
+
+### Remediation after rc.001
+
+`rc.001` stays `FAIL 33/39`. Nothing above is rewritten, because a candidate result is a fact about a tree rather than a draft to be improved after the fact.
+
+| Commit | What |
+|---|---|
+| `83d5355` | the two product defects and the WebSocket path: command palette ring (`ring-inset`, because `DialogContent` is `overflow-hidden` and clipped the outward band's top edge), dialog focus return to `button[data-testid="sidebar-version-badge"]`, and `ws.connect("/command-center")` |
+| `699c8a2` | the harness, `apps/web/scripts/qa/`, deleted `hex-allow.txt` which had no reader |
+| `f684832` | four rows rewritten: `TK-03`, `BR-04`, `I18-02`, `KB-02` |
+| `bbca38b` | `SC-10` split by control class |
+| `cebf709` | the harness's structural problems made fatal, and `--tag` added |
+| `4b2f3c9` | the runner contract aligned with what the harness enforces |
+
+**`SC-10` was a row defect, and the reason is worth keeping.** It required no visible ring on mouse click for all four controls. A text-entry control matches `:focus-visible` on every focus in Chromium, mouse included, so the assertion could not hold for `[cmdk-input]` and failed correct code. It now asserts a ring on both paths for text-entry controls and the original asymmetry for non-text controls.
+
+**The best evidence in this cycle came from that row.** It passes at `bbca38b` and fails at `4e6900b`, where the served candidate reported `boxShadow: none, outlineStyle: none` on all four surfaces. A row that fails against the pre-fix tree and passes against the fix is a test; a row that only ever passes is decoration, and this plan produced five before anyone noticed.
+
+**`BR-04` was hiding a production bug.** The console error it caught was `wss://app.avrig.ai/ws/ws/command-center`: `loadConfig` sets `wsBaseUrl` to `wss://host/ws`, and `ApiContext` passed `/ws/command-center` into a join that concatenates. Every client had been failing its WebSocket handshake, invisible because the only symptom is a `wsStatus` string reading `reconnecting`. The row now asserts the constructed URL, which needs no network and cannot be allowlisted.
+
+**Two harness holes were found by reading the harness rather than by running it.** Structural problems were collected and printed but never affected status or exit code, so a run against the wrong tree printed `HARNESS HEAD ... does not equal ...` and then `PASS 39/39`, exit 0. They are now fatal. And `--tag` was added, because `HEAD` matching the pair only proves the working tree is the candidate; the tag assertion proves the candidate is the commit the tag names. Both were proved with negative runs that exit 2 and never say `PASS`.
+
+**The matrix named scripts that did not exist, which is the root cause of four of the six failures.** `hex-allow.txt` was empty and unread, `console-allow.txt` and `i18n-allow.txt` never existed, and the fourteen drivers lived in an uncommitted folder under evidence. A row that cannot be executed by a reader is documentation of a test run rather than a test, so the harness is now committed, parameterised by `--base`, `--evidence`, `--pair` and optional `--tag`, and prints the plan's verdict line only on a full run.
+
 
 ## Review Findings
 
