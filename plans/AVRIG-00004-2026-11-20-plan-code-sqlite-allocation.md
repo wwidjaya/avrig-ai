@@ -28,16 +28,19 @@ Measurable outcomes:
 - Two concurrent `assign` calls against one project produce two distinct codes, and the second is exactly one higher than the first. Under the 20 way concurrency test the same property becomes 20 distinct codes forming the contiguous run from `00004` to `00023`, measured by script rather than by inspection.
 - A duplicate `(indicator, number)` insert is refused by the database with a non-zero exit and a named constraint, proven by test.
 - A number that is explicitly voided after abandonment is never issued again by that database, and neither is one whose row is rekeyed or deleted, because both are refused outright, proven by test.
-- `verify` detects drift between the database, the ledger table, and the git union in both directions, and exits non-zero under `--strict`.
-- `render` reproduces today's ledger bytes exactly once `import` has captured the existing rows, so the change is additive rather than a rewrite. The three cells with no bare column (`Created`, `Repos`, and the prose-bearing tag, issue, and release cells) are resolved by the `created_on` and `repos` columns plus the `ledger_cells` snapshot rule in the render section, and the case is graded against a post-marker fixture.
-- Deleting `plans/_plan.db`, rebuilding it with `import`, and assigning again returns the same next number the git union implies.
+- `verify` detects drift between the database, the committed dump, and the git union in both directions, and exits non-zero under `--strict`.
+- `export` is deterministic: two exports of one database are byte identical, and an export of an imported dump reproduces that dump byte for byte, so a committed dump diffs only when a row actually changed.
+- `plans/PLAN-INDEX.md` is deleted, and no numbered fact survives outside the database: the ledger rows, the deferred defects, and the indicator aliases all live in tables, and the file's prose lives in `plans/PLAN-RULES.md`, so there is one record rather than a database shadowed by a hand-maintained table.
+- Deleting `plans/_plan.db`, rebuilding it with `import` from `plans/_plan.sql`, and assigning again returns the same next number the dump implies.
 - A wrong or unset payload path never produces a silent success: it exits `3` and writes no row, proven by test.
 
-Non goal, stated plainly so it is not mistaken for one: this does not make numbering safe across machines. SQLite locks a file, and two machines hold two files. The git push rejection stays the cross machine compare and swap, and the git union stays an input to the candidate number so a stale local database jumps forward instead of reissuing. The database is a local lock and a fast index, never the archive. The ledger in git remains the durable record.
+Non goal, stated plainly so it is not mistaken for one: this does not make numbering safe across machines. SQLite locks a file, and two machines hold two files. The git push rejection stays the cross machine compare and swap, and the git union stays an input to the candidate number so a stale local database jumps forward instead of reissuing. The database is a local lock and a fast index, never the archive. The archive is the committed dump, `plans/_plan.sql`, and its git history is the record.
+
+This plan also deletes `plans/PLAN-INDEX.md` rather than maintaining it. The user's direction is that the markdown ledger is no longer needed once the database exists: keeping both would mean every allocation written twice, by two mechanisms, with the markdown as an unenforced copy. A second copy of a record is a future drift, not a backup, because the only time it is ever compared is when someone notices the numbers disagree.
 
 ## Context: what exists today
 
-- `plans/PLAN-INDEX.md` holds the indicator (`AVRIG`), the allocation rules, the conventions, and the ledger table with rows `AVRIG-00001` through `AVRIG-00003`.
+- `plans/PLAN-INDEX.md` holds the indicator (`AVRIG`), the allocation rules, the conventions, the deferred defects, and the ledger table with rows `AVRIG-00001` through `AVRIG-00004`. It is what this plan replaces and deletes: its tables become database tables, its prose becomes `plans/PLAN-RULES.md`, and its numbered rows become the seed of `plans/_plan.sql`.
 - `.opencode/agents/Architect.md` holds the same rules in stage form. It is untracked in the Agentic repository (`git ls-files .opencode/agents` returns 0), a defect already deferred from `AVRIG-00003`.
 - Agentic `AGENTS.md` holds the normative summary, and it is tracked.
 - No allocation tooling exists anywhere. Verified: no `.ps1`, `.sh`, `.py`, `.ts`, or `.js` under `scripts/`, `tools/`, `bin/`, or `workflows/` mentions `PLAN-INDEX`, `project_indicator`, or allocation, and a `graphify` query for plan number allocation returns nothing relevant.
@@ -48,23 +51,36 @@ Non goal, stated plainly so it is not mistaken for one: this does not make numbe
 
 ## Key Detailed Design
 
-### Three layers, and what each one owns
+### Two layers, and what each one owns
+
+The first draft of this plan had three layers, with the markdown ledger as a rendered view of the database. The user deleted that layer: `plans/PLAN-INDEX.md` is removed, so there is nothing to render and no second copy to keep honest. Two layers remain.
 
 | Layer | Artifact | Owns | Rebuildable |
 |---|---|---|---|
-| L1 durable authority | git union, `plans/PLAN-INDEX.md`, the approval push | truth, history, cross machine serialization | n/a |
-| L2 local lock | `plans/_plan.db` | assignment, contention, fast lookup | yes, from L1 via `import` |
-| L3 rendered view | the `## Ledger` table between markers | human reading, review diff | yes, from L2 via `render` |
+| Durable archive | `plans/_plan.sql`, its git history, the approval push | truth, history, cross machine serialization | not applicable |
+| Local lock | `plans/_plan.db` | assignment, contention, fast lookup | yes, from the archive via `import` |
 
-L1 never depends on L2. L2 is rebuilt from L1 at any time. L3 is regenerated from L2 and checked against it. That ordering is what keeps a lost or corrupt database from becoming a lost number.
+The archive never depends on the local database. The local database is rebuilt from the archive at any time, and `verify` proves the two agree. That ordering is what keeps a lost or corrupt database from becoming a lost number.
+
+Deleting the markdown layer deletes a class of failure rather than adding one. There is no longer a hand-editable copy that can disagree with the database, no render pass to run after every change, no marker block, and no scenario that has to prove a regeneration is byte identical to a table somebody typed by hand. What replaces it is one deterministic dump, and determinism is a property a test can assert with a hash.
+
+The files that hold the record:
+
+| Path | Tracked | Holds |
+|---|---|---|
+| `plans/_plan.sql` | yes | the whole database as plain text: schema, then one `INSERT` per row, then indexes and triggers |
+| `plans/_plan.db` | no, ignored as `plans/_plan.db*` | the working database, rebuilt by `import` |
+| `plans/PLAN-RULES.md` | yes | the prose that used to sit in `PLAN-INDEX.md`: indicator declaration, allocation rules, status vocabulary, conventions, reconciliation contract |
+
+A text dump rather than the database file itself is deliberate. Git merges text, and a dump conflict is a handful of visible lines a reader can resolve; a binary database conflict cannot be resolved at all, and two branches that both allocate would produce one on every merge.
 
 ### Allocation algorithm
 
-The candidate is `max(db_max, git_max) + 1`, computed inside one `BEGIN IMMEDIATE` transaction, so a stale database whose rows lag the remote jumps forward instead of reissuing a number another machine already claimed.
+The candidate is `max(db_max, dump_max, remote_dump_max, filename_max, branch_max) + 1`, computed inside one `BEGIN IMMEDIATE` transaction, so a stale database whose rows lag the remote jumps forward instead of reissuing a number another machine already claimed. The payload carries that maximum as a single integer named `git_max`, because four of the five sources are read through git; the name is kept as it stands because the statement below was executed and verified under it.
 
-1. Resolve the project root, read `project_indicator:` from the `plans/PLAN-INDEX.md` frontmatter, and resolve the default branch with the four step contract below. The indicator is validated against `^[A-Z][A-Z0-9]{1,9}$` with a case sensitive match before it reaches SQL, and a value that fails exits `3` naming the offending value, because the `project` CHECK is a backstop that surfaces as a constraint error rather than as bad configuration.
-2. `git fetch origin <default> --quiet` where an `origin` remote exists. A fetch that is attempted and fails exits `4` even without `--strict-git`, because `PLAN-INDEX.md` makes the fetch and the recheck one indivisible step, and a stale `origin/<default>` is exactly how another machine's number gets reissued. A checkout with no `origin` remote at all, which is the shape of a fixture repository, is a warning by default and exit `4` under `--strict-git`. `--no-fetch` is the deliberate opt out, and it records that the union was read from cached refs.
-3. Compute `git_max` from the union of `git ls-tree -r --name-only origin/<default> -- plans/`, local `plans/*.md`, local `plans/done/**/*.md`, and `git branch --all --format=%(refname:short)`, keeping only codes whose indicator equals the declared indicator by case sensitive comparison.
+1. Resolve the project root, read `project_indicator:` from the `plans/PLAN-RULES.md` frontmatter, and resolve the default branch with the four step contract below. The indicator is validated against `^[A-Z][A-Z0-9]{1,9}$` with a case sensitive match before it reaches SQL, and a value that fails exits `3` naming the offending value, because the `project` CHECK is a backstop that surfaces as a constraint error rather than as bad configuration.
+2. `git fetch origin <default> --quiet` where an `origin` remote exists. A fetch that is attempted and fails exits `4` even without `--strict-git`, because `PLAN-RULES.md` makes the fetch and the recheck one indivisible step, and a stale `origin/<default>` is exactly how another machine's number gets reissued. A checkout with no `origin` remote at all, which is the shape of a fixture repository, is a warning by default and exit `4` under `--strict-git`. `--no-fetch` is the deliberate opt out, and it records that the union was read from cached refs.
+3. Compute `git_max` from five sources: the database's own maximum, the local `plans/_plan.sql` maximum, the `origin/<default>` copy of `plans/_plan.sql`, the filenames in `git ls-tree -r --name-only origin/<default> -- plans/` plus local `plans/*.md` and `plans/done/**/*.md`, and `git branch --all --format=%(refname:short)`. Every source is filtered to codes whose indicator equals the declared indicator by case sensitive comparison. The dump is read exactly rather than scanned: `sqlite3 :memory: ".read '<dump>'" "SELECT MAX(number) FROM work_item WHERE indicator='<ind>';"`, and the remote copy is extracted with `git show origin/<default>:plans/_plan.sql` to a temp file first, because a dump on the remote is what another clone allocated and has not merged.
 4. Write a BOM-free UTF-8 JSON payload to a temp file. The payload is a single element array whose one object carries indicator, title, branch, plan path, role, host, user, and `git_max`. The array is required rather than decorative: `json_each` over an object yields one row per member, and `json_extract` on a scalar string member then raises `malformed JSON`, so the object form fails and the one element array inserts exactly one row. The bytes must be BOM-free, because a PowerShell `-Encoding utf8` write produced a byte order mark and made the same statement fail with the same message.
 5. Run one `sqlite3` invocation that inserts the assignment and selects the row it wrote.
 6. Emit `code`, `number`, and `state` as machine readable output.
@@ -130,7 +146,8 @@ The payload read has one silent failure mode that must never be silent, and it w
 ### Stated decisions
 
 - Location: `plans/_plan.db`, per project, named as requested. The leading underscore sorts the binary ahead of the plan markdown rather than between two dated files. Tables carry no `project` dimension beyond a single row registry, because one project owns one database.
-- Tracked or ignored: ignored. `plans/_plan.db*` (including `-wal` and `-shm`) is added to `.gitignore` in the owning project. A binary file in git merges badly and a per machine lock has no business being distributed, and `import` makes the file disposable. This is an open item for confirmation at stage 4.
+- Tracked or ignored: the database is ignored, the dump is tracked. `plans/_plan.db*` (including `-wal` and `-shm`) is added to `.gitignore` in the owning project, and `plans/_plan.sql` is committed. A binary file in git merges badly and a per machine lock has no business being distributed, while a text dump merges as lines a reader can resolve; `import` makes the database disposable. Confirmed by the user.
+- Archive: `plans/_plan.sql`, a deterministic dump of the whole database. Committing the database file itself was considered and rejected for the same reason: two branches that both allocate would produce a binary conflict on every merge, and no human can resolve one.
 - Sync caveat: `plans/` sits under OneDrive, which is not a friend of a live SQLite file. Mitigations are WAL, 5 second busy timeouts, transactions confined to a single statement plus a select, `PRAGMA integrity_check` inside `verify`, and `import` as the recovery path. `Infra` may additionally pin the file with `attrib +P` so OneDrive stops uploading it. The risk is accepted, not eliminated, and the design tolerates it because the file is rebuildable.
 - Schema home: `shared/skills/plan-code/schema/001-plan.sql` in the Agentic repository, beside the tool. It is deliberately not placed in `.edm/ddl/`, which holds the platform PostgreSQL schema for `avrig_km_dev`; governance numbering is tooling state, not platform data, and filing it there would misrepresent ownership. `edm` still authors and validates the DDL.
 
@@ -178,16 +195,13 @@ CREATE TABLE IF NOT EXISTS work_item (
                       'released','abandoned')),
   candidate_tags   TEXT,
   release_version  TEXT,
-  ledger_cells     TEXT,
   assigned_at      TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   committed_at     TEXT,
   voided_at        TEXT,
   voided_reason    TEXT,
   CONSTRAINT uq_work_item_number UNIQUE (indicator, number),
   CONSTRAINT uq_work_item_code   UNIQUE (code),
-  CONSTRAINT ck_committed_branch CHECK (state <> 'committed'
-                                        OR claiming_branch IS NOT NULL
-                                        OR ledger_cells   IS NOT NULL),
+  CONSTRAINT ck_committed_branch CHECK (state <> 'committed' OR claiming_branch IS NOT NULL),
   CONSTRAINT ck_committed_at     CHECK (state <> 'committed' OR committed_at IS NOT NULL),
   CONSTRAINT ck_voided_reason    CHECK (state <> 'voided'    OR voided_reason IS NOT NULL),
   CONSTRAINT ck_branch_carries_code
@@ -207,6 +221,23 @@ CREATE TABLE IF NOT EXISTS allocation_event (
   actor_user TEXT NOT NULL,
   detail     TEXT,
   at         TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+-- found_during holds a work item code such as AVRIG-00001 as text rather than
+-- as a foreign key, because work_item.code is a generated column and SQLite
+-- cannot point a foreign key at one. Do not "fix" this into a REFERENCES clause.
+CREATE TABLE IF NOT EXISTS deferred_defect (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  found_during TEXT NOT NULL CHECK (length(trim(found_during)) > 0),
+  defect       TEXT NOT NULL CHECK (length(trim(defect)) > 0),
+  evidence     TEXT,
+  at           TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+CREATE TABLE IF NOT EXISTS indicator_alias (
+  old_code    TEXT PRIMARY KEY,
+  new_code    TEXT NOT NULL,
+  migrated_on TEXT
 );
 
 CREATE TRIGGER IF NOT EXISTS tr_allocation_event_no_update
@@ -235,48 +266,51 @@ One script, `plan-code.ps1`, run from any project root. Every subcommand takes `
 | Subcommand | Purpose |
 |---|---|
 | `init` | create `plans/_plan.db`, apply the schema, set `user_version`, register the indicator |
-| `import` | bootstrap or repair rows from the ledger and the git union, idempotent |
-| `assign` | compute `max(db_max, git_max) + 1`, write the row already bound to its branch and plan path, with `--dry-run` printing the candidate and writing nothing |
+| `import` | delete `plans/_plan.db` and load `plans/_plan.sql` into it, reporting the row counts |
+| `assign` | compute `max(db_max, dump_max, remote_dump_max, filename_max, branch_max) + 1`, write the row already bound to its branch and plan path, with `--dry-run` printing the candidate and writing nothing |
 | `void` | mark a committed row abandoned with a reason, burning the number without deleting the row |
 | `status` | list rows, filterable by state, `--json` for machines |
-| `verify` | cross check database, ledger, and git union, `--strict` to fail on drift |
-| `render` | regenerate the ledger table between markers, `--check` to fail instead of writing |
+| `verify` | cross check the database against the committed dump and the git union, `--strict` to fail on drift |
+| `export` | write `plans/_plan.sql` deterministically from the database, `--check` to fail instead of writing |
 
 `assign` self heals: when `plans/_plan.db` is absent it runs `import` first, so a fresh clone needs no ceremony and no number is skipped.
 
-### Ledger rendering
+### The committed dump
 
-`PLAN-INDEX.md` gains two markers around the existing table, keeping its ten columns and their order exactly as they are today:
+`plans/_plan.sql` is the durable record: the whole database as plain text. `export` writes it, `import` loads it, and `verify` proves the two agree. The format is pinned so that a diff means a row changed and nothing else.
 
-```markdown
-<!-- BEGIN GENERATED LEDGER -->
-| Plan | Created | Title | Repos | Claiming branch | Status | Passing candidate tag | Evidence path | Feature request | Release version |
-|---|---|---|---|---|---|---|---|---|---|
-<!-- END GENERATED LEDGER -->
-```
+- Header: three `--` comment lines naming the project and the file, then `PRAGMA user_version = <n>;` taken from the database, then `BEGIN TRANSACTION;`.
+- Schema: every `CREATE TABLE` from `sqlite_master` where `type = 'table'` and the name does not begin with `sqlite_`, ordered by name, emitted exactly as stored.
+- Data: one `INSERT` per line, ordered so the order is stable (`project` by `indicator`, `indicator_alias` by `old_code`, `work_item` by `number`, `allocation_event` by `id`, `deferred_defect` by `id`), each with an explicit column list.
+- Indexes and triggers last, ordered by name, so loading the file never fires an append-only trigger before the data is in.
+- A closing `COMMIT;`.
+- Values are emitted with SQLite's own `quote()`: integers bare, `NULL` bare, text single quoted with doubled quotes. Escaping is therefore SQLite's problem rather than the tool's, and a title containing a quote, a backslash, or a semicolon round trips unchanged.
+- The column list comes from `PRAGMA table_info`, which omits generated columns, so `work_item.code` is never inserted. Measured on sqlite3 3.51.2: `table_info` does not return `code` at all, while `table_xinfo` returns it with `hidden = 3`, which is why the dumper uses `table_info`.
+- No export timestamp appears anywhere in the file. Determinism is what makes the dump reviewable: two exports of one database are byte identical, and an export of an imported dump reproduces that dump exactly.
 
-`render` regenerates only the lines between the markers, orders rows by number, escapes `|` as `\|`, strips newlines from cells, and rewrites the file preserving what it found: the same encoding, the same byte-order mark, and the same line endings. That matters rather than being fussy, because the live ledger is a BOM-prefixed CRLF file today, so a rule that forced BOM-free UTF-8 with LF would rewrite all 14187 bytes on the first render and turn an additive change into a whole-file rewrite. A file with no BOM gets no BOM, a file with one keeps it, and CRLF stays CRLF. `render --check` exits `1` when the file and the database disagree and writes nothing, which is the gate that keeps them from drifting apart. Prose sections stay hand written: the database owns numbered facts, not narrative.
+Driving the dumper from `sqlite_master` rather than from a hardcoded table list means a future table dumps without a code change, which matters because this schema is version 1 and will not be the last. Adding `deferred_defect` and `indicator_alias` to it during this plan is the first demonstration: the dumper needed no edit to carry them.
 
-Reproducing today's ledger byte for byte needs a source for every one of the ten cells, and three kinds of cell defeat bare columns: `Created` and `Repos` had no column at all, and the existing `Passing candidate tag`, `Feature request`, and `Release version` cells carry bold tag names, commit SHAs, issue links, and the literal prose `empty until deployment`. Two of the three are settled structurally and the third is settled by a snapshot.
+The prose that used to live beside the ledger table does not belong in a dump, so it moves to `plans/PLAN-RULES.md`: the indicator declaration in its frontmatter, the allocation rules, the status vocabulary, the conventions, the pre-branch reconciliation contract, and the backfill notes. The database owns numbered facts; the rules document owns the sentences that explain them. Neither duplicates the other, which is the property the deleted markdown file lost by holding both.
 
-- `created_on` and `repos` are real columns, so `Created` and `Repos` render from the row. The `created_on` shape is checked against `YYYY-MM-DD`.
-- `ledger_cells` holds the ten cell texts of an existing row, as JSON, captured by `import` from the ledger as it stood. Rendering a cell resolves in this order: the structured column when it is not null, otherwise the snapshot text, otherwise an empty cell.
-- `candidate_tags`, `issue_url`, and `release_version` therefore win as soon as they are populated, while the two legacy `empty until deployment` cells and the markdown in the `AVRIG-00001` row survive verbatim until their rows are deliberately re-rendered. A new row with no release renders a blank cell, which is the honest state; the older cells keep the prose they already shipped, because rewriting released evidence to satisfy a formatting rule would be the worse trade.
 
-`import` is what makes the first render additive: it writes one row per existing ledger entry, `state = 'committed'`, with `ledger_cells` carrying the original ten cells, and it is idempotent, so a second run changes nothing. The goal of byte equality is therefore measured against a post-marker fixture and against the live ledger after `import`, never against an unmigrated copy, and the scenario case that grades it has to be written that way.
+`import` is the load side, and it is deliberately blunt: delete `plans/_plan.db` and its `-wal` and `-shm` siblings, then apply the dump. There is no merge, no diffing, and no idempotency question, because the dump is the record and the database is a cache; rebuilding a cache from its source is not a merge. `assign` self heals by importing first when the database is absent, and by running `init` when neither file exists, so a fresh clone needs no ceremony and no number is skipped.
 
-`import` also has to satisfy `ck_branch_carries_code` without importing a value the rule would reject, because the ledger's `Claiming branch` cell is prose rather than a branch name. Today's rows read `main (approval), feat/AVRIG-00001-agent-workflow-update`, with the code inside the second token, but a historical row that recorded only `main` is a legal ledger line and would be an illegal row. The rule is therefore a parse rather than a copy: `import` scans the cell for a `<type>/<CODE>-<NNNNN>[-<slug>]` token whose code equals the row's own code, stores the first match in `claiming_branch`, and stores `NULL` when nothing matches, leaving the original prose intact in `ledger_cells` so the cell still renders exactly as it shipped. `ck_committed_branch` was widened for exactly this case: a committed row needs a branch **or** a `ledger_cells` snapshot, so an `assign` row is forced to name its branch while an imported row may honestly carry none. `import` supplies the timestamps the schema demands, `created_on` from the ledger's `Created` cell and `committed_at` as the import instant, plus the importing host and user, because an imported row is a record of something that already happened rather than an assignment made now. Measured: an imported row with `ledger_cells` and no branch inserts, the same row with a code-bearing branch inserts, a branch naming another code is still refused, and a committed row with neither a branch nor cells is refused.
+`verify` is what keeps the two from drifting apart. It checks three things: that `export` would not change the dump on disk, that every number in the git union is present in the database, and that `PLAN-RULES.md`'s `project_indicator:` equals the `project.indicator` row. Under `--strict` any of the three exits `1`; otherwise it reports the drift and exits `0`, because a database that is merely behind a dump somebody else committed is not an error.
+
+The first rows in the dump are the four that exist today, and they come from the file this plan deletes. Each of the ten ledger cells has a home: `Plan` is the generated `code`, `Created` is `created_on`, `Title` is `title`, `Repos` is `repos`, `Claiming branch` is `claiming_branch` holding the code-bearing token, `Status` is `ledger_status`, `Passing candidate tag` is `candidate_tags`, `Evidence path` is `evidence_path`, `Feature request` is `issue_number` and `issue_url`, and `Release version` is `release_version`. The one cell with no structured home is `AVRIG-00001`'s candidate tag text, which carries five tags with SHAs and pass counts; it lands in `candidate_tags` verbatim, because rewriting released evidence into a stricter shape would be the worse trade. The prose cells in `AVRIG-00002` and `AVRIG-00003` that read `none yet` and `pending` disappear with the table they were written for, since a null column says the same thing without a sentence that can go stale.
+
+The four historical rows are inserted once, by a migration kept as evidence at `plans/evidence/AVRIG-00004/migrate-legacy-ledger.sql`, because `assign` only ever writes the maximum plus one and these four already hold `00001` to `00004`. That script is not shipped as a subcommand: it runs once against an empty database built from the schema, and then `export` writes the dump. Because there is no markdown left to parse, the earlier `import` rule that scanned a ledger cell for a code-bearing token disappears with it. Each historical row still needs a real `claiming_branch`, since `ck_committed_branch` is strict again, and all four rows in the file being deleted do carry one: `feat/AVRIG-00001-agent-workflow-update`, `feat/AVRIG-00002-landing-console-unslop-redesign`, `chore/AVRIG-00003-agent-desktop-uat-tooling`, and `feat/AVRIG-00004-plan-code-sqlite-allocation`.
 
 ### Git union computation
 
-Unchanged from the ledger's current rules, because they were verified there:
+The filename and branch forms are unchanged from the deleted ledger's rules, because they were verified there. The ledger-cell form is gone with the cell it parsed, and the dump takes its place.
 
 - Filename: `^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})-(?<date>\d{4}-\d{2}-\d{2})-(?<slug>.+)$`, anchored, so a draft name contributes nothing.
-- Ledger cell: `^(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})$`.
+- Dump: queried, never scanned. Three copies exist and all three count: the local database, the local `plans/_plan.sql`, and `origin/<default>:plans/_plan.sql` extracted with `git show` to a temp file. Each is read as `sqlite3 :memory: ".read '<dump>'" "SELECT COALESCE(MAX(number),0) FROM work_item WHERE indicator = '<ind>';"`.
 - Branch: `<type>/(?<code>[A-Z][A-Z0-9]{1,9})-(?<num>\d{5})`, deliberately unanchored after the digits so a slug and a slice segment both parse.
-- Indicator comparison uses `-cmatch` and `-ceq`. Never split at a hyphen, never scan for a bare five digit run, and `plans/_plan.db` contains no five digit token, so the database file contributes nothing to the union.
+- Indicator comparison uses `-cmatch` and `-ceq`. Never split a filename at a hyphen, and never scan a raw dump for five digit runs: a dump carries years, timestamps, commit SHAs inside `candidate_tags`, and issue numbers, so a loose scan over it would read one of those and jump the series permanently. The dump is queried through SQLite or it is not read at all.
 
-Measured on 2026-11-20 in `avrig-ai`, which is why the first number is `00004`: the `origin/main` tree carries `AVRIG-00001` (under `plans/done/`), `AVRIG-00002`, and `AVRIG-00003`; local `plans/*.md` carries `00002` and `00003`; local `plans/done/` carries `00001`; local and remote branches carry `00001`, `00002`, and `00003`; and the ledger rows are `AVRIG-00001` through `AVRIG-00003`. The union maximum is therefore `3`, and `max(db_max, 3) + 1` is `00004`. The same file's illustrative examples contain `AVRIG-00007`, `AVRIG-00045`, and `AVRIG-00442` inside prose and fenced fixtures; those are the exact case the anchored regex and the indicator filter exist to discard, and a naive scan would have jumped this project to `00443` permanently.
+Measured on 2026-11-20 in `avrig-ai`, which is why the first number is `00004`: the `origin/main` tree carries `AVRIG-00001` (under `plans/done/`), `AVRIG-00002`, and `AVRIG-00003`; local `plans/*.md` carries `00002` and `00003`; local `plans/done/` carries `00001`; local and remote branches carry `00001`, `00002`, and `00003`; and the ledger rows are `AVRIG-00001` through `AVRIG-00003`. The union maximum is therefore `3`, and `max(db_max, 3) + 1` is `00004`. The same file's illustrative examples contain `AVRIG-00007`, `AVRIG-00045`, and `AVRIG-00442` inside prose and fenced fixtures; those are the exact case the anchored regex and the indicator filter exist to discard, and a naive scan would have jumped this project to `00443` permanently. The row this plan itself wrote is `AVRIG-00004`, which is the five-source maximum exactly one greater than the four sources that existed before it.
 
 ### Default branch resolution record
 
@@ -320,9 +354,10 @@ The Agentic checkout was on `chore/AVRIG-00003-agent-desktop-uat-tooling`, which
 |---|---|---|
 | Second writer still blocked when the 5 second timeout expires | `SQLITE_BUSY` | exit `2`, caller retries; nothing was written |
 | Process killed during `assign` | nothing, because the transaction either committed or rolled back | `verify` decides; a committed row is a real assignment, a rolled back one left no trace |
-| Push rejected as non-fast-forward | the row is committed locally but the remote already holds the number | `void` with reason `push rejected`, then `assign` again with the refreshed `git_max`; the loser burns a number by design |
-| Database deleted, corrupt, or stale | `verify` reports rows missing or `integrity_check` fails | delete the file, `import` rebuilds from ledger and git union |
-| Ledger edited by hand | `render --check` exits `1` | re-render, or edit the database if the ledger was right |
+| Push rejected as non-fast-forward | the row is committed locally but the remote already holds the number | `void` with reason `push rejected`, then `assign` again with the refreshed remote dump in the union; the loser burns a number by design |
+| Database deleted, corrupt, or stale | `verify` reports rows missing or `integrity_check` fails | delete the file, `import` reloads it from `plans/_plan.sql` |
+| Database ahead of the dump | `export --check` exits `1`, `verify --strict` exits `1` | run `export` and commit the dump with the plan |
+| Dump edited by hand, or another clone's dump not merged | `verify --strict` exits `1` naming the code | `import` to adopt the dump, or `export` to overwrite it, depending on which side was right |
 | `sqlite3` not on `PATH` | exit `3` naming the binary | install path or `AVRIG_SQLITE3` override, reported as a setup defect not a data defect |
 | Payload path wrong, unset, or file missing | `sqlite3` exits `0` having inserted nothing | wrapper requires one `<INDICATOR>-<NNNNN>` token on stdout; zero rows maps to exit `3` and the caller must not proceed |
 | Payload empty, BOM prefixed, or malformed | `malformed JSON`, exit `1` | mapped to exit `3` as an input defect; the transaction did not commit |
@@ -333,20 +368,26 @@ Agentic repository (default branch `master`):
 
 | Path | Action | Owner | Purpose |
 |---|---|---|---|
-| `shared/skills/plan-code/SKILL.md` | create | `be` | skill body: when to allocate, the approval runbook, the exit code contract |
-| `shared/skills/plan-code/plan-code.ps1` | create | `be` | the allocator: git union, SQLite transactions, seven subcommands |
-| `shared/skills/plan-code/schema/001-plan.sql` | create | `edm` | the DDL above plus `PRAGMA user_version` |
-| `shared/skills/plan-code/tests/Test-Allocation.ps1` | create | `tester` | concurrency, duplicate, injection, void, import, and render tests |
-| `AGENTS.md` | edit | `be` | the allocation paragraph names the tool as the local lock and keeps git as the authority |
-| `.opencode/agents/Architect.md` | edit | `be` | stage 4 calls `assign` and `render` instead of describing a manual maximum scan |
+| `shared/skills/plan-code/SKILL.md` | create | `be` | skill body: when to allocate, the approval runbook, the exit code contract, the assign then export cycle |
+| `shared/skills/plan-code/plan-code.ps1` | create | `be` | the allocator: five source union, SQLite transactions, seven subcommands |
+| `shared/skills/plan-code/schema/001-plan.sql` | create | `edm` | the DDL above, five tables, four triggers, `PRAGMA user_version` |
+| `shared/skills/plan-code/tests/Test-Allocation.ps1` | create | `tester` | concurrency, duplicate, injection, void, import, export determinism |
+| `AGENTS.md` | edit | `be` | the allocation paragraph names the tool as the local lock, and the ledger reference moves from `PLAN-INDEX.md` to `PLAN-RULES.md` plus the dump |
+| `.opencode/agents/Architect.md` | edit | `be` | stage 4 calls `assign` then `export` instead of describing a manual maximum scan, and the six `PLAN-INDEX.md` references move to `PLAN-RULES.md` |
+| `.opencode/agents/analyst.md` | edit | `be` | its single `PLAN-INDEX.md` reference moves to `PLAN-RULES.md` |
+| `.opencode/agents/plan.md` | edit | `be` | its single `PLAN-INDEX.md` reference moves to `PLAN-RULES.md` |
+| `.opencode/agents/tester.md` | edit | `be` | its single `PLAN-INDEX.md` reference moves to `PLAN-RULES.md` |
 
 `avrig-ai` repository (default branch `main`):
 
 | Path | Action | Owner | Purpose |
 |---|---|---|---|
-| `plans/PLAN-INDEX.md` | edit | `Architect` | generated ledger markers, Allocation section naming the database and the tool, Conventions note |
+| `plans/PLAN-RULES.md` | create | `Architect` | the prose from the deleted ledger: indicator declaration in its frontmatter, allocation rules, status vocabulary, conventions, reconciliation contract, backfill notes |
+| `plans/_plan.sql` | create | `Architect` | the committed dump: schema, the four historical rows, and this plan's own row |
+| `plans/PLAN-INDEX.md` | delete | `Architect` | replaced by the database, the dump, and `PLAN-RULES.md` |
 | `.gitignore` | edit | `be` | add `plans/_plan.db*` |
-| `plans/_plan.db` | runtime artifact, never committed | `be` | created by `init`, populated by `import` |
+| `plans/_plan.db` | runtime artifact, never committed | `be` | created by `init`, loaded by `import`, written by `assign` |
+| `plans/evidence/AVRIG-00004/migrate-legacy-ledger.sql` | create | `be` | the one-off insert of the four historical rows, kept as evidence because it is the only record of how the deleted table became rows |
 
 `.opencode/agents/Architect.md` is untracked in the Agentic repository, the defect deferred from `AVRIG-00003`. The edit is therefore not reviewable through git. It is recorded with a SHA-256 manifest at `plans/evidence/<CODE>-<NNNNN>/instruction-manifest.json`, written once stage 4 assigns the code, with a `.bak-<timestamp>` sibling beside every edited instruction file, so the content is pinned and can be restored. The normative rule also lands in the tracked `AGENTS.md`, so a lost agent file degrades convenience rather than correctness.
 
@@ -356,7 +397,7 @@ Agentic repository (default branch `master`):
 |---|---|---|---|---|
 | S1 schema | `edm` | `schema/001-plan.sql`, constraint and trigger validation query set | none | starts immediately |
 | S2 allocator | `be` | `plan-code.ps1`, `SKILL.md`, `.gitignore`, `AGENTS.md` | S1 for the final DDL, proceeds against the DDL in this plan meanwhile | overlaps S1, gates on it |
-| S3 ledger integration | `Architect` | `plans/PLAN-INDEX.md` markers, Allocation prose, Conventions note | the CLI contract frozen in this plan | parallel with S1 and S2 |
+| S3 ledger replacement | `Architect` | `plans/PLAN-RULES.md`, deletion of `plans/PLAN-INDEX.md`, `plans/_plan.sql`, the migration evidence, and the four instruction file references that point at the deleted file | the CLI contract frozen in this plan | parallel with S1 and S2 |
 | S4 tests | `tester` | `tests/Test-Allocation.ps1`, `## Test Specification and Validation Scenarios`, evidence under `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/` | S4 authoring parallel, execution after S1 to S3 | author parallel, run last |
 | S5 build and candidates | `build` | build gate, build id, candidate tags and pushes | S1 to S4 | sequential after S4 |
 | S6 wiring | `be` | Architect stage 4 runbook, AGENTS.md paragraph verified in place | S2, S3 | sequential after S3 |
@@ -368,10 +409,12 @@ Stage mapping: this is Stage 1 output now, then Stage 2 analyst review and Stage
 ## Risks and Mitigations
 
 - OneDrive touching a live SQLite file. Mitigated by WAL, short transactions, `integrity_check` in `verify`, and a rebuild path that makes corruption recoverable. Accepted, because the file is disposable by design.
-- The database is mistaken for the archive. Mitigated in wording everywhere: git holds the record, the database holds the lock.
-- Two machines still race. Mitigated by leaving the git push as the gate and by seeding the candidate from the git union so a stale database jumps forward.
+- The database is mistaken for the archive. Mitigated in wording everywhere: `plans/_plan.sql` in git holds the record, the database holds the lock and the cache.
+- Two machines still race. Mitigated by leaving the git push as the gate and by seeding the candidate from five sources including the remote dump, so a stale database jumps forward.
 - A burned number from a losing race. Accepted: the existing rule already treats a failed push as the fail fast signal, and a gap is honest while a duplicate is not.
-- An agent forgets `assign` or `render`. Mitigated by `verify`, which reports assigned numbers that never reached the ledger and ledger rows the database does not know.
+- An agent assigns without exporting. Mitigated by `verify`, whose first check is whether `export` would change the dump, so a database that is ahead of its record is reported immediately rather than at the next merge.
+- The dump is edited by hand. Mitigated by the same check in the opposite direction, and by the fact that a hand edit is a line of SQL in a text diff rather than a silent database change nobody can see.
+- A binary database is committed by mistake. Mitigated by `plans/_plan.db*` in `.gitignore` and by the fact that the file is regenerable, so committing it is a mistake with a one line fix rather than a corrupted history.
 - Untracked agent definition. Mitigated by the SHA-256 manifest entry and by keeping the normative rule in tracked `AGENTS.md`.
 
 ## Out of Scope
@@ -386,11 +429,17 @@ Stage mapping: this is Stage 1 output now, then Stage 2 analyst review and Stage
 ## Decisions Taken at Stage 4
 
 1. Agentic default branch is `master`, confirmed by the user. Resolution step 4 applies: the checkout is `master` while `origin/HEAD` advertises `origin/main`, no local `main` exists, and `origin/master` is 32 commits ahead of `origin/main` with nothing flowing the other way, so `main` is stale rather than parallel.
-2. `plans/_plan.db` is ignored by git as `plans/_plan.db*` and rebuilt with `import`, confirmed. The database is a local lock and a fast index; git plus the ledger stay the durable record.
+2. `plans/_plan.db` is ignored by git as `plans/_plan.db*`, confirmed. The database is a local lock and a fast index; the committed dump `plans/_plan.sql` is the durable record.
 3. There is no reservation lease. The user's direction is that no reservation is needed because a number is assigned once, at approval. The design therefore writes the row already committed and already bound to its branch and plan path, in one `BEGIN IMMEDIATE`, and drops the lease columns, the reaper, the `reserved` state, the `reap` event, and the `--lease` flag. `voided` remains, but only as the explicit abandonment transition, never a timeout.
 4. `.opencode/agents/Architect.md` is edited while untracked, confirmed, with a SHA-256 manifest at `plans/evidence/<CODE>-<NNNNN>/instruction-manifest.json` and `.bak-<timestamp>` siblings standing in for review. The normative rule also lands in tracked `AGENTS.md`.
 5. `assign` accepts a `{code}` placeholder in `--branch` and `--plan-path`, and the statement substitutes the computed code before the `CHECK` runs. The tester raised this as a contract element the design did not state; without it a concurrent `assign` cannot satisfy `ck_branch_carries_code`, because the caller cannot know the number the transaction is about to allocate. Substitution is verified: two calls produced `feat/AVRIG-00004-...` and `feat/AVRIG-00010-...` with zero `{code}` survivors, while a literal branch naming another code is still refused.
-6. `import` parses the ledger's `Claiming branch` cell for a code-bearing branch token rather than copying it, storing `NULL` when the cell carries none, and `ck_committed_branch` was widened to accept a `ledger_cells` snapshot in place of a branch. The tester raised this as a gap: today's cells all carry their code, but a historical cell reading only `main` is a legal ledger line that `ck_branch_carries_code` would refuse, and no path was defined for it. Verified: cells with no branch insert, a code-bearing branch inserts, a foreign code is refused, and a committed row with neither is refused.
+6. **Withdrawn by decision 7.** `import` used to parse the ledger's `Claiming branch` cell for a code-bearing branch token rather than copying it, storing `NULL` when the cell carried none, and `ck_committed_branch` was widened to accept a `ledger_cells` snapshot in place of a branch. The tester raised it as a gap: today's cells all carry their code, but a historical cell reading only `main` is a legal ledger line that `ck_branch_carries_code` would refuse. It was verified at the time, and it stays here as history rather than as a rule, because there is no markdown ledger left to parse and no snapshot column left to widen.
+
+7. `plans/PLAN-INDEX.md` is deleted at the user's direction, because the database makes the markdown ledger a second copy of the same facts and the only time a second copy is ever compared is when someone notices the numbers disagree. The ledger rows, the deferred defects, and the indicator aliases move into tables; the prose moves to `plans/PLAN-RULES.md`; the durable record becomes `plans/_plan.sql`, a deterministic text dump that git can diff and merge. Consequences: `render` is replaced by `export`, markdown `import` is replaced by "load the dump", `ledger_cells` is dropped, `ck_committed_branch` returns to its strict form, and decision 6 disappears with the mechanism it described. The dump was chosen over committing the database file because a binary conflict between two branches that both allocate cannot be resolved by a human, while a text conflict is a few visible lines.
+
+8. `deferred_defect` and `indicator_alias` are added to the schema now rather than in a later plan, because the markdown tables that held them are being deleted in this same change and leaving their content without a home would lose it. `found_during` stores a work item code as text rather than as a foreign key, because `work_item.code` is a generated column and SQLite cannot point a foreign key at one.
+
+9. The schema file is amended in place at `user_version = 1` instead of gaining a `002-plan.sql`. It has never shipped: it exists only on this plan branch, so a second version would record a migration that no release ever experienced. The first shipped version is therefore version 1 with five tables, and a future change is what introduces version 2.
 
 ## Test Specification and Validation Scenarios
 
@@ -1470,6 +1519,8 @@ Pop-Location
 Pass: all three paths are ignored on the resolved default branch, nothing matching `_plan.db` is tracked, and the smoke writes no file, because `check-ignore` and `ls-files` are read only. A failure here after a green T16 means the merge dropped the rule, not that the rule was wrong.
 
 ## Review Findings
+
+**Addendum, 2026-11-20, after approval.** The user deleted the markdown ledger from the design after this review closed: `plans/PLAN-INDEX.md` is gone, the durable record is now the committed dump `plans/_plan.sql`, and `render` is `export`. Findings B2, B5, and B9 graded the markdown rendering, the ledger-cell snapshots, and the `PLAN-INDEX.md` filenames respectively, so their subject matter no longer exists; the design that replaced them is recorded under `## Decisions Taken at Stage 4` as decisions 7, 8, and 9. The verdict below stands as written, because rewriting a completed audit to match a later design would make it a worse record than an out of date one. A fresh audit of the amended design is required before Stage 7, and it is recorded in `## Architect Response to Review Findings` as the addendum entry.
 
 **Verdict: PASS WITH CHANGES.** The design is sound: the three layer split is honest about what SQLite can and cannot guarantee, the trust boundary is real rather than decorative, and the approach needs no rework. Stage 4 must not open until Blocking B1 to B9 are closed, and B2 and B6 need a decision from `Architect` and `tester` rather than a wording fix. The document changed twice while this audit ran: the database and DDL filenames were rewritten, then the test matrix arrived and was revised. Every finding therefore names the text as it stood at the end of the review.
 
