@@ -33,7 +33,7 @@ The user cancelled this work item on 2026-11-20, after UAT approved the candidat
 | Branches | deleted in both repositories once this record was written |
 | Candidate tags | retained. Tags are immutable, and they are the evidence that the work was tested |
 | Release tag | none. The newest release remains `0.5.0` |
-| Feature request | [#5](https://github.com/wwidjaya/avrig-ai/issues/5) left open, with no version recorded |
+| Feature request | [#5](https://github.com/wwidjaya/avrig-ai/issues/5) closed as not planned, with no version recorded |
 
 What survives the deletion is this document, the design artifact beside it under `design/ui/AVRIG-00002/`, the two candidate tags, and the `AVRIG-00002` row in the ledger. The number is consumed permanently and is never reissued.
 
