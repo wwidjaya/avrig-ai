@@ -13,7 +13,7 @@ tags:
 
 The rules that govern plan identity in this project, and the declaration of its indicator.
 
-The numbered facts that used to live in this file's companion ledger table are now rows. The ledger is `plans/_plan.db`, a local SQLite database, and its committed archive is `plans/_plan.sql`, a deterministic text dump. Read a row with `plan-code.ps1 status`, or query either file directly. This document holds only the sentences that explain the rules; it deliberately holds no row data, so there is never a second copy of a number to disagree with the first.
+The numbered facts that used to sit in a ledger table beside these rules are now rows. The ledger is `plans/_plan.db`, a local SQLite database, and its committed archive is `plans/_plan.sql`, a deterministic text dump. Read a row with `plan-code.ps1 status`, or query either file directly. This document holds only the sentences that explain the rules; it deliberately holds no row data, so there is never a second copy of a number to disagree with the first.
 
 ## Project indicator
 
