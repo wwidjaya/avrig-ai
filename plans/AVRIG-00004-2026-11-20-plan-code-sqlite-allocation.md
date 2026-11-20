@@ -504,9 +504,9 @@ pwsh -NoProfile -File shared/skills/plan-code/tests/Test-Allocation.ps1 `
 ```
 
 - `-Case T03` (or `-Case T01,T02`) runs a subset. `-Keep` leaves the scratch tree for inspection. `-IncludeOneDrive` opts into the synced-folder concurrency variant.
-- One `PASS` or `FAIL` line per case, each carrying the case id, the assertions passed over the assertions attempted, the candidate tag, the project commit SHA, and the tool checkout SHA, followed by a `ROLLUP n/18 PASS exit=n` line. A failing case makes the process exit non-zero.
+- One `PASS` or `FAIL` line per case, each carrying the case id, the assertions passed over the assertions attempted, the candidate tag, the project commit SHA, and the tool checkout SHA, followed by a `ROLLUP n/21 PASS exit=n` line. A failing case makes the process exit non-zero.
 - A missing subject is reported as `BLOCKED` with the reason and counted as a failing case, never skipped silently.
-- Runner constants: `$PC` the allocator, `$DDL` the schema asset, `$PW` `pwsh`, `$SQL` `sqlite3`, `$TMP` `$env:TEMP\opencode\plan-code`. Every fixture, database, dump, payload, and race output lives under `$TMP`.
+- Runner constants: `$PC` the allocator, `$DDL` the schema asset, `$PW` `pwsh`, `$SQL` `sqlite3`, `$TMP` a directory unique to the process, `$env:TEMP\opencode\plan-code\<pid>-<guid>` unless `-Scratch <dir>` names one, so two runs started at the same time cannot delete each other's fixtures. Every fixture, database, dump, payload, and race output lives under `$TMP`.
 - Fixtures never touch the live checkout, its `plans/PLAN-RULES.md`, its `plans/_plan.sql`, or its `plans/_plan.db`.
 - Every fixture is a real git repository with a bare `origin`, `core.autocrlf=false`, no commit signing, and `refs/remotes/origin/HEAD` set, because the default branch contract resolves through it.
 - A fixture seeds its database by applying the shipped DDL, and produces `plans/_plan.sql` with the tool's own `export`. The dump is therefore always in the one format `verify` compares against, and a schema or export regression fails the fixture rather than passing quietly.
@@ -535,6 +535,9 @@ pwsh -NoProfile -File shared/skills/plan-code/tests/Test-Allocation.ps1 `
 | T16 | The database reaches git, or the dump is gitignored | 7 |
 | T17 | `status` and `void` misreport state or lose the reason | 2 |
 | T18 | `init` overwrites a durable record, a foreign project, or a newer schema | 1 |
+| T19 | Goal 6 is ungraded: a numbered fact survives outside the database, or the archive carries the machine that made it | 1 |
+| T20 | The delivery columns have no sanctioned writer, so stages 8, 12, 13, 14, and 16 have no mechanism | 2 |
+| T21 | A row's `plan_path` is trusted rather than checked, so a pointer that rotted at the approval rename reports clean forever | 2 |
 
 Gates run in that order. T14 runs last, on a clean scratch clone.
 
@@ -570,6 +573,8 @@ Assertions, every refusal probed by direct SQL:
 - `19` (SQLITE_CONSTRAINT) with the named refusal text for: duplicate `(indicator, number)`, retired `state` values `pending` and `reserved`, empty and whitespace-only `title`, `number` `0` and `100000`, a committed row with a null `claiming_branch`, a committed row with a null `committed_at`, a voided row with no reason, empty `owner_role`, empty `actor_host`, whitespace `actor_user`, a branch carrying another code, a `created_on` that is not `YYYY-MM-DD`, a foreign indicator that violates the `work_item` to `project` foreign key with `PRAGMA foreign_keys=ON`, a lowercase and a malformed indicator, `frozen` out of range, a second `assign` event on one number, an `UPDATE` and a `DELETE` of `allocation_event`, a `DELETE` of `work_item`, and an `UPDATE` of `work_item.number` and `work_item.indicator`.
 - `19` with the named refusal for an empty `found_during`, a whitespace-only `defect`, and a duplicate `indicator_alias.old_code`.
 - `uq_work_item_number` and `uq_work_item_code` are both declarable and present in the DDL, and the case records that the second cannot fire independently because `code` is generated from the pair.
+- A committed row whose branch carries a prefix sibling, `feat/AVRIG-000051-x` on number `5`, is refused by `ck_branch_carries_code`, while `feat/AVRIG-00005-x` is accepted and a voided row with a `NULL` branch is still accepted. The needle ends in a hyphen so the code must be a full token; the earlier expression without it accepted the sibling, which is why it changed.
+- `event='update'` is accepted by the event CHECK, and `event='reserve'` is still refused by it.
 - After every refusal: exactly the seeded row and event and alias survive, no defect row landed, no retired state reached a row, no foreign indicator reached the registry, and `integrity_check` is `ok`.
 
 Pass: all probes refuse, the probe count is not smaller than the set the case declares, and nothing partial survived.
@@ -777,6 +782,68 @@ Assertions:
 
 Pass: all four.
 
+#### T19 The migration left nothing behind
+
+Threat: goal 6 is asserted nowhere. A numbered fact survives in `plans/PLAN-INDEX.md`, the dump does not carry the four historical rows, a historical row loses its own code, or the committed archive embeds the machine that exported it, which is a diff on every clone.
+
+Fixture: none. This is the only case that reads the candidate tree rather than a fixture, because its subject is that tree's leftovers. It is read only: the dump is applied to a scratch database, and `export --check` is the only command run against the tree, and it writes nothing.
+
+Assertions:
+
+- `plans/PLAN-INDEX.md` does not exist.
+- `plans/PLAN-RULES.md` exists, opens with a frontmatter block, and that block carries `project_indicator:` and `indicator_status:`. The declared indicator matches `^[A-Z][A-Z0-9]{1,9}$`.
+- `git ls-files --error-unmatch plans/_plan.sql` exits `0`, `git ls-files plans/_plan.db` is empty, and `git check-ignore -v plans/_plan.db` exits `0` with output naming a rule that matches `_plan.db*`.
+- Applying the committed dump to a scratch database succeeds, and that database holds exactly `4` `work_item` rows, `6` `deferred_defect` rows, `0` `indicator_alias` rows, and `1` `project` row. The project indicator equals the declared one, and the four rows are numbers `1` to `4` with no gap.
+- Each of the four rows satisfies `instr(claiming_branch, code || '-') > 0` and `instr(plan_path, code || '-') > 0`, and its `ledger_status` is one of the twelve vocabulary values rather than `NULL`.
+- No column of `project` carries a drive letter or a `Users` fragment, and `repo_root` is `NULL`, because it is the only column an export could derive the machine from.
+- The archive keeps its machine values where they are the record rather than a derivation: `actor_host` and `actor_user` hold the machine and account that wrote each row, and `deferred_defect` keeps the words a finding was written with. The case asserts that positively, so `deferred_defect` holds six rows and the `AVRIG-00003` row still names `.opencode/agents`. A later scrub is then caught as a change rather than passing silently, and a path in that text does not fail the case.
+- The dump header says it is generated by `export` and must not be hand edited, and after `export --check` the file is byte identical. `export --check` may exit `0` or `1`; anything else is a configuration failure.
+
+Pass: every assertion above, with the dump unchanged by the check.
+
+The first draft of this case failed on a drive letter anywhere in the file, which flagged the `AVRIG-00003` deferred defect text. That was too broad: the plan permits machine values in the audit columns and in defect prose, and forbids them only where `export` derives them. The case grades the narrow claim and grades the three permitted sites positively, which is decision 12 and the bullet it sits beside.
+
+#### T20 The `update` subcommand
+
+Threat: six delivery columns have no writer at all, so stages 8, 12, 13, 14, and 16 of the delivery process have no sanctioned mechanism, or the writer they get reaches an immutable column, invents a version, or reports a refusal over a row it already committed.
+
+Fixture: a coded repository seeded with three committed rows and an exported dump, then `assign` for `AVRIG-00004`, then `export`, so `verify --strict` is clean at the start. `--status` is proven on `AVRIG-00002`; the other fields are proven on `AVRIG-00004`.
+
+Blocked path: the case probes `update --code AVRIG-00002 --status testing` first. If the allocator answers exit `3` with an unknown subcommand, the case reports `BLOCKED` with that output rather than failing or skipping. A missing subject is not evidence either way.
+
+Assertions:
+
+- `update --code AVRIG-00002 --status testing` exits `0`, sets `ledger_status` on that row, changes no other row, and writes exactly one `allocation_event` with `event='update'` whose `detail` names `status`.
+- `--candidate-tag avrig/00004/rc.001` and `--evidence plans/evidence/AVRIG-00004/rc.001/` each write their column on `AVRIG-00004`.
+- `--issue 6` writes `issue_number` `6`, and `issue_url` either ends `/issues/6` or stays empty, because a non GitHub origin yields no derivable URL and the column is not filled with a guess.
+- After those calls and before `--release-version`, `release_version` is still empty: no other field invents a version.
+- `--release-version 9.9.9` is accepted rather than refused, and stores the value verbatim.
+- The allowlisted calls write exactly one event each, and every `update` event names a row that was actually updated.
+- Refused with exit `3`, each proven separately: an unknown `--code`; `--indicator`, `--number`, `--state`, `--assigned-at`, `--committed-at`, `--voided-at`, and `--voided-reason`; and any update to a row whose `state` is `voided`. After each refusal the row count, the full row digest, and the event count are unchanged.
+- An immutable column is unreachable even when a legal field is named in the same call, so `--status passed --indicator WXYZ --state voided` either runs or refuses and `indicator`, `number`, and `state` keep their stored values either way. Dropping the flag quietly is tolerated; writing it is not.
+- A hostile string carrying a quote, a semicolon, a `--` comment, and in a second payload a newline lands verbatim in `evidence_path`, leaves all five tables present, drops no row, keeps `integrity_check` at `ok`, and exits `0`, because a value cannot be stored and reported as a refusal at the same time.
+- `verify --strict` after an `update` with no `export` exits `1` and labels the finding as drift; `export` then `verify --strict` exits `0`, and the exported dump carries the candidate tag.
+
+Pass: all of the above. `BLOCKED` is not a pass.
+
+#### T21 The plan pointer is checked rather than trusted
+
+Threat: a committed row names a plan file that is not there and the ledger still reports clean. This is not hypothetical: all four migrated rows named their pre-approval draft names, every one stale since the approval rename, and `verify --strict` passed them, so the one form of drift the tool could not see was the pointer. Decision 12 records it and the goals carry it.
+
+Fixture: a coded repository seeded with three committed rows and an exported dump, each row naming a real file, `plans/done/` for row 1 so the archived shape is exercised from the start, and `plans/` for the rest. `verify --strict` is clean before the case begins.
+
+Assertions:
+
+- The baseline is clean: a ledger whose pointers resolve exits `0` under `verify --strict`.
+- A committed row whose `plan_path` names a missing file makes `verify --strict` exit `1` with a `drift:` line naming the code and the path, and plain `verify` exits `0` while printing the same line. The probe state is written with SQL, because the writer refuses to create it, which is the point of the refusals below.
+- An empty `plan_path` on a committed row is drift too, with its own message, and the finding names the row.
+- The sanctioned repair is in place rather than a re-key: `update --code <row> --plan-path plans/<code>-<date>-<slug>.md` exits `0`, stores the pointer, writes exactly one `allocation_event` whose `detail` names `plan_path`, and `export` plus `verify --strict` then exits `0`.
+- A voided row is exempt, because the check covers committed rows. Voiding a row whose pointer is empty removes the finding and `verify --strict` exits `0` with the pointer still empty, so the exemption passed it rather than a repair.
+- A path under `plans/done/` is accepted, because stage 16 archives the plan there and the row follows it.
+- Refused with exit `3`, each proven separately with the row count, the row digest, and the event count unchanged after: an absolute path; a path outside `plans/`; a basename carrying a different row's code, such as `plans/AVRIG-00005-x.md` on `AVRIG-00004`; and a path with no file behind it.
+- Refused with exit `3` as well: a basename carrying the row's code with no hyphen after it, `plans/AVRIG-00004.md`, even when that file exists. The guard requires the basename to start with `<code>-`, which is the same set `instr(plan_path, code || '-')` accepts, so the writer cannot store a pointer that `T19` would then reject.
+
+Pass: all of the above. Refusal messages are not graded, only the exit code and the unchanged ledger, because an invalid shape and a missing file are refused with the same code.
 ---
 
 ### Failure reporting
@@ -785,18 +852,20 @@ A failing case reports the case id, the assertion that failed, the expected and 
 
 ### Attached suite and its first run
 
-The suite above is not a specification that waits for implementation: `tester` wrote it as `shared/skills/plan-code/tests/Test-Allocation.ps1` (1502 lines, one `PASS` or `FAIL` line per case, a `ROLLUP n/18` summary, non-zero exit on failure) and ran it against the tool commit `fd935c96` on 2026-11-20. Result `ROLLUP 16/18 PASS exit=1`.
+The suite above is not a specification that waits for implementation. `tester` wrote it as `shared/skills/plan-code/tests/Test-Allocation.ps1`, one `PASS` or `FAIL` line per case and a `ROLLUP n/m` summary with a non-zero exit on failure, and ran it against the tool commit `fd935c96` on 2026-11-20. The first result was `ROLLUP 16/18 PASS exit=1`.
 
-Sixteen cases green on the first run is the useful part: schema creation and its integrity, the table driven constraint proof, the git union raising the candidate, indicator filtering, void and killed `assign` durability, payload injection, import rebuilding from the dump, dump determinism by SHA-256, drift detection in both directions, the environment and exit code contracts, the record never reaching git, status and explicit void, and the approval runbook end to end, all exercised against the real tool rather than a description of it.
+Sixteen green on the first run was the useful part: schema creation and its integrity, the constraint proof, the git union raising the candidate, indicator filtering, void and killed `assign` durability, payload injection, import rebuilding from the dump, dump determinism by SHA-256, drift detection in both directions, the environment and exit code contracts, the record never reaching git, status and explicit void, and the approval runbook end to end, all exercised against the real tool rather than a description of it.
 
-Two red cases, both implementation defects rather than test gaps, both owned by `be`:
+The two red cases were implementation defects rather than test gaps, both owned by `be`:
 
-- `T03`, twenty way concurrency, loses 16 of 20 writers. The `{code}` placeholder is substituted client side from a candidate computed outside the write transaction, while the statement recomputes `MAX(number)+1` inside it, so under contention the written number exceeds the candidate and `ck_branch_carries_code` refuses the row. A locked read also reports exit `1` instead of `2`, because one read path hardcodes the code.
-- `T18`, schema downgrade, `init` rewrites a `user_version` of `99` back to `1` and exits `0`, because the schema is applied before the guard that refuses a newer database, and the schema asset itself sets the marker.
+- `T03`, twenty way concurrency, lost 16 of 20 writers. The `{code}` placeholder was substituted client side from a candidate computed outside the write transaction, while the statement recomputed `MAX(number)+1` inside it, so under contention the written number exceeded the candidate and `ck_branch_carries_code` refused the row. A locked read also reported exit `1` instead of `2`, because one read path hardcoded the code.
+- `T18`, schema downgrade, rewrote a `user_version` of `99` back to `1` and exited `0`, because the schema was applied before the guard that refuses a newer database, and the schema asset itself sets the marker.
 
-A third finding is hardening rather than a gate: a shared temp payload directory that another process deletes turns into an unhandled exception instead of an exit code.
+A third finding was hardening rather than a gate: a shared temp payload directory that another process deletes turned into an unhandled exception instead of an exit code. The runner had the same class of defect from the other side, a hardcoded scratch root that let a concurrent run wipe another run's fixtures mid case and produce three false reds, which is why `-Scratch` exists and why the isolation is proven by running two copies at once rather than by reasoning about it.
 
-This is recorded because a plan that claimed a green suite before one existed would be false, and because the two failures are the evidence that the constraint set works: a weaker `ck_branch_carries_code` would have let both writers claim the same number silently.
+The suite then grew with the plan rather than staying at eighteen. `T19` closed the analyst's blocking finding that goal 6 was ungraded. `T20` and `T21` came from two further findings: that the ledger could be created but never advanced, and that a row's plan pointer could rot while `verify` called the ledger clean, the second found on the live ledger at stage 7 rather than by any test.
+
+This is recorded because a plan that claimed a green suite before one existed would be false, and because the first two failures are the evidence that the constraint set works: a weaker `ck_branch_carries_code` would have let both writers claim the same number silently.
 
 ### Not applicable in this plan
 
@@ -813,13 +882,14 @@ If a later stage adds a page or a window, these rows must be replaced by execute
 | Order | Cases | Gate |
 |---|---|---|
 | 1 | `T01`, `T02` | schema is real before anything is tested against it |
-| 2 | `T12`, `T13`, `T17`, `T18` | single process behaviour before contention |
+| 2 | `T12`, `T13`, `T17`, `T18`, `T20`, `T21` | single process behaviour before contention |
 | 3 | `T03` | the only case that can leave 20 rows behind; runs on a clean fixture |
 | 4 | `T04`, `T05`, `T08` | union and rebuild correctness |
 | 5 | `T06`, `T07` | durability and injection |
 | 6 | `T09`, `T10` | dump determinism and drift |
 | 7 | `T11`, `T15`, `T16` | environment and contract edges |
 | 8 | `T14` | the runbook, last, on a clean scratch clone |
+| 9 | `T19` | the migration left nothing behind; the only case that reads the tree rather than a fixture | the tree is final only after every other case has run |
 
 One command runs everything for a candidate:
 
@@ -831,14 +901,14 @@ One command runs everything for a candidate:
 ### Evidence convention
 
 - Results land in `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/`, one folder per candidate tag, keyed to the same candidate number as the build. `<CODE>`, `<NNNNN>`, and `<NNN>` are empty at Stage 3 and are filled at Stage 8, when the tag exists; nobody writes a version or a code before then.
-- Contents: `RESULTS.md` (one line per case plus the rollup), `logs/T01.log` through `logs/T18.log` (stdout and stderr verbatim), `env.json` (`$PSVersionTable.PSVersion`, `sqlite3 --version`, `$TAG`, `$SHA`, `$TSHA`, and `git -C $TOOL status --porcelain -- shared/skills/plan-code` which must be empty), and `db/` (the fixture database copied after each destructive case, so a reviewer can re-run any query).
+- Contents: `RESULTS.md` (one line per case plus the rollup), `logs/T01.log` through `logs/T21.log` (stdout and stderr verbatim), `env.json` (`$PSVersionTable.PSVersion`, `sqlite3 --version`, `$TAG`, `$SHA`, `$TSHA`, and `git -C $TOOL status --porcelain -- shared/skills/plan-code` which must be empty), and `db/` (the fixture database copied after each destructive case, so a reviewer can re-run any query).
 - No case output is paraphrased into `RESULTS.md`. The log is the record; the summary line only points at it.
 - Each result line carries the tag, both commit SHAs, the verdict, the passing assertion count, and the evidence path. A line missing the tag or either SHA is treated as `BLOCKED`.
 - No run may start against an untagged or moving tree. A green result on an older tag is not a pass for a newer tree, and a run in the working tree is not evidence at all.
 
 ### Rollup rule for the release trigger
 
-The candidate passes only when all 18 cases report `PASS` with zero failed assertions and the runner exits `0`. At that point `tester` reports the passing tag, its `git rev-parse <tag>^{commit}` SHA, and a recommended increment: `minor` if the allocator ships as new capability with no change to any existing ledger row, `patch` if it only repairs an interface defect found during the run, `major` only if the ledger table shape or the exit code contract changes incompatibly after a previous release. No tag is created by `tester`; `build` owns the tag, the merge, and the push.
+The candidate passes only when all 21 cases report `PASS` with zero failed assertions and the runner exits `0`. At that point `tester` reports the passing tag, its `git rev-parse <tag>^{commit}` SHA, and a recommended increment: `minor` if the allocator ships as new capability with no change to any existing ledger row, `patch` if it only repairs an interface defect found during the run, `major` only if the ledger table shape or the exit code contract changes incompatibly after a previous release. No tag is created by `tester`; `build` owns the tag, the merge, and the push.
 
 ### Post-merge smoke, after the Stage 13 merge
 
