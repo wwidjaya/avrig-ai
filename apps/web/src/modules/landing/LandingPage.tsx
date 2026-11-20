@@ -2,35 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 import {
   Button,
-  Badge,
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
 } from "@avrig/ui";
-import {
-  ShieldCheck,
-  Building2,
-  Kanban,
-  Users,
-  Lock,
-  ArrowRight,
-  Activity,
-  Cpu,
-  Workflow,
-  Sparkles,
-  CheckCircle2,
-  Layers,
-  Network,
-  Radio,
-  FileCheck2,
-} from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useI18n } from "../../shared/i18n/I18nContext";
 import { ThemeSelector } from "../../shared/components/ThemeSelector";
 import { LanguageSelector } from "../../shared/components/LanguageSelector";
@@ -40,29 +22,36 @@ interface LandingPageProps {
   onEnterCommandCenter: (targetPath?: string) => void;
 }
 
+type StageCode = "RE" | "SA" | "DV" | "TE";
+
+const STAGE_ORDER: StageCode[] = ["RE", "SA", "DV", "TE"];
+
+const appVersion = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "0.1.0";
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }) => {
   const auth = useAuth();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const { t } = useI18n();
 
-  // Active simulated stage in the hero interactive rig
-  const [activeStage, setActiveStage] = useState<"RE" | "SA" | "DV" | "TE">("RE");
+  // Active stage on the hero gate certificate
+  const [activeStage, setActiveStage] = useState<StageCode>("RE");
 
-  // Simulated ticker time
-  const [tickerIndex, setTickerIndex] = useState(0);
-  const tickerEvents = [
-    "[GATE_PASS] Stage [RE] signed by Human Founder (SHA-256: 7f83b165...)",
-    "[CONSENSUS] Architecture Deliberation #004: Unanimous 4/4 Quorum",
-    "[EVENT_BUS] Dispatching task packet to Specialist Agent #012 [DV]",
-    "[RBAC_OK] OAuth 2.1 PKCE token validated via iam.avrig.ai",
-  ];
+  // One entrance on load, skipped entirely when motion is reduced
+  const [entered, setEntered] = useState<boolean>(prefersReducedMotion);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTickerIndex((prev) => (prev + 1) % tickerEvents.length);
-    }, 3800);
-    return () => clearInterval(timer);
-  }, [tickerEvents.length]);
+    if (entered) return;
+    const frame = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(frame);
+  }, [entered]);
+
+  const enter = `transition-[transform,opacity] ease-out duration-[240ms] ${
+    entered ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+  }`;
 
   const isLoggedIn = Boolean(
     auth.isAuthenticated ||
@@ -70,17 +59,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }
     (typeof window !== "undefined" && localStorage.getItem("avrig-logged-in") === "true")
   );
 
-  const handleLaunchConsole = async () => {
+  const handleLaunchConsole = () => {
     if (isLoggedIn) {
       onEnterCommandCenter();
     } else {
-      try {
-        await auth.signinRedirect();
-      } catch (err) {
-        console.error("OpenID Connect redirect failed", err);
-        setLoginModalOpen(true);
-      }
+      setLoginModalOpen(true);
     }
+  };
+
+  const handleDemoAccess = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("avrig-logged-in", "true");
+    }
+    setLoginModalOpen(false);
+    onEnterCommandCenter();
   };
 
   const scrollToSection = (id: string) => {
@@ -90,712 +82,613 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterCommandCenter }
     }
   };
 
+  const sdlc = t.showcase.sdlc;
+
+  const stages: Array<{
+    code: StageCode;
+    index: string;
+    name: string;
+    status: string;
+    tone: string;
+    approved: boolean;
+    current: boolean;
+    checks: [string, string];
+  }> = [
+    {
+      code: "RE",
+      index: "01",
+      name: sdlc.item1Name,
+      status: sdlc.item1Status,
+      tone: "bg-positive",
+      approved: true,
+      current: false,
+      checks: [t.certificate.reCheck1, t.certificate.reCheck2],
+    },
+    {
+      code: "SA",
+      index: "02",
+      name: sdlc.item2Name,
+      status: sdlc.item2Status,
+      tone: "bg-positive",
+      approved: true,
+      current: false,
+      checks: [t.certificate.saCheck1, t.certificate.saCheck2],
+    },
+    {
+      code: "DV",
+      index: "03",
+      name: sdlc.item3Name,
+      status: sdlc.item3Status,
+      tone: "bg-accent-text",
+      approved: false,
+      current: true,
+      checks: [t.certificate.dvCheck1, t.certificate.dvCheck2],
+    },
+    {
+      code: "TE",
+      index: "04",
+      name: sdlc.item4Name,
+      status: sdlc.item4Status,
+      tone: "bg-muted-foreground/60",
+      approved: false,
+      current: false,
+      checks: [t.certificate.teCheck1, t.certificate.teCheck2],
+    },
+  ];
+  const stage = stages.find((item) => item.code === activeStage) ?? stages[0];
+
+  const navLinks = [
+    { id: "sdlc-cockpit", label: t.nav.sdlc },
+    { id: "architecture", label: t.nav.architecture },
+    { id: "workflow", label: t.nav.office },
+    { id: "deliberations", label: t.nav.deliberations },
+  ];
+
+  const figures = [
+    { value: "16", label: t.hero.telemetry.activeAgents },
+    { value: "1", label: t.hero.telemetry.sdlcGates },
+    { value: "0", label: t.hero.telemetry.routingLatency },
+    { value: t.hero.telemetry.enforced, label: t.hero.telemetry.securityStatus },
+  ];
+
+  const officeRoles = [
+    { tier: t.showcase.office.tier1, role: t.showcase.office.role1, desc: t.showcase.office.role1Desc },
+    { tier: t.showcase.office.tier2, role: t.showcase.office.role2, desc: t.showcase.office.role2Desc },
+    { tier: t.showcase.office.tier3, role: t.showcase.office.role3, desc: t.showcase.office.role3Desc },
+  ];
+
+  const bentoCards = [
+    {
+      anchor: undefined,
+      label: t.bento.card1Badge,
+      title: t.bento.card1Title,
+      desc: t.bento.card1Desc,
+      footer: t.bento.card1Footer,
+    },
+    {
+      anchor: undefined,
+      label: t.bento.card2Badge,
+      title: t.bento.card2Title,
+      desc: t.bento.card2Desc,
+      footer: t.bento.card2Footer,
+    },
+    {
+      anchor: undefined,
+      label: t.bento.card3Badge,
+      title: t.bento.card3Title,
+      desc: t.bento.card3Desc,
+      footer: t.bento.card3Footer,
+    },
+    {
+      anchor: "deliberations",
+      label: t.bento.card4Badge,
+      title: t.bento.card4Title,
+      desc: t.bento.card4Desc,
+      footer: t.bento.card4Footer,
+    },
+  ];
+
+  const workflowSteps = [
+    { num: t.workflow.step1Num, title: t.workflow.step1Title, desc: t.workflow.step1Desc },
+    { num: t.workflow.step2Num, title: t.workflow.step2Title, desc: t.workflow.step2Desc },
+    { num: t.workflow.step3Num, title: t.workflow.step3Title, desc: t.workflow.step3Desc },
+    { num: t.workflow.step4Num, title: t.workflow.step4Title, desc: t.workflow.step4Desc },
+  ];
+
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/20 selection:text-primary transition-colors duration-300">
-      {/* Accessible Skip Link */}
+    <div className="flex min-h-screen flex-col bg-background font-sans text-foreground selection:bg-primary/25 selection:text-foreground">
       <a
         href="#main-landing"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg focus:outline-hidden"
+        className="sr-only rounded focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
       >
         Skip to main content
       </a>
 
-      {/* 1. Industrial Hairline Navigation Bar */}
-      <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/90 backdrop-blur-md">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <div className="flex size-9 items-center justify-center rounded bg-primary text-primary-foreground font-mono font-black tracking-wider text-sm shadow-xs">
+      {/* 1. Navigation */}
+      <header className="sticky top-0 z-40 border-b border-border bg-background">
+        <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between gap-4 px-6 lg:px-8">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary font-mono text-xs text-primary-foreground">
               AV
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base leading-tight tracking-tight">
-                  avrig<span className="text-primary font-mono ml-0.5">.ai</span>
-                </span>
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded font-mono text-[9px] uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
-                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  RIG.V1
-                </span>
-              </div>
-              <span className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase">
-                Autonomous Engineering Rig
-              </span>
-            </div>
+            </span>
+            <span className="truncate text-base leading-tight font-medium">
+              avrig<span className="text-accent-text">.ai</span>
+            </span>
+            <span className="hidden font-mono text-[11px] tabular-nums text-muted-foreground sm:inline">
+              v{appVersion}
+            </span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-7 text-xs font-mono font-medium text-muted-foreground" aria-label="Landing Navigation">
-            <button
-              type="button"
-              onClick={() => scrollToSection("sdlc-cockpit")}
-              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
-            >
-              <span className="text-primary font-bold mr-1">01.</span>{t.nav.sdlc}
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection("architecture")}
-              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
-            >
-              <span className="text-primary font-bold mr-1">02.</span>{t.nav.architecture}
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection("workflow")}
-              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
-            >
-              <span className="text-primary font-bold mr-1">03.</span>{t.nav.office}
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToSection("deliberations")}
-              className="hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden rounded px-1.5 py-0.5"
-            >
-              <span className="text-primary font-bold mr-1">04.</span>{t.nav.deliberations}
-            </button>
+          <nav
+            className="hidden items-center gap-6 lg:flex"
+            aria-label="Landing Navigation"
+          >
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => scrollToSection(link.id)}
+                className="rounded text-sm text-text-secondary transition-colors duration-[120ms] ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                {link.label}
+              </button>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language Selector */}
+          <div className="flex shrink-0 items-center gap-2">
             <LanguageSelector />
-
-            {/* 3-Way Theme Selector */}
             <ThemeSelector />
-
-            {/* Console CTA */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden sm:inline-flex"
+              onClick={() => setLoginModalOpen(true)}
+            >
+              {t.nav.signIn}
+            </Button>
             <Button
               size="sm"
-              className="font-mono text-xs font-semibold shadow-xs cursor-pointer gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95 ring-1 ring-primary/20"
+              className="gap-1.5 px-2 sm:px-3"
               onClick={handleLaunchConsole}
             >
-              <span>{t.nav.launchConsole}</span>
-              <ArrowRight className="size-3.5" />
+              <span className="hidden sm:inline">{t.nav.launchConsole}</span>
+              <ArrowRight className="size-4" strokeWidth={1.5} />
             </Button>
           </div>
         </div>
       </header>
 
-      {/* 2. Asymmetric Hero Composition ("The Sovereign Rig") */}
-      <section id="main-landing" tabIndex={-1} className="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-border/80 focus:outline-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left 7 Columns: Rig Manifest & Command Directives */}
-            <div className="lg:col-span-7 flex flex-col items-start text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 font-mono text-xs font-medium border-l-2 border-primary bg-primary/5 text-primary border-y border-r border-border/60">
-                <Sparkles className="size-3.5 text-primary" />
-                <span className="uppercase tracking-widest">{t.hero.badge}</span>
+      {/* 2. Hero: copy and the gate certificate */}
+      <section
+        id="main-landing"
+        tabIndex={-1}
+        className="relative border-b border-border focus:outline-hidden"
+      >
+        <div className="mx-auto w-full max-w-[1440px] px-6 pt-12 pb-16 lg:px-8 lg:pt-24 lg:pb-20">
+          <div className="grid grid-cols-1 gap-12 xl:grid-cols-12 xl:gap-16">
+            <div className="xl:col-span-5 lg:flex lg:flex-col lg:justify-center">
+              <div className={enter} style={{ transitionDelay: "0ms" }}>
+                <p className="font-mono text-xs text-muted-foreground">{t.hero.badge}</p>
+                <h1 className="mt-6 text-4xl leading-[1.05] font-medium tracking-tight text-balance sm:text-5xl lg:text-[56px]">
+                  {t.hero.titleStart}{" "}
+                  <span className="text-accent-text whitespace-nowrap">{t.hero.titleHighlight}</span>{" "}
+                  {t.hero.titleEnd}
+                </h1>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.06] mb-6">
-                {t.hero.titleStart}{" "}
-                <span className="bg-gradient-to-r from-primary via-primary/90 to-foreground bg-clip-text text-transparent">
-                  {t.hero.titleHighlight}
-                </span>{" "}
-                {t.hero.titleEnd}
-              </h1>
+              <div className={`${enter} mt-6`} style={{ transitionDelay: "40ms" }}>
+                <p className="max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
+                  {t.hero.subtitle}
+                </p>
 
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-2xl font-normal">
-                {t.hero.subtitle}
-              </p>
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <Button size="lg" className="gap-2" onClick={handleLaunchConsole}>
+                    {t.hero.ctaPrimary}
+                    <ArrowRight className="size-4" strokeWidth={1.5} />
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={() => scrollToSection("sdlc-cockpit")}
+                  >
+                    {t.hero.ctaSecondary}
+                  </Button>
+                </div>
 
-              <div className="flex flex-wrap items-center gap-4 mb-8">
-                <Button
-                  size="lg"
-                  className="gap-2 font-semibold shadow-sm cursor-pointer"
-                  onClick={handleLaunchConsole}
-                >
-                  {t.hero.ctaPrimary}
-                  <ArrowRight className="size-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="font-semibold cursor-pointer"
-                  onClick={() => scrollToSection("sdlc-cockpit")}
-                >
-                  {t.hero.ctaSecondary}
-                </Button>
-              </div>
-
-              {/* Technical Trust Strip */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-muted-foreground pt-4 border-t border-border/60 w-full">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-primary" />
-                  <span>{t.hero.trust.rustEngine}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-primary" />
-                  <span>{t.hero.trust.stageGates}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="size-3.5 text-primary" />
-                  <span>{t.hero.trust.traceability}</span>
-                </div>
+                <ul className="mt-10 flex flex-col gap-1.5 border-t border-border pt-4 font-mono text-xs text-muted-foreground">
+                  <li>{t.hero.trust.rustEngine}</li>
+                  <li>{t.hero.trust.stageGates}</li>
+                  <li>{t.hero.trust.traceability}</li>
+                </ul>
               </div>
             </div>
 
-            {/* Right 5 Columns: Interactive Sovereign Rig Terminal Simulator */}
-            <div className="lg:col-span-5 w-full">
-              <div className="rounded-xl border border-border bg-card/95 shadow-2xl overflow-hidden">
-                {/* Terminal Header */}
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/40 font-mono text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="size-2.5 rounded-full bg-destructive/70 inline-block"></span>
-                    <span className="size-2.5 rounded-full bg-amber-500/70 inline-block"></span>
-                    <span className="size-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                    <span className="text-[11px] text-muted-foreground ml-1">avrig-rig://cluster-01.local</span>
-                  </div>
-                  <Badge variant="outline" className="font-mono text-[10px] px-1.5 py-0">
-                    STATUS: ONLINE
-                  </Badge>
+            <div
+              className={`xl:col-span-7 xl:flex xl:flex-col ${enter}`}
+              style={{ transitionDelay: "80ms" }}
+            >
+              <div className="mb-3 flex items-center justify-between gap-4">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {t.certificate.inspect}
+                </span>
+                <div
+                  role="group"
+                  aria-label={t.certificate.inspect}
+                  className="inline-flex items-center gap-1 rounded-lg border border-border p-1"
+                >
+                  {STAGE_ORDER.map((code) => (
+                    <button
+                      key={code}
+                      type="button"
+                      aria-pressed={activeStage === code}
+                      onClick={() => setActiveStage(code)}
+                      className={`rounded px-2 py-1 font-mono text-xs tabular-nums transition-colors duration-[120ms] ease-out active:scale-[0.99] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${
+                        activeStage === code
+                          ? "bg-muted text-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {code}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-1 flex-col rounded-2xl border border-border bg-card p-6 sm:p-8">
+                <div className="flex items-baseline justify-between gap-4 border-b border-border pb-4 font-mono text-xs text-muted-foreground tabular-nums">
+                  <span className="text-foreground">{stage.code}</span>
+                  <span>
+                    {stage.index} {t.certificate.stageOf}
+                  </span>
                 </div>
 
-                {/* Terminal Content: Interactive Stage Inspector */}
-                <div className="p-4 sm:p-5 flex flex-col gap-4 font-mono text-xs">
-                  <div className="flex items-center justify-between text-muted-foreground pb-2 border-b border-border/60 text-[11px]">
-                    <span>CANONICAL SDLC GATE INSPECTOR</span>
-                    <span className="text-primary font-bold">16 INVARIANTS ACTIVE</span>
-                  </div>
+                <div className="flex items-start justify-between gap-4 pt-4">
+                  <h2 className="text-xl leading-snug font-medium text-foreground sm:text-2xl">
+                    {stage.name}
+                  </h2>
+                  <span className="mt-1 flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
+                    <span
+                      className={`size-1.5 rounded-full ${stage.tone}`}
+                      aria-hidden="true"
+                    />
+                    {stage.status}
+                  </span>
+                </div>
 
-                  {/* Stage Switcher Buttons */}
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {(["RE", "SA", "DV", "TE"] as const).map((code) => {
-                      const isActive = activeStage === code;
-                      return (
-                        <button
-                          key={code}
-                          onClick={() => setActiveStage(code)}
-                          className={`p-2 rounded border text-center transition-all cursor-pointer ${
-                            isActive
-                              ? "bg-primary text-primary-foreground border-primary font-bold shadow-xs"
-                              : "bg-muted/40 text-muted-foreground border-border hover:bg-muted"
-                          }`}
-                        >
-                          <div className="text-[10px] opacity-70">STAGE</div>
-                          <div className="text-sm tracking-wider font-bold">[{code}]</div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                <ul className="mt-6 space-y-2.5">
+                  {stage.checks.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2.5 text-sm text-text-secondary"
+                    >
+                      <Check
+                        className="mt-0.5 size-3.5 shrink-0 text-positive [stroke-linecap:square]"
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
 
-                  {/* Stage Detail Box */}
-                  <div className="rounded-lg border border-border/80 bg-background/80 p-3.5 flex flex-col gap-2">
-                    {activeStage === "RE" && (
-                      <>
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-foreground">[RE] Requirements Engineering</span>
-                          <Badge variant="success" className="text-[10px]">GATE VERIFIED</Badge>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground leading-relaxed">
-                          Baseline: <code className="text-primary">sha256:7f83b165...</code> signed by Founder. Invariant test: 12 user stories, 0 unmapped requirements.
-                        </p>
-                      </>
-                    )}
-                    {activeStage === "SA" && (
-                      <>
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-foreground">[SA] System Architecture</span>
-                          <Badge variant="success" className="text-[10px]">GATE VERIFIED</Badge>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground leading-relaxed">
-                          Baseline: <code className="text-primary">sha256:3a91c01e...</code> signed. Topology contracts, database schema, and micro-role boundaries locked.
-                        </p>
-                      </>
-                    )}
-                    {activeStage === "DV" && (
-                      <>
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-foreground">[DV] Development Engineering</span>
-                          <Badge variant="default" className="text-[10px]">ACTIVE COMPILATION</Badge>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground leading-relaxed">
-                          Rust Axum core building with cargo-clippy 0 warnings. Automated git commit signed via GPG key `agent-012`.
-                        </p>
-                      </>
-                    )}
-                    {activeStage === "TE" && (
-                      <>
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-foreground">[TE] Test & Verification</span>
-                          <Badge variant="outline" className="text-[10px]">SCHEDULED</Badge>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground leading-relaxed">
-                          Integration test harness ready: 48 automated test cases, mock OIDC assertion check, WebSocket telemetry loop.
-                        </p>
-                      </>
-                    )}
-                  </div>
+                <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 border-t border-border pt-4 font-mono text-xs tabular-nums">
+                  <dt className="text-muted-foreground">{t.certificate.version}</dt>
+                  <dd className="text-foreground">v{appVersion}</dd>
+                  <dt className="text-muted-foreground">{t.certificate.pin}</dt>
+                  <dd className="text-foreground">sha256:unset</dd>
+                </dl>
 
-                  {/* Live WebSocket Event Ticker */}
-                  <div className="pt-2 border-t border-border/60">
-                    <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground mb-1">
-                      <Radio className="size-3 text-emerald-500 animate-pulse" />
-                      <span>GATEWAY EVENT BUS STREAM:</span>
-                    </div>
-                    <div className="bg-muted/50 rounded px-2.5 py-1.5 text-[10px] text-foreground truncate font-mono">
-                      {tickerEvents[tickerIndex]}
-                    </div>
-                  </div>
+                <div className="mt-auto flex items-center justify-between gap-3 pt-8">
+                  <span className="font-mono text-[11px] text-muted-foreground">
+                    {stage.approved
+                      ? t.certificate.approvalGiven
+                      : t.certificate.approvalPending}
+                  </span>
+                  {stage.approved && (
+                    <span className="inline-flex items-center rounded-[4px] border-[1.5px] border-accent-text px-1.5 py-0.5 font-mono text-[10px] leading-none tracking-normal text-accent-text">
+                      AVRIG-00002
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Telemetry Strip under Hero */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto pt-10 text-left">
-            <Card className="bg-card/60 border-border">
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="text-[11px] font-mono uppercase tracking-wider">{t.hero.telemetry.activeAgents}</span>
-                  <Users className="size-4 text-primary" />
+          <div className="mt-16 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-border pt-8 lg:mt-20 lg:grid-cols-4">
+            {figures.map((figure) => (
+              <div key={figure.label}>
+                <div className="font-mono text-2xl font-medium tabular-nums text-foreground">
+                  {figure.value}
                 </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <div className="text-2xl font-bold font-mono">14 Agents</div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/60 border-border">
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="text-[11px] font-mono uppercase tracking-wider">{t.hero.telemetry.sdlcGates}</span>
-                  <Workflow className="size-4 text-primary" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <div className="text-2xl font-bold font-mono">16 / 16 Invariant</div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/60 border-border">
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="text-[11px] font-mono uppercase tracking-wider">{t.hero.telemetry.routingLatency}</span>
-                  <Cpu className="size-4 text-primary" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <div className="text-2xl font-bold font-mono">&lt; 15 ms</div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/60 border-border">
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="text-[11px] font-mono uppercase tracking-wider">{t.hero.telemetry.securityStatus}</span>
-                  <Lock className="size-4 text-primary" />
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-0">
-                <div className="text-2xl font-bold font-mono text-primary">{t.hero.telemetry.enforced}</div>
-              </CardContent>
-            </Card>
+                <div className="mt-1 text-xs text-muted-foreground">{figure.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 3. The Dual-Engine Cockpit (Interactive Tabs Showcase) */}
-      <section id="sdlc-cockpit" className="py-20 lg:py-24 bg-muted/20 border-b border-border scroll-mt-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <Badge variant="outline" className="gap-2 px-3 py-1 text-xs font-mono mb-3">
-              <Layers className="size-3.5 text-primary" />
-              <span>{t.showcase.badge}</span>
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+      {/* 3. Console views */}
+      <section
+        id="sdlc-cockpit"
+        className="scroll-mt-16 border-b border-border bg-muted/20 py-20 lg:py-24"
+      >
+        <div className="mx-auto w-full max-w-[1440px] px-6 lg:px-8">
+          <div className="mb-10 max-w-2xl">
+            <p className="font-mono text-xs text-muted-foreground">{t.showcase.badge}</p>
+            <h2 className="mt-3 text-[28px] leading-tight font-medium tracking-tight text-balance sm:text-4xl">
               {t.showcase.title}
             </h2>
-            <p className="text-muted-foreground text-sm sm:text-base">
+            <p className="mt-3 text-sm text-text-secondary sm:text-base">
               {t.showcase.subtitle}
             </p>
           </div>
 
           <Tabs defaultValue="sdlc" className="w-full">
-            <div className="flex justify-center mb-8">
-              <TabsList className="h-11 p-1 bg-card border border-border">
-                <TabsTrigger value="sdlc" className="font-mono text-xs sm:text-sm cursor-pointer gap-2">
-                  <Kanban className="size-4" />
-                  <span>{t.showcase.tabSdlc}</span>
-                </TabsTrigger>
-                <TabsTrigger value="office" className="font-mono text-xs sm:text-sm cursor-pointer gap-2">
-                  <Building2 className="size-4" />
-                  <span>{t.showcase.tabOffice}</span>
-                </TabsTrigger>
-                <TabsTrigger value="deliberations" className="font-mono text-xs sm:text-sm cursor-pointer gap-2">
-                  <Radio className="size-4" />
-                  <span>{t.showcase.tabDeliberations}</span>
-                </TabsTrigger>
-                <TabsTrigger value="knowledge" className="font-mono text-xs sm:text-sm cursor-pointer gap-2">
-                  <Network className="size-4" />
-                  <span>{t.showcase.tabKnowledge}</span>
-                </TabsTrigger>
-              </TabsList>
-            </div>
+            <TabsList className="mb-6 h-10">
+              <TabsTrigger value="sdlc" className="px-2 text-xs sm:px-3 sm:text-sm">
+                {t.showcase.tabSdlc}
+              </TabsTrigger>
+              <TabsTrigger value="office" className="px-2 text-xs sm:px-3 sm:text-sm">
+                {t.showcase.tabOffice}
+              </TabsTrigger>
+              <TabsTrigger value="deliberations" className="px-2 text-xs sm:px-3 sm:text-sm">
+                {t.showcase.tabDeliberations}
+              </TabsTrigger>
+              <TabsTrigger value="knowledge" className="px-2 text-xs sm:px-3 sm:text-sm">
+                {t.showcase.tabKnowledge}
+              </TabsTrigger>
+            </TabsList>
 
-            {/* Tab 1: SDLC Board Showcase */}
             <TabsContent value="sdlc">
-              <Card className="bg-card border-border shadow-md">
+              <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="gap-1.5 font-mono text-xs">
-                      <Kanban className="size-3.5 text-primary" />
-                      <span>RE-TE Canonical Engine</span>
-                    </Badge>
-                    <span className="text-xs font-mono text-muted-foreground">SHA-256 Gate Checklists</span>
-                  </div>
-                  <CardTitle className="text-xl font-bold">{t.showcase.sdlc.title}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">{t.showcase.sdlc.desc}</CardDescription>
+                  <CardTitle className="text-xl font-medium">{sdlc.title}</CardTitle>
+                  <CardDescription className="leading-relaxed">{sdlc.desc}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 my-2">
-                    <div className="p-3.5 rounded-lg border border-border bg-background flex flex-col justify-between">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-xs font-bold text-primary">{t.showcase.sdlc.item1Code}</span>
-                        <Badge variant="success" className="text-[10px] py-0 px-1.5">{t.showcase.sdlc.item1Status}</Badge>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    {stages.map((item) => (
+                      <div
+                        key={item.code}
+                        className={`flex flex-col gap-2 rounded-xl border bg-background p-4 ${
+                          item.current ? "border-accent-text" : "border-border"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2 font-mono text-xs tabular-nums">
+                          <span className="text-foreground">[{item.code}]</span>
+                          <span className="flex items-center gap-1.5 text-muted-foreground">
+                            <span
+                              className={`size-1.5 rounded-full ${item.tone}`}
+                              aria-hidden="true"
+                            />
+                            {item.status}
+                          </span>
+                        </div>
+                        <div className="text-sm text-text-secondary">{item.name}</div>
                       </div>
-                      <div className="text-xs font-semibold">{t.showcase.sdlc.item1Name}</div>
-                    </div>
-                    <div className="p-3.5 rounded-lg border border-border bg-background flex flex-col justify-between">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-xs font-bold text-primary">{t.showcase.sdlc.item2Code}</span>
-                        <Badge variant="success" className="text-[10px] py-0 px-1.5">{t.showcase.sdlc.item2Status}</Badge>
-                      </div>
-                      <div className="text-xs font-semibold">{t.showcase.sdlc.item2Name}</div>
-                    </div>
-                    <div className="p-3.5 rounded-lg border border-primary/40 bg-primary/5 flex flex-col justify-between">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-xs font-bold text-primary">{t.showcase.sdlc.item3Code}</span>
-                        <Badge variant="default" className="text-[10px] py-0 px-1.5">{t.showcase.sdlc.item3Status}</Badge>
-                      </div>
-                      <div className="text-xs font-semibold">{t.showcase.sdlc.item3Name}</div>
-                    </div>
-                    <div className="p-3.5 rounded-lg border border-border bg-background flex flex-col justify-between opacity-80">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-xs font-bold text-muted-foreground">{t.showcase.sdlc.item4Code}</span>
-                        <Badge variant="outline" className="text-[10px] py-0 px-1.5 text-muted-foreground">{t.showcase.sdlc.item4Status}</Badge>
-                      </div>
-                      <div className="text-xs font-semibold text-muted-foreground">{t.showcase.sdlc.item4Name}</div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
-                <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground flex items-center gap-2">
-                  <Activity className="size-3.5 text-primary" />
-                  <span>{t.showcase.sdlc.footerText}</span>
-                </CardFooter>
+                <div className="border-t border-border px-6 py-4">
+                  <span className="text-xs text-muted-foreground">{sdlc.footerText}</span>
+                </div>
               </Card>
             </TabsContent>
 
-            {/* Tab 2: Office OS Showcase */}
             <TabsContent value="office">
-              <Card className="bg-card border-border shadow-md">
+              <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="gap-1.5 font-mono text-xs">
-                      <Building2 className="size-3.5 text-primary" />
-                      <span>OG / WF Subsystem</span>
-                    </Badge>
-                    <span className="text-xs font-mono text-muted-foreground">Persistent Identity</span>
-                  </div>
-                  <CardTitle className="text-xl font-bold">{t.showcase.office.title}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">{t.showcase.office.desc}</CardDescription>
+                  <div className="mb-1 font-mono text-xs text-muted-foreground">OG / WF</div>
+                  <CardTitle className="text-xl font-medium">
+                    {t.showcase.office.title}
+                  </CardTitle>
+                  <CardDescription className="leading-relaxed">
+                    {t.showcase.office.desc}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-2">
-                    <div className="p-4 rounded-lg border border-border bg-background">
-                      <Badge variant="outline" className="mb-2 text-[10px]">Tier 2: Executive</Badge>
-                      <div className="font-bold text-sm mb-1">{t.showcase.office.role1}</div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{t.showcase.office.role1Desc}</p>
-                    </div>
-                    <div className="p-4 rounded-lg border border-border bg-background">
-                      <Badge variant="outline" className="mb-2 text-[10px]">Tier 3: Operational</Badge>
-                      <div className="font-bold text-sm mb-1">{t.showcase.office.role2}</div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{t.showcase.office.role2Desc}</p>
-                    </div>
-                    <div className="p-4 rounded-lg border border-border bg-background">
-                      <Badge variant="outline" className="mb-2 text-[10px]">Tier 4: Specialist</Badge>
-                      <div className="font-bold text-sm mb-1">{t.showcase.office.role3}</div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{t.showcase.office.role3Desc}</p>
-                    </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    {officeRoles.map((role) => (
+                      <div key={role.tier} className="rounded-xl border border-border bg-background p-4">
+                        <div className="font-mono text-xs text-muted-foreground">{role.tier}</div>
+                        <div className="mt-2 text-sm font-medium text-foreground">{role.role}</div>
+                        <p className="mt-1 text-xs leading-relaxed text-text-secondary">
+                          {role.desc}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
-                <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground flex items-center gap-2">
-                  <ShieldCheck className="size-3.5 text-primary" />
-                  <span>{t.showcase.office.footerText}</span>
-                </CardFooter>
+                <div className="border-t border-border px-6 py-4">
+                  <span className="text-xs text-muted-foreground">
+                    {t.showcase.office.footerText}
+                  </span>
+                </div>
               </Card>
             </TabsContent>
 
-            {/* Tab 3: Deliberations Showcase */}
             <TabsContent value="deliberations">
-              <Card className="bg-card border-border shadow-md">
+              <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="gap-1.5 font-mono text-xs">
-                      <Radio className="size-3.5 text-primary animate-pulse" />
-                      <span>Live WebSocket Stream</span>
-                    </Badge>
-                    <span className="text-xs font-mono text-emerald-500 font-semibold">{t.showcase.deliberations.consensus}</span>
+                  <div className="mb-1 flex items-center justify-between font-mono text-xs text-muted-foreground">
+                    <span>MT</span>
+                    <span className="flex items-center gap-1.5 text-positive">
+                      <span className="size-1.5 rounded-full bg-positive" aria-hidden="true" />
+                      {t.showcase.deliberations.consensus}
+                    </span>
                   </div>
-                  <CardTitle className="text-xl font-bold">{t.showcase.deliberations.title}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">{t.showcase.deliberations.desc}</CardDescription>
+                  <CardTitle className="text-xl font-medium">
+                    {t.showcase.deliberations.title}
+                  </CardTitle>
+                  <CardDescription className="leading-relaxed">
+                    {t.showcase.deliberations.desc}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="p-4 rounded-lg border border-border bg-background flex flex-col gap-3 my-2">
-                    <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                      <span className="text-xs font-mono font-bold text-primary">#MT-004: Architecture Sign-Off Deliberation</span>
-                      <Badge variant="outline" className="text-[10px]">{t.showcase.deliberations.quorum}</Badge>
+                  <div className="flex flex-col gap-3 rounded-xl border border-border bg-background p-4">
+                    <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+                      <span className="font-mono text-xs text-foreground">#MT-004</span>
+                      <span className="font-mono text-xs text-muted-foreground tabular-nums">
+                        {t.showcase.deliberations.quorum}
+                      </span>
                     </div>
-                    <div className="text-xs font-mono text-muted-foreground flex items-center gap-2">
-                      <span className="size-2 rounded-full bg-emerald-500 animate-ping"></span>
-                      <span>{t.showcase.deliberations.transcriptFeed}</span>
-                    </div>
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {t.showcase.deliberations.transcriptFeed}
+                    </p>
                   </div>
                 </CardContent>
-                <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground flex items-center gap-2">
-                  <FileCheck2 className="size-3.5 text-primary" />
-                  <span>{t.showcase.deliberations.footerText}</span>
-                </CardFooter>
+                <div className="border-t border-border px-6 py-4">
+                  <span className="text-xs text-muted-foreground">
+                    {t.showcase.deliberations.footerText}
+                  </span>
+                </div>
               </Card>
             </TabsContent>
 
-            {/* Tab 4: Knowledge Graph Showcase */}
             <TabsContent value="knowledge">
-              <Card className="bg-card border-border shadow-md">
+              <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="gap-1.5 font-mono text-xs">
-                      <Network className="size-3.5 text-primary" />
-                      <span>Apache AGE + pgvector</span>
-                    </Badge>
-                    <span className="text-xs font-mono text-muted-foreground">Epistemic Recall</span>
+                  <div className="mb-1 font-mono text-xs text-muted-foreground">
+                    AGE, pgvector
                   </div>
-                  <CardTitle className="text-xl font-bold">{t.showcase.knowledge.title}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">{t.showcase.knowledge.desc}</CardDescription>
+                  <CardTitle className="text-xl font-medium">
+                    {t.showcase.knowledge.title}
+                  </CardTitle>
+                  <CardDescription className="leading-relaxed">
+                    {t.showcase.knowledge.desc}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2">
-                    <div className="p-4 rounded-lg border border-border bg-background">
-                      <div className="text-xs font-bold text-primary mb-1">Vector Search (Dense Embeddings)</div>
-                      <p className="text-xs text-muted-foreground">{t.showcase.knowledge.hybridSearch}</p>
-                    </div>
-                    <div className="p-4 rounded-lg border border-border bg-background">
-                      <div className="text-xs font-bold text-primary mb-1">Graph Network Traversals</div>
-                      <p className="text-xs text-muted-foreground">{t.showcase.knowledge.graphLinks}</p>
-                    </div>
-                  </div>
+                  <ul className="divide-y divide-border border-t border-border">
+                    <li className="py-3 text-sm leading-relaxed text-text-secondary">
+                      {t.showcase.knowledge.hybridSearch}
+                    </li>
+                    <li className="py-3 text-sm leading-relaxed text-text-secondary">
+                      {t.showcase.knowledge.graphLinks}
+                    </li>
+                  </ul>
                 </CardContent>
-                <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground flex items-center gap-2">
-                  <Cpu className="size-3.5 text-primary" />
-                  <span>{t.showcase.knowledge.footerText}</span>
-                </CardFooter>
+                <div className="border-t border-border px-6 py-4">
+                  <span className="text-xs text-muted-foreground">
+                    {t.showcase.knowledge.footerText}
+                  </span>
+                </div>
               </Card>
             </TabsContent>
           </Tabs>
         </div>
       </section>
 
-      {/* 4. Bento Architecture Section */}
-      <section id="architecture" className="py-20 lg:py-24 border-b border-border scroll-mt-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <Badge variant="outline" className="gap-2 px-3 py-1 text-xs font-mono mb-3">
-              <Cpu className="size-3.5 text-primary" />
-              <span>{t.bento.badge}</span>
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+      {/* 4. Architecture */}
+      <section
+        id="architecture"
+        className="scroll-mt-16 border-b border-border py-20 lg:py-24"
+      >
+        <div className="mx-auto w-full max-w-[1440px] px-6 lg:px-8">
+          <div className="mb-10 max-w-2xl">
+            <p className="font-mono text-xs text-muted-foreground">{t.bento.badge}</p>
+            <h2 className="mt-3 text-[28px] leading-tight font-medium tracking-tight text-balance sm:text-4xl">
               {t.bento.title}
             </h2>
-            <p className="text-muted-foreground text-sm sm:text-base">
-              {t.bento.subtitle}
-            </p>
+            <p className="mt-3 text-sm text-text-secondary sm:text-base">{t.bento.subtitle}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Bento Card 1: 4-Tier Hierarchy */}
-            <Card className="flex flex-col justify-between bg-card transition-all hover:border-primary/50">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                    <Building2 className="size-5" />
-                  </div>
-                  <Badge variant="outline" className="font-mono text-[10px]">{t.bento.card1Badge}</Badge>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {bentoCards.map((card) => (
+              <Card key={card.title} id={card.anchor} className="flex scroll-mt-24 flex-col">
+                <CardHeader>
+                  <div className="font-mono text-xs text-muted-foreground">{card.label}</div>
+                  <CardTitle className="mt-2 text-xl font-medium">{card.title}</CardTitle>
+                  <CardDescription className="mt-1 leading-relaxed">{card.desc}</CardDescription>
+                </CardHeader>
+                <div className="mt-auto border-t border-border px-6 py-4">
+                  <span className="font-mono text-xs text-muted-foreground">{card.footer}</span>
                 </div>
-                <CardTitle className="text-xl font-bold">{t.bento.card1Title}</CardTitle>
-                <CardDescription className="text-sm leading-relaxed mt-2">
-                  {t.bento.card1Desc}
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground">
-                Human Sovereignty &bull; Delegated Authority
-              </CardFooter>
-            </Card>
-
-            {/* Bento Card 2: Cryptographic Invariance */}
-            <Card className="flex flex-col justify-between bg-card transition-all hover:border-primary/50">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                    <ShieldCheck className="size-5" />
-                  </div>
-                  <Badge variant="outline" className="font-mono text-[10px]">{t.bento.card2Badge}</Badge>
-                </div>
-                <CardTitle className="text-xl font-bold">{t.bento.card2Title}</CardTitle>
-                <CardDescription className="text-sm leading-relaxed mt-2">
-                  {t.bento.card2Desc}
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground">
-                SHA-256 Gate Checklists &bull; Immutable History
-              </CardFooter>
-            </Card>
-
-            {/* Bento Card 3: Rust Event Bus */}
-            <Card className="flex flex-col justify-between bg-card transition-all hover:border-primary/50">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                    <Cpu className="size-5" />
-                  </div>
-                  <Badge variant="outline" className="font-mono text-[10px]">{t.bento.card3Badge}</Badge>
-                </div>
-                <CardTitle className="text-xl font-bold">{t.bento.card3Title}</CardTitle>
-                <CardDescription className="text-sm leading-relaxed mt-2">
-                  {t.bento.card3Desc}
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground">
-                Axum Micro-Services &bull; Multi-Role Runtime
-              </CardFooter>
-            </Card>
-
-            {/* Bento Card 4: Universal OIDC */}
-            <Card id="deliberations" className="flex flex-col justify-between bg-card transition-all hover:border-primary/50 scroll-mt-24">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                    <Lock className="size-5" />
-                  </div>
-                  <Badge variant="outline" className="font-mono text-[10px]">{t.bento.card4Badge}</Badge>
-                </div>
-                <CardTitle className="text-xl font-bold">{t.bento.card4Title}</CardTitle>
-                <CardDescription className="text-sm leading-relaxed mt-2">
-                  {t.bento.card4Desc}
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="border-t border-border/60 pt-4 text-xs font-mono text-muted-foreground">
-                Rauthy &bull; Keycloak &bull; Authentik Ready
-              </CardFooter>
-            </Card>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 5. Autonomous Workflow Sequence */}
-      <section id="workflow" className="py-20 lg:py-24 bg-muted/20 border-b border-border scroll-mt-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <Badge variant="outline" className="gap-2 px-3 py-1 text-xs font-mono mb-3">
-              <Workflow className="size-3.5 text-primary" />
-              <span>{t.workflow.badge}</span>
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+      {/* 5. Workflow */}
+      <section
+        id="workflow"
+        className="scroll-mt-16 border-b border-border bg-muted/20 py-20 lg:py-24"
+      >
+        <div className="mx-auto w-full max-w-[1440px] px-6 lg:px-8">
+          <div className="mb-10 max-w-2xl">
+            <p className="font-mono text-xs text-muted-foreground">{t.workflow.badge}</p>
+            <h2 className="mt-3 text-[28px] leading-tight font-medium tracking-tight text-balance sm:text-4xl">
               {t.workflow.title}
             </h2>
-            <p className="text-muted-foreground text-sm sm:text-base">
+            <p className="mt-3 text-sm text-text-secondary sm:text-base">
               {t.workflow.subtitle}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-5 rounded-xl border border-border bg-card flex flex-col justify-between">
-              <div>
-                <span className="font-mono text-3xl font-black text-primary/40 block mb-3">{t.workflow.step1Num}</span>
-                <h3 className="font-bold text-base mb-2">{t.workflow.step1Title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{t.workflow.step1Desc}</p>
+          <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {workflowSteps.map((step) => (
+              <div key={step.num} className="border-t border-border pt-4">
+                <span className="font-mono text-2xl font-medium tabular-nums text-muted-foreground">
+                  {step.num}
+                </span>
+                <h3 className="mt-3 text-base font-medium text-foreground">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{step.desc}</p>
               </div>
-            </div>
-
-            <div className="p-5 rounded-xl border border-border bg-card flex flex-col justify-between">
-              <div>
-                <span className="font-mono text-3xl font-black text-primary/40 block mb-3">{t.workflow.step2Num}</span>
-                <h3 className="font-bold text-base mb-2">{t.workflow.step2Title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{t.workflow.step2Desc}</p>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-xl border border-border bg-card flex flex-col justify-between">
-              <div>
-                <span className="font-mono text-3xl font-black text-primary/40 block mb-3">{t.workflow.step3Num}</span>
-                <h3 className="font-bold text-base mb-2">{t.workflow.step3Title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{t.workflow.step3Desc}</p>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-xl border border-border bg-card flex flex-col justify-between">
-              <div>
-                <span className="font-mono text-3xl font-black text-primary/40 block mb-3">{t.workflow.step4Num}</span>
-                <h3 className="font-bold text-base mb-2">{t.workflow.step4Title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{t.workflow.step4Desc}</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 6. Call to Action Banner */}
+      {/* 6. Call to action */}
       <section className="py-20 lg:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
-          <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-background p-8 sm:p-12 shadow-xl">
-            <Badge variant="outline" className="gap-2 px-3 py-1 text-xs font-mono mb-4">
-              <Sparkles className="size-3.5 text-primary" />
-              <span>{t.ctaBanner.badge}</span>
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
-              {t.ctaBanner.title}
-            </h2>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-              {t.ctaBanner.subtitle}
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Button
-                size="lg"
-                className="gap-2 font-semibold shadow-md cursor-pointer"
-                onClick={handleLaunchConsole}
-              >
-                {t.ctaBanner.buttonPrimary}
-                <ArrowRight className="size-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="font-semibold cursor-pointer"
-                onClick={() => scrollToSection("sdlc-cockpit")}
-              >
-                {t.ctaBanner.buttonSecondary}
-              </Button>
+        <div className="mx-auto w-full max-w-[1440px] px-6 lg:px-8">
+          <div className="rounded-2xl border border-border bg-card p-8 sm:p-12">
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+              <div className="lg:col-span-7">
+                <p className="font-mono text-xs text-muted-foreground">{t.ctaBanner.badge}</p>
+                <h2 className="mt-3 text-[28px] leading-tight font-medium tracking-tight text-balance sm:text-4xl">
+                  {t.ctaBanner.title}
+                </h2>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
+                  {t.ctaBanner.subtitle}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 lg:col-span-5 lg:justify-end">
+                <Button size="lg" className="gap-2" onClick={handleLaunchConsole}>
+                  {t.ctaBanner.buttonPrimary}
+                  <ArrowRight className="size-4" strokeWidth={1.5} />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={handleDemoAccess}
+                >
+                  {t.ctaBanner.buttonSecondary}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* 7. Footer */}
-      <footer className="mt-auto border-t border-border py-8 bg-muted/20 text-xs text-muted-foreground">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-foreground">avrig-ai</span>
-            <span>— Sovereign AI Autonomous Engineering Organization Platform</span>
+      <footer className="mt-auto border-t border-border bg-muted/20 py-8 text-xs text-muted-foreground">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="font-medium text-foreground">avrig-ai</span>
+            <span className="text-muted-foreground">v{appVersion}</span>
           </div>
-          <div>© {new Date().getFullYear()} avrig. All rights reserved.</div>
+          <div className="font-mono tabular-nums">
+            &copy; {new Date().getFullYear()} avrig
+          </div>
         </div>
       </footer>
 
-      {/* Login Dialog */}
       <LoginModal
         open={loginModalOpen}
         onOpenChange={setLoginModalOpen}
-        onDemoAccess={() => {
-          setLoginModalOpen(false);
-          onEnterCommandCenter();
-        }}
+        onDemoAccess={handleDemoAccess}
       />
     </div>
   );
