@@ -32,7 +32,9 @@ Two surfaces, one product, one direction.
 
 `LoginModal` is listed with the landing rather than as a separate surface because `LandingPage.tsx` mounts it at line 791. It carries `animate-ping`, `animate-spin` and three uppercase labels of its own, so a pass that ignores it leaves the landing surface half-finished.
 
-`avrig-ui/packages/ui` is not a dependency of `apps/web` (only `@avrig/tokens` is, through a `link:`), so no component in that package is touched. Its checklist coverage is not implied by this artifact.
+`@avrig/ui` **is** a workspace dependency of `apps/web`, and the ten primitives listed above are part of both surfaces, which is why they are in the target list. An earlier revision of this artifact claimed the opposite on the grounds that only `@avrig/tokens` is linked; that was wrong, and it contradicts line 31 of this same document.
+
+The consequence is worth stating because it cost the plan a defect: `packages/ui/package.json` resolves `exports` to `./dist/index.js`, and `packages/ui/dist` is tracked in git. Converting `packages/ui/src` therefore changes nothing on screen until the built output is regenerated and committed. A sweep verified against `src` returned zero while the browser still painted the old palette, and every primary button rendered with a transparent background.
 
 Verdict: **heavy slop**. Signs appear across colour, type, icons, copy, details and motion on both surfaces. Full process, not polish mode.
 
