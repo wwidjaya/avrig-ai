@@ -865,6 +865,10 @@ A third finding was hardening rather than a gate: a shared temp payload director
 
 The suite then grew with the plan rather than staying at eighteen. `T19` closed the analyst's blocking finding that goal 6 was ungraded. `T20` and `T21` came from two further findings: that the ledger could be created but never advanced, and that a row's plan pointer could rot while `verify` called the ledger clean, the second found on the live ledger at stage 7 rather than by any test.
 
+The suite was then run three times rather than once, against the tool commit `827c4b6`, so that the claim is a measurement and not a hope. The single run reported `ROLLUP 21/21 PASS exit=0` with 495 assertions. Two further copies were then started at the same instant in separate scratch roots: both reported `ROLLUP 21/21 PASS exit=0`, and their per-case assertion counts matched the single run case for case, so the runner genuinely isolates rather than sharing state that happens to work when only one process is running.
+
+Those are working-tree runs, and the plan says so rather than calling them evidence: no candidate tag existed when they were made, so they describe a commit and not a candidate. Stage 9 repeats the run at `avrig/00004/rc.001` and that result is the one that counts.
+
 This is recorded because a plan that claimed a green suite before one existed would be false, and because the first two failures are the evidence that the constraint set works: a weaker `ck_branch_carries_code` would have let both writers claim the same number silently.
 
 ### Not applicable in this plan
