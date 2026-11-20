@@ -1,0 +1,3 @@
+INVOCATION (D7): 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s1lcvnv0k2vtlw:e1' --stdin
+ref is the only argument; the value travels on stdin
+exit=1

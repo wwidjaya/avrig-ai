@@ -1,0 +1,13 @@
+deskIdx(line no): 117
+1. line 121: ### When it applies
+2. line 128: ### Preflight
+3. line 143: ### Read the bundled guides before the first action
+4. line 154: ### The observe, act, verify loop
+5. line 175: ### Windows and PowerShell specifics
+6. line 191: ### Launch the tested artifact
+7. line 199: ### Secrets
+8. line 208: ### Retry discipline
+9. line 215: ### What to assert
+10. line 223: ### Evidence per run
+11. line 244: ### Reporting a desktop failure
+count=11

@@ -1,0 +1,20 @@
+E2 tree change, both attempts recorded
+-------------------------------------------------------------
+ATTEMPT 1 (premise failed, superseded, NOT the row evidence)
+  snapshot  --app "Notepad" -i --window-id w-7145708   -> sw0fj84v50qqy, one tab "Untitled. Unmodified.", one Close Tab (e4)
+  click '@sw0fj84v50qqy:e5'   (Add New Tab)            -> ok true, tab added
+  click '@sw0fj84v50qqy:e4'   (the captured Close Tab) -> ok TRUE, envelope kept as E2-attempt1-click-resolved.json
+  Why it resolved: Notepad exposes a Close button only on the active tab, so after adding a tab exactly one
+  live Close Tab element still matched and the ref stayed resolvable. The element was never superseded, so
+  this attempt could not test the stale path. Harness error in choosing the tree change, not a tool defect.
+  Recording gap disclosed: attempt 1's act envelope was written to E2-tree-change-act.json and was replaced by
+  attempt 2's act at the same path. The retained artefact for attempt 1 is E2-attempt1-click-resolved.json.
+
+ATTEMPT 2 (the row evidence)
+  snapshot  --app "Notepad" -i --window-id w-7145708   -> s32csg2m3vks92, tab e3 name "Untitled. Unmodified."
+  'e2-probe' | agent-desktop.cmd set-value '@s32csg2m3vks92:e1' --stdin
+                                                       -> ACTION_FAILED delivered_unverified retry unsafe (value did land)
+  list-windows                                         -> window title becomes "*e2-probe - Notepad"
+  click '@s32csg2m3vks92:e3'                           -> STALE_REF, details.kind saved_ref_absent, ok false
+  The tab's accessible name changed from "Untitled. Unmodified." to "e2-probe. Modified.", so the recorded
+  identity no longer matched any live element. That is a genuine supersession.

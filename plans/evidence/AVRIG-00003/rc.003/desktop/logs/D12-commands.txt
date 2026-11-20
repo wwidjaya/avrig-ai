@@ -1,0 +1,1 @@
+INVOCATION (D12): agent-desktop wait --element '@s1rssaesvsd06y:e1' --predicate value --value uat-secret-0002 --app Notepad

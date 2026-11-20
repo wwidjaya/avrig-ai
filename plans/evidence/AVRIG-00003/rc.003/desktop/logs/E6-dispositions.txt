@@ -1,0 +1,14 @@
+E6 retry disposition, recorded verbatim per error envelope
+-------------------------------------------------------------
+E1  click '@e8'                    -> INVALID_ARGS      delivery=not_delivered  retry=safe        (no retry performed)
+E2  click '@s32csg2m3vks92:e3'     -> STALE_REF         delivery=not_delivered  retry=safe        (no retry performed; fresh snapshot instead)
+E7  focus-window --title Notepad   -> AMBIGUOUS_TARGET  delivery=not_delivered  retry=safe        (no retry performed; recovery named --window-id)
+E7  find --app Notepad --name "Text editor" -> AMBIGUOUS_TARGET delivery=not_delivered retry=safe (no retry performed)
+
+Adjacent, same rule, reported because it is not in E1/E2/E7:
+D7  set-value (stdin, .cmd)        -> ACTION_FAILED     delivery=delivered_unverified retry=UNSAFE
+    Not retried, as etry: unsafe requires. The verdict was taken from the following snapshot (D8), which holds the value.
+E2-tree-change set-value (stdin)   -> ACTION_FAILED     delivery=delivered_unverified retry=unsafe
+    Not retried either.
+
+Every retry-worthy disposition encountered was safe; every unsafe one was left alone.

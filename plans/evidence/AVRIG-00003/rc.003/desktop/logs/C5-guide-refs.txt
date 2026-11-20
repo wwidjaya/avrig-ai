@@ -1,0 +1,7 @@
+=== C5: ref lifecycle statements ===
+STALE_REF in desktop guide: True
+AMBIGUOUS_TARGET in desktop guide: True
+STALE_REF in platform guide: True
+AMBIGUOUS_TARGET in platform guide: True
+stale-ref rule text: Refs are valid for one snapshot. After any UI change, re-drill ... (desktop guide, Refs)
+ambiguous rule text: a live second match is saved_ref_ambiguous, and a removed element is STALE_REF (platform guide)

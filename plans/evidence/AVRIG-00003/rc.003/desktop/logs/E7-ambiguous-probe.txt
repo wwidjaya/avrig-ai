@@ -1,0 +1,7 @@
+E7 ambiguous probe, recorded as printed
+---------------------------------------
+Both forms were retried with a *different argument* (the pin), never with the same one.
+  agent-desktop focus-window --title "Notepad"             -> AMBIGUOUS_TARGET candidate_count 2 {w-7145708 is_focused false, w-9046438 is_focused false}, not_delivered retry safe
+  agent-desktop find --app "Notepad" --name "Text editor"  -> AMBIGUOUS_TARGET candidate_count 2 {same two ids}, not_delivered retry safe
+Non-positional forms confirmed by help: focus-window takes --title/--window-id/--app; find takes --name/--value/--text/--role.
+Neither probe was repeated. Recovery taken was list-windows then --window-id, which is what the suggestion states.

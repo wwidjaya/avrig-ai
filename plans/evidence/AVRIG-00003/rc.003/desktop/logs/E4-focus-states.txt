@@ -1,0 +1,16 @@
+=== E4 focus states ===
+E3-pin-a : ok=True snapshot_id=s127i9ywnpl3zj window.id=w-7145708 window.title=Untitled - Notepad
+  window node fields: id,title
+  window.is_focused=
+E3-pin-b : ok=True snapshot_id=s1smsu6y2fiov6 window.id=w-9046438 window.title=*uat-secret-0002 - Notepad
+  window node fields: id,title
+  window.is_focused=
+E4-pin-a-repeat : ok=True snapshot_id=spi2tijsvw41e window.id=w-7145708 window.title=Untitled - Notepad
+  window node fields: id,title
+  window.is_focused=
+E4-pin-b-repeat : ok=True snapshot_id=s381an7yujpcj0 window.id=w-9046438 window.title=*uat-secret-0002 - Notepad
+  window node fields: id,title
+  window.is_focused=
+--- list-windows is_focused at E4 time ---
+  w-7145708 is_focused=False title=Untitled - Notepad
+  w-9046438 is_focused=False title=*uat-secret-0002 - Notepad

@@ -1,0 +1,35 @@
+C4 form-by-form agreement: definition (## Desktop UAT Testing) vs bundled guides and --help
+--------------------------------------------------------------------------------------------
+form in definition                         | source that states it                                   | agrees
+agent-desktop status                       | desktop guide, First run #1                            | yes
+agent-desktop version                      | desktop guide, First run / status                      | yes
+agent-desktop list-surfaces                | platform guide, Surfaces group                         | yes
+skills get desktop / get platform          | desktop guide, First run #2                            | yes
+snapshot --app "<app>" -i                  | desktop guide loop sample; snapshot --help (-i/--app)  | yes
+snapshot --window-id <id>                  | snapshot --help --window-id; platform guide           | yes
+--skeleton --compact                       | desktop guide loop sample                              | yes
+--root '<ref>'                             | desktop guide loop sample; observation reference       | yes
+get '<ref>' property set                   | get --help: text,value,title,bounds,role,states        | yes
+get never reports available_actions        | get --help options list (no such flag)                 | yes
+click '<ref>'                              | desktop guide loop sample                              | yes
+is '<ref>'                                 | desktop guide Refs/delivery ("get, is, or a snapshot") | yes
+find with name                             | find --help                                            | yes
+toggle / select / scroll-to / press        | platform guide Ref interaction group                   | yes
+focus-window --title / --window-id         | focus-window --help                                    | yes
+wait (condition/settle)                    | platform guide Wait group; wait --help                 | yes
+launch / list-apps / list-windows          | platform guide App and window group                    | yes
+close-app positional <APP>                 | close-app --help ("Usage: close-app [OPTIONS] <APP>")  | yes
+close-app --app is INVALID_ARGS            | observed this run (D10-close-app-app-flag.json)        | yes
+batch '<json array>'                       | platform guide System group; batch --help              | yes
+set-value --stdin                          | set-value --help --stdin                               | yes
+clipboard-set --stdin / clipboard-clear    | clipboard-set --help --stdin; platform guide Clipboard | yes
+type needs --headed                        | platform guide First Contact ("type needs --headed")   | yes
+right-click/focus/2x/3x need --headed      | platform guide Ref interaction, What differs on Windows| yes
+list-notifications needs --headed closed   | platform guide Notifications; observed D11 POLICY_DENIED| yes
+screenshot                                 | screenshot --help (positional PATH)                    | yes
+STALE_REF / AMBIGUOUS_TARGET / INVALID_ARGS| desktop guide Refs; platform guide What differs        | yes
+error.disposition.retry safe rule          | desktop guide Delivery and retry                       | yes
+delivered_verified not evidence on its own | platform guide First Contact (stateful actions)        | yes
+
+Disagreements found: none. Every form the definition states is present in a guide or in the binary's own --help,
+and the two places where this run measured behaviour (close-app --app, list-notifications headless) match the text.

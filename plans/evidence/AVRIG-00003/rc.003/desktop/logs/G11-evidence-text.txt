@@ -1,0 +1,21 @@
+=== G11 evidence layout (lines 223-236) ===
+### Evidence per run
+
+Capture evidence under `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/`, keyed by the same candidate number as the browser evidence for the same run:
+
+```text
+plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/
+  snapshots/          every snapshot envelope, exactly as printed
+  screens/            one screenshot per asserted state
+  version.json        agent-desktop version output
+  status.json         agent-desktop status output
+  guide-desktop.txt
+  guide-platform.txt
+  RESULT.md           one result line
+```
+names desktop path: True
+lists snapshots/ : True
+lists screens/ : True
+lists version.json : True
+lists status.json : True
+lists RESULT.md : True
