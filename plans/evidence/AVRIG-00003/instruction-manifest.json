@@ -10,9 +10,9 @@
     {
       "File": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md",
       "Status": "PRESENT",
-      "Bytes": 26855,
-      "Lines": 247,
-      "Sha256": "2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82",
+      "Bytes": 26974,
+      "Lines": 246,
+      "Sha256": "FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6",
       "Backup": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md.bak-20261120-062939",
       "BackupStatus": "PRESENT",
       "BackupBytes": 11496,
@@ -65,6 +65,19 @@
       "sha256_after": "2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82",
       "lines_before": 242,
       "lines_after": 247
+    },
+    {
+      "sequence": 4,
+      "amended_utc": "2026-11-20T00:52:05Z",
+      "amended_local": "2026-11-20 07:52:05 +07:00",
+      "section": "## Desktop UAT Testing > ### Windows and PowerShell specifics",
+      "reason": "The claim was over-broad. It said snapshot --app never raises AMBIGUOUS_TARGET for a multi-window application and silently takes the focused window. The rc.002 run measured both halves: with several windows and one of them focused the tool returns ok true on that window and emits no error block, and with several windows and none focused it raises AMBIGUOUS_TARGET and names the candidate window ids. The bullet now states both cases and keeps the operative rule unchanged, which was always right: pin --window-id taken from list-windows --app whenever more than one window exists, rather than reading the envelope to discover which behaviour you got. The old sentence about the case that does raise the error is folded into the same bullet.",
+      "sha256_before": "2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82",
+      "sha256_after": "FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6",
+      "bytes_before": 26855,
+      "bytes_after": 26974,
+      "lines_before": 247,
+      "lines_after": 246
     }
   ]
 }
