@@ -383,3 +383,15 @@ Before-state captures in `design/ui/AVRIG-00002/snapshots/`. They exist to prove
 | `con-chat.png` | console, knowledge chat view, dark |
 
 After-state captures go to `plans/evidence/AVRIG-00002/rc.<NNN>/` with the QA run, not here.
+
+## 8. Execution deviations, accepted
+
+Recorded so the analyst reviews the actual result rather than the intended one.
+
+**The certificate does not cross the fold.** Pass 8 asked for the sheet to run past the bottom edge of the first screen. With only honest content it is 471px tall at 1280x900, so it was built to fill the height of the copy block instead: both columns end at the same y, and the hero still ends below the fold at 924 against a 900 viewport. Making the sheet itself cross the fold would need roughly 220px of padding-only air, which would read as emptiness rather than as scale, and emptiness is the dead band the requirement existed to prevent. The requirement's purpose is met by the taller composition; its literal phrasing is not, and the literalism loses to the purpose.
+
+**The ruled ground behind the sheet was dropped.** Pass 8 specified a repeating gradient suggesting drafting film. It read as visual noise at 1280 rather than as stock, and the matrix independently forbids any `backgroundImage` matching a gradient on these surfaces. The sheet sits on its hairline alone. This is the design's own escape hatch applied: if a texture reads as decoration rather than as the material, remove it.
+
+**`packages/ui/dist` had to be regenerated and committed.** The app resolves `@avrig/ui` through `exports` to `dist`, so converting `src` alone changes nothing on screen. See the plan's Stage Gate Record for the full account; the short version is that this artifact's target files listed `src` and the plan excluded `apps/web/dist`, and neither statement mentioned that a second `dist` tree is tracked and consumed.
+
+**The Indonesian headline was rewritten, not translated.** A literal rendering broke to five lines in a 469px column. Copy was recomposed in `id` so the headline holds two to three lines, which is a copy decision inside the direction rather than a layout workaround.
