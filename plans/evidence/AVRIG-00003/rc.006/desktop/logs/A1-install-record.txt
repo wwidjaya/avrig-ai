@@ -1,0 +1,60 @@
+=== A1 install record read ===
+install-log path: plans/evidence/AVRIG-00003/install-log.txt
+manifest path:    plans/evidence/AVRIG-00003/instruction-manifest.json
+
+--- agent-desktop version ---
+{"version":"2.6","ok":true,"command":"version","data":{"os":"windows","target":"x86_64","version":"1.3.1"}}
+
+--- npm list -g agent-desktop --depth=0 ---
+d:\nodejs\.npm\global
+`-- agent-desktop@1.3.1
+
+
+--- npm view agent-desktop@1.3.1 dist.integrity ---
+sha512-5pBKkFkdB/VIAWRfqoA8lYp5/fenfxUHI15Pc4k8Nn2LmLxxo1PkAb0WLypknyOCczuIwuzFp/rZHGGawEV+hw==
+
+--- Get-ChildItem d:\nodejs\.npm\global -Filter 'agent-desktop*' ---
+
+Name              Length LastWriteTime
+----              ------ -------------
+agent-desktop        431 11/20/2026 6:34:08 AM
+agent-desktop.cmd    120 11/20/2026 6:34:09 AM
+agent-desktop.ps1    112 11/20/2026 6:34:09 AM
+
+--- Test-Path d:\nodejs\.npm\global\node_modules\agent-desktop\ ---
+True
+--- A1 continuation: platform binary the postinstall unpacks ---
+
+Mode  Length Name
+----  ------ ----
+d----        bin
+d----        lib
+d----        scripts
+-a--- 856    package.json
+-a--- 10105  README.md
+
+--- binary under vendor/ or bin/ ---
+
+FullName                                                                            Length
+--------                                                                            ------
+D:\nodejs\.npm\global\node_modules\agent-desktop\bin\agent-desktop-win32-arm64.exe 3553280
+D:\nodejs\.npm\global\node_modules\agent-desktop\bin\agent-desktop-win32-x64.exe   4037120
+
+--- package.json bin ---
+{
+  "agent-desktop": "bin/agent-desktop"
+}
+--- install-log.txt integrity lines ---
+L14: (I)(OI)(CI)(RX). The pinned install therefore returns EPERM at unelevated integrity
+L15: and was run once more from an elevated pwsh with the user's explicit approval. Every
+L17: elevation requirement predates this work item and belongs to the host, not to the
+L21: 1. UNELEVATED ATTEMPT, VERBATIM (expected failure, recorded so A8 has its artifact)
+L50: 2. ELEVATED ATTEMPT, VERBATIM (identity, command, output, exit code)
+L52: === elevated identity ===
+L60: npm install -g agent-desktop@1.3.1 --foreground-scripts
+L63: > agent-desktop@1.3.1 postinstall
+L80: === EXIT CODE: 0 ===
+L88: `-- agent-desktop@1.3.1
+L97: npm view agent-desktop@1.3.1 dist.integrity:
+L98: sha512-5pBKkFkdB/VIAWRfqoA8lYp5/fenfxUHI15Pc4k8Nn2LmLxxo1PkAb0WLypknyOCczuIwuzFp/rZHGGawEV+hw==
+L107: {"version":"2.6","ok":true,"command":"version","data":{"os":"windows","target":"x86_64","version":"1.3.1"}}

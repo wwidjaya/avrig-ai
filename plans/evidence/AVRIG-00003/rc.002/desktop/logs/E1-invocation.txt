@@ -1,0 +1,1 @@
+E1 INVOCATION: agent-desktop click '@e8'  (unqualified ref, single-quoted as PowerShell requires)

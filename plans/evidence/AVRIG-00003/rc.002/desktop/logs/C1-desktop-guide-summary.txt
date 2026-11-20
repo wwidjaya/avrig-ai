@@ -1,0 +1,3 @@
+C1 desktop guide: envelope ok=true, data.content 9971 chars, saved at guide-desktop.txt and decoded at logs/C1-desktop-guide-content.txt
+states the loop = True   states the ref rules = True   states the retry rule = True
+named rule lines: 'Retry or substitute an action only when disposition.retry is safe' = True

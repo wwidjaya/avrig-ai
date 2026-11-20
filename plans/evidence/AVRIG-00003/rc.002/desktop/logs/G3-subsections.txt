@@ -1,0 +1,14 @@
+G3 SUBSECTIONS UNDER ## Desktop UAT Testing (11 expected, in plan order)
+line 121: ### When it applies
+line 128: ### Preflight
+line 143: ### Read the bundled guides before the first action
+line 154: ### The observe, act, verify loop
+line 175: ### Windows and PowerShell specifics
+line 192: ### Launch the tested artifact
+line 200: ### Secrets
+line 209: ### Retry discipline
+line 216: ### What to assert
+line 224: ### Evidence per run
+line 245: ### Reporting a desktop failure
+count = 11
+order_matches = True

@@ -1,0 +1,23 @@
+DESKTOP CLEANLINESS, END OF RUN
+
+apps now running: ApplicationFrameHost.exe(2248), ChatGPT.exe(13076), Obsidian.exe(41468), WhatsApp.Root.exe(12136), WindowsTerminal.exe(24620), chrome.exe(38196), explorer.exe(26428)
+notepad still present: False
+windows now: 9
+  w-2557630  ChatGPT
+  w-328978  Go | OpenCode Console - Google Chrome
+  w-329578  OC | Greeting
+  w-1968338  WhatsApp
+  w-1509318  OmniRoute ΓÇö AI Gateway for Multi-Provider LLMs - Google Chrome
+  w-327926  Settings
+  w-657810  Γáç Explain switching agents in Codex | avrig-ai
+  w-526132  .opencode - File Explorer
+  w-329500  API-Key - vault - Obsidian 1.15.1
+baseline ids: w-657810, w-329578, w-1509318, w-1968338, w-9701954, w-526132, w-327926, w-329500, w-328978
+new ids since baseline: w-2557630
+notepad processes by Get-Process: 0
+
+DELTA EXPLAINED:
+  opened by this run: notepad.exe only (D1, then a second window for E3), and every Notepad process and window is gone (list-apps has no notepad entry, Get-Process notepad returns 0).
+  w-2557630 belongs to ChatGPT.exe, which this run did not launch: no launch of ChatGPT appears in logs/D14-commands.txt.
+  w-9701954 was a WindowsTerminal window present at baseline and absent now; this run did not close any terminal.
+  No --headed run was started, so nothing is left alive in that mode.

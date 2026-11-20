@@ -1,0 +1,1 @@
+{"version":"2.6","ok":true,"command":"list-windows","data":[{"accessible":true,"app_name":"Notepad.exe","bounds":{"height":1257.0,"width":2161.0,"x":77.0,"y":77.0},"id":"w-2230606","is_focused":false,"minimized":false,"pid":4144,"process_instance":"windows-proc-v1:13439616078:4749981","title":"*uat-d10-modified-0005 - Notepad","visible":true}]}

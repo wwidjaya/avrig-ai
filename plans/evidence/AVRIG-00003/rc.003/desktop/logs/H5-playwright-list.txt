@@ -1,0 +1,13 @@
+Listing tests:
+  [setup-auth] ΓÇ║ auth.setup.ts:20:1 ΓÇ║ admin signs in once
+  [app] ΓÇ║ landing.spec.ts:8:3 ΓÇ║ public landing page ΓÇ║ renders hero, features and guest navigation
+  [app] ΓÇ║ landing.spec.ts:25:3 ΓÇ║ public landing page ΓÇ║ guest can navigate to the login screen
+  [app] ΓÇ║ login.spec.ts:9:3 ΓÇ║ local login ΓÇ║ signs in with the username and lands on the main menu
+  [app] ΓÇ║ login.spec.ts:25:3 ΓÇ║ local login ΓÇ║ signs in with the email address
+  [app] ΓÇ║ login.spec.ts:34:3 ΓÇ║ local login ΓÇ║ rejects an invalid password and stays on the form
+  [app] ΓÇ║ main-menu.spec.ts:8:3 ΓÇ║ authenticated main menu ΓÇ║ greets the signed-in user by display name
+  [app] ΓÇ║ main-menu.spec.ts:20:3 ΓÇ║ authenticated main menu ΓÇ║ signs out back to the public landing page
+  [app] ΓÇ║ main-menu.spec.ts:36:3 ΓÇ║ authenticated main menu ΓÇ║ shows the profile with the email address
+  [app] ΓÇ║ main-menu.spec.ts:52:3 ΓÇ║ route guards ΓÇ║ unauthenticated visitor is redirected from /main-menu to /login
+Total: 10 tests in 4 files
+exit=0

@@ -1,0 +1,19 @@
+# E5: the recovery path after a stale ref is a new snapshot, not a retry
+
+Captured ref: @s22zc1maxume78:e6 (the Close Tab button of the tab that existed at snapshot s22zc1maxume78)
+
+| Step | Command | Outcome |
+|---|---|---|
+| 1 | `agent-desktop snapshot --app "Notepad" -i` | s22zc1maxume78 captured, ref @s22zc1maxume78:e6 recorded |
+| 2 | `agent-desktop click '@s22zc1maxume78:e6'` | ok, tab closed (the tree change that supersedes the ref) |
+| 3 | `agent-desktop snapshot --app "Notepad" -i` | s1c5w665s653jr, the changed tree observed before the assertion |
+| 4 | `agent-desktop click '@s22zc1maxume78:e6'` | STALE_REF, saved_ref_absent (the assertion, first and only attempt) |
+| 5 | `agent-desktop snapshot --app "Notepad" -i` | skm1oq1qjfaf2, a fresh snapshot taken before the next action |
+
+Assertions:
+
+- The captured ref appears in the command sequence exactly once as a failed action. No second attempt with the same ref is recorded.
+- The action that follows the STALE_REF is a fresh `snapshot`, which is the recovery the definition prescribes.
+- The failure is not retried and is not papered over with a sleep or a loop.
+
+Envelope: envelopes/E2-stale-ref.json. Tree change: snapshots/E2-snapshot-after-close.json.

@@ -1,0 +1,16 @@
+=== G13 manifest read-back ===
+manifest file: D:\Cloud\OneDrive\AI\Agentic\AVRIG-00003\avrig-ai\plans\evidence\AVRIG-00003\instruction-manifest.json
+rows: 1
+File           : D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md
+Status         : PRESENT
+manifest Bytes : 26974   actual Bytes : 26974   match=True
+manifest Lines : 246   actual Lines : 246   match=True
+manifest Sha256: FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6
+actual   Sha256: FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6   match=True
+Backup         : D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md.bak-20261120-062939 exists=True
+Backup Sha256  : manifest=ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56
+Backup Sha256  : actual  =ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56   match=True
+Backup GitIgnore: .gitignore:35 *.bak-*
+
+rows MISSING or mismatched: 0
+amendments chained hashes: 2:7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6 -> 3:2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82 -> 4:FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6

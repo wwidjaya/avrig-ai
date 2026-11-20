@@ -1,0 +1,7 @@
+G7 ### When it applies UNDER ## Live Browser Testing (lines 57-61)
+### When it applies
+
+- Mandatory whenever the plan changes or exercises a user interface: a rendered page, a route a user can load, a login or SSO journey, a form, a dashboard, or any surface whose correctness is only visible when rendered.
+- Not applicable only when the plan genuinely has no user interface surface, such as a schema migration, a build configuration change, a pure library refactor, or a documentation-only edit. Record `not applicable` with a one line reason in the matrix and in the result line, and never leave the row silent. A surface that exists but could not be reached is recorded as BLOCKED, never as not applicable.
+- A native desktop surface is not a browser surface. A Tauri window, a Bevy overlay, a tray menu, or any other native window belongs to `## Desktop UAT Testing`, and it must never be recorded as not applicable here on the grounds that a browser harness cannot see it.
+names Desktop UAT Testing = True  says never record as not applicable here = True

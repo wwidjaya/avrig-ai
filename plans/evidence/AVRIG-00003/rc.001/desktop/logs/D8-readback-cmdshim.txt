@@ -1,0 +1,2 @@
+{"version":"2.6","ok":true,"command":"get","data":{"property":"value","ref":"@s4owxx7cy36dm:e1","value":"agent-desktop-uat-0001"}}
+{"version":"2.6","ok":true,"command":"get","data":{"property":"text","ref":"@s4owxx7cy36dm:e1","value":"agent-desktop-uat-0001"}}

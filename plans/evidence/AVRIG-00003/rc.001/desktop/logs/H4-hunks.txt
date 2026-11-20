@@ -1,0 +1,6 @@
+=== H4b: hunk ranges from an explicit two-file diff (no-index, not the repo index) ===
+@@ -33 +33 @@ You are the Tester subagent. Your responsibility is to ensure quality, test desi
+@@ -34,0 +35 @@ You are the Tester subagent. Your responsibility is to ensure quality, test desi
+@@ -59,0 +61 @@ A browser responsibility that cannot be executed is a sentence, not a test. This
+@@ -65,2 +67,3 @@ A browser responsibility that cannot be executed is a sentence, not a test. This
+@@ -112,0 +116,127 @@ Report the failing ref, the expected visible text, the actual visible text, the

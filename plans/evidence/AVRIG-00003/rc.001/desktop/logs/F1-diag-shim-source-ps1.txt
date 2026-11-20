@@ -1,0 +1,2 @@
+& 'd:\nodejs\.npm\global\node_modules\agent-desktop\bin\agent-desktop-win32-x64.exe' @args
+exit $LASTEXITCODE

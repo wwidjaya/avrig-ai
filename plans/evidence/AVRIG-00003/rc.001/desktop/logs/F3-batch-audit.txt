@@ -1,0 +1,12 @@
+batch invocations recorded in this evidence folder (expect none):
+
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\C1-desktop-guide-content.txt:119:| `commands-system` | You launch or close apps, manage windows, use the clipboard, `wait`, `batch`, sessions, multi-agent cursors, tracing, or load skills |
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-audit.txt:1:batch invocations recorded in this evidence folder (expect none):
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-help.txt:1:=== F3: batch help ===
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-help.txt:2:Execute a bounded, sequential, non-atomic JSON command batch
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-help.txt:4:Usage: agent-desktop-win32-x64.exe batch [OPTIONS] <JSON>
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-help.txt:10:      --stop-on-error                  Halt the batch on the first failed command
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-help.txt:13:      --timeout-ms <TIMEOUT_MS>        Absolute wall-clock budget for the whole non-atomic batch [default: 60000]
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F3-batch-help.txt:24:=== F3: any batch use recorded in the run? ===
+plans\evidence\AVRIG-00003\rc.001\desktop\logs\F6-secrets-text.txt:8:- `batch` puts its JSON in the process arguments, so no secret ever goes in a batch.
+

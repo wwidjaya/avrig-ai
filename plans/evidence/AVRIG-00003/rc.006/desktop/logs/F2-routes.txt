@@ -1,0 +1,46 @@
+F2, the two routes, measured side by side on the same field and the same sentinel.
+
+Sentinel: uat-secret-0002, a declared fake. It is not a credential and stands in for one.
+
+ROUTE A, the .ps1 shim, which is the route PowerShell's own resolution picks and the route the
+definition forbids for a value:
+
+  'uat-secret-0002' | & "d:\nodejs\.npm\global\agent-desktop.ps1" set-value '@s9c74ay9zu1e6:e1' --stdin
+  -> ok true, command set-value, disposition delivered_verified, retry unsafe,
+     steps[0] ValuePattern.SetValue succeeded verified true,
+     details.verification_scope element_value
+  Set against a field that had just been read as the empty string.
+  Evidence: snapshots/F2-ps1-set-value.json
+
+  READ-BACK, agent-desktop get '@s9c74ay9zu1e6:e1' --property value
+  -> ok true, value ""     THE VALUE DID NOT LAND.
+  Evidence: snapshots/F2-readback.json
+
+  So on this build the .ps1 shim reports a verified delivery of a value it never received. The
+  mechanism is the one the definition names: the shim is
+  '& ...agent-desktop-win32-x64.exe @args', and PowerShell does not forward a script's pipeline into
+  a native command invoked inside it, so --stdin arrives as EOF, the tool writes an empty value,
+  reads it back empty, and returns ok true with delivered_verified. A credential sent this way is
+  lost silently while every field in the envelope looks healthy.
+
+ROUTE B, the .cmd shim, which the definition mandates:
+
+  'uat-secret-0002' | & "d:\nodejs\.npm\global\agent-desktop.cmd" set-value '@s9c74ay9zu1e6:e1' --stdin
+  -> ok false, command set-value, error.code ACTION_FAILED 'Post-action state does not match the
+     requested change', delivered_unverified, retry unsafe, no value in post_state
+  Evidence: snapshots/F1-cmd-set-value.json
+
+  READ-BACK, agent-desktop get '@s9c74ay9zu1e6:e1' --property value
+  -> ok true, value "uat-secret-0002"     THE VALUE DID LAND.
+  And the follow-up snapshot s3hrxsnxe2id9z shows the sentinel in the tree and the window title
+  '*uat-secret-0002 - Notepad'.
+  Evidence: snapshots/F1-get-value.json, snapshots/F1-readback.json
+
+  The ACTION_FAILED here is a false negative, not a failed delivery: the .cmd path forwards stdin
+  correctly, the value lands, and the post-action check cannot read a UIA text field's value back.
+  The verdict is therefore taken from the read alone, never from either envelope's delivery field.
+
+Both routes were exercised on the same field, in this order, so the F2 loss is demonstrated against a
+field that provably accepted the value moments later through the other route. The definition names
+agent-desktop.cmd or the native .exe as the route and never the .ps1 shim, which is what these two
+envelopes and their read-backs require.

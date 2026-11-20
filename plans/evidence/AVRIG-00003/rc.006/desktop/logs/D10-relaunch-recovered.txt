@@ -1,0 +1,36 @@
+D10, the relaunch check the row asks for, measured rather than assumed.
+
+Before the close, window w-2296062 of pid 24580 held a document written by this run:
+  marker written through the documented headless path ('uat-d10-modified-0006' | agent-desktop.cmd set-value --stdin)
+  get --property value read back 'uat-d10-modified-0006'
+  window title '*uat-d10-modified-0006 - Notepad', which is the modified marker
+  Evidence: snapshots/D10-unsaved-write.json, snapshots/D10-unsaved-modified.json,
+            logs/D10-unsaved-windows-modified.txt
+
+The close: agent-desktop close-app "notepad.exe"
+  -> ok true, method graceful, delivery delivered_verified, retry unsafe,
+     steps terminate_request succeeded then process_exit succeeded verified true,
+     details.evidence process_instance_exited, pid 24580
+  -> no save bar, no prompt, no refusal in that envelope or in any envelope taken after it
+  -> list-apps: notepad absent, 6 apps listed and none of them Notepad
+  -> list-windows --app "Notepad": empty data []
+  -> snapshot of w-2296062: WINDOW_NOT_FOUND 'No window with id w-2296062'
+  Evidence: snapshots/D10-unsaved-close.json, snapshots/D10-unsaved-list-apps-after.json,
+            logs/D10-windows-after-close.txt, snapshots/D10-unsaved-snapshot-after.json
+
+The relaunch: agent-desktop launch notepad.exe, then a pinned snapshot and a get.
+  -> list-windows: w-7342734, title '*uat-d10-modified-0006 - Notepad'  (modified marker present)
+  -> get --property value on the text field: 'uat-d10-modified-0006'
+  -> the typed text and its modified marker came back intact
+  Evidence: snapshots/D10-relaunch.json, logs/D10-relaunch-windows.txt,
+            snapshots/D10-relaunch-snapshot.json, snapshots/D10-relaunch-value.json
+
+Conclusion, recorded as the row requires: the close is SILENT (asks nothing), SELF CERTIFYING
+(reports delivered_verified with process_instance_exited), and RECOVERABLE BY RELAUNCH (the
+document returned with its text). It is not a verified destruction of the work, and this log does
+not claim one. The hazard stands: a desktop agent that closes a modified document is told the
+close was verified and has no reason to look for the work afterwards.
+
+Document disposition for this window, stated plainly: it was written into by this run and
+DELIBERATELY ABANDONED rather than saved. The application's own session store recovered it, which
+is what the relaunch above measured.

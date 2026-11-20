@@ -1,0 +1,9 @@
+G8 ### Choose the harness, then name the command (numbered choices, lines 63-69)
+### Choose the harness, then name the command
+
+1. Read the project's own test harness before writing the test step, and name the exact command you ran in the plan's matrix and in the result line.
+2. Prefer the Playwright harness when the project has one. The usual entry points are `npx playwright test` for the local stack, `npx playwright test --config=<sso-config>` for an SSO or federated login journey, and the project's own summary or report target for reading results.
+3. Choose `agent-desktop` instead when the surface is a native window rather than a page: `apps/desktop`, `avatar/pet-desktop`, or any application a user operates directly. Decide which surface you are testing before writing the step, because a page loaded by a browser takes Playwright and a native window takes `agent-desktop`, and neither harness sees the other's surface.
+4. This workspace keeps its harness in `D:\Cloud\OneDrive\AI\Agentic\test`, with `playwright.config.ts`, `playwright.keycloak.config.ts`, and a `Makefile` carrying `test`, `keycloak`, `report` and `summary` targets. Its module resolution only works from that directory, so run every Node command with it as the working directory.
+5. Use the `wmux` browser only for a surface the harness does not cover, or when the harness itself is unavailable.
+desktop branch present = True

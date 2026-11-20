@@ -1,0 +1,124 @@
+D14, the command log for the rc.006 desktop run, one annotated entry per envelope.
+
+candidate: avrig/00003/rc.006 @ e006c0dc10b551f93abbb401b4caf6218a6517d7
+branch:    chore/AVRIG-00003-agent-desktop-uat-tooling
+started:   2026-11-20 09:25 +07:00
+binary:    agent-desktop 1.3.1, envelope schema 2.6
+rule:      every envelope this run produced is listed below, in the order it was issued, including
+           the ones that refused, the ones superseded, and the ones that are not the assertion.
+           95 envelopes are on disk under snapshots/ and 95 entries follow, so coverage is total
+           rather than selective.
+
+Format:  seq  time      command as issued                                   -> row   outcome
+
+  1  09:25:55  agent-desktop version                                        A1      ok true, version 1.3.1, os windows, target x86_64
+  2  09:26:25  pwsh -NoProfile -Command "agent-desktop version"              A5      ok true, one envelope, exit 0
+  3  09:26:42  agent-desktop version                                        A6      ok true, version 1.3.1
+  4  09:26:42  pwsh -NoProfile -Command "agent-desktop status"               A7      ok true, platform windows, accessibility granted
+  5  09:27:00  agent-desktop version                                        B1      ok true, command version, data.version 1.3.1
+  6  09:27:00  agent-desktop status                                         B2      ok true, platform windows, permissions.accessibility.state granted
+  7  09:27:00  agent-desktop permissions                                    B4      ok true, accessibility granted
+  8  09:27:00  agent-desktop list-surfaces                                  B5      ok true, two surfaces listed (window, focused)
+  9  09:27:08  agent-desktop status 1> B6-status.json 2> B6-stderr.txt        B6      ok true, exit 0, one JSON object, stderr 0 bytes
+ 10  09:28:06  agent-desktop list-apps                                      PRE     ok true, 6 apps, no Notepad at run start
+ 11  09:28:06  agent-desktop list-windows                                   PRE     ok true, 7 windows, no Notepad at run start
+ 12  09:28:42  agent-desktop launch notepad.exe                             D1      ok true, app notepad.exe, pid 5388
+ 13  09:28:43  agent-desktop list-apps                                      D2      ok true, Notepad.exe present, pid 24580
+ 14  09:28:43  agent-desktop list-windows --app "Notepad"                    D3      ok true, one window w-2296062
+ 15  09:29:03  agent-desktop snapshot --app "Notepad" -i                     D4      ok true, snapshot s228ha33q6aax8, ref_count 25
+ 16  09:30:34  agent-desktop launch notepad.exe                             E3      ok true, a second window arrived (w-16910484, same pid 24580)
+ 17  09:31:08  agent-desktop get '@s228ha33q6aax8:e1' --property value        D6      ok true, property value, 'uat-d10-modified-0005'
+ 18  09:31:08  agent-desktop get '@s228ha33q6aax8:e21' --property title       D6      ok true, property title, null for that node
+ 19  09:31:15  agent-desktop click '@s228ha33q6aax8:e4'                      D7      ok true, InvokePattern.Invoke succeeded, delivered_unverified
+ 20  09:31:16  agent-desktop snapshot --app "Notepad" -i --window-id w-2296062 D8      ok true, new snapshot s9c74ay9zu1e6, two tabs, title lost its marker
+ 21  09:31:26  agent-desktop screenshot --window-id w-2296062 <screens/D9-after-act.png> D9 ok true, png written, 2143x1248
+ 22  09:31:33  'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.ps1 set-value '@s9c74ay9zu1e6:e1' --stdin  F2  ok true, delivered_verified, and the value did NOT land
+ 23  09:31:34  agent-desktop get '@s9c74ay9zu1e6:e1' --property value         F2      ok true, value '', the .ps1 route lost the piped value
+ 24  09:31:43  'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s9c74ay9zu1e6:e1' --stdin  F1  ACTION_FAILED, delivered_unverified, no value in post_state
+ 25  09:31:49  agent-desktop get '@s9c74ay9zu1e6:e1' --property value         F1      ok true, value 'uat-secret-0002', the read-back that decides the row
+ 26  09:31:50  agent-desktop snapshot --app "Notepad" -i --window-id w-2296062 F1      ok true, snapshot s3hrxsnxe2id9z, sentinel visible in the tree
+ 27  09:31:58  'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd clipboard-set --stdin  F4  ok true, delivered_unverified
+ 28  09:31:58  agent-desktop clipboard-get                                 F4      ok true, text 'uat-secret-0002\r\n'
+ 29  09:31:58  agent-desktop clipboard-clear                               F4      ok true, delivered_unverified
+ 30  09:31:58  agent-desktop clipboard-get                                 F4      ok true, found false, clipboard clear
+ 31  09:31:58  agent-desktop clear '@s3hrxsnxe2id9z:e1'                      F4      ok true, delivered_verified, post_state.value ''
+ 32  09:31:58  agent-desktop get '@s3hrxsnxe2id9z:e1' --property value        F4      ok true, value '' with the property named, not text
+ 33  09:31:59  agent-desktop screenshot --window-id w-2296062 <screens/F4-cleared.png> F4 ok true, png written
+ 34  09:32:04  agent-desktop type '@s3hrxsnxe2id9z:e1' "uat-probe-0003"        F7      POLICY_DENIED, not_delivered, recovery block invites a headed retry, declined
+ 35  09:32:04  agent-desktop list-notifications                             D11     POLICY_DENIED, Action Center closed headless, recorded as a preflight state
+ 36  09:32:17  'uat-d12-wait-0006' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s3fv4euta72xnk:e1' --stdin  D12  ACTION_FAILED, delivered_unverified, value lands and the read-back proves it
+ 37  09:32:18  agent-desktop wait --element '@s3fv4euta72xnk:e1'              D12     ok true, predicate exists, found true, no Start-Sleep used
+ 38  09:32:18  agent-desktop get '@s3fv4euta72xnk:e1' --property value        D12     ok true, value 'uat-d12-wait-0006', compared in the shell against a variable
+ 39  09:32:58  agent-desktop launch notepad.exe                             E7      ok true, a third window arrived (w-11208710)
+ 40  09:33:06  agent-desktop focus-window --title "Untitled - Notepad"       E7      AMBIGUOUS_TARGET, ok false, 2 candidates listed by id
+ 41  09:33:09  agent-desktop find --name "Add New Tab"                       E7      ok true, 0 matches for a name present in all three windows, recorded verbatim
+ 42  09:33:10  agent-desktop find --window-id w-16910484 --name "Add New Tab" E7      ok true, 1 match, the pinned form the row says exists
+ 43  09:33:10  agent-desktop snapshot --app "Notepad" -i                      E7      AMBIGUOUS_TARGET, ok false, 3 candidates, none focused
+ 44  09:33:18  agent-desktop snapshot --app "Notepad" -i --window-id w-2296062 E3     ok true, data.window.id w-2296062, snapshot s3qp2s0zxbi5la
+ 45  09:33:18  agent-desktop snapshot --app "Notepad" -i --window-id w-16910484 E3     ok true, data.window.id w-16910484, snapshot saywgfnzjx19p
+ 46  09:33:19  agent-desktop snapshot --app "Notepad" -i --window-id w-2296062 E4     ok true, data.window.id w-2296062 again, snapshot s8szte87t7e6i
+ 47  09:33:19  agent-desktop snapshot --app "Notepad" -i --window-id w-16910484 E4     ok true, data.window.id w-16910484 again, snapshot s3g7h5sacpznkt
+ 48  09:33:37  agent-desktop click '@e8'                                     E1      INVALID_ARGS, ok false, bare ref rejected, expected @<snapshot_id>:e<N>
+ 49  09:34:03  agent-desktop snapshot --app "Notepad" -i --window-id w-11208710 E2r    ok true, snapshot sjlyy8rr8eho7, one tab, no menu open
+ 50  09:34:09  agent-desktop click '@sjlyy8rr8eho7:e6'                       E2r     ok true, File menuitem clicked, tree unchanged
+ 51  09:34:10  agent-desktop snapshot --app "Notepad" --surface menu -i --window-id w-11208710 E2r WINDOW_NOT_FOUND, 'No menu this surface can root', recorded
+ 52  09:34:17  agent-desktop snapshot --app "Notepad" -i --window-id w-11208710 E2r    ok true, snapshot s3ivq2dj6pxozf, menu not exposed in the tree
+ 53  09:34:29  agent-desktop click '@s3ivq2dj6pxozf:e5'                      E2r     ok true, Add New Tab, window now holds two tabs
+ 54  09:34:30  agent-desktop snapshot --app "Notepad" -i --window-id w-11208710 E2r    ok true, snapshot spb7ktdgbfx04, Close Tab captured at e5
+ 55  09:34:37  agent-desktop click '@spb7ktdgbfx04:e5'                       E2r     ok true, act 1, the selected tab closed, the addressed element removed
+ 56  09:34:38  agent-desktop click '@spb7ktdgbfx04:e5'                       E2r     ok true, act 2 on the same removed ref, no STALE_REF, the window then closed
+ 57  09:34:47  agent-desktop snapshot --app "Notepad" --window-id w-11208710  E2r     WINDOW_NOT_FOUND, the window act 2 closed is gone
+ 58  09:35:32  agent-desktop snapshot --app "Notepad" -i --window-id w-16910484 E2b    ok true, snapshot szz8ia7ccwvqy, one tab, Close Tab at e4
+ 59  09:35:39  agent-desktop click '@szz8ia7ccwvqy:e5'                       E2b     ok true, Add New Tab, window now holds two tabs
+ 60  09:35:40  agent-desktop snapshot --app "Notepad" -i --window-id w-16910484 E2b    ok true, snapshot s140zy7gstwrt6, selected tab's Close Tab captured at e5
+ 61  09:35:48  agent-desktop click '@s140zy7gstwrt6:e5'                      E2b     ok true, act 1, the selected tab closed
+ 62  09:35:49  agent-desktop snapshot --app "Notepad" -i --window-id w-16910484 E2b    ok true, snapshot s1zuzkr15qwej7, one tab, its Close Tab is e4, a different node
+ 63  09:35:57  agent-desktop click '@s140zy7gstwrt6:e5'                      E2b     ok true, act 2 on the removed ref: silent redirect, the window closed, sibling window untouched
+ 64  09:36:42  agent-desktop snapshot --app "Notepad" -i --window-id w-2296062 D10     ok true, snapshot s3aaxbcm0sz8s7, window A title '*uat-d12-wait-0006 - Notepad'
+ 65  09:36:49  'uat-d10-modified-0006' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s3aaxbcm0sz8s7:e1' --stdin  D10  ACTION_FAILED, delivered_unverified, the marker lands
+ 66  09:36:50  agent-desktop get '@s3aaxbcm0sz8s7:e1' --property value        D10     ok true, value 'uat-d10-modified-0006' read back before the close
+ 67  09:36:56  agent-desktop close-app "notepad.exe"                          D10     ok true, delivered_verified, process_instance_exited, no prompt
+ 68  09:36:57  agent-desktop list-apps                                       D10     ok true, Notepad absent
+ 69  09:36:57  agent-desktop snapshot --app "Notepad" -i --window-id w-2296062 D10     WINDOW_NOT_FOUND, no window left
+ 70  09:37:35  agent-desktop launch notepad.exe                              D10     ok true, app relaunched
+ 71  09:37:37  agent-desktop snapshot --app "Notepad" -i --window-id w-7342734 D10     ok true, snapshot s2h8ikbaio9h7m, title carries the modified marker
+ 72  09:37:37  agent-desktop get '@s2h8ikbaio9h7m:e1' --property value        D10     ok true, value 'uat-d10-modified-0006', the text survived the close
+ 73  09:40:07  agent-desktop launch notepad.exe                              D10     ok true, a blank second window w-9636106 arrived
+ 74  09:40:08  agent-desktop snapshot --app "Notepad" -i --window-id w-9636106 D10     ok true, snapshot s2p51nq168guik, title 'Untitled - Notepad', no marker
+ 75  09:40:23  agent-desktop close-app "notepad.exe"                          D10     TIMEOUT, delivered_unverified, retry unsafe: the process still held a modified document
+ 76  09:40:24  agent-desktop list-apps                                       D10     ok true, Notepad still listed
+ 77  09:40:24  agent-desktop close-app --app "notepad.exe"                    D10     INVALID_ARGS, unexpected argument '--app', the positional form is the one the tool takes
+ 78  09:40:34  agent-desktop snapshot --app "Notepad" --window-id w-7342734   D10     ok true, snapshot s2t3ndfjqwkpic, the save prompt is in the tree
+ 79  09:40:46  agent-desktop click '@s2t3ndfjqwkpic:e3'                       D10     ok true, "Don't save" on the pending prompt
+ 80  09:40:55  agent-desktop snapshot --app "Notepad" --window-id w-7342734   D10     ok true, snapshot s2nupnysmtz1k3, one modified tab left
+ 81  09:41:01  agent-desktop click '@s2nupnysmtz1k3:e29'                      D10     ok true, the window's own Close ref, window gone, no prompt
+ 82  09:41:48  agent-desktop launch notepad.exe                              D10     ok true, the store restored '*uat-d10-modified-0005 - Notepad'
+ 83  09:42:36  agent-desktop launch notepad.exe                              D10     ok true, a blank window w-22742892 arrived beside the restored one
+ 84  09:42:40  agent-desktop snapshot --app "Notepad" -i --window-id w-22742892 D10    ok true, title 'Untitled - Notepad', unmodified
+ 85  09:42:53  agent-desktop close-app "notepad.exe"                          D10     TIMEOUT, delivered_unverified, retry unsafe, prompt for the restored document
+ 86  09:42:55  agent-desktop snapshot --app "Notepad" --window-id w-2230606   D10     ok true, snapshot sid8cdfbu9pdk, Save / Don't save / Cancel in the tree
+ 87  09:43:01  agent-desktop click '@sid8cdfbu9pdk:e3'                        D10     ok true, "Don't save", the pending close completed
+ 88  09:43:37  agent-desktop launch notepad.exe                              D10     ok true, the store is clear, a single blank window w-11274524
+ 89  09:43:46  agent-desktop snapshot --app "Notepad" -i --window-id w-11274524 D10    ok true, title 'Untitled - Notepad', no modified marker
+ 90  09:43:47  agent-desktop close-app "notepad.exe"                          D10     ok true, delivered_verified, process_instance_exited, app gone, no window left
+ 91  09:43:47  agent-desktop list-apps                                       D10     ok true, Notepad absent
+ 92  09:44:27  agent-desktop launch notepad.exe                              E2w     ok true, one window w-8784212 for the loud-refusal case
+ 93  09:44:29  agent-desktop snapshot --app "Notepad" --window-id w-8784212   E2w     ok true, snapshot s3ohpyeocjp2ie, window Close captured at e26
+ 94  09:44:29  agent-desktop click '@s3ohpyeocjp2ie:e26'                      E2w     ok true, act 1, the window closed
+ 95  09:44:30  agent-desktop click '@s3ohpyeocjp2ie:e26'                      E2w     WINDOW_NOT_FOUND, ok false, not_delivered: the loud refusal E2 asks for
+
+Order rule, checked against this log rather than asserted:
+- after E1's INVALID_ARGS (seq 48) the next command is a snapshot (49), and '@e8' appears once.
+- after E2r's redirected act 2 (seq 56) the next command is a listing and a pinned snapshot, never
+  the same ref again.
+- after E2b's act 2 (seq 63) the next command is list-windows, then a snapshot on the surviving
+  window, never a retry of '@s140zy7gstwrt6:e5'.
+- after E2w's WINDOW_NOT_FOUND (seq 95) nothing followed, and no retry was issued.
+- the one non-safe disposition that was followed by another act of the same kind is the close-app
+  TIMEOUT (seq 75 and 85). It was not a blind retry: the live state was read first (seq 78 and 86
+  are fresh snapshots of the pending prompt), the pending prompt was dismissed through its own ref
+  (seq 79 and 87), and the close was re-issued only after the state that caused the timeout was
+  gone. That reasoning is stated here because the row asks for any retry to be visible, and it is
+  reported in the run's closing findings as a judgement rather than hidden as a pass.
+- every observe, act, verify triple is adjacent: 19-20 for D7/D8, 24-25-26 for F1,
+  55-56-57 for E2r, 61-62-63 for E2b, 66-67-68-69 for D10.

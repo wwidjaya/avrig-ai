@@ -1,0 +1,5 @@
+=== G2: '## ' headings with line numbers ===
+12: ## Responsibilities
+53: ## Live Browser Testing
+117: ## Desktop UAT Testing
+count_desktop_uat_heading=1 line=117 browser_reporting_line=113

@@ -1,0 +1,5 @@
+=== N1 ledger audit ===
+rows: 73  (expected 73)
+verdict counts: BLOCKED=1, PASS=72
+rows with an empty evidence column or a missing artefact: 0
+PASS rows: 72; each names at least one existing artefact: True

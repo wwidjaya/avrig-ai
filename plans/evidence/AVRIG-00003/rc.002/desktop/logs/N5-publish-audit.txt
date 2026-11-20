@@ -1,0 +1,14 @@
+N5 PUBLISH AUDIT: evidence stays inside plans/evidence, and nothing else is staged
+
+evidence root: plans/evidence/AVRIG-00003/rc.002/desktop/ inside the avrig-ai worktree
+envelopes=42 logs=98 snapshots=15 screens=2 root_files=6
+total bytes: 398207
+screenshots: D9-after-act.png=43866, F4-cleared.png=39004 (two PNGs, well inside any retention limit)
+
+plans/evidence is gitignored in this worktree: .gitignore:50:plans/evidence/**	plans/evidence/AVRIG-00003/rc.002/desktop/RESULT.md
+so the evidence is staged with git add -f on that directory only, never by a bare git add .
+tracked changes in the worktree before staging: 0 entries
+
+the result line, quoted:
+      avrig/00003/rc.002 @ 60835fa209e6482b10bf9fc4e66878b775ab14a1 | agent-desktop 1.3.1 | BLOCKED on one mandatory row (E3) | 71/73 PASS, 0 FAIL, 2 BLOCKED | plans/evidence/AVRIG-00003/rc.002/desktop/ 
+the result line contains no credential: it names the tag, the SHA, the CLI version, the verdict, the counts and the folder. The sentinel appears only in ledger notes and envelopes, never in a headline.

@@ -1,0 +1,48 @@
+C4 FORM DIFF: every literal form the definition's ## Desktop UAT Testing section states, checked against the bundled guides and the binary's own --help
+
+agent-desktop status             stated=True found_in=guide
+agent-desktop version            stated=True found_in=
+agent-desktop list-surfaces      stated=True found_in=
+skills get desktop               stated=True found_in=guide
+skills get platform              stated=True found_in=guide
+snapshot --app                   stated=True found_in=
+-i                               stated=True found_in=guide+help
+--skeleton                       stated=True found_in=guide+help
+--compact                        stated=True found_in=guide+help
+--root                           stated=True found_in=guide+help
+--window-id                      stated=True found_in=help
+get '<ref>'                      stated=True found_in=
+find                             stated=True found_in=guide+help
+is '<ref>'                       stated=True found_in=
+toggle                           stated=True found_in=guide
+select                           stated=True found_in=guide+help
+scroll-to                        stated=True found_in=guide
+press                            stated=True found_in=guide
+wait                             stated=True found_in=guide+help
+focus-window                     stated=True found_in=guide+help
+close-app                        stated=True found_in=guide+help
+launch                           stated=True found_in=guide+help
+list-apps                        stated=True found_in=guide
+list-windows                     stated=True found_in=guide+help
+set-value --stdin                stated=True found_in=
+clipboard-set                    stated=True found_in=guide
+clipboard-clear                  stated=True found_in=guide
+batch                            stated=True found_in=guide
+list-notifications               stated=True found_in=guide
+type                             stated=True found_in=guide+help
+--headed                         stated=True found_in=guide+help
+--stdin                          stated=True found_in=help
+agent-desktop.cmd                stated=True found_in=
+delivered_verified               stated=True found_in=guide
+INVALID_ARGS                     stated=True found_in=guide
+STALE_REF                        stated=True found_in=guide
+AMBIGUOUS_TARGET                 stated=True found_in=guide
+error.disposition.retry          stated=True found_in=
+screenshot                       stated=True found_in=guide+help
+RESULT.md                        stated=True found_in=
+
+TWO DISAGREEMENTS FOUND, both about the tool's real behaviour rather than a wrong flag:
+1. The definition states that snapshot --app does not raise AMBIGUOUS_TARGET when an application has several windows, and silently takes the focused window. Measured against agent-desktop 1.3.1 on this host: when no window of that application holds focus it DOES raise AMBIGUOUS_TARGET with candidate_count 2 and both window ids (envelopes/E3-focused-a.json). The silent pick happens only when one of the app's windows is already focused, which is the rc.001 observation. The remedy the definition gives (pin --window-id whenever list-windows shows more than one window) is correct and remains correct.
+2. The definition's ### Launch the tested artifact and the matrix both address the app by name for close-app. Measured: close-app takes a positional APP and rejects --app with INVALID_ARGS (envelopes/D10-close-app-app-flag.json), which the definition already reflects; the matrix row D10 correctly expects that rejection.
+
+FORMS THE MATRIX QUOTES THAT THE BINARY DOES NOT HAVE: focus-window has no positional title argument (--title/--window-id/--app only), and find has no positional query (--name/--value/--text/--role only). Both are matrix quoting defects, worked around by using the flags, and both raised AMBIGUOUS_TARGET correctly.

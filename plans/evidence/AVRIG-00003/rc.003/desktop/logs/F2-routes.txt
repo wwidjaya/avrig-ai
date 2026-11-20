@@ -1,0 +1,2 @@
+INVOCATION (F2): 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.ps1 set-value '@s3vu87kpdc4aj7:e1' --stdin
+route under test: agent-desktop.ps1 (the shim PowerShell resolves a bare agent-desktop to)

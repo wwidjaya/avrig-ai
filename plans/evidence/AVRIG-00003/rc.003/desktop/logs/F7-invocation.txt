@@ -1,0 +1,4 @@
+INVOCATION (F7): agent-desktop type '@s14m6amf7ai68z:e1' "uat-probe-0003"
+uat-probe-0003 is a declared non-secret probe literal and is the only literal this run puts in an argument list.
+It carries no credential. The command is recorded here because the denied envelope does not echo the value.
+No --headed retry was attempted: physical input is not permitted on this run.

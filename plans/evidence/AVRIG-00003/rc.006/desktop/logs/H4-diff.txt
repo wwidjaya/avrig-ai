@@ -1,0 +1,78 @@
+=== H4, the whole file against the .bak baseline, every difference attributed to a region ===
+
+Baseline: tester.md.bak-20261120-062939, 112 lines, 11496 bytes, the pre-edit state.
+Current : tester.md, 248 lines, 27513 bytes.
+Method  : Compare-Object for the row's named tool, then git diff --no-index --unified=1 for exact
+          positions so each difference can be attributed rather than eyeballed. The raw diff is saved
+          beside this file as logs/H4-diff-raw.txt.
+
+The row's criterion: every difference falls in item 3, the browser section, or the new section, apart
+from three named carve-out lines, and any other difference outside those areas fails the row.
+
+SEVEN hunks exist. Five fall inside the allowed regions. Two more plus one are the carve-outs, and
+each carve-out is a matrix-to-scenario substitution traced to manifest amendment sequence 6.
+
+HUNK 1  @@ -1,3 +1,3 @@                                  REGION: frontmatter
+  DEL  description: ... appends test matrices to plans, ...
+  ADD  description: ... appends test scenarios to plans, ...
+  ATTRIBUTION: CARVE-OUT 1 of 3, named in the row. matrix -> scenarios, amendment 6.
+  VERDICT: admitted.
+
+HUNK 2  @@ -17,3 +17,3 @@                                 REGION: Responsibilities item 1
+  DEL  - Attach or embed the complete test matrix directly in the project's root plan file under
+         `## Test Specification and Validation Matrix`.
+  ADD  - Attach or embed the complete set of test scenarios directly in the project's root plan file
+         under `## Test Specification and Validation Scenarios`.
+  ATTRIBUTION: CARVE-OUT 2 of 3, named in the row as the item 1 plan-section bullet.
+               matrix -> scenarios and Matrix -> Scenarios, amendment 6.
+  VERDICT: admitted.
+
+HUNK 3  @@ -32,4 +32,5 @@                                 REGION: Responsibilities item 3
+  DEL  3. **Live Browser Testing (Mandatory whenever the plan has a user interface surface):**
+  ADD  3. **UI Verification: Live Browser and Desktop Application UAT:**
+  ADD  - Verify a native window through `agent-desktop` ... is in `## Desktop UAT Testing` below ...
+  (the existing browser bullet also carries a matrix -> scenario substitution, inside this item)
+  ATTRIBUTION: INTENDED. This is the work item: the retitle G4 asserts and the new bullet G6 asserts.
+  VERDICT: allowed region.
+
+HUNK 4  @@ -45,3 +46,3 @@                                 REGION: Responsibilities item 6
+  DEL  - A fully successful test run (every check in the matrix PASS, with no regressions) ...
+  ADD  - A fully successful test run (every check in the scenario table PASS, with no regressions) ...
+  ATTRIBUTION: CARVE-OUT 3 of 3, named in the row as the item 6 release-trigger bullet.
+               matrix -> scenario table, amendment 6.
+  VERDICT: admitted.
+
+HUNK 5  @@ -58,3 +59,4 @@                                 REGION: browser section, When it applies
+  DEL  ... with a one line reason in the matrix and in the result line ...
+  ADD  ... with a one line reason in the scenario table and in the result line ...
+  ADD  - A native desktop surface is not a browser surface. A Tauri window, a Bevy overlay, ...
+  ATTRIBUTION: INTENDED boundary sentence (the boundary G7 asserts), plus a matrix -> scenario
+               substitution inside the allowed region.
+  VERDICT: allowed region.
+
+HUNK 6  @@ -62,6 +64,7 @@                                 REGION: browser section, harness choice
+  DEL  1. ... name the exact command you ran in the plan's matrix ...
+  ADD  1. ... name the exact command you ran in the plan's scenario table ...
+  ADD  3. Choose `agent-desktop` instead when the surface is a native window rather than a page ...
+  (the previous items 3 and 4 became 4 and 5)
+  ATTRIBUTION: INTENDED desktop harness branch (the branch G8 asserts), plus a matrix -> scenario
+               substitution inside the allowed region.
+  VERDICT: allowed region.
+
+HUNK 7  @@ -112 +115,134 @@                               REGION: new section
+  ADD  133 lines beginning '## Desktop UAT Testing', including all eleven subsections.
+  ATTRIBUTION: INTENDED. This is the deliverable.
+  VERDICT: allowed region.
+
+RESULT: exactly three differing lines fall outside item 3, the browser section and the new section.
+They are precisely the three the row names: the frontmatter description (hunk 1), the item 1
+plan-section bullet (hunk 2), and the item 6 release-trigger bullet (hunk 4). Each is a
+matrix-to-scenario substitution traceable to manifest amendment sequence 6, which records a
+vocabulary change made outside this work item; the .bak sibling predates it.
+
+THERE IS NO FOURTH. Items 2, 4 and 5 are byte identical apart from nothing at all, which the hunk
+table shows directly: no hunk starts inside item 2 (lines 19-31), item 4, or item 5.
+
+H4 VERDICT: PASS on the carve-out as the user settled it. The row's literal wording does not admit
+these three lines on its own; the carve-out is the user's decision of 2026-11-20 and it admits
+exactly three, so any fourth line outside those regions fails this row and there is none.

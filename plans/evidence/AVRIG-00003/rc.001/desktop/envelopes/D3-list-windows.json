@@ -1,0 +1,1 @@
+{"version":"2.6","ok":true,"command":"list-windows","data":[{"accessible":true,"app_name":"Notepad.exe","bounds":{"height":1257.0,"width":2161.0,"x":77.0,"y":77.0},"id":"w-395428","is_focused":false,"minimized":false,"pid":39736,"process_instance":"windows-proc-v1:13439605685:6474129","title":"opencode.json - Notepad","visible":true}]}

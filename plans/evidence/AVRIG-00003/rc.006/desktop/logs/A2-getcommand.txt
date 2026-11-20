@@ -1,0 +1,2 @@
+(Get-Command agent-desktop).Source
+d:\nodejs\.npm\global\agent-desktop.ps1

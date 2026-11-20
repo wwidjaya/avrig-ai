@@ -1,0 +1,2 @@
+d:\nodejs\.npm\global\agent-desktop
+d:\nodejs\.npm\global\agent-desktop.cmd

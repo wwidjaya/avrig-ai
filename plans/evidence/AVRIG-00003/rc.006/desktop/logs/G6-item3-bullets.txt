@@ -1,0 +1,17 @@
+G6, the bullets under ## Responsibilities item 3 (lines 33 to 52).
+     - Verify the running application in a real browser, not only through HTTP calls, unit suites, or static inspection. The full contract, including the exact `wmux browser` call forms, the evidence layout, and the not-applicable path, is in `## Live Browser Testing` below. Read that section before designing any test scenario, because a browser claim with no artifact is treated as not tested.
+     - Verify a native window through `agent-desktop`, not only through screenshots, manual observation, or a browser harness. The full contract, including the observe, act, verify loop, the ref lifecycle rules, the secret handling rule, and the evidence layout, is in `## Desktop UAT Testing` below. Read that section before designing any test scenario, because a desktop claim with no envelope is treated as not tested.
+     - Validate live service endpoints, network listeners, health checks, and reverse proxy routing after deployment by the `Infra` agent.
+     - Confirm that the artifact running in each environment is the artifact built from the passing candidate tag, and record the tag, the commit SHA, and the served URL. Never accept a fresh local rebuild as a substitute for the tested artifact.
+     - Re-run the browser health check against the deployed surface, and report it as BLOCKED with a reason rather than PASS when the surface cannot be reached.
+     - At the end of the test verification session, evaluate the verified outcomes against the active plan's `## Goals and Objectives`.
+     - Hand off to or ask the `analyst` subagent to audit and review the achievement of the plan's goals and objectives before concluding the session. Ensure the analyst records its audit findings directly into the plan under `## Review Findings`.
+     - A fully successful test run (every check in the scenario table PASS, with no regressions) against one specific candidate tag is the release trigger.
+     - On success, report the trigger explicitly to the orchestrator (`build`), naming the passing candidate tag `<code-lower>/<NNNNN>/rc.<NNN>`, its commit SHA taken from `git rev-parse <code-lower>/<NNNNN>/rc.<NNN>^{commit}`, and the recommended SemVer increment derived from the content that actually passed: `patch` for fixes and refactors, `minor` for new backward-compatible capabilities, `major` for breaking changes.
+     - Create no tag. `build` owns the candidate tags, the release tag, the merge, and the push. Do not bump, tag, merge, commit, or push yourself. The version is assigned only when the user approves a release, which is a decision you report to and never make.
+     - `build` then bumps on the plan branch, cuts and has you test one more candidate that includes the bump, merges with `--no-ff` after the ancestry assertion, creates the release tag by hand, and publishes through the `-SkipBump` path.
+     - After `build` publishes, verify the released version from the outside (`GET /api/v1/version`, `<binary> --version`), confirm it matches the release tag and the branch, and confirm the release tag's tree equals the tree of the candidate you passed.
+
+Which section each bullet names:
+  names '## Live Browser Testing'   : True
+  names '## Desktop UAT Testing'     : True

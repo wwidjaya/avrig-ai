@@ -1,0 +1,42 @@
+=== N7, the tester did not do the installer s or the author s job ===
+
+advisory.
+
+1. Installed nothing.
+   The only install-shaped step was A8 s unelevated `npm install -g agent-desktop@1.3.1`,
+   which was refused EPERM and left the shim listing unchanged (logs/A8-reinstall-
+   unelevated.txt, logs/A8-shims-after.txt). The row permits exactly that probe because it
+   installs nothing. No elevated install was performed by the tester; the installed tree is
+   asserted from the Infra log and the manifest instead.
+
+2. Edited no definition. Two readings, both recorded, because they disagree.
+   at 09:50:05  sha256 46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+                equals the pinned tester.md.tested and the manifest Sha256 and amendments[-1]
+   at 09:56     sha256 1E52D9ACF121AF4C0594239822C18B8CB3F19616102C628820AF3BC593B24C3D
+                does NOT equal the pinned copy 46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2
+                mtime 2026-11-20 09:53:50, 27556 bytes, 2 differing lines
+
+   The file moved at 09:53:50, during the run but after every G row had been scored. One line
+   changed, Responsibilities item 1, the plan indicator source moving from plans/PLAN-INDEX.md to
+   project_indicator in the frontmatter of plans/PLAN-RULES.md. That is not this work item s scope.
+
+   Why this is not a tester edit, stated as evidence rather than as a denial:
+     every command this session issued against the file was a read: Get-Content, Select-String,
+     Get-FileHash and Compare-Object. No Set-Content, Add-Content, Out-File, edit or redirect
+     targeted it. Every write this session performed went to a path under
+     plans/evidence/AVRIG-00003/rc.006/desktop/.
+     the file is untracked in the Agentic repository (.opencode/agents/ is listed ?? by git), so
+     no commit, no author and no reflog exists to name the writer. That absence is recorded, not
+     glossed: authorship cannot be proven from git here, only that this session did not write it
+     and that the edit is outside the work item.
+     the file was NOT reverted. Reverting a concurrent writer to make a hash line read clean is
+     not a tester s decision, and doing it would have destroyed someone else s work.
+
+   Consequence: every G, H and N row is scored against the 46EC68BE bytes, which is what the run
+   actually measured. No claim is made about the current bytes. G13 records the drift in full and
+   names the recovery, which is to re-pin and re-score once the concurrent edit settles.
+
+3. Created only evidence files.
+   avrig-ai git status --porcelain is empty, and the evidence tree it wrote is covered by
+   the plans/evidence/** ignore rule (N5). No product source, schema, build configuration,
+   harness file or plan file was modified. The plan file was read, never written.

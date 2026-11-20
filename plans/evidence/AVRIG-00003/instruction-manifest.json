@@ -1,0 +1,146 @@
+{
+  "work_item": "AVRIG-00003",
+  "plan": "plans/AVRIG-00003-2026-11-20-agent-desktop-uat-tooling.md",
+  "generated_utc": "2026-11-19T23:39:12Z",
+  "generated_local": "2026-11-20 06:39:12 +07:00",
+  "purpose": "Proof of the tester definition edit. The target sits in the untracked .opencode/agents/ tree of the Agentic checkout, so no branch commit and no candidate tag can contain it.",
+  "repository": "avrig-ai",
+  "branch": "chore/AVRIG-00003-agent-desktop-uat-tooling",
+  "files": [
+    {
+      "File": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md",
+      "Status": "PRESENT",
+      "Bytes": 27513,
+      "Lines": 248,
+      "Sha256": "46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2",
+      "Backup": "D:\\Cloud\\OneDrive\\AI\\Agentic\\.opencode\\agents\\tester.md.bak-20261120-062939",
+      "BackupStatus": "PRESENT",
+      "BackupBytes": 11496,
+      "BackupLines": 112,
+      "BackupSha256": "ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56",
+      "BackupGitIgnore": ".gitignore:35 *.bak-*"
+    }
+  ],
+  "tested_copy": {
+    "Path": "plans/evidence/AVRIG-00003/tester.md.tested",
+    "Sha256": "46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2",
+    "Bytes": 27513,
+    "Lines": 248,
+    "Note": "Verbatim byte copy of the live definition taken before rc.005. The definition is untracked in the Agentic checkout and had been rewritten twice by a concurrent writer, so a hash alone records that something changed but not what. This copy lets a later reader diff the tested artifact against the live file."
+  },
+  "agent_desktop": {
+    "cli_version": "1.3.1",
+    "envelope_schema_version": "2.6",
+    "install_command": "npm install -g agent-desktop@1.3.1",
+    "installed_elevated": true,
+    "dist_integrity": "sha512-5pBKkFkdB/VIAWRfqoA8lYp5/fenfxUHI15Pc4k8Nn2LmLxxo1PkAb0WLypknyOCczuIwuzFp/rZHGGawEV+hw==",
+    "dist_shasum": "7ec645dc27a3191ab6d0ab7fa23033ed1980a20a",
+    "shim_prefix": "d:\\nodejs\\.npm\\global",
+    "note": "The npm prefix grants Users and Authenticated Users only RX, so the pinned install ran from an elevated pwsh. Every pre-existing global CLI at the same prefix is owned by BUILTIN\\Administrators. The installed tree is byte identical to the published tarball, whose sha512 equals dist.integrity."
+  },
+  "definition_sections": {
+    "retitled_item": "Responsibilities item 3: UI Verification: Live Browser and Desktop Application UAT",
+    "browser_boundary_added": true,
+    "harness_choice_added": true,
+    "new_section": "## Desktop UAT Testing",
+    "new_section_subsections": 11
+  },
+  "amendments": [
+    {
+      "sequence": 2,
+      "amended_utc": "2026-11-19T23:44:24Z",
+      "amended_local": "2026-11-20 06:44:24 +07:00",
+      "section": "## Desktop UAT Testing > ### Launch the tested artifact",
+      "reason": "close-app cannot resolve a hosted application. --app resolves against list-apps, where a hosted application appears under its host process, so close-app answers APP_NOT_FOUND while list-windows --app finds the window. Verified against CalculatorApp.exe on this host. The section now records the window Close ref route.",
+      "sha256_before": "E8EE3EE738724120A2E8D284727DEECD1B6A3D91A0BA5B2C53E0170C0A64C8A7",
+      "sha256_after": "7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6",
+      "lines_before": 241,
+      "lines_after": 242
+    },
+    {
+      "sequence": 3,
+      "amended_utc": "2026-11-20T00:16:03Z",
+      "amended_local": "2026-11-20 07:16:03 +07:00",
+      "sections": [
+        "## Desktop UAT Testing > ### Secrets",
+        "## Desktop UAT Testing > ### The observe, act, verify loop",
+        "## Desktop UAT Testing > ### Windows and PowerShell specifics",
+        "## Desktop UAT Testing > ### What to assert"
+      ],
+      "reason": "The .ps1 shim drops the pipeline and certifies an empty value as delivered. agent-desktop resolves to agent-desktop.ps1, which is a thin wrapper over the native executable, and PowerShell does not forward a script's pipeline into a native command, so --stdin reached the tool as EOF; the tool wrote an empty value, read it back empty, and returned ok true with delivered_verified. The .cmd and native routes deliver the value but answer ACTION_FAILED with no value in post_state, a false negative. get reads one named property and never reports available_actions. snapshot --app silently takes the focused window when an application has several windows instead of raising AMBIGUOUS_TARGET. wait --text cannot match a value held in a control. All four measured against agent-desktop 1.3.1 on this host.",
+      "sha256_before": "7AAA385ACF8AD4E867FAF69C7D9E712ABDEB62160411AE45FB6D0C9191A749B6",
+      "sha256_after": "2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82",
+      "lines_before": 242,
+      "lines_after": 247
+    },
+    {
+      "sequence": 4,
+      "amended_utc": "2026-11-20T00:52:05Z",
+      "amended_local": "2026-11-20 07:52:05 +07:00",
+      "section": "## Desktop UAT Testing > ### Windows and PowerShell specifics",
+      "reason": "The claim was over-broad. It said snapshot --app never raises AMBIGUOUS_TARGET for a multi-window application and silently takes the focused window. The rc.002 run measured both halves: with several windows and one of them focused the tool returns ok true on that window and emits no error block, and with several windows and none focused it raises AMBIGUOUS_TARGET and names the candidate window ids. The bullet now states both cases and keeps the operative rule unchanged, which was always right: pin --window-id taken from list-windows --app whenever more than one window exists, rather than reading the envelope to discover which behaviour you got. The old sentence about the case that does raise the error is folded into the same bullet.",
+      "sha256_before": "2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82",
+      "sha256_after": "FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6",
+      "bytes_before": 26855,
+      "bytes_after": 26974,
+      "lines_before": 247,
+      "lines_after": 246
+    },
+    {
+      "sequence": 5,
+      "amended_utc": "2026-11-20T01:49:31Z",
+      "amended_local": "2026-11-20 08:49:31 +07:00",
+      "sections": [
+        "## Desktop UAT Testing > ### The observe, act, verify loop",
+        "## Desktop UAT Testing > ### Launch the tested artifact"
+      ],
+      "reason": "Two contract level hazards measured in the rc.004 run, neither of which the definition warned about. A saved ref can resolve onto an identical sibling instead of raising STALE_REF: with two Notepad windows open, a Close Tab ref captured from one snapshot was acted on after its own tab had been removed, the act returned ok true and InvokePattern.Invoke succeeded, and the click landed on the identical Close Tab in the sibling window, closing that window's document. The clean case does raise STALE_REF with details.kind saved_ref_absent, so the fresh snapshot advice stands while its implied guarantee does not, and the section now states that a successful act is not proof the ref addressed the intended node. Separately, closing a window whose document has unsaved changes discards that work with no prompt while returning ok true and delivered_verified, verified twice on this host through the positional close-app and through the window's own Close ref. Both hazards were added as two bullets and nothing else in the definition changed.",
+      "sha256_before": "FE53CBA420BBADC24396A57C13E82B372B0421AA0315126C9060E09DF28421D6",
+      "sha256_after": "6ECAE1E8B9B39DF06A2BE3031AA32B96357779B4BDE929ED6719411CAF217CC3",
+      "bytes_before": 26974,
+      "bytes_after": 27455,
+      "lines_before": 246,
+      "lines_after": 248
+    },
+    {
+      "sequence": 6,
+      "amended_utc": "2026-11-20T01:59:10Z",
+      "amended_local": "2026-11-20 08:59:10 +07:00",
+      "change_mtime_local": "2026-11-20 08:51:15 +07:00",
+      "author": "concurrent writer outside this work item",
+      "scope": "whole definition",
+      "accepted": true,
+      "reason": "Recorded rather than performed by this work item. The live definition was rewritten at 08:51:15 by a concurrent writer as a vocabulary harmonization that aligns it with the global AGENTS.md update landing at the same time, which rewords the Tester description from matrices to scenarios. The diff against the retained pre-change copy at C:\\Users\\wwidj\\AppData\\Local\\Temp\\opencode\\tester.md.pre-term-change-20261120-083503 is twenty lines: nine substitution pairs replacing matrix or matrices with scenario or scenarios, including the plan section reference becoming ## Test Specification and Validation Scenarios, plus the two hazard bullets added by sequence 5. Nothing else moved, both bullets remain at lines 169 and 198, and all eleven subsections are intact. The change is accepted rather than reverted, so the earlier wording is not restored.",
+      "sha256_before": "6ECAE1E8B9B39DF06A2BE3031AA32B96357779B4BDE929ED6719411CAF217CC3",
+      "sha256_after": "46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2",
+      "bytes_before": 27455,
+      "bytes_after": 27513,
+      "lines_before": 248,
+      "lines_after": 248
+    },
+    {
+      "sequence": 7,
+      "amended_utc": "2026-11-20T02:53:50Z",
+      "amended_local": "2026-11-20 09:53:50",
+      "change_mtime_local": "2026-11-20 09:53:50",
+      "author": "external writer, unattributed: the definition is untracked, so git names no author",
+      "scope": "Responsibilities item 1",
+      "accepted": false,
+      "reason": "The `<CODE>` source in Responsibilities item 1 moved from `plans/PLAN-INDEX.md` to `project_indicator:` in the frontmatter of `plans/PLAN-RULES.md`, matching the global AGENTS.md change made at the same time. It is authority aligned and deliberately not reversed, but it landed after every row of rc.006 had been scored, so it is recorded here and NOT adopted into the tested set. The tested bytes stay 46EC68BE. Re-pinning the tested copy to follow the live file was rejected, because a pinned copy that tracks the live file proves nothing about what was tested.",
+      "sha256_before": "46EC68BE1D15F03CB2EBF0B921510BC8D389BEF0D08CED8D67F96C85771703D2",
+      "sha256_after": "1E52D9ACF121AF4C0594239822C18B8CB3F19616102C628820AF3BC593B24C3D",
+      "bytes_before": 27513,
+      "bytes_after": 27556,
+      "lines_before": 248,
+      "lines_after": 248,
+      "measured_delta": "One differing line, not two as first reported. Compare-Object of the tested copy against the live file returns a single pair, Responsibilities item 1, and the 43 byte growth is that line alone."
+    }
+  ],
+  "live_after_merge": {
+    "Sha256": "1E52D9ACF121AF4C0594239822C18B8CB3F19616102C628820AF3BC593B24C3D",
+    "Bytes": 27556,
+    "Lines": 248,
+    "ObservedLocal": "2026-11-20 09:53:50",
+    "Note": "The live definition at merge time. It is newer than the tested bytes and differs by one line in Responsibilities item 1. The verdict of record describes 46EC68BE, not this hash. Recorded so a later reader can tell which bytes passed and which shipped."
+  }
+}

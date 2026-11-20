@@ -1,0 +1,5 @@
+F3 BATCH AUDIT
+batch --help saved at logs/F3-batch-help.txt; its own text states the JSON array of commands sits in the process arguments.
+Secret steps recorded in this run: F1 (.cmd set-value --stdin), F2 (.ps1 set-value --stdin), F4 (.cmd clipboard-set --stdin). Each is one separate command with the value on stdin, never a batch.
+batch invocations in this run: 0. No batch call appears in logs/D14-commands.txt.
+definition states the batch rule = True

@@ -1,0 +1,5 @@
+N6 empty-tree note
+------------------
+No candidate app returned a window with no interactive children, so the empty-tree distinction is stated rather than exercised.
+notepad.exe returned ref_count 26 on the first snapshot (D4), which is why D5's fallbacks were not needed.
+Had an app exposed no refs, it would be recorded as a finding about that app with its snapshot attached, never as a tool failure.

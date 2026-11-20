@@ -1,0 +1,5 @@
+B6 single-envelope check on 'agent-desktop status'
+---------------------------------------------------
+stdout parses as one JSON object : True (single JSON document, nothing else on stdout)
+exit code                        : 0
+stderr                           : empty (B6-stderr.txt holds only the recorded exit code)

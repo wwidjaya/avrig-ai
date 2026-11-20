@@ -1,0 +1,85 @@
+=== N4, a credential never travels in an argument list ===
+
+Scope: every file under the desktop evidence folder that records a command, not only the
+commands a value is written through. wait --value and find --value, which would put a value
+in argv exactly as set-value does, are read for too.
+
+1. Every recorded line that shows the sentinel ON A COMMAND LINE:
+    logs\C4-section-text.txt:68
+        'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+    logs\C4-tokens.txt:3
+        'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+    logs\D14-commands.txt:35
+        22  09:31:33  'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.ps1 set-value '@s9c74ay9zu1e6:e1' --stdin  F2  ok true, delivered_verified, and  ...
+    logs\D14-commands.txt:37
+        24  09:31:43  'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s9c74ay9zu1e6:e1' --stdin  F1  ACTION_FAILED, delivered_unverifi ...
+    logs\D14-commands.txt:38
+        25  09:31:49  agent-desktop get '@s9c74ay9zu1e6:e1' --property value         F1      ok true, value 'uat-secret-0002', the read-back that decides the  ...
+    logs\D14-commands.txt:40
+        27  09:31:58  'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd clipboard-set --stdin  F4  ok true, delivered_unverified
+    logs\D14-commands.txt:41
+        28  09:31:58  agent-desktop clipboard-get                                 F4      ok true, text 'uat-secret-0002\r\n'
+    logs\F1-invocation.txt:9
+        uat-secret-0002
+    logs\F2-routes.txt:3
+        Sentinel: uat-secret-0002, a declared fake. It is not a credential and stands in for one.
+    logs\F2-routes.txt:8
+        'uat-secret-0002' | & "d:\nodejs\.npm\global\agent-desktop.ps1" set-value '@s9c74ay9zu1e6:e1' --stdin
+    logs\F2-routes.txt:28
+        'uat-secret-0002' | & "d:\nodejs\.npm\global\agent-desktop.cmd" set-value '@s9c74ay9zu1e6:e1' --stdin
+    logs\F2-routes.txt:34
+        -> ok true, value "uat-secret-0002"     THE VALUE DID LAND.
+    logs\F2-routes.txt:36
+        '*uat-secret-0002 - Notepad'.
+    logs\F5-secret-audit.txt:8
+        uat-secret-0002        the declared fake sentinel. Found in: logs/F1-invocation.txt,
+    logs\G10-powershell.txt:10
+        'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+    logs\H4-diff-raw.txt:123
+        ADD  'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+    ledger.csv:42
+        "F1","PASS","snapshots/F1-cmd-set-value.json; snapshots/F1-readback.json; snapshots/F1-get-value.json; logs/F1-invocation.txt","Sentinel piped through ...
+    ledger.csv:46
+        "F5","PASS","logs/F5-secret-audit.txt","advisory: the only secret-shaped string in the folder is the declared fake uat-secret-0002, plus the declared  ...
+    ledger.csv:71
+        "N4","PASS","logs/N4-argument-audit.txt","Every recorded invocation was read, not only the ones that write a value. The sentinel uat-secret-0002 appea ...
+
+2. Reading of each, one by one:
+
+     F1-invocation.txt, F2-routes.txt and D14-commands.txt record the sentinel as the
+     PIPELINE PRODUCER: the line begins with the value in single quotes, then a pipe, then
+     the command. That places the value on stdin. The argv in those calls is the ref and
+     --stdin and nothing else:
+        'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s9c74ay9zu1e6:e1' --stdin
+     F1-get-value.json, F5-secret-audit.txt, F6-secrets-text.txt and E6-dispositions.txt
+     record the sentinel as a READ RESULT or as prose about the sentinel. A read-back is not
+     an argument list; it is the assertion the row requires.
+     snapshots/F1-readback.json and snapshots/F1-get-value.json carry it as the observed
+     value of the field, which is the whole point of the read-back rule.
+
+3. Forms that would have put a credential in argv, and whether they were used:
+     set-value "<value>"      NOT USED. Every set-value used --stdin.
+     clipboard-set "<value>"  NOT USED. clipboard-set used --stdin.
+     wait --value "<value>"   NOT USED. D12 compares in the shell after a get read.
+     find --value "<value>"   NOT USED anywhere in the run.
+     type "<value>"           used ONCE, in F7, with uat-probe-0003, a declared non-secret
+                              probe. It is the only literal this run puts in an argument list.
+     batch <json>             used for NOTHING. F3 only read batch --help, because batch JSON
+                              sits in argv and the definition forbids a secret in a batch.
+
+4. Verdict: no sentinel, token, password or key appears in any argument list. The only
+   argv literal in the run carries no credential and is labelled a probe wherever it appears.
+
+5. Nine of the hits listed in section 1 are not this run s invocations and are named here so a
+   reader does not have to guess:
+     logs/C4-section-text.txt, logs/C4-tokens.txt, logs/G10-powershell.txt and
+     logs/H4-diff-raw.txt carry the DEFINITION s own example line, extracted for the C4, G9, G10
+     and H4 analyses:
+       'uat-secret-0002' | agent-desktop.cmd set-value '@s8f3k2p9:e8' --stdin
+     That is the same pipeline-producer shape, with the value on stdin, and it is the example the
+     definition teaches rather than a command this run issued.
+     logs/F1-invocation.txt line 9 is the sentinel written on its own line as the value that was
+     piped, recorded on purpose as proof of the transport.
+     ledger.csv rows F1, F5 and N4 mention the sentinel in prose.
+   None of the above places the sentinel in an argument list. The only argv literal in the run is
+   the F7 probe, which carries no credential.

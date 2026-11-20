@@ -1,0 +1,18 @@
+
+Name              Length Mode
+----              ------ ----
+agent-desktop        431 -a---
+agent-desktop.cmd    120 -a---
+agent-desktop.ps1    112 -a---
+
+
+
+Name
+----
+bin
+lib
+scripts
+package.json
+README.md
+
+

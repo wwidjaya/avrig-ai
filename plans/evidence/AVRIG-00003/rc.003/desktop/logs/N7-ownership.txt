@@ -1,0 +1,6 @@
+N7 ownership audit
+------------------
+Tester installed nothing: the only npm invocation is the A8 unelevated attempt, which was refused with EPERM and changed nothing.
+Tester edited no definition: tester.md hashes FE53CBA4...21D6 before and after this run.
+Tester created only files under plans/evidence/AVRIG-00003/rc.003/desktop/.
+avrig-ai worktree: clean except the evidence added by this run (see logs/A4-git-status.txt and N5).

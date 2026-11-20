@@ -1,0 +1,51 @@
+=== git -C avrig-ai status --porcelain ===
+
+=== git -C Agentic status --porcelain ===
+ M .obsidian/appearance.json
+ M .obsidian/workspace.json
+ M .opencode/opencode.json
+ M .opencode/skills/remote-skills/SKILL.md
+ M .opencode/skills/remote-skills/remote-skills.ps1
+ M AGENTS.md
+ D agentic
+ M api
+ M backup/api
+ M backup/web
+ M service.json
+ M shared/skills/gmail/SKILL.md
+ M shared/skills/gmail/gmail-tool.ps1
+ M shared/skills/manage-dns/SKILL.md
+ M shared/skills/manage-dns/dns.ps1
+ M shared/skills/manage-edm/SKILL.md
+ M shared/skills/manage-edm/scripts/manage-edm.py
+ M shared/skills/manage-zeroclaw/SKILL.md
+ M shared/skills/map-codebase/SKILL.md
+ M shared/skills/plan-code/schema/001-plan.sql
+ M shared/skills/unblock-vpn/SKILL.md
+ M web
+?? .opencode/agents/
+?? .opencode/commands/unslop.md
+?? .opencode/plugins/wsl-bash.ts
+?? .rc/
+?? 0.34.0
+?? AGENTS.md.bak
+?? AVRIG-00002/
+?? AVRIG-00003/
+?? TripoSR/
+?? avatar/
+?? avrig-ai-gateway-oauth/
+?? avrig-ai/
+?? avrig-api/
+?? avrig-lib/
+?? avrig-ui/
+?? commands/unslop.md
+?? edge/
+?? office/
+?? opencode.json
+?? package-lock.json
+?? package.json
+?? shared/skills/manage-rauthy/
+?? shared/skills/manage-vault/
+?? shared/skills/plan-code/plan-code.ps1
+?? shared/skills/plan-code/tests/
+?? shared/skills/unslop/

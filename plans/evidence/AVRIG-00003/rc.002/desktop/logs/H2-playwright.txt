@@ -1,0 +1,8 @@
+PLAYWRIGHT HARNESS REFERENCES
+D:\Cloud\OneDrive\AI\Agentic\test          present=True
+playwright.config.ts                       present=True
+playwright.keycloak.config.ts              present=True
+`test`                                     present=True
+`keycloak`                                 present=True
+`report`                                   present=True
+`summary`                                  present=True

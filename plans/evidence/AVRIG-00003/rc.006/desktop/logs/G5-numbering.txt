@@ -1,0 +1,8 @@
+G5, the numbered items in ## Responsibilities (lines 12 to 52).
+  item 1  bold-title='Test Design, Plan Attachment, and Token Cache Preparation (Pre-Implementation):'
+  item 2  bold-title='Automated Verification, Functional Testing, and Diagnostics (Post-Implementation):'
+  item 3  bold-title='UI Verification: Live Browser and Desktop Application UAT:'
+  item 4  bold-title='Post-Deployment Smoke Verification:'
+  item 5  bold-title='Session-End Goals Review with Analyst:'
+  item 6  bold-title='Release Trigger (Mandatory):'
+gap/duplicate check: expect 1..6 exactly, each with a bold title

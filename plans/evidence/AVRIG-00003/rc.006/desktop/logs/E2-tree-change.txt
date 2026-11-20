@@ -1,0 +1,36 @@
+E2, first construction, window C (w-11208710), and what it measured.
+
+Premise: a change that REMOVES the element the captured ref addresses.
+  snapshot s3ivq2dj6pxozf, window w-11208710, one tab 'Untitled. Unmodified.'
+  click Add New Tab (e5 of s3ivq2dj6pxozf) -> window now holds two tabs
+  snapshot spb7ktdgbfx04, ref_count 27:
+    tab 'Untitled. Unmodified.'  ref=@spb7ktdgbfx04:e3
+    tab 'Untitled. Unmodified.'  ref=@spb7ktdgbfx04:e4  states=selected
+      button 'Close Tab'          ref=@spb7ktdgbfx04:e5   <- captured ref, addresses the SELECTED tab's close button
+
+Act 1: click '@spb7ktdgbfx04:e5'
+  -> ok true, InvokePattern.Invoke succeeded, delivered_unverified, retry unsafe
+  -> the selected tab closed. The addressed element (that tab's Close Tab button) is gone.
+  Evidence: snapshots/E2r-act1-close-tab.json
+
+Act 2: click '@spb7ktdgbfx04:e5' again, same captured ref, no new snapshot in between
+  -> ok true AGAIN, InvokePattern.Invoke succeeded, delivered_unverified, retry unsafe.
+     No STALE_REF, no AMBIGUOUS_TARGET. The envelope also lists a transient
+     'Pop-upHost' window with unclassified:sheet, which is the host's own popup
+     plumbing rather than an application prompt.
+  -> consequence: the remaining tab closed as well, and with it the window.
+     list-windows after act 2 has no w-11208710 at all, and a pinned snapshot of it
+     answers WINDOW_NOT_FOUND 'No window with id w-11208710'.
+  Evidence: snapshots/E2r-stale-ref.json, logs/E2r-windows-after-act2.json, snapshots/E2r-sheet.json
+
+READING: this is the silent redirect the row exists for, in its own window. The captured node
+addressed tab 2's Close Tab button; after act 1 that node no longer existed, a structurally
+identical Close Tab button for tab 1 had appeared, and act 2 resolved onto it and closed the
+window. The envelope reported ok true and verified invocation both times, so a tester who trusted
+it would have no signal that the second act landed on a different node than the one captured.
+This is recorded as a FINDING against the tool, not as a clean refusal.
+
+Because that construction destroyed the window before a snapshot could be taken between the acts,
+it cannot carry the identity read on its own. The same construction is therefore repeated on
+window B (w-16910484) with a snapshot between the acts, which is where the identity comparison
+below comes from.

@@ -1,0 +1,4 @@
+C2 platform guide: envelope ok=true, data.content 8624 chars, saved at guide-platform.txt and decoded at logs/C2-platform-guide-content.txt
+first heading = agent-desktop-windows, headings: 
+# agent-desktop-windows | ## Capability Table | ## First Contact | ## What differs on Windows | ## References
+addresses Windows specifically = True   PowerShell ref quoting = True   headed-only input named = True

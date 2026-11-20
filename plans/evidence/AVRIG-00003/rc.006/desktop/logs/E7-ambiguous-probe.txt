@@ -1,0 +1,58 @@
+E7, the error path where several windows of one application exist and none is in front.
+
+State at probe time: three Notepad windows existed, all in one process (pid 24580).
+  w-2296062  '*uat-d12-wait-0006 - Notepad'   (the window this run had typed into)
+  w-11208710 'Untitled - Notepad'
+  w-16910484 'Untitled - Notepad'
+Evidence: logs/E7-windows.txt
+
+Probe 1, focus-window --title on a title two windows share:
+
+  agent-desktop focus-window --title "Untitled - Notepad"
+  -> ok false, error.code AMBIGUOUS_TARGET
+     message 'More than one window matches the focus target'
+     suggestion 'Run list-windows and retry with --window-id <id>.'
+     details.candidate_count 2
+     details.candidates: w-11208710 'Untitled - Notepad', w-16910484 'Untitled - Notepad'
+     disposition: delivery not_delivered, retry safe
+  The refusal is correct and precise: it named exactly the two windows carrying that title, and it
+  named the recovery in its own suggestion. Neither candidate is listed as focused, which matches the
+  environment limit recorded in D7 and E4.
+  Evidence: snapshots/E7-ambiguous-focus-window.json
+
+  Recovery taken: none was needed inside the row, because E3 already owns the pinned path. The
+  pinned form was exercised immediately afterwards and resolved cleanly
+  (snapshots/E7-find-pinned.json, and E3-pin-a/b). The title was never repeated.
+
+Probe 2, find --name unpinned, on a name present in all three windows:
+
+  agent-desktop find --name "Add New Tab"
+  -> ok true, total_matches 0, matches []
+     snapshot_id s2woj08i9xh8b8
+  This is the deviation rc.005 reported, reproduced on rc.006: an EMPTY RESULT for a control that
+  exists in every open Notepad window. The envelope reports ok true, so a tester who reads absence
+  from it would conclude the control does not exist. It does.
+  Evidence: snapshots/E7-ambiguous-find.json
+
+Probe 3, the same find pinned to a window:
+
+  agent-desktop find --window-id w-16910484 --name "Add New Tab"
+  -> ok true, total_matches 1, matches[0] role button, name 'Add New Tab',
+     path ['window:Untitled - Notepad','group','group','tablist'], ref_id @s3bc3wfuu25n1z:e1
+  So the pin is what makes find answer truthfully. The empty result in probe 2 is a defect of the
+  unpinned form, not an absence of the control, and the row's rule that an empty unpinned result is
+  never evidence of absence is borne out on this build.
+  Evidence: snapshots/E7-find-pinned.json
+
+Probe 4, the unpinned snapshot form, recorded because the definition's bullet states it:
+
+  agent-desktop snapshot --app "Notepad" -i
+  -> ok false, AMBIGUOUS_TARGET, 'More than one window matches the target'
+  Evidence: snapshots/E7-snapshot-unpinned.json
+
+Reading. E7 asked for a targeted refusal and got one on the focus path and on the snapshot path, with
+the candidate list in details, which is the behaviour the bundled guide promises. It also asked for
+the unpinned find outcome to be recorded verbatim rather than trusted, and that outcome is a silent
+wrong answer: ok true with zero matches. Both are recorded, neither is passed over, and the
+divergence between focus-window/snapshot (loud) and find (silent) on the same ambiguity is stated as
+a finding against the tool.

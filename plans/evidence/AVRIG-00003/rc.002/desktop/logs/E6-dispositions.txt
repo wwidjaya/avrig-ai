@@ -1,0 +1,9 @@
+E6 DISPOSITIONS, recorded verbatim from the error envelope of each check
+
+E1-bare-ref.json: code=INVALID_ARGS delivery=not_delivered retry=safe recovery=null
+E2-stale-ref.json: code=STALE_REF delivery=not_delivered retry=safe recovery={"strategy":"refresh_snapshot_then_retry_original","retryable":true,"requires_fresh_snapshot":true}
+E7-ambiguous-focus-window.json: code=AMBIGUOUS_TARGET delivery=not_delivered retry=safe recovery=null
+E7-ambiguous-find.json: code=AMBIGUOUS_TARGET delivery=not_delivered retry=safe recovery=null
+
+RETRIES PERFORMED: none of the four was retried with the same argument. The ref failure was followed by a fresh snapshot; the two E7 name-addressed probes were recorded as the deviation they are.
+UNSAFE DISPOSITIONS SEEN ELSEWHERE THIS RUN: D7 and F1 set-value over the .cmd route return ACTION_FAILED retry=unsafe (delivered_unverified). Neither was retried; the following snapshot decided each.

@@ -1,0 +1,51 @@
+=== N3, a ref is never retried after a stale ref error ===
+
+Source: logs/E5-recovery-order.txt, plus a mechanical count of every qualified ref in
+logs/D14-commands.txt so the claim is checked rather than asserted.
+
+Every ref that appears more than once on a command line, and what each occurrence is:
+
+  @s140zy7gstwrt6:e5   E2b, 2 invocations (seq 61 and 63) with a FRESH snapshot s1zuzkr15qwej7
+                       recorded between them at seq 62. The second invocation is the experiment
+                       itself, not a retry: the row exists to find out what the tool does when a
+                       removed ref is used again. A third mention at line 115 is prose in this
+                       file's order note, not a command.
+  @spb7ktdgbfx04:e5    E2r, 2 invocations (seq 55 and 56), the same deliberate experiment on a
+                       second window, where the window was destroyed before a snapshot could be
+                       taken between the acts.
+  @s3ohpyeocjp2ie:e26  E2w, 2 invocations (seq 94 and 95). The second was refused
+                       WINDOW_NOT_FOUND, not_delivered, and NOTHING followed it. This is the
+                       refused branch, and it was not retried.
+  @s3hrxsnxe2id9z:e1   F4 and F7, 3 DIFFERENT commands on one still-valid snapshot: clear,
+                       then get --property value, then type. No error preceded the second or third,
+                       and type failed at the policy check (POLICY_DENIED) rather than because the
+                       ref was stale. Not a retry.
+  @s3fv4euta72xnk:e1   D12, 3 different commands on one live snapshot: set-value --stdin, then
+                       wait --element, then get --property value. That is the write, await, read
+                       triple the row prescribes, in order, on a ref that still resolved.
+  @s3aaxbcm0sz8s7:e1   D10, 2 commands: set-value --stdin, then get --property value. Write then
+                       read, both against the same live snapshot.
+
+So the count has two shapes rather than one, and the audit separates them:
+
+  RE-ISSUED AFTER AN ERROR, without a new snapshot: NONE.
+  Used more than once for a deliberate read or for the row's own experiment: six refs, each
+  accounted for above, and none of them a blind repeat of a failed command.
+
+The ref lifecycle errors that actually fired on this run were INVALID_ARGS (E1, D6, D10 --app),
+WINDOW_NOT_FOUND (three times) and AMBIGUOUS_TARGET (twice). Each was followed by a snapshot, a
+listing, or nothing at all, never by the same argument again:
+
+  after E1's INVALID_ARGS        -> a snapshot on the next line
+  after E7's AMBIGUOUS_TARGET    -> pinned --window-id, the title never repeated
+  after each WINDOW_NOT_FOUND    -> list-windows, or the end of the run
+
+No STALE_REF was raised on this run, so there is no stale-ref retry to audit against; the closest
+case is E2, where the tool did NOT raise STALE_REF and the row's own instruction is to record that
+silence as the finding rather than to retry into it.
+
+One judgement, repeated from E6 rather than buried: the two close-app TIMEOUTs were followed by
+further work on the same application. That was not a retry of the same command. The pending save
+prompt was read from a fresh snapshot and dismissed through its own Don't save ref first, and the
+close was then completed through the window's own Close ref, which is a different command against
+a different state.

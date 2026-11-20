@@ -1,0 +1,6 @@
+### The wmux browser fallback subsection, Compare-Object against the .bak baseline
+current lines 71..92 against baseline lines 68..89
+differences = 0
+
+WMUX_SURFACE_ID rule present = True
+identical = True

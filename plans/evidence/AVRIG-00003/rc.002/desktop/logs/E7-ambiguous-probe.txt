@@ -1,0 +1,10 @@
+E7 PROBES against the two Notepad windows w-1444236 (opencode.json - Notepad) and w-4589872 (Untitled - Notepad), same app, same pid, neither focused:
+
+1. agent-desktop focus-window --title 'Notepad'   (partial title match hits both windows; focus-window takes --title/--window-id/--app, it has no positional argument)
+2. agent-desktop find --app 'Notepad' --name 'File'   (find takes --name/--value/--text/--role, it has no positional query)
+3. agent-desktop snapshot --app 'Notepad' -i   (recorded earlier in envelopes/E3-focused-a.json)
+
+RESULT 1: focus-window --title 'Notepad' -> ok false AMBIGUOUS_TARGET, candidate_count 2, candidates [w-4589872, w-1444236], retry safe (envelopes/E7-ambiguous-focus-window.json).
+RESULT 2: find --app 'Notepad' --name 'File' -> ok false AMBIGUOUS_TARGET, candidate_count 2, candidates [w-4589872, w-1444236], retry safe (envelopes/E7-ambiguous-find.json).
+RESULT 3: snapshot --app 'Notepad' -i with no --window-id -> ok false AMBIGUOUS_TARGET, candidate_count 2 (envelopes/E3-focused-a.json).
+RECOVERY TAKEN: list-windows, then a pinned --window-id snapshot (envelopes/E4-window-id.json). The ambiguous argument was never retried as it stood.

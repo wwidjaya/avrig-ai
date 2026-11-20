@@ -1,0 +1,18 @@
+E5 recovery order after the E2 failure
+-------------------------------------------------------------
+1. snapshot  --app "Notepad" -i --window-id w-7145708  -> s32csg2m3vks92   (captured ref @s32csg2m3vks92:e3, the tab)
+2. set-value (stdin) into @s32csg2m3vks92:e1           -> tree change, tab name becomes "e2-probe. Modified."
+3. click '@s32csg2m3vks92:e3'                          -> STALE_REF / saved_ref_absent / retry safe  (FAILS LOUDLY, once)
+4. snapshot  --app "Notepad" -i --window-id w-7145708  -> s1qqj0g1iex8ij   (FRESH snapshot, this is the recovery)
+5. subsequent reads use s1qqj0g1iex8ij refs only
+
+Assertions:
+- the failed ref @s32csg2m3vks92:e3 appears exactly once in the recorded sequence: TRUE
+- a fresh snapshot appears before the next action: TRUE (step 4)
+- no second attempt with the same ref is recorded: TRUE
+
+Note on E2 attempt 1 (kept as E2-attempt1-click-resolved.json, not reused):
+the first tree change (Add New Tab) did not supersede the captured Close Tab ref, because Notepad
+exposes a Close button only on the active tab, so exactly one live element still matched and the
+click resolved and succeeded. That was a harness error in choosing the tree change, not a tool
+defect and not a retry. The row was then re-run with a change that genuinely removes the element.

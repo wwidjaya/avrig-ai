@@ -1,0 +1,7 @@
+N3 retry audit
+--------------
+Stale ref @s32csg2m3vks92:e3 appears in exactly one act envelope (E2-stale-ref.json) and once in the command log.
+It is followed by snapshot s1qqj0g1iex8ij. No second attempt with that ref exists anywhere in the folder.
+The one click that succeeded on an old ref (@sw0fj84v50qqy:e4) was not a stale ref: its element was still unique,
+so the tool had nothing to refuse. That attempt was abandoned and the row re-run with a genuinely superseded ref.
+See logs/E2-tree-change.txt.

@@ -1,0 +1,6 @@
+=== N3: retry audit ===
+stale ref @s22zc1maxume78:e6 appears in the recorded sequence as: one successful click before the tree change, one STALE_REF after it. It is never attempted a third time.
+  D14 line 69: | 44 | `agent-desktop click '@s22zc1maxume78:e6'` (Close Tab, tree changes) | logs/E2-step2-close-tab.json |
+  D14 line 71: | 46 | `agent-desktop click '@s22zc1maxume78:e6'` (same ref after the tree change) | envelopes/E2-stale-ref.json (STALE_REF / saved_ref_absent) |
+the step after the failure is a fresh snapshot: skm1oq1qjfaf2 (snapshots/E5-fresh-snapshot-after-stale.json)
+no Start-Sleep and no loop wraps any ref action

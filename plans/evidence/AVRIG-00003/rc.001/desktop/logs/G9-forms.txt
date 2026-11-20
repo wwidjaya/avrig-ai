@@ -1,0 +1,13 @@
+=== G9: literal forms in the ## Desktop UAT Testing section (line 117 to end) ===
+agent-desktop status         count=2
+skills get desktop           count=1
+skills get platform          count=1
+snapshot --app               count=3
+-i                           count=4
+--window-id                  count=2
+close-app                    count=2
+--stdin                      count=6
+INVALID_ARGS                 count=2
+STALE_REF                    count=2
+AMBIGUOUS_TARGET             count=2
+error.disposition.retry      count=1

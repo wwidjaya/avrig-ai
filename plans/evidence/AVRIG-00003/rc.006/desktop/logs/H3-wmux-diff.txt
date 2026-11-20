@@ -1,0 +1,13 @@
+=== H3, the wmux browser fallback subsection, live against the .bak baseline ===
+
+Method: Compare-Object on the extracted subsection of each file, not git diff, because the
+definition is untracked and git diff reports nothing for it.
+
+  live subsection   lines 71 to 92, 22 lines
+  .bak subsection   lines 68 to 89, 22 lines
+  Compare-Object differences: 0
+
+  No difference. The subsection is identical, including the WMUX_SURFACE_ID rule.
+
+The WMUX_SURFACE_ID rule, quoted from the live subsection:
+  - With no caller surface (`WMUX_SURFACE_ID` unset), `wmux` subcommands can exit 0 with empty output. Treat that as BLOCKED with the reason recorded, never as a passing browser run.
