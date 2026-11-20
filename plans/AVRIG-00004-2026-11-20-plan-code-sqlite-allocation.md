@@ -33,6 +33,7 @@ Measurable outcomes:
 - `plans/PLAN-INDEX.md` is deleted, and no numbered fact survives outside the database: the ledger rows, the deferred defects, and the indicator aliases all live in tables, and the file's prose lives in `plans/PLAN-RULES.md`, so there is one record rather than a database shadowed by a hand-maintained table.
 - Deleting `plans/_plan.db`, rebuilding it with `import` from `plans/_plan.sql`, and assigning again returns the same next number the dump implies.
 - A wrong or unset payload path never produces a silent success: it exits `3` and writes no row, proven by test.
+- A row written at assignment can be advanced afterwards without being re-keyed. `update` writes the six record fields (status, candidate tag, evidence, issue, issue URL, release version), refuses the six protected columns and a voided row by name with exit `3`, writes exactly one event per call, and leaves `verify --strict` to catch a skipped `export` as drift, proven by test. This goal exists because the ledger could otherwise be created and never advanced: stages 8, 12, 13, 14, and 16 each record something on a row that already exists, and without a writer those columns are decoration.
 
 Non goal, stated plainly so it is not mistaken for one: this does not make numbering safe across machines. SQLite locks a file, and two machines hold two files. The git push rejection stays the cross machine compare and swap, and the git union stays an input to the candidate number so a stale local database jumps forward instead of reissuing. The database is a local lock and a fast index, never the archive. The archive is the committed dump, `plans/_plan.sql`, and its git history is the record.
 
@@ -425,6 +426,7 @@ Stage mapping: this is Stage 1 output now, then Stage 2 analyst review and Stage
 - The dump is edited by hand. Mitigated by the same check in the opposite direction, and by the fact that a hand edit is a line of SQL in a text diff rather than a silent database change nobody can see.
 - A binary database is committed by mistake. Mitigated by `plans/_plan.db*` in `.gitignore` and by the fact that the file is regenerable, so committing it is a mistake with a one line fix rather than a corrupted history.
 - Untracked agent definition. Mitigated by the SHA-256 manifest entry and by keeping the normative rule in tracked `AGENTS.md`.
+- A record that can be created but never advanced. Mitigated by `update`, which is allowlisted to the six record fields, refuses the protected six and a voided row by name, and writes one event per call. This risk is listed rather than assumed away because the rejected alternative is the dangerous one: a hand `UPDATE` can set `state = 'committed'` on a voided row and un-burn a number this design calls permanent, and it leaves no event, so the habit would quietly defeat the whole record.
 
 ## Out of Scope
 
