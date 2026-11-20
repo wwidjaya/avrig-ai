@@ -5,6 +5,7 @@ project_indicator: AVRIG
 branch: chore/AVRIG-00003-agent-desktop-uat-tooling
 candidate_tags:
   - "avrig/00003/rc.001 @ 68520e980a10a220fed78b7a86b6ba36e63e0e36 (AVRIG-00003-build.001)"
+  - "avrig/00003/rc.002 (AVRIG-00003-build.002), cut after the remediation set landed"
 release_version:
 status: testing
 created: 2026-11-20
@@ -475,6 +476,9 @@ Screenshot and `screenshot` by window are subject to the same hosted-application
 | 7, workspace build gate | Not applicable, with the reason stated: the diff from the approval commit `1ad27f4` to the branch head contains only `plans/AVRIG-00003-2026-11-20-agent-desktop-uat-tooling.md` and `plans/evidence/AVRIG-00003/instruction-manifest.json`. No buildable source changed, so there is nothing for `cargo check --workspace` or `pnpm build` to say about this plan |
 | 8, candidate tag | `avrig/00003/rc.001`, annotated, on `68520e980a10a220fed78b7a86b6ba36e63e0e36`, build id `AVRIG-00003-build.001`, pushed. The tag resolves to that commit, and it is the commit the matrix runs against |
 | 9, QA | Verdict recorded once the run completes, against the tag rather than the tree |
+| 10, remediation candidate | `avrig/00003/rc.002`, build id `AVRIG-00003-build.002`, cut at the head that carries both the corrected definition and the corrected 73 row matrix. It is the first candidate whose tree contains every remediation, and it absorbs the bookkeeping commits that landed after `rc.001` |
+
+The branch stops moving at `rc.002`. The verdict, the ledger row, and the release version are recorded after the merge, because a commit that records a verdict would move the tree away from the candidate that earned it. That is also why `rc.001` is described here rather than edited: a failed candidate keeps its history and the next candidate carries the fix.
 
 The tag covers the manifest, and the manifest covers the definition. That chain is the only evidence available for a file the Agentic repository does not version, which is why check G13 recomputes the live hash instead of trusting the recorded one.
 
