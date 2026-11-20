@@ -1,0 +1,4 @@
+B3 VERSIONS, kept apart:
+envelope root version (schema) = 2.6
+binary version (agent-desktop version data.version) = 1.3.1
+Neither number is a product release version; the release version is assigned only at deployment and is empty in the plan frontmatter.

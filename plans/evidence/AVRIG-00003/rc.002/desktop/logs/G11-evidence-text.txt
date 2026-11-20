@@ -1,0 +1,22 @@
+G11 ### Evidence per run IN THE NEW SECTION (lines 224-243)
+### Evidence per run
+
+Capture evidence under `plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/`, keyed by the same candidate number as the browser evidence for the same run:
+
+```text
+plans/evidence/<CODE>-<NNNNN>/rc.<NNN>/desktop/
+  snapshots/          every snapshot envelope, exactly as printed
+  screens/            one screenshot per asserted state
+  version.json        agent-desktop version output
+  status.json         agent-desktop status output
+  guide-desktop.txt
+  guide-platform.txt
+  RESULT.md           one result line
+```
+
+- Save the snapshot envelopes, one screenshot per asserted state, the `version` output, and the `status` output. A paraphrased envelope cannot be re-read when a result is questioned, so save what the tool printed.
+- The result line names the candidate tag, the commit SHA, the installed CLI version, the verdict, the count of passing checks, and this folder path.
+- The envelope carries a `version` field of its own, which is the schema version of the envelope and not the CLI version. Keep the two apart: the schema version describes the JSON shape, and the CLI version describes the binary that produced it. Neither of them is a product release version.
+- The edit to this definition is untracked in the Agentic checkout, so no candidate tag can contain it. Its proof is the instruction manifest at `plans/evidence/<CODE>-<NNNNN>/instruction-manifest.json` together with a read-back of the hashes it records, while the candidate tag proves the rest of the tree.
+- Follow the project's evidence retention policy rather than committing large binaries by default. A desktop claim with no envelope in that folder counts as not tested, and the verdict line must say so.
+names_plans_evidence_path=True  names_snapshots=True  names_screens=True  names_version=True  names_status=True  names_RESULT=True

@@ -1,0 +1,10 @@
+G1 FRONTMATTER (lines 1 to the closing ---)
+---
+description: Designs test specifications, appends test matrices to plans, runs automated test suites, performs functional and end-to-end verification, and validates deployment health
+mode: subagent
+permissions:
+  - action: edit
+    resource: "**/plans/evidence/**"
+    effect: allow
+---
+description present=True  mode_subagent=True  allow_rule=True

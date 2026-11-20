@@ -1,0 +1,16 @@
+N7 OWNERSHIP AUDIT: this run installed nothing, edited no definition, and created files only under the evidence tree
+
+definition SHA256 before = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82 (logs/G13-definition-hash-pre.txt)
+definition SHA256 after  = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82 (logs/G13-definition-hash-post.txt)
+
+installed package unchanged: `-- agent-desktop@1.3.1
+shim set after the failed reinstall: agent-desktop, agent-desktop.cmd, agent-desktop.ps1
+the two npm attempts this run both failed (EPERM, unelevated), so the installed tree is the one the manifest attests:
+  exit=-4048
+
+avrig-ai worktree status --porcelain (empty means nothing tracked was touched):
+  entries = 0
+Agentic checkout status, recorded before the run in logs/A4-git-status.txt: 43 entries. Now: 43 entries. Added since: 0 []. Removed since: 0 [].
+
+files now under plans/evidence/AVRIG-00003/rc.002/: 162 in total, of which 6 sit at the desktop/ root (ledger, RESULT, version, status, two guides) and 156 inside envelopes/, logs/, screens/ and snapshots/.
+Nothing was written to crates/, apps/, packages/, migrations/, scripts/, or .opencode/.

@@ -1,0 +1,6 @@
+F2 ROUTE: ps1 shim. INVOCATION: 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.ps1 set-value '@s36v6n2oftajd2:e1' --stdin
+F2 READBACK: snapshot=slgv0d67j5jlq ref= value=[]
+F2 READBACK snapshot=s3h8fpmxub039w window_title=Untitled - Notepad textfield_value=[] sentinel_present=False
+F2 RESULT: ps1 shim envelope ok=true, disposition.delivery=delivered_verified, verified=true, and the read-back (snapshots/F2-snapshot-readback.json, envelopes/F2-readback.json) holds value='' -> the piped sentinel was lost. Before the act the field held 'agent-desktop-uat-0001'; after it the field was empty and the title lost its '*' marker.
+
+F1 ROUTE: cmd shim. INVOCATION: 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd set-value '@s3h8fpmxub039w:e1' --stdin

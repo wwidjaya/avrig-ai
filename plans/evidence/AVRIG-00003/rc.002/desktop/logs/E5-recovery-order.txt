@@ -1,0 +1,11 @@
+E5 RECOVERY ORDER (read back from the envelopes and logs of this run)
+
+1. snapshots/E2-snapshot-before-change.json      snapshot s1pq1m6yiwffa8, tab ref @s1pq1m6yiwffa8:e10 captured
+2. snapshots/E2-snapshot-root-redrill.json      root drill on the tab strip, refs inside the subtree replaced (e10 superseded)
+3. envelopes/E2-stale-ref.json                  click '@s1pq1m6yiwffa8:e10' -> ok false STALE_REF, disposition.retry safe
+4. snapshots/E5-fresh-snapshot-after-stale.json snapshot s3rgt4zpi62vl7, taken BEFORE the next action, no retry of e10
+5. envelopes/E3-focused-a.json                  the next action is a fresh observation, not a repeat of the failed click
+
+OCCURRENCES OF THE FAILED REF: the ref is acted on exactly once, in envelopes/E2-stale-ref.json. It is named again only where a log quotes it, at the point it was captured, at the point it failed, and in this audit. See logs/N3-retry-audit.txt for the count.
+SECOND ATTEMPT WITH THE SAME REF: none.
+SLEEP OR LOOP IN THE RECOVERY: none. No Start-Sleep was recorded in any step of this run.

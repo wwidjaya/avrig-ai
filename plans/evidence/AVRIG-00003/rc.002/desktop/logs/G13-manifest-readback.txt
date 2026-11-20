@@ -1,0 +1,17 @@
+G13 MANIFEST READ-BACK
+manifest: plans/evidence/AVRIG-00003/instruction-manifest.json
+row File        = D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md
+row Status      = PRESENT
+row Bytes       = 26855   live bytes = 26855   match = True
+row Lines       = 247   live lines = 247   match = True
+row Sha256      = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82
+live Sha256     = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82
+sha_match       = True
+row Backup      = D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md.bak-20261120-062939
+backup exists   = True
+row BackupSha256= ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56
+live BackupSha  = ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56
+backup_match    = ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56 -eq @{File=D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md; Status=PRESENT; Bytes=26855; Lines=247; Sha256=2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82; Backup=D:\Cloud\OneDrive\AI\Agentic\.opencode\agents\tester.md.bak-20261120-062939; BackupStatus=PRESENT; BackupBytes=11496; BackupLines=112; BackupSha256=ED5581F4DB65377B8961CC0D6A4D7F6E412A3139CA6F5D50AA10CC174C4D4F56; BackupGitIgnore=.gitignore:35 *.bak-*}.BackupSha256
+rows MISSING    = 0
+amendments      = 2; last amendment sha256_after = 2F733F260A174E4D9C4D83A101051BAEB06ECBDB3B137EC50DF62911F9007F82
+last_amendment_equals_live = True

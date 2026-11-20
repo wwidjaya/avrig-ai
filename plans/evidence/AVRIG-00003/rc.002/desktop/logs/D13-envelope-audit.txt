@@ -1,0 +1,65 @@
+D13 ENVELOPE AUDIT: every file under envelopes/ must parse as one JSON object and carry version, ok and command at the root
+
+ok   A5-version-noprofile.json              version=2.6 ok=True command=version
+ok   A6-version.json                        version=2.6 ok=True command=version
+ok   A7-status-second-shell.json            version=2.6 ok=True command=status
+ok   B1-version.json                        version=2.6 ok=True command=version
+ok   B2-status.json                         version=2.6 ok=True command=status
+ok   B4-permissions.json                    version=2.6 ok=True command=permissions
+ok   B5-list-surfaces.json                  version=2.6 ok=True command=list-surfaces
+ok   B6-status.json                         version=2.6 ok=True command=status
+ok   D1-launch.json                         version=2.6 ok=True command=launch
+ok   D10-close-app-app-flag.json            version=2.6 ok=False command=close-app
+ok   D10-close-app-positional.json          version=2.6 ok=True command=close-app
+ok   D10-list-apps-after.json               version=2.6 ok=True command=list-apps
+ok   D11-notifications.json                 version=2.6 ok=False command=list-notifications
+ok   D12-get-value.json                     version=2.6 ok=True command=get
+ok   D12-wait-value.json                    version=2.6 ok=True command=wait
+ok   D2-list-apps.json                      version=2.6 ok=True command=list-apps
+ok   D3-list-windows.json                   version=2.6 ok=True command=list-windows
+ok   D4-snapshot-observe.json               version=2.6 ok=True command=snapshot
+ok   D6-get-ref.json                        version=2.6 ok=True command=get
+ok   D6-get-role.json                       version=2.6 ok=True command=get
+ok   D7-act.json                            version=2.6 ok=False command=set-value
+ok   D8-snapshot-verify.json                version=2.6 ok=True command=snapshot
+ok   D9-screenshot.json                     version=2.6 ok=True command=screenshot
+ok   E1-bare-ref.json                       version=2.6 ok=False command=click
+ok   E2-add-tab.json                        version=2.6 ok=True command=click
+ok   E2-stale-ref.json                      version=2.6 ok=False command=click
+ok   E3-focused-a.json                      version=2.6 ok=False command=snapshot
+ok   E4-window-id.json                      version=2.6 ok=True command=snapshot
+ok   E7-ambiguous-find.json                 version=2.6 ok=False command=find
+ok   E7-ambiguous-focus-window.json         version=2.6 ok=False command=focus-window
+ok   F1-cmd-set-value.json                  version=2.6 ok=False command=set-value
+ok   F1-readback.json                       version=2.6 ok=True command=get
+ok   F2-ps1-set-value.json                  version=2.6 ok=True command=set-value
+ok   F2-readback.json                       version=2.6 ok=True command=get
+ok   F4-clear-field.json                    version=2.6 ok=True command=clear
+ok   F4-clipboard-clear.json                version=2.6 ok=True command=clipboard-clear
+ok   F4-clipboard-get-after-clear.json      version=2.6 ok=True command=clipboard-get
+ok   F4-clipboard-get.json                  version=2.6 ok=True command=clipboard-get
+ok   F4-clipboard-set.json                  version=2.6 ok=True command=clipboard-set
+ok   F4-readback-empty.json                 version=2.6 ok=True command=get
+ok   F4-screenshot.json                     version=2.6 ok=True command=screenshot
+ok   F7-type-headless.json                  version=2.6 ok=False command=type
+
+files=42 unparseable_or_incomplete=0
+SNAPSHOT ENVELOPES (every one must parse and carry version, ok, command)
+
+ok   D4-snapshot-observe.json                     version=2.6 ok=True command=snapshot snapshot_id=s1tc00hf3lvakv
+ok   D8-snapshot-verify.json                      version=2.6 ok=True command=snapshot snapshot_id=s33z6o07a5ypnb
+ok   E2-snapshot-after-addtab.json                version=2.6 ok=True command=snapshot snapshot_id=s32um0k4qa58as
+ok   E2-snapshot-before-addtab.json               version=2.6 ok=True command=snapshot snapshot_id=s3u80jkjmqkod6
+ok   E2-snapshot-before-change.json               version=2.6 ok=True command=snapshot snapshot_id=s1pq1m6yiwffa8
+ok   E2-snapshot-opencode-selected.json           version=2.6 ok=False command=snapshot snapshot_id=
+ok   E2-snapshot-root-redrill.json                version=2.6 ok=True command=snapshot snapshot_id=s1pq1m6yiwffa8
+ok   E3-focused-a.json                            version=2.6 ok=False command=snapshot snapshot_id=
+ok   E4-window-id.json                            version=2.6 ok=True command=snapshot snapshot_id=s24riefhg4yy5c
+ok   E5-fresh-snapshot-after-stale.json           version=2.6 ok=True command=snapshot snapshot_id=s3rgt4zpi62vl7
+ok   F1-snapshot-after-cmd.json                   version=2.6 ok=True command=snapshot snapshot_id=s2xk05yvc53sa2
+ok   F2-snapshot-after.json                       version=2.6 ok=True command=snapshot snapshot_id=slgv0d67j5jlq
+ok   F2-snapshot-before.json                      version=2.6 ok=True command=snapshot snapshot_id=s36v6n2oftajd2
+ok   F2-snapshot-readback.json                    version=2.6 ok=True command=snapshot snapshot_id=s3h8fpmxub039w
+ok   F4-snapshot-cleared.json                     version=2.6 ok=True command=snapshot snapshot_id=s2zpp73l0ed8nd
+
+snapshot files=15 bad=0

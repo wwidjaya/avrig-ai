@@ -1,0 +1,18 @@
+N2 NOT-APPLICABLE AUDIT: a desktop surface is never recorded as not applicable because Playwright cannot see it
+
+rows whose verdict is not one of PASS, FAIL or BLOCKED: 0
+rows whose verdict or note contains the phrase 'not applicable': 2, and neither is a desktop surface marked unsupported
+  G7 quotes the browser section's own sentence, which forbids exactly that downgrade.
+  N2 states the rule as this row's finding, so the phrase appears in its own wording.
+  No row in ledger.csv uses the phrase to excuse a native window.
+
+BLOCKED rows and the artefacts that carry their failure:
+  A8: logs/A8-reinstall.txt
+    logs/A8-reinstall.txt exists=True
+  E3: envelopes/E3-focused-a.json; logs/E3-focus-a.json; logs/E3-taskbar-open.json; logs/E3-list-windows-after-max.json
+    envelopes/E3-focused-a.json exists=True
+    logs/E3-focus-a.json exists=True
+    logs/E3-taskbar-open.json exists=True
+    logs/E3-list-windows-after-max.json exists=True
+
+Every desktop row is a native-window observation with an envelope or a log behind it; the two rows that could not be produced are BLOCKED with their failing envelopes named, not downgraded to a browser check and not marked not applicable.

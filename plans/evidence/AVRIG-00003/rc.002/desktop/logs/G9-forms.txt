@@ -1,0 +1,15 @@
+G9 LITERAL FORMS REQUIRED IN THE NEW SECTION
+agent-desktop status           present=True
+skills get desktop             present=True
+skills get platform            present=True
+snapshot --app                 present=True
+-i                             present=True
+--window-id                    present=True
+close-app                      present=True
+--stdin                        present=True
+agent-desktop.cmd              present=True
+delivered_verified             present=True
+INVALID_ARGS                   present=True
+STALE_REF                      present=True
+AMBIGUOUS_TARGET               present=True
+error.disposition.retry        present=True

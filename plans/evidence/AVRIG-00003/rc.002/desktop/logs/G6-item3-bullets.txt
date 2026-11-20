@@ -1,0 +1,5 @@
+G6 BULLETS UNDER ITEM 3
+3. **UI Verification: Live Browser and Desktop Application UAT:**
+   - Verify the running application in a real browser, not only through HTTP calls, unit suites, or static inspection. The full contract, including the exact `wmux browser` call forms, the evidence layout, and the not-applicable path, is in `## Live Browser Testing` below. Read that section before designing any test matrix, because a browser claim with no artifact is treated as not tested.
+   - Verify a native window through `agent-desktop`, not only through screenshots, manual observation, or a browser harness. The full contract, including the observe, act, verify loop, the ref lifecycle rules, the secret handling rule, and the evidence layout, is in `## Desktop UAT Testing` below. Read that section before designing any test matrix, because a desktop claim with no envelope is treated as not tested.
+

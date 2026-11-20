@@ -1,0 +1,1 @@
+{"version":"2.6","ok":true,"command":"wait","data":{"elapsed_ms":157,"found":true,"observed":{"expected_chars":22,"matched":true,"value_chars":22,"value_present":true},"predicate":"value","ref":"@s33z6o07a5ypnb:e1"}}

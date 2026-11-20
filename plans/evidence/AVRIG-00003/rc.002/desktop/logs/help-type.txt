@@ -1,0 +1,25 @@
+===== type --help =====
+Insert text into a text target
+
+Usage: agent-desktop-win32-x64.exe type [OPTIONS] <REF> [TEXT]
+
+Arguments:
+  <REF>   Qualified ref from snapshot (@<snapshot_id>:eN)
+  [TEXT]  Text to type
+
+Options:
+      --timeout-ms <TIMEOUT_MS>        Maximum wait in milliseconds, covering ref resolution, actionability and delivery of the text; default 5000 plus 30 per character of TEXT; 0 disables the wait
+  -v, --verbose                        Enable debug logging to stderr
+      --debug                          Visual debug for snapshot/click; requires --screenshot PATH.html
+      --stdin                          Read up to 10,000 bytes of UTF-8 text from a pipe or file
+      --interval-ms <INTERVAL_MS>      Type one keystroke every N ms (1-2000) instead of inserting TEXT at once; --timeout-ms then applies to each keystroke, and 0 makes each keystroke try once
+      --screenshot <PATH.html>         Write a sensitive, local HTML screenshot visualization (new file only)
+      --session <SESSION>              Select the snapshot namespace; session-owned refs require the same scope
+      --agent-id <AGENT_ID>            Harness subagent ID within --session (1-64 letters/digits/-/_; or AGENT_DESKTOP_AGENT_ID)
+      --trace <TRACE>                  Append reliability trace JSONL to this path
+      --trace-strict                   Fail on trace setup/pre-action write errors
+      --headed                         Prefer physical delivery for natural input commands and permit focus/cursor side effects. Default is strict headless semantic delivery.
+  -w, --wait-for <WAIT_FOR>            Poll until an element matching the role:text selector appears, then return the snapshot (snapshot and ref actions only)
+      --wait-for-gone <WAIT_FOR_GONE>  Poll until no element matches the role:text selector, then return the snapshot (snapshot and ref actions only)
+      --wait-timeout <WAIT_TIMEOUT>    Maximum wait time in milliseconds for --wait-for / --wait-for-gone (default: 30000)
+  -h, --help                           Print help

@@ -1,0 +1,1 @@
+F7 INVOCATION: agent-desktop type '@s2xk05yvc53sa2:e1' 'uat-probe-0003'  (no --headed; the literal is the declared non-secret probe string, the only argv literal in this run)

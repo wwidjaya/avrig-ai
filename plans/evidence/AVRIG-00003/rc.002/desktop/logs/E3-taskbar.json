@@ -1,0 +1,1 @@
+{"version":"2.6","ok":false,"command":"open-system-surface","error":{"code":"INVALID_ARGS","message":"error: unexpected argument 'taskbar' found","disposition":{"delivery":"not_delivered","retry":"safe"}}}

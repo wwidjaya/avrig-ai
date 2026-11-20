@@ -1,0 +1,1 @@
+F4 INVOCATION: 'uat-secret-0002' | d:\nodejs\.npm\global\agent-desktop.cmd clipboard-set --stdin
