@@ -3,9 +3,10 @@ title: Landing and Console Unslop Redesign
 plan_id: AVRIG-00002
 project_indicator: AVRIG
 branch: feat/AVRIG-00002-landing-console-unslop-redesign
-candidate_tags: []
+candidate_tags:
+  - avrig/00002/rc.001
 release_version:
-status: in-progress
+status: testing
 created: 2026-11-20
 owner: Architect
 tags:
@@ -513,7 +514,22 @@ Commit `cbc295f` closes both. All seven negative assertions now return zero acro
 
 **Slice branch convention defect, found in practice.** The taxonomy defines slice branches as `<type>/<CODE>-<NNNNN>-<slug>/<slice>`, nested under the plan branch, and the parallel plan above repeats it. Git refs form a tree, so `refs/heads/feat/X` and `refs/heads/feat/X/landing` cannot coexist: `git worktree add -b feat/X/landing` fails with `cannot lock ref ... exists; cannot create`. The convention only works if the plan branch exists solely as a remote ref, which it cannot, because the plan branch is what gets checked out to do the work.
 
-Consequence for this plan: the two surfaces run sequentially in the single plan-branch worktree rather than as concurrent slices, with explicit-path staging so no commit sweeps up the other agent's files. Both surfaces still land on the plan branch, which is what the merge expectations require; only the nested ref names were dropped. This is worth fixing in the taxonomy rather than silently working around, because the next plan will hit it at the same point. The taxonomy defines slice branches as `<type>/<CODE>-<NNNNN>-<slug>/<slice>`, nested under the plan branch. Git refs form a tree, so `refs/heads/feat/X` and `refs/heads/feat/X/landing` cannot coexist: `git worktree add -b feat/X/landing` fails with `cannot lock ref ... exists; cannot create`. The convention only works if the plan branch exists solely as a remote ref, which it cannot, because the plan branch is what gets checked out to work on. Consequence for this plan: the two surfaces run sequentially in the single plan-branch worktree rather than as concurrent slices, with explicit-path staging so no commit sweeps up the other agent's files. Both slices still live logically on the plan branch, which is what the merge expectations require; only the nested ref names were dropped. This is worth fixing in the taxonomy, and it is recorded here rather than silently worked around.
+Consequence for this plan: the two surfaces run sequentially in the single plan-branch worktree rather than as concurrent slices, with explicit-path staging so no commit sweeps up the other agent's files. Both surfaces still land on the plan branch, which is what the merge expectations require; only the nested ref names were dropped. This is worth fixing in the taxonomy rather than silently working around, because the next plan will hit it at the same point.
+
+## Stage 8, Candidate Tag
+
+**Two commits landed after the gate, so the candidate was cut from a reconciled tree.** The seal placement (`838f5be`) and a `--no-ff` merge of `origin/main` (`4e6900b`) came after `cbc295f`. The merge was not cosmetic: stage 13 asserts the default branch is an ancestor of the candidate, and `origin/main` at `415650d` was not an ancestor of the branch, so a candidate cut before the merge would have failed the ancestry assertion and shipped a tag whose plan file predates the work it describes. The gate's assertions were re-run on the merged tree: all six projects build, and `packages/ui/dist` did not drift.
+
+Build id is **`AVRIG-00002-build.001`**, anchored to the candidate commit rather than to the gate run, so `build.<NNN>` and `rc.<NNN>` stay aligned at `.001`.
+
+| Repository | Commit | Tag |
+|---|---|---|
+| `avrig-ai` | `4e6900b7e1528b588d2968f24cf8693f4d59ecb0` | `avrig/00002/rc.001` |
+| `avrig-ui` | `777bbb6ee0e36a8db96980490b1cd637257ac7e4` | `avrig/00002/rc.001` |
+
+Both annotated tags are pushed and resolve on the remote to exactly those commits (`ls-remote` confirms `^{}` dereferences). Candidate identity for this plan is the pair, not either SHA alone, because the token CSS lives in `avrig-ui` while the consuming app lives in `avrig-ai` and `@avrig/tokens` resolves through a `link:` symlink that no tag in `avrig-ai` can describe.
+
+`avrig/00002/rc.001` is immutable from this point. Any fix produces `rc.002`, never a moved tag. The taxonomy defines slice branches as `<type>/<CODE>-<NNNNN>-<slug>/<slice>`, nested under the plan branch. Git refs form a tree, so `refs/heads/feat/X` and `refs/heads/feat/X/landing` cannot coexist: `git worktree add -b feat/X/landing` fails with `cannot lock ref ... exists; cannot create`. The convention only works if the plan branch exists solely as a remote ref, which it cannot, because the plan branch is what gets checked out to work on. Consequence for this plan: the two surfaces run sequentially in the single plan-branch worktree rather than as concurrent slices, with explicit-path staging so no commit sweeps up the other agent's files. Both slices still live logically on the plan branch, which is what the merge expectations require; only the nested ref names were dropped. This is worth fixing in the taxonomy, and it is recorded here rather than silently worked around.
 
 ## Review Findings
 
