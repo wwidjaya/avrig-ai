@@ -33,6 +33,17 @@ Take the maximum from the union of four sources: `git ls-tree -r --name-only ori
 
 Allocation runs at **approval**, and at no other time. Authoring a draft allocates nothing, so a draft has no number to hold and a discarded draft leaves no gap. Because drafts are not numbered, these four sources are not the only evidence: a draft approved in another clone appears as a ledger row and an approved filename, and both are already in the union, so nothing is missed.
 
+**The tool is the local lock; git stays the authority.** Allocation is executed by `plan-code.ps1`, held in the Agentic repository at `shared/skills/plan-code/`, with the SQLite schema beside it at `schema/001-plan.sql`. The number is assigned inside one `BEGIN IMMEDIATE` transaction against `plans/_plan.db`, a per-project database file that is gitignored (`plans/_plan.db*`) and rebuildable at any time with `import`. The database never becomes the record: the candidate is `max(db_max, git_max) + 1`, so a stale, deleted, or corrupted file jumps forward to what git already claims instead of reissuing a number that another machine took. Two machines still hold two files, so the git push rejection remains the cross-machine compare and swap. `render` regenerates the table in `## Ledger` from the database, and `verify` reports drift between the database, that table, and the git union in both directions.
+
+The three layers, and what each one owns:
+
+| Layer | Artifact | Owns | Rebuildable |
+|---|---|---|---|
+| Durable authority | git union, this file, the approval push | truth, history, cross-machine serialization | not applicable |
+| Local lock | `plans/_plan.db` | assignment, contention, fast lookup | yes, from the layer above via `import` |
+| Rendered view | the `## Ledger` table between its markers | human reading, review diff | yes, from the database via `render` |
+
+
 Run `git fetch origin <default>` immediately before reading the union. `origin/<default>` is a cached ref, so without a fetch a plan pushed from another clone is invisible and the number is reissued. Verified in a fresh clone: a pushed plan was absent from `git ls-tree origin/main -- plans/` until `git fetch` ran. The fetch and the recheck below are one indivisible step.
 
 `<default>` is resolved with the four step contract in the plan, never from `origin/HEAD` alone, and indicators are compared case sensitively with `-ceq`. See the plan's default branch contract for why a single command is not sufficient.
@@ -76,7 +87,7 @@ A filename with no matching token contributes nothing. It is never treated as nu
 
 Numbers are never reused, renumbered, or reclaimed, including for abandoned plans.
 
-Single writer: allocation is serialized through the Architect role. Recheck before writing the row, then write with nothing in between. After writing, re-read the ledger and abort if the number appears twice. A racing session fails on non-fast-forward push, which is the intended fail-fast signal.
+Single writer: allocation is serialized through the Architect role. Recheck before writing the row, then write with nothing in between. That sentence is no longer only prose: `assign` performs the read, the maximum, and the insert inside one `BEGIN IMMEDIATE`, so a second writer waits or exits `2` instead of reading a number that is already taken. After writing, re-read the ledger and abort if the number appears twice. A racing session fails on non-fast-forward push, which is the intended fail-fast signal.
 
 Approval commit: no code is assigned while a plan is a draft. A draft carries no `plan_id`, no ledger number row, and no code in its filename, because a number claimed before anyone approved the work reserves a slot for something that may never happen. The single sanctioned commit on the default branch happens at approval instead: the number is claimed at that moment, the plan file is renamed to put the code first, the ledger row is written, and only the renamed plan file and this ledger are committed with a `docs(<CODE>-<NNNNN>):` message, before any implementation branch is cut. That commit is what makes the reservation visible to every checkout and worktree. An abandoned draft therefore consumes no number and leaves no gap in the series.
 
@@ -114,6 +125,8 @@ Measured on 2026-11-19: all release tags in `avrig-ai`, `avrig-api`, `avrig-lib`
 
 A work-item code never implies a release version. The Release version column stays blank through review, approval, implementation, testing, UAT, merge and deployment, and is filled with the released tag only after deployment succeeds, at stage 16. A blank cell is the honest state, because no version exists until a release is approved.
 
+`plans/_plan.db` is a runtime artifact, not a committed one. It is ignored as `plans/_plan.db*`, which covers the `-wal` and `-shm` siblings that WAL mode creates, and the leading underscore sorts it ahead of every plan markdown in a directory listing. Deleting it loses nothing that is not recoverable: `import` rebuilds it from this ledger and the git union, and `assign` self-heals by importing first when the file is absent. The database must never be committed, because a committed binary would conflict on every concurrent branch and would turn a local cache into a second source of truth.
+
 ## Aliases
 
 Empty. Populated only if the indicator ever changes after freezing.
@@ -124,12 +137,16 @@ Empty. Populated only if the indicator ever changes after freezing.
 
 ## Ledger
 
+Everything between the two markers is generated by `render` from `plans/_plan.db`, ordered by number. Editing those lines by hand is drift: `render --check` reports it and the next `render` overwrites it. Hand-written content belongs outside the markers.
+
+<!-- BEGIN GENERATED LEDGER -->
 | Plan | Created | Title | Repos | Claiming branch | Status | Passing candidate tag | Evidence path | Feature request | Release version |
 |---|---|---|---|---|---|---|---|---|---|
 | AVRIG-00001 | 2026-11-19 | Architect and Tester Workflow: Universal Plan Codes, Analyst-First Review, Branch and Candidate Tag Gate | Agentic, avrig-ai | main (approval), feat/AVRIG-00001-agent-workflow-update | released | **`avrig/00001/rc.005` @ `472dc04` PASS 20/20** (includes 0.5.0 bump); `rc.004` @ `a908c7e` PASS 20/20; `rc.003` @ `5ebede4` FAIL 19/20; `rc.002` @ `d23a7aa` FAIL 19/20; `rc.001` @ `d100017` FAIL 15/20 | `plans/evidence/AVRIG-00001/rc.005/` | [#3](https://github.com/wwidjaya/avrig-ai/issues/3), branch linked | **0.5.0** @ `dea90a7`, tagged in all four repositories |
 | AVRIG-00002 | 2026-11-20 | Landing and Console Unslop Redesign | avrig-ai, avrig-ui | main (approval), feat/AVRIG-00002-landing-console-unslop-redesign | in-progress | none yet | pending | [#5](https://github.com/wwidjaya/avrig-ai/issues/5), avrig-ai branch linked, avrig-ui branch unlinked by design | empty until deployment |
 | AVRIG-00003 | 2026-11-20 | Agent-Desktop as the Desktop UAT Harness for the Tester Agent | Agentic, avrig-ai | main (approval), chore/AVRIG-00003-agent-desktop-uat-tooling | approved | none yet | `plans/evidence/AVRIG-00003/` | pending | empty until deployment |
 | AVRIG-00004 | 2026-11-20 | Plan Code Allocation via a SQLite Allocation Ledger | Agentic, avrig-ai | main (approval), feat/AVRIG-00004-plan-code-sqlite-allocation | in-progress | none yet | `plans/evidence/AVRIG-00004/` | [#6](https://github.com/wwidjaya/avrig-ai/issues/6), both branches linked | empty until deployment |
+<!-- END GENERATED LEDGER -->
 
 ## Backfill
 
@@ -144,7 +161,7 @@ A coded plan also moves to `plans/done/` once it is released, and it keeps its c
 
 Archived coded plans: `plans/done/AVRIG-00001-2026-11-19-agent-workflow-update.md`.
 
-New work in this project starts at `AVRIG-00004`. Allocated so far: `AVRIG-00001`, `AVRIG-00002`, `AVRIG-00003`.
+New work in this project starts at the next number `plan-code.ps1` reports for `assign`, never at a number anyone computes by hand. Allocated so far: `AVRIG-00001` through `AVRIG-00004`.
 
 ## Deferred defects
 
