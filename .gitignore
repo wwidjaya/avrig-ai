@@ -50,6 +50,10 @@ lab/
 plans/evidence/**
 !plans/evidence/.gitkeep
 
+# Plan allocation database: plans/_plan.sql is the committed record, while the
+# working database and its WAL siblings are rebuilt locally by plan-code.ps1 import.
+plans/_plan.db*
+
 # Agent edit backups: `<file>.bak-<timestamp>` rollback copies are local, not source.
 # Default-deny so `git add -A` cannot sweep them into a release. A backup is a
 # recovery aid for an untracked file edit, never a committed artifact.
