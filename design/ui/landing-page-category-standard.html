@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Avrig organizes engineering work through a virtual company, a defined lifecycle, and human approval.">
+  <title>Avrig, engineering work organized as a company</title>
+  <style>
+    @font-face {
+      font-family: "IBM Plex Sans";
+      font-style: normal;
+      font-weight: 100 700;
+      font-display: swap;
+      src: url("../../assets/fonts/ibm-plex-sans-latin-ext.woff2") format("woff2");
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    @font-face {
+      font-family: "IBM Plex Sans";
+      font-style: normal;
+      font-weight: 100 700;
+      font-display: swap;
+      src: url("../../assets/fonts/ibm-plex-sans-latin.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    :root {
+      color-scheme: light;
+      --bg: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-tint: #f4f7fb;
+      --ink: #111827;
+      --body: #475569;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --line-strong: #cbd5e1;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --blue-line: #bfdbfe;
+      --green: #15803d;
+      --green-soft: #f0fdf4;
+      --amber: #a16207;
+      --amber-soft: #fffbeb;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --content: 1160px;
+      --shadow-panel: 0 18px 44px rgb(15 23 42 / 8%), 0 2px 8px rgb(15 23 42 / 4%);
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.55; }
+    a { color: inherit; text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    ::selection { color: #fff; background: #1d4ed8; }
+    :focus:not(:focus-visible) { outline: none; }
+
+    .skip-link {
+      position: absolute;
+      inset-block-start: 0.75rem;
+      inset-inline-start: 0.75rem;
+      z-index: 10;
+      transform: translateY(-160%);
+      padding: 0.65rem 0.9rem;
+      border-radius: var(--radius-sm);
+      background: var(--ink);
+      color: #fff;
+      font-weight: 650;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .container { width: min(calc(100% - 3rem), var(--content)); margin-inline: auto; }
+    .site-header { border-bottom: 1px solid var(--line); background: rgb(255 255 255 / 96%); }
+    .header-main { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+    .brand { display: inline-flex; align-items: center; gap: 0.65rem; color: var(--ink); text-decoration: none; font-size: 1.12rem; font-weight: 720; letter-spacing: -0.045em; white-space: nowrap; }
+    .brand-mark { width: 25px; height: 25px; display: inline-grid; place-items: center; border-radius: 7px; background: var(--ink); color: #fff; font-size: 0.8rem; font-weight: 700; letter-spacing: -0.08em; }
+    .header-actions { display: flex; align-items: center; gap: 1.25rem; }
+    .site-nav { min-width: 0; }
+    .nav-list { display: flex; align-items: center; gap: 1.65rem; margin: 0; padding: 0; list-style: none; }
+    .nav-list a { color: #475569; font-size: 0.9rem; font-weight: 540; text-decoration: none; white-space: nowrap; }
+    .nav-list a:hover { color: var(--ink); }
+    .button {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.68rem 1rem;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 620;
+      text-decoration: none;
+      transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+    .button:hover { transform: translateY(-1px); text-decoration: none; }
+    .button-primary { color: #fff; background: var(--ink); box-shadow: 0 1px 2px rgb(15 23 42 / 14%); }
+    .button-primary:hover { background: #273449; }
+    .button-outline { border-color: var(--line-strong); color: var(--ink); background: #fff; }
+    .button-outline:hover { background: var(--bg-subtle); border-color: #94a3b8; }
+    .button-link { min-height: 42px; padding-inline: 0.25rem; color: var(--ink); }
+
+    .hero { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(440px, 1.08fr); align-items: center; gap: clamp(3rem, 6.7vw, 6.5rem); padding-block: clamp(4.5rem, 9vw, 7.4rem) 5.75rem; }
+    h1, h2, h3, p { margin-block-start: 0; }
+    h1 { max-width: 10.5ch; margin-block-end: 1.4rem; font-size: clamp(3.2rem, 5.55vw, 4.7rem); line-height: 1.045; letter-spacing: -0.065em; font-weight: 650; }
+    .hero-copy { max-width: 570px; margin-block-end: 1.8rem; color: var(--body); font-size: clamp(1.05rem, 1.45vw, 1.2rem); line-height: 1.75; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem 1.2rem; }
+    .hero-note { max-width: 480px; margin: 1.25rem 0 0; color: var(--muted); font-size: 0.86rem; }
+
+    .system-figure { min-width: 0; margin: 0; }
+    .system-window { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; box-shadow: var(--shadow-panel); }
+    .window-top { display: flex; min-height: 54px; align-items: center; justify-content: space-between; gap: 1rem; padding-inline: 1.25rem; border-bottom: 1px solid var(--line); background: #fff; }
+    .window-title { font-size: 0.88rem; font-weight: 650; letter-spacing: -0.01em; }
+    .definition-label { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.52rem; border: 1px solid var(--line); border-radius: 999px; color: #475569; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+    .definition-label::before { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; content: ""; }
+    .map-content { padding: 1.15rem; background: var(--bg-subtle); }
+    .founder-node { display: flex; align-items: center; gap: 0.8rem; min-height: 62px; padding: 0.7rem 0.85rem; border: 1px solid var(--blue-line); border-radius: var(--radius-md); background: var(--blue-soft); }
+    .human-mark { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 8px; background: #dbeafe; color: #1d4ed8; font-size: 0.76rem; font-weight: 740; }
+    .node-copy { min-width: 0; display: grid; gap: 0.12rem; }
+    .node-copy strong { font-size: 0.86rem; font-weight: 660; }
+    .node-copy small { color: var(--body); font-size: 0.75rem; line-height: 1.45; }
+    .role-tag { margin-inline-start: auto; padding: 0.24rem 0.43rem; border: 1px solid #bfdbfe; border-radius: 5px; color: #1d4ed8; font: 600 0.72rem/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: 0.025em; white-space: nowrap; }
+    .map-connector { width: 1px; height: 18px; margin-inline-start: 2.35rem; background: var(--line-strong); animation: authority-link 520ms cubic-bezier(0.16, 1, 0.3, 1) both; transform-origin: top; }
+    @keyframes authority-link { from { opacity: 0.7; transform: scaleY(0.35); } to { opacity: 1; transform: scaleY(1); } }
+    .engine-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+    .engine { min-height: 126px; padding: 0.9rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: #fff; }
+    .engine-label { display: block; margin-block-end: 0.45rem; color: var(--muted); font: 590 0.75rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .engine h2 { margin-block-end: 0.28rem; font-size: 0.96rem; font-weight: 650; letter-spacing: -0.025em; }
+    .engine p { margin: 0; color: var(--body); font-size: 0.75rem; line-height: 1.55; }
+    .shared-layer { margin-block-start: 0.7rem; padding: 0.82rem 0.9rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: #fff; }
+    .shared-layer strong { display: block; margin-block-end: 0.42rem; font-size: 0.76rem; font-weight: 650; }
+    .module-tags { display: flex; flex-wrap: wrap; gap: 0.34rem; }
+    .module-tag { padding: 0.2rem 0.42rem; border: 1px solid #e2e8f0; border-radius: 5px; color: #475569; background: #fff; font-size: 0.75rem; line-height: 1.35; }
+    .record-layer { display: flex; align-items: center; gap: 0.55rem; margin-block-start: 0.7rem; padding: 0.64rem 0.85rem; border-radius: var(--radius-md); color: #fff; background: #1e293b; font-size: 0.75rem; }
+    .record-layer strong { font-weight: 630; }
+    .record-layer span { color: #cbd5e1; }
+    .record-symbol { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 2px; background: #93c5fd; }
+    .system-caption { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 1.2rem; border-top: 1px solid var(--line); color: var(--muted); background: #fff; font-size: 0.75rem; }
+    .system-caption span:last-child { text-align: end; }
+
+    .proof-band { border-block: 1px solid var(--line); background: var(--bg-subtle); }
+    .proof-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 1.2rem 0; list-style: none; }
+    .proof-list li { min-height: 56px; display: flex; align-items: center; gap: 0.75rem; padding-inline: 1rem; border-inline-start: 1px solid var(--line); color: #334155; font-size: 0.84rem; font-weight: 560; }
+    .proof-list li:first-child { padding-inline-start: 0; border-inline-start: 0; }
+    .proof-mark { width: 19px; height: 19px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--blue); background: #fff; font-size: 0.68rem; font-weight: 680; }
+
+    .section { padding-block: clamp(4.3rem, 8vw, 7rem); border-bottom: 1px solid var(--line); }
+    .section-heading { max-width: 710px; margin-block-end: 2.6rem; }
+    .section-heading h2 { margin-block-end: 0.8rem; font-size: clamp(2rem, 3.3vw, 2.8rem); line-height: 1.14; letter-spacing: -0.05em; font-weight: 640; }
+    .section-heading p { max-width: 66ch; margin: 0; color: var(--body); font-size: 1.02rem; line-height: 1.75; }
+
+    .engines { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+    .engine-panel { min-height: 270px; padding: clamp(1.3rem, 3.3vw, 2.35rem); background: #fff; }
+    .engine-panel + .engine-panel { border-inline-start: 1px solid var(--line); }
+    .engine-panel h3 { margin-block: 0.25rem 0.7rem; font-size: 1.35rem; letter-spacing: -0.035em; font-weight: 640; }
+    .engine-panel p { max-width: 50ch; color: var(--body); font-size: 0.94rem; line-height: 1.75; }
+    .panel-code { color: var(--muted); font: 610 0.75rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .panel-list { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+    .panel-list li { padding: 0.33rem 0.56rem; border: 1px solid var(--line); border-radius: 6px; color: #334155; background: var(--bg-subtle); font-size: 0.76rem; }
+    .harness-strip { display: grid; grid-template-columns: minmax(180px, 0.45fr) 1fr; align-items: center; gap: 1.2rem; margin-block-start: 0.8rem; padding: 1.25rem 1.45rem; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg-subtle); }
+    .harness-strip h3 { margin: 0; font-size: 0.93rem; font-weight: 630; }
+    .harness-strip p { margin: 0; color: var(--body); font-size: 0.84rem; }
+
+    .lifecycle-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-block-end: 2.25rem; }
+    .lifecycle-head .section-heading { margin: 0; }
+    .sequence-note { max-width: 220px; flex: 0 0 190px; margin: 0 0 0.4rem; padding-inline-start: 1rem; border-inline-start: 2px solid var(--blue); color: var(--body); font-size: 0.78rem; line-height: 1.6; }
+    .stage-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; border-top: 1px solid var(--line); border-inline-start: 1px solid var(--line); list-style: none; counter-reset: stage; }
+    .stage-list li { position: relative; min-height: 78px; display: flex; align-items: center; gap: 0.7rem; padding: 0.9rem; border-inline-end: 1px solid var(--line); border-bottom: 1px solid var(--line); color: #334155; font-size: 0.85rem; font-weight: 540; counter-increment: stage; }
+    .stage-list li::before { content: counter(stage, decimal-leading-zero); color: var(--muted); font: 650 0.75rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .stage-list li:last-child { background: var(--blue-soft); color: #1e3a8a; }
+    .deployment-note { display: flex; justify-content: space-between; gap: 1rem; margin-block-start: 0.8rem; padding: 0.8rem 0; color: var(--muted); font-size: 0.79rem; }
+    .deployment-note strong { color: #334155; font-weight: 620; }
+
+    .org-grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(2rem, 6vw, 5.5rem); align-items: start; }
+    .org-grid .section-heading { margin: 0; }
+    .org-tree { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: #fff; }
+    .org-row { display: grid; grid-template-columns: 115px 1fr; gap: 1rem; padding: 1rem 1.1rem; border-bottom: 1px solid var(--line); }
+    .org-row:last-child { border-bottom: 0; }
+    .org-row dt { color: #334155; font-size: 0.82rem; font-weight: 650; }
+    .org-row dd { margin: 0; color: var(--body); font-size: 0.81rem; line-height: 1.6; }
+    .org-note { margin-block-start: 0.8rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: var(--radius-md); color: var(--body); background: var(--bg-subtle); font-size: 0.82rem; line-height: 1.65; }
+    .org-note strong { color: var(--ink); }
+
+    .governance { display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(420px, 1.22fr); align-items: center; gap: clamp(2.2rem, 7vw, 6rem); }
+    .governance .section-heading { margin: 0; }
+    .decision-demo { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: 0 8px 24px rgb(15 23 42 / 5%); }
+    .demo-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); }
+    .demo-top strong { font-size: 0.9rem; font-weight: 640; }
+    .sample-label { padding: 0.22rem 0.42rem; border: 1px solid #fde68a; border-radius: 5px; color: #854d0e; background: var(--amber-soft); font: 600 0.72rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: 0.02em; }
+    .decision-body { padding: 1.2rem; }
+    .decision-row { display: grid; grid-template-columns: 145px 1fr; gap: 0.8rem; padding-block: 0.57rem; border-bottom: 1px solid #f1f5f9; font-size: 0.82rem; }
+    .decision-row:last-of-type { border-bottom: 0; }
+    .decision-row span:first-child { color: var(--muted); }
+    .decision-row strong { font-weight: 600; }
+    .human-gate { display: flex; align-items: center; gap: 0.55rem; margin-block-start: 0.9rem; padding: 0.72rem 0.8rem; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); color: #166534; background: var(--green-soft); font-size: 0.79rem; font-weight: 590; }
+    .human-gate::before { content: ""; width: 8px; height: 8px; border: 2px solid #15803d; border-radius: 50%; }
+    .governance-footnote { margin: 0.9rem 1.2rem 1.15rem; color: var(--muted); font-size: 0.75rem; }
+
+    .model-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+    .model-block { min-width: 0; padding-block-start: 1.25rem; border-top: 2px solid var(--ink); }
+    .model-block h3 { margin-block-end: 0.55rem; font-size: 1.1rem; letter-spacing: -0.025em; font-weight: 630; }
+    .model-block > p { max-width: 57ch; color: var(--body); font-size: 0.87rem; line-height: 1.7; }
+    .status-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 1rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .status-list li { padding: 0.72rem 0.65rem 0.72rem 0; border-bottom: 1px solid var(--line); }
+    .status-list code { color: #1e3a8a; font: 610 0.75rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+    .status-list span { display: block; margin-block-start: 0.16rem; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
+    .trace-list { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+    .trace-list li { padding: 0.35rem 0.52rem; border: 1px solid var(--line); border-radius: 6px; color: #334155; background: var(--bg-subtle); font: 570 0.75rem/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .epistemic-list { display: grid; gap: 0.46rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+    .epistemic-list li { display: grid; grid-template-columns: minmax(150px, 0.8fr) 1.2fr; gap: 0.8rem; align-items: baseline; padding-block: 0.52rem; border-bottom: 1px solid var(--line); }
+    .epistemic-list code { color: #1e3a8a; font: 610 0.75rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+    .epistemic-list span { color: var(--body); font-size: 0.76rem; }
+    .precedence-callout { margin-block-start: 1rem; padding: 0.85rem 0.95rem; border: 1px solid var(--blue-line); border-radius: var(--radius-sm); background: var(--blue-soft); color: #1e3a8a; font-size: 0.8rem; line-height: 1.65; }
+    .status-note { margin-block: 1.2rem 0; color: var(--body); font-size: 0.84rem; }
+
+    .knowledge-flow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 1.8rem 0 0; padding: 0; border-top: 1px solid var(--line-strong); list-style: none; }
+    .knowledge-flow li { position: relative; padding: 1rem 0.8rem 0 0; color: var(--body); font-size: 0.78rem; line-height: 1.55; }
+    .knowledge-flow li::before { position: absolute; inset-block-start: -5px; inset-inline-start: 0; width: 9px; height: 9px; border: 2px solid #fff; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 1px var(--blue); content: ""; }
+    .knowledge-flow strong { display: block; margin-block-end: 0.28rem; color: var(--ink); font-size: 0.78rem; font-weight: 630; }
+
+    .registry-wrap { overflow: clip; border: 1px solid var(--line); border-radius: var(--radius-lg); }
+    .registry { width: 100%; border-collapse: collapse; text-align: start; }
+    .registry caption { padding: 1rem 1.1rem; border-bottom: 1px solid var(--line); color: var(--muted); background: var(--bg-subtle); font-size: 0.78rem; text-align: start; }
+    .registry th, .registry td { padding: 0.84rem 1rem; border-bottom: 1px solid var(--line); vertical-align: top; text-align: start; }
+    .registry thead th { color: var(--muted); background: #fff; font-size: 0.75rem; font-weight: 620; letter-spacing: 0.02em; }
+    .registry tbody th { width: 155px; color: var(--ink); font-size: 0.79rem; font-weight: 640; }
+    .registry tbody tr:last-child th, .registry tbody tr:last-child td { border-bottom: 0; }
+    .registry td { color: var(--body); font-size: 0.78rem; line-height: 1.65; }
+    .registry code { color: #1e3a8a; font: 630 0.75rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .tech-note { display: inline-flex; align-items: center; gap: 0.45rem; margin-block-end: 1.6rem; padding: 0.36rem 0.58rem; border: 1px solid var(--blue-line); border-radius: 6px; color: #1e40af; background: var(--blue-soft); font-size: 0.75rem; font-weight: 600; }
+    .tech-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-inline-start: 1px solid var(--line); }
+    .tech-cell { min-height: 150px; padding: 1.15rem; border-inline-end: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .tech-cell h3 { margin-block-end: 0.45rem; font-size: 0.88rem; font-weight: 640; }
+    .tech-cell p { margin: 0; color: var(--body); font-size: 0.77rem; line-height: 1.7; }
+    .architecture-caveat { max-width: 78ch; margin-block-start: 1rem; color: var(--muted); font-size: 0.77rem; line-height: 1.7; }
+
+    .closing { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem; padding-block: 4rem; }
+    .closing h2 { max-width: 17ch; margin-block-end: 0.55rem; font-size: clamp(1.7rem, 3vw, 2.2rem); line-height: 1.17; letter-spacing: -0.045em; font-weight: 630; }
+    .closing p { margin: 0; color: var(--body); font-size: 0.9rem; }
+    .site-footer { border-top: 1px solid var(--line); background: var(--bg-subtle); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 74px; color: var(--muted); font-size: 0.76rem; }
+    .footer-inner a { color: #475569; }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
+      .hero-copy { max-width: 68ch; }
+      .system-figure { width: min(100%, 720px); }
+      .proof-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .proof-list li:nth-child(3) { border-inline-start: 0; padding-inline-start: 0; }
+      .proof-list li:nth-child(n + 3) { border-top: 1px solid var(--line); }
+      .org-grid, .governance { grid-template-columns: minmax(0, 1fr); gap: 2.2rem; }
+      .org-grid .section-heading, .governance .section-heading { max-width: 700px; }
+      .knowledge-flow { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 1.5rem; border-top: 0; }
+      .knowledge-flow li { border-top: 1px solid var(--line-strong); }
+      .knowledge-flow li::before { inset-block-start: -5px; }
+    }
+    @media (max-width: 700px) {
+      .container { width: min(calc(100% - 2rem), var(--content)); }
+      .header-main { min-height: 70px; flex-wrap: wrap; gap: 0.6rem 1rem; padding-block: 0.8rem; }
+      .brand { font-size: 1.05rem; }
+      .brand-mark { width: 23px; height: 23px; }
+      .header-actions { gap: 0.7rem; }
+      .header-actions .button { min-height: 40px; padding: 0.55rem 0.72rem; font-size: 0.82rem; }
+      .site-nav { order: 3; width: 100%; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+      .nav-list { width: max-content; gap: 1.2rem; padding-block: 0.25rem 0.45rem; }
+      .nav-list a { font-size: 0.82rem; }
+      .hero { gap: 2.25rem; padding-block: 3.5rem 3.6rem; }
+      h1 { max-width: 12ch; font-size: clamp(2.8rem, 11vw, 4rem); }
+      .hero-copy { font-size: 1.02rem; }
+      .hero-actions { align-items: flex-start; }
+      .button { min-height: 46px; }
+      .system-caption { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+      .system-caption span:last-child { text-align: start; }
+      .map-content { padding: 0.8rem; }
+      .engine-grid { gap: 0.5rem; }
+      .engine { min-height: 142px; padding: 0.7rem; }
+      .engine h2 { font-size: 0.85rem; }
+      .engine p { font-size: 0.7rem; }
+      .definition-label { font-size: 0.75rem; }
+      .window-top { padding-inline: 0.85rem; }
+      .record-layer { flex-wrap: wrap; }
+      .proof-list li { padding-inline: 0.7rem; font-size: 0.78rem; }
+      .section { padding-block: 3.8rem; }
+      .section-heading { margin-block-end: 1.8rem; }
+      .engines { grid-template-columns: minmax(0, 1fr); }
+      .engine-panel { min-height: auto; padding: 1.35rem; }
+      .engine-panel + .engine-panel { border-inline-start: 0; border-top: 1px solid var(--line); }
+      .harness-strip { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; padding: 1.1rem; }
+      .lifecycle-head { align-items: flex-start; flex-direction: column; gap: 0.9rem; }
+      .sequence-note { max-width: 420px; flex-basis: auto; }
+      .stage-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stage-list li { min-height: 68px; padding: 0.7rem; font-size: 0.77rem; }
+      .deployment-note { flex-direction: column; gap: 0.2rem; }
+      .org-row { grid-template-columns: 95px 1fr; gap: 0.7rem; padding-inline: 0.85rem; }
+      .org-row dt, .org-row dd { font-size: 0.76rem; }
+      .decision-row { grid-template-columns: 120px 1fr; }
+      .model-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+      .status-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .epistemic-list li { grid-template-columns: minmax(0, 1fr); gap: 0.05rem; }
+      .knowledge-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.3rem; }
+      .registry-wrap { overflow: visible; border: 0; border-radius: 0; }
+      .registry, .registry tbody, .registry tr, .registry th, .registry td { display: block; width: 100%; min-width: 0; }
+      .registry thead { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+      .registry caption { display: block; width: 100%; border: 1px solid var(--line); border-radius: var(--radius-md) var(--radius-md) 0 0; }
+      .registry tbody tr { border: 1px solid var(--line); border-top: 0; background: #fff; }
+      .registry tbody tr:last-child { border-radius: 0 0 var(--radius-md) var(--radius-md); }
+      .registry tbody th { width: auto; padding: 0.85rem 0.9rem 0.2rem; border: 0; font-size: 0.82rem; }
+      .registry td { padding: 0.25rem 0.9rem 0.9rem; border: 0; font-size: 0.8rem; }
+      .registry code { font-size: 0.75rem; }
+      .tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tech-cell { min-height: 165px; padding: 0.9rem; }
+      .closing { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; padding-block: 3.2rem; }
+      .closing .button { justify-self: start; }
+      .footer-inner { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 1rem; }
+    }
+    @media (max-width: 400px) {
+      .container { width: min(calc(100% - 1.5rem), var(--content)); }
+      .header-actions .button { padding-inline: 0.58rem; }
+      .window-title { font-size: 0.79rem; }
+      .definition-label { max-width: 145px; white-space: nowrap; }
+      .role-tag { font-size: 0.72rem; }
+      .engine { min-height: 156px; }
+      .proof-list li { gap: 0.5rem; padding-inline: 0.45rem; font-size: 0.72rem; }
+      .org-row { grid-template-columns: 82px 1fr; }
+      .decision-row { grid-template-columns: 105px 1fr; gap: 0.45rem; font-size: 0.76rem; }
+      .tech-grid { grid-template-columns: minmax(0, 1fr); }
+      .tech-cell { min-height: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+    }
+    @media (forced-colors: active) {
+      .button-primary { border: 1px solid ButtonText; }
+      .definition-label::before, .proof-mark, .human-gate::before, .knowledge-flow li::before { forced-color-adjust: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#page-title">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-main">
+      <a class="brand" href="#top" aria-label="Avrig home"><span class="brand-mark" aria-hidden="true">A</span><span>avrig.ai</span></a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="#system">Product</a></li>
+          <li><a href="#lifecycle">Lifecycle</a></li>
+          <li><a href="#governance">Governance</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a class="button button-outline" href="https://app.avrig.ai/">Open workspace</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="container hero" id="top">
+      <div>
+        <h1 id="page-title" tabindex="-1">Engineering work, organized as a company.</h1>
+        <p class="hero-copy">Avrig brings human leadership, AI employees, and a defined engineering lifecycle into one governed system. Work stays connected from intent through verification.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#system">See how Avrig works</a>
+          <a class="button button-link" href="https://app.avrig.ai/">Open the workspace</a>
+        </div>
+        <p class="hero-note">Agents can propose and execute permitted work. Human authority remains responsible for approval.</p>
+      </div>
+
+      <figure class="system-figure" aria-labelledby="system-map-caption">
+        <div class="system-window">
+          <div class="window-top">
+            <span class="window-title">Avrig system map</span>
+            <span class="definition-label">System model</span>
+          </div>
+          <div class="map-content">
+            <div class="founder-node">
+              <span class="human-mark" aria-hidden="true">F</span>
+              <span class="node-copy"><strong>Founder</strong><small>Human authority for consequential decisions</small></span>
+              <span class="role-tag">HUMAN</span>
+            </div>
+            <div class="map-connector" aria-hidden="true"></div>
+            <div class="engine-grid">
+              <section class="engine" aria-labelledby="office-engine-title">
+                <span class="engine-label">COMPANY OPERATIONS</span>
+                <h2 id="office-engine-title">Office Operating System</h2>
+                <p>Organization, workforce, departments, project teams, and formal meetings.</p>
+              </section>
+              <section class="engine" aria-labelledby="sdlc-engine-title">
+                <span class="engine-label">ENGINEERING DELIVERY</span>
+                <h2 id="sdlc-engine-title">Agentic SDLC Engine</h2>
+                <p>Ordered lifecycle stages, engineering modules, artifacts, and baselines.</p>
+              </section>
+            </div>
+            <div class="shared-layer">
+              <strong>Shared agent harness</strong>
+              <div class="module-tags" aria-label="Shared harness modules">
+                <span class="module-tag">Knowledge</span><span class="module-tag">Context</span><span class="module-tag">Skills</span><span class="module-tag">Policy</span><span class="module-tag">Events</span><span class="module-tag">Traceability</span>
+              </div>
+            </div>
+            <div class="record-layer"><span class="record-symbol" aria-hidden="true"></span><strong>Authoritative records</strong><span>relational system of record · graph relationships</span></div>
+          </div>
+          <figcaption class="system-caption" id="system-map-caption"><span>How the virtual company is structured</span><span>Definition view, not live telemetry</span></figcaption>
+        </div>
+      </figure>
+    </div>
+
+    <section class="proof-band" aria-label="Core product principles">
+      <ul class="container proof-list">
+        <li><span class="proof-mark" aria-hidden="true"></span>One ordered lifecycle</li>
+        <li><span class="proof-mark" aria-hidden="true"></span>Human approval authority</li>
+        <li><span class="proof-mark" aria-hidden="true"></span>Versioned evidence</li>
+        <li><span class="proof-mark" aria-hidden="true"></span>Explicit knowledge status</li>
+      </ul>
+    </section>
+
+    <section class="section" id="system" aria-labelledby="system-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="system-heading">One company, two operating engines.</h2>
+          <p>The Office OS organizes the people and teams. The SDLC Engine organizes engineering work. A shared harness carries context, policy, skills, knowledge, and traceability across both.</p>
+        </div>
+        <div class="engines">
+          <article class="engine-panel">
+            <span class="panel-code">OFFICE OS</span>
+            <h3>A workforce with identity and structure</h3>
+            <p>Employees have persistent organizational identities. Departments define an employee's home; project teams define where that employee contributes. Formal meetings record deliberations and outcomes.</p>
+            <ul class="panel-list" aria-label="Office OS capabilities">
+              <li>Organization and hierarchy</li><li>Workforce and recruitment</li><li>Meetings and rooms</li><li>Spatial projection</li>
+            </ul>
+          </article>
+          <article class="engine-panel">
+            <span class="panel-code">AGENTIC SDLC ENGINE</span>
+            <h3>Delivery that keeps its approved sequence</h3>
+            <p>Engineering work moves from intent through mandatory test. Each stage produces artifacts that can be reviewed, validated, approved, and traced into later work.</p>
+            <ul class="panel-list" aria-label="SDLC Engine capabilities">
+              <li>Canonical stages</li><li>Engineering modules</li><li>Stage gates</li><li>Versioned baselines</li>
+            </ul>
+          </article>
+        </div>
+        <div class="harness-strip">
+          <h3>Shared harness</h3>
+          <p>Knowledge Management · Context Engine · Skills and Tool Registry · Policy and Guardrails · Event Bus · Traceability Graph</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="lifecycle" aria-labelledby="lifecycle-heading">
+      <div class="container">
+        <div class="lifecycle-head">
+          <div class="section-heading">
+            <h2 id="lifecycle-heading">A defined path from intent to verification.</h2>
+            <p>The sequence stays intact as agents become more capable. Deployment follows test when needed and remains optional.</p>
+          </div>
+          <p class="sequence-note">The numbered stages are ordered. They are not presented as optional steps or interchangeable tasks.</p>
+        </div>
+        <ol class="stage-list" aria-label="Canonical engineering lifecycle">
+          <li>Project</li><li>Vision</li><li>Mission</li><li>Strategy</li>
+          <li>Business Capability</li><li>Business Process</li><li>Activity</li><li>Role</li>
+          <li>User Story</li><li>UI/UX Design</li><li>Data Model</li><li>Non-Functional Requirement</li>
+          <li>System Architecture</li><li>Technology Architecture</li><li>Development</li><li>Test</li>
+        </ol>
+        <div class="deployment-note"><span><strong>Optional continuation</strong></span><span>Deployment Engineering, cardinality 0..1 after the mandatory test baseline.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="company" aria-labelledby="company-heading">
+      <div class="container org-grid">
+        <div class="section-heading">
+          <h2 id="company-heading">People, employees, and runtimes have distinct roles.</h2>
+          <p>Avrig models a company around human authority. An AI employee has an identity that persists beyond any one execution. The runtime that performs a task is temporary.</p>
+        </div>
+        <div>
+          <dl class="org-tree">
+            <div class="org-row"><dt>Founder</dt><dd>Human owner with authority over significant organizational decisions and approved baselines.</dd></div>
+            <div class="org-row"><dt>CEO / PET</dt><dd>AI Employee #001, responsible for company operations, projects, departments, and workforce coordination.</dd></div>
+            <div class="org-row"><dt>Personal Assistant</dt><dd>A separate AI position serving the Founder on personal and administrative tasks.</dd></div>
+            <div class="org-row"><dt>Employees</dt><dd>Persistent human or AI organizational identities, with roles, department membership, history, and project assignments.</dd></div>
+            <div class="org-row"><dt>Actor</dt><dd>The shared participant identity used by a human or AI employee in tasks, meetings, approvals, and audits.</dd></div>
+            <div class="org-row"><dt>Agent runtime</dt><dd>An ephemeral execution process. It may start, pause, sleep, or terminate without deleting the employee identity.</dd></div>
+          </dl>
+          <p class="org-note"><strong>Two dimensions stay separate:</strong> departments describe organizational home; project teams describe execution context. The virtual office is a projection of structured records, not the source of truth.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="governance" aria-labelledby="governance-heading">
+      <div class="container governance">
+        <div class="section-heading">
+          <h2 id="governance-heading">Agents can prepare the work. People approve it.</h2>
+          <p>An agent may analyze, recommend, draft, and execute permitted actions. An agent cannot approve an artifact. Human approval creates the authority to make a candidate an approved baseline.</p>
+        </div>
+        <figure class="decision-demo" aria-labelledby="decision-caption">
+          <div class="demo-top"><strong>Artifact decision</strong><span class="sample-label">ILLUSTRATIVE EXAMPLE</span></div>
+          <div class="decision-body">
+            <div class="decision-row"><span>Artifact</span><strong>System architecture</strong></div>
+            <div class="decision-row"><span>Submitted by</span><strong>AI employee</strong></div>
+            <div class="decision-row"><span>Candidate status</span><strong>Reviewed candidate</strong></div>
+            <div class="decision-row"><span>Approval authority</span><strong>Human owner</strong></div>
+            <div class="human-gate">Approval requires human authority</div>
+          </div>
+          <figcaption class="governance-footnote" id="decision-caption">Illustrative interaction only. It does not describe a live project or an actual approval.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="evidence" aria-labelledby="evidence-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="evidence-heading">Every claim and artifact carries its standing.</h2>
+          <p>Authority, proposal, practice, and uncertainty are named explicitly. Traceability connects specific versions, so an evidence link records what it actually refers to.</p>
+        </div>
+        <div class="model-grid">
+          <article class="model-block">
+            <h3>Epistemic status</h3>
+            <p>Knowledge does not become authoritative by appearing in an agent response. These six states distinguish project truth, practice, advice, inference, and uncertainty.</p>
+            <ul class="epistemic-list">
+              <li><code>AuthoritativeRequirement</code><span>Authorized project constraint, authoritative</span></li>
+              <li><code>ApprovedBaseline</code><span>Formally approved project artifact, authoritative</span></li>
+              <li><code>ExistingPractice</code><span>Observed current practice, not automatically authoritative</span></li>
+              <li><code>BestPractice</code><span>Recommended platform guidance</span></li>
+              <li><code>AgentInference</code><span>AI-generated proposal or hypothesis</span></li>
+              <li><code>AssumptionOrUnknown</code><span>Unverified item that needs clarification</span></li>
+            </ul>
+            <div class="precedence-callout"><strong>Precedence rule:</strong> project requirements and approved baselines take precedence over platform guidance when they conflict.</div>
+          </article>
+          <article class="model-block">
+            <h3>Artifact lifecycle and traceability</h3>
+            <p>Artifacts move through defined states. Only <code>Approved</code> is approved; only <code>Superseded</code> and <code>Rejected</code> are terminal.</p>
+            <ul class="status-list" aria-label="Artifact lifecycle statuses">
+              <li><code>Draft</code><span>Work in progress</span></li>
+              <li><code>Candidate</code><span>Proposed artifact</span></li>
+              <li><code>ValidatedCandidate</code><span>Candidate with validation evidence</span></li>
+              <li><code>ReviewedCandidate</code><span>Candidate after review</span></li>
+              <li><code>Approved</code><span>Human-approved baseline</span></li>
+              <li><code>Superseded</code><span>Terminal state</span></li>
+              <li><code>Rejected</code><span>Terminal state</span></li>
+            </ul>
+            <p class="status-note">Each traceability link pins both source and target versions.</p>
+            <ul class="trace-list" aria-label="Traceability relation types">
+              <li>DerivedFrom</li><li>Satisfies</li><li>ConstrainedBy</li><li>RealizedBy</li><li>ImplementedBy</li><li>VerifiedBy</li><li>DeployedAs</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="knowledge" aria-labelledby="knowledge-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="knowledge-heading">Knowledge follows the work and keeps its source.</h2>
+          <p>Project knowledge captures the truth and constraints for a specific effort. Platform knowledge stores reusable guidance. Retrieval stays scoped to the active lifecycle stage, and conflicts are surfaced for human deliberation.</p>
+        </div>
+        <ol class="knowledge-flow" aria-label="Knowledge management flow">
+          <li><strong>Store</strong>Keep source documents, metadata, and artifacts in authoritative records.</li>
+          <li><strong>Ingest</strong>Parse and normalize material while retaining provenance.</li>
+          <li><strong>Index</strong>Combine semantic and lexical search over structured content.</li>
+          <li><strong>Resolve</strong>Retrieve stage-scoped context and apply authority precedence.</li>
+          <li><strong>Trace</strong>Link sources, decisions, and outputs; detect discrepancies.</li>
+          <li><strong>Promote</strong>Review reusable lessons before adding them to platform guidance.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="modules" aria-labelledby="modules-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="modules-heading">A modular system, with clear responsibility boundaries.</h2>
+          <p>The architecture assigns named modules to engineering delivery, company operations, shared agent capabilities, and persistence. These names describe system boundaries, not proof that every target is implemented.</p>
+        </div>
+        <div class="registry-wrap">
+          <table class="registry">
+            <caption>Module registry from the system architecture definition</caption>
+            <thead><tr><th scope="col">Area</th><th scope="col">Modules and responsibility</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">SDLC Engine</th><td><code>RE</code> Requirements Engineering · <code>UX</code> UI/UX Engineering · <code>DE</code> Data Engineering · <code>NF</code> NFR Engineering · <code>SA</code> System Architecture · <code>TA</code> Technology Architecture · <code>DV</code> Development Engineering · <code>TE</code> Test Engineering · <code>DP</code> Deployment Engineering, optional.</td></tr>
+              <tr><th scope="row">Office OS</th><td><code>OG</code> Organization and Hierarchy · <code>WF</code> Workforce and Recruitment · <code>MT</code> Meetings and Rooms · <code>SV</code> Spatial Virtualization.</td></tr>
+              <tr><th scope="row">Shared harness</th><td><code>KM</code> Knowledge Management · <code>CX</code> Context Engine · <code>SK</code> Skills and Tool Registry · <code>PG</code> Policy and Guardrails · <code>EB</code> Event Bus and Messaging · <code>TR</code> Traceability Graph.</td></tr>
+              <tr><th scope="row">Persistence</th><td><code>RD</code> Relational System of Record · <code>AG</code> Graph Network Engine.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="architecture" aria-labelledby="architecture-heading">
+      <div class="container">
+        <div class="section-heading">
+          <h2 id="architecture-heading">The technology architecture follows the same boundaries.</h2>
+          <p>Clients, services, governed execution, knowledge processing, and persistence are defined as connected layers. The architecture puts human authority and traceable records across the system.</p>
+        </div>
+        <p class="tech-note">Target technology definition, not implementation status</p>
+        <div class="tech-grid">
+          <article class="tech-cell"><h3>Client surfaces</h3><p>Web application with React and Tailwind CSS, a Tauri desktop shell, and a Capacitor mobile shell.</p></article>
+          <article class="tech-cell"><h3>Service core</h3><p>Rust services with Axum and Tokio provide API routing and event delivery.</p></article>
+          <article class="tech-cell"><h3>Identity and policy</h3><p>OIDC identity through Rauthy and explicit policy enforcement through Cedar.</p></article>
+          <article class="tech-cell"><h3>Governed execution</h3><p>Typed tool gateways and sandbox boundaries separate agents from direct host access.</p></article>
+          <article class="tech-cell"><h3>Knowledge processing</h3><p>Document parsing, semantic and lexical search, stage-scoped retrieval, precedence resolution, and reranking.</p></article>
+          <article class="tech-cell"><h3>Authoritative persistence</h3><p>PostgreSQL for relational records and search, Apache AGE for graph relationships, and Garage for S3-compatible artifacts.</p></article>
+        </div>
+        <p class="architecture-caveat">The Technology Architecture is a target design. The repository contains both implemented modules and empty placeholders; this page does not imply that every architecture component is shipped.</p>
+      </div>
+    </section>
+
+    <section class="container closing" id="workspace-entry" aria-labelledby="closing-heading">
+      <div>
+        <h2 id="closing-heading">Start with the work. Keep the decision yours.</h2>
+        <p>Explore Avrig's workspace or review the system model first.</p>
+      </div>
+      <a class="button button-primary" href="https://app.avrig.ai/">Open workspace</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">A</span><span>avrig.ai</span></a>
+      <span>Human authority. Ordered engineering. Traceable evidence.</span>
+    </div>
+  </footer>
+</body>
+</html>

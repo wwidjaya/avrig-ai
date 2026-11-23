@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings · Workflow · avrig.ai</title>
+  <meta name="description" content="Configure engineering lifecycle stages, steps, agent assignments, and human approval gates.">
+  <link rel="icon" type="image/svg+xml" href="/avrig-mark.svg">
+  <script src="/theme-init.js"></script>
+  <link rel="stylesheet" href="/chrome.css">
+  <style>
+    /* Scoped exclusively to Settings > Workflow prototype */
+    .shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      min-height: 100dvh;
+    }
+
+    /* Left Settings Navigation (matches user screenshot) */
+    .settings-nav {
+      border-right: 1px solid var(--border);
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      padding: 16px 12px;
+      gap: 4px;
+    }
+    .settings-nav-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 10px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 8px;
+    }
+    .settings-nav-head h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .back-link {
+      font-size: 12px;
+      color: var(--muted-fg);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--fg); }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--muted-fg);
+      text-decoration: none;
+      transition: background 120ms, color 120ms;
+    }
+    .nav-item:hover {
+      background: var(--accent);
+      color: var(--fg);
+    }
+    .nav-item[aria-current="page"] {
+      background: var(--accent);
+      color: var(--fg);
+      font-weight: 600;
+    }
+    .nav-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Main Content Area */
+    .main-area {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg);
+    }
+
+    .topbar {
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .dirty-pill {
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--secondary);
+      color: var(--muted-fg);
+      border: 1px solid var(--border);
+    }
+    .dirty-pill.is-dirty {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: transparent;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Master-Detail Workflow Editor */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Stage List Pane */
+    .stage-pane {
+      border-right: 1px solid var(--border);
+      background: var(--card);
+      overflow-y: auto;
+      padding: 16px 12px;
+    }
+    .pane-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted-fg);
+      padding: 0 10px 10px;
+      margin: 0;
+    }
+    .stage-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stage-btn {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 10px 10px;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg);
+      font-family: inherit;
+    }
+    .stage-btn:hover {
+      background: var(--accent);
+    }
+    .stage-btn[aria-selected="true"] {
+      background: var(--accent);
+      border-color: var(--border);
+    }
+    .stage-code {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted-fg);
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 5px;
+      text-align: center;
+    }
+    .stage-btn[aria-selected="true"] .stage-code {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .stage-meta {
+      min-width: 0;
+    }
+    .stage-meta strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stage-meta span {
+      display: block;
+      font-size: 11.5px;
+      color: var(--muted-fg);
+      margin-top: 2px;
+    }
+    .gate-dot {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--gate-soft);
+      color: var(--gate);
+      border: 1px solid var(--gate-line);
+    }
+
+    /* Step Editor Pane */
+    .editor-pane {
+      padding: 24px 32px 48px;
+      overflow-y: auto;
+      max-width: 880px;
+    }
+    .stage-header {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stage-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .stage-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .stage-header p {
+      margin: 6px 0 0;
+      font-size: 13.5px;
+      color: var(--muted-fg);
+      line-height: 1.5;
+    }
+    .stage-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 14px;
+      font-size: 13px;
+    }
+    .stage-toggles label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      color: var(--fg);
+    }
+
+    /* Step Cards */
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .step-card.is-approval {
+      border-color: var(--gate-line);
+      background: var(--gate-soft);
+    }
+
+    .step-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-order {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted-fg);
+      min-width: 24px;
+    }
+    .step-title-input {
+      flex: 1;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 4px 8px;
+    }
+    .step-title-input:hover,
+    .step-title-input:focus {
+      background: var(--bg);
+      border-color: var(--border);
+      outline: none;
+    }
+    .step-title-input:focus {
+      border-color: var(--primary);
+    }
+
+    .step-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .icon-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted-fg);
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .icon-btn:hover:not(:disabled) {
+      background: var(--accent);
+      color: var(--fg);
+    }
+    .icon-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .icon-btn.danger:hover:not(:disabled) {
+      color: var(--danger);
+      border-color: var(--danger-line);
+      background: var(--danger-soft);
+    }
+
+    .step-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .field label {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--muted-fg);
+    }
+    .field select,
+    .field input[type="text"] {
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 13px;
+    }
+    .field select:focus,
+    .field input[type="text"]:focus {
+      outline: 2px solid var(--ring);
+      outline-offset: 1px;
+    }
+
+    .gate-banner {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--gate);
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: var(--card);
+      border: 1px solid var(--gate-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .decision-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .decision-chip {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--gate-soft);
+      border: 1px solid var(--gate-line);
+      color: var(--gate);
+      font-weight: 500;
+    }
+
+    .add-step-row {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* Native Dialog */
+    dialog {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      max-width: 420px;
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop {
+      background: rgb(0 0 0 / 50%);
+    }
+    dialog h3 { margin: 0 0 8px; font-size: 16px; }
+    dialog p { margin: 0 0 18px; font-size: 13.5px; color: var(--muted-fg); line-height: 1.5; }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    @media (max-width: 960px) {
+      .shell { grid-template-columns: 1fr; }
+      .settings-nav { display: none; }
+      .workflow-grid { grid-template-columns: 1fr; }
+      .stage-pane { border-right: 0; border-bottom: 1px solid var(--border); max-height: 240px; }
+      .editor-pane { padding: 20px 16px; }
+      .step-fields { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Left Settings Navigation -->
+    <aside class="settings-nav" aria-label="Settings navigation">
+      <div class="settings-nav-head">
+        <h1>Settings</h1>
+        <a class="back-link" href="/workspace">← Workspace</a>
+      </div>
+      <a class="nav-item" href="#provider">
+        <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+        Provider
+      </a>
+      <a class="nav-item" href="#model">
+        <svg viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>
+        Model
+      </a>
+      <a class="nav-item" href="#tool">
+        <svg viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>
+        Tool
+      </a>
+      <a class="nav-item" href="#skill">
+        <svg viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+        Skill
+      </a>
+      <a class="nav-item" href="#agent">
+        <svg viewBox="0 0 24 24"><rect width="18" height="10" x="3" y="11" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" x2="8" y1="16" y2="16"/><line x1="16" x2="16" y1="16" y2="16"/></svg>
+        Agent
+      </a>
+      <a class="nav-item" href="/workflow" aria-current="page">
+        <svg viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        Workflow
+      </a>
+      <a class="nav-item" href="#office">
+        <svg viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>
+        Office
+      </a>
+      <a class="nav-item" href="#organization">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Organization
+      </a>
+      <a class="nav-item" href="#employee">
+        <svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Employee
+      </a>
+      <a class="nav-item" href="#security">
+        <svg viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Security
+      </a>
+    </aside>
+
+    <!-- Main Workflow Surface -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 class="topbar-title">Engineering Workflow</h2>
+          <span id="dirty-indicator" class="dirty-pill">Canonical baseline</span>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="btn-outline" id="btn-reset">Reset to baseline</button>
+          <button type="button" class="btn-primary" id="btn-save">Save workflow</button>
+        </div>
+      </header>
+
+      <div class="workflow-grid">
+        <!-- Master: Canonical Lifecycle Stages -->
+        <section class="stage-pane" aria-label="Engineering lifecycle stages">
+          <p class="pane-label">Canonical Lifecycle (9 Stages)</p>
+          <ul id="stage-list" class="stage-list" role="tablist" aria-orientation="vertical"></ul>
+        </section>
+
+        <!-- Detail: Steps & Responsibilities -->
+        <main class="editor-pane" id="editor-pane" aria-live="polite">
+          <!-- Rendered by script -->
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Native Reset Confirmation Dialog -->
+  <dialog id="reset-dialog">
+    <h3>Reset workflow to canonical baseline?</h3>
+    <p>This restores all stages, step assignments, and human approval gates to the Vault default specification. Unsaved edits will be discarded.</p>
+    <div class="dialog-actions">
+      <button type="button" class="btn-outline" id="dialog-cancel">Cancel</button>
+      <button type="button" class="btn-primary" id="dialog-confirm">Reset baseline</button>
+    </div>
+  </dialog>
+
+  <script>
+    const ACTIVITY_TYPES = [
+      { value: "RECOMMENDATION", label: "Recommendation (Agent proposal)" },
+      { value: "PERFORM", label: "Perform (Agent execution)" },
+      { value: "AUDIT_GATE", label: "Audit Gate (Specialist check)" },
+      { value: "HUMAN_APPROVAL", label: "Human Approval (Mandatory sign-off)" }
+    ];
+
+    const AGENT_ROLES = [
+      "agent:architect",
+      "agent:plan",
+      "agent:analyst",
+      "agent:designer",
+      "agent:edm",
+      "agent:explore",
+      "agent:be",
+      "agent:fe",
+      "agent:build",
+      "agent:tester",
+      "agent:infra",
+      "agent:km"
+    ];
+
+    const HUMAN_ROLES = [
+      "human:product_owner",
+      "human:lead_architect",
+      "human:design_authority",
+      "human:qa_lead",
+      "human:security_officer"
+    ];
+
+    const CANONICAL_BASELINE = [
+      {
+        id: "PR",
+        name: "Project & Intent",
+        description: "Establish project scope, vision, mission, and working context.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "pr-1", title: "Scope & Vision Synthesis", type: "RECOMMENDATION", actor: "agent:architect", artifact: "Project Context Brief" },
+          { id: "pr-2", title: "Intent Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Project Charter" }
+        ]
+      },
+      {
+        id: "BP",
+        name: "Business Process",
+        description: "Model business capabilities, processes, and decompose into executable activities.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "bp-1", title: "Process & Activity Decomposition", type: "PERFORM", actor: "agent:plan", artifact: "Business Process Map" }
+        ]
+      },
+      {
+        id: "US",
+        name: "User Stories",
+        description: "Identify participating business roles and derive user stories with acceptance criteria.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "us-1", title: "Role & User Story Formulation", type: "PERFORM", actor: "agent:plan", artifact: "User Stories + AC" },
+          { id: "us-2", title: "Traceability & Standards Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "Traceability Report" },
+          { id: "us-3", title: "Requirements Baseline Gate", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Requirements Baseline" }
+        ]
+      },
+      {
+        id: "UI",
+        name: "UI/UX Design",
+        description: "Set visual direction and build clickable prototypes in design/ui/ before architecture planning.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "ui-1", title: "Direction & Token Proposal", type: "RECOMMENDATION", actor: "agent:designer", artifact: "design/ui/design.md" },
+          { id: "ui-2", title: "Clickable Prototype Build", type: "PERFORM", actor: "agent:designer", artifact: "design/ui/prototype/" },
+          { id: "ui-3", title: "9-Pass Unslop & Modern Web Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "DOM Snapshot & Craft Report" },
+          { id: "ui-4", title: "Visual Experience Sign-off", type: "HUMAN_APPROVAL", actor: "human:design_authority", artifact: "Approved Design Candidate" }
+        ]
+      },
+      {
+        id: "DM",
+        name: "Data Model (EDM)",
+        description: "Define conceptual and logical entities, attributes, constraints, and migrations.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "dm-1", title: "Entity & Schema Modeling", type: "PERFORM", actor: "agent:edm", artifact: "Schema DDL & ERD" },
+          { id: "dm-2", title: "Data Integrity & Impact Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "DMC-03 Validation Result" },
+          { id: "dm-3", title: "Data Baseline Gate", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Approved Data Baseline" }
+        ]
+      },
+      {
+        id: "SA",
+        name: "System & Tech Architecture",
+        description: "Explore codebase via graphify and formulate step-by-step implementation plans.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "sa-1", title: "Graphify Codebase Exploration", type: "PERFORM", actor: "agent:explore", artifact: "Symbol & Dependency Graph" },
+          { id: "sa-2", title: "Architecture & Plan Formulation", type: "RECOMMENDATION", actor: "agent:architect", artifact: "plans/YYYY-MM-DD-<task>.md" },
+          { id: "sa-3", title: "Pre-Implementation Test Matrix", type: "AUDIT_GATE", actor: "agent:tester", artifact: "Test Specification Matrix" },
+          { id: "sa-4", title: "Architecture Baseline Sign-off", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Authorized Implementation Plan" }
+        ]
+      },
+      {
+        id: "DV",
+        name: "Development",
+        description: "Execute work items across backend, frontend, and database under Ponytail minimalism.",
+        mandatory: true,
+        sequential: false,
+        steps: [
+          { id: "dv-1", title: "Backend & API Implementation", type: "PERFORM", actor: "agent:be", artifact: "Rust crates & Axum routes" },
+          { id: "dv-2", title: "Frontend & UI Porting", type: "PERFORM", actor: "agent:fe", artifact: "apps/web components" },
+          { id: "dv-3", title: "Workspace Compilation Gate", type: "AUDIT_GATE", actor: "agent:build", artifact: "cargo check & pnpm build" }
+        ]
+      },
+      {
+        id: "TE",
+        name: "Test & Verification",
+        description: "Execute automated suites and verify implementation satisfies plan goals.",
+        mandatory: true,
+        sequential: true,
+        steps: [
+          { id: "te-1", title: "Automated Playwright & API Suites", type: "PERFORM", actor: "agent:tester", artifact: "Test Execution Evidence" },
+          { id: "te-2", title: "Goal Achievement Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "Plan Review Findings" },
+          { id: "te-3", title: "Release Candidate Gate", type: "HUMAN_APPROVAL", actor: "human:qa_lead", artifact: "Approved Candidate Tag" }
+        ]
+      },
+      {
+        id: "DP",
+        name: "Deploy & Knowledge Capture",
+        description: "Deploy verified builds, bump SemVer tags, and publish retrospectives to Vault.",
+        mandatory: false,
+        sequential: true,
+        steps: [
+          { id: "dp-1", title: "Daemon & Reverse Proxy Deployment", type: "PERFORM", actor: "agent:infra", artifact: "Running Production Service" },
+          { id: "dp-2", title: "Live Smoke Verification", type: "AUDIT_GATE", actor: "agent:tester", artifact: "HTTP 200 Health Report" },
+          { id: "dp-3", title: "SemVer Release & Multi-Repo Push", type: "PERFORM", actor: "agent:build", artifact: "Git Tag X.Y.Z" },
+          { id: "dp-4", title: "Vault Retrospective Update", type: "PERFORM", actor: "agent:km", artifact: "Obsidian Vault Note" }
+        ]
+      }
+    ];
+
+    const STORAGE_KEY = "avrig-workflow-prototype-v1";
+    let stages = loadState();
+    let activeStageId = stages[5].id; // Default to System & Tech Architecture
+    let isDirty = false;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch {}
+      return structuredClone(CANONICAL_BASELINE);
+    }
+
+    function markDirty(dirty) {
+      isDirty = dirty;
+      const pill = document.getElementById("dirty-indicator");
+      if (dirty) {
+        pill.textContent = "Unsaved changes";
+        pill.classList.add("is-dirty");
+      } else {
+        pill.textContent = "Saved";
+        pill.classList.remove("is-dirty");
+      }
+    }
+
+    function renderStageList() {
+      const list = document.getElementById("stage-list");
+      list.innerHTML = "";
+      stages.forEach((stage) => {
+        const gateCount = stage.steps.filter((s) => s.type === "HUMAN_APPROVAL").length;
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "stage-btn";
+        btn.setAttribute("role", "tab");
+        btn.setAttribute("aria-selected", String(stage.id === activeStageId));
+        btn.innerHTML = `
+          <span class="stage-code">${stage.id}</span>
+          <span class="stage-meta">
+            <strong>${stage.name}</strong>
+            <span>${stage.steps.length} ${stage.steps.length === 1 ? "step" : "steps"}</span>
+          </span>
+          ${gateCount > 0 ? `<span class="gate-dot">GATE</span>` : ""}
+        `;
+        btn.addEventListener("click", () => {
+          activeStageId = stage.id;
+          render();
+        });
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+    }
+
+    function renderEditor() {
+      const pane = document.getElementById("editor-pane");
+      const stage = stages.find((s) => s.id === activeStageId);
+      if (!stage) return;
+
+      pane.innerHTML = `
+        <div class="stage-header">
+          <div class="stage-header-top">
+            <h2>${stage.id} · ${stage.name}</h2>
+          </div>
+          <p>${stage.description}</p>
+          <div class="stage-toggles">
+            <label>
+              <input type="checkbox" id="toggle-mandatory" ${stage.mandatory ? "checked" : ""}>
+              Mandatory stage
+            </label>
+            <label>
+              <input type="checkbox" id="toggle-sequential" ${stage.sequential ? "checked" : ""}>
+              Enforce sequential step execution
+            </label>
+          </div>
+        </div>
+        <div class="steps-container" id="steps-container"></div>
+        <div class="add-step-row">
+          <button type="button" class="btn-outline" id="btn-add-step">+ Add step to ${stage.name}</button>
+        </div>
+      `;
+
+      document.getElementById("toggle-mandatory").addEventListener("change", (e) => {
+        stage.mandatory = e.target.checked;
+        markDirty(true);
+      });
+      document.getElementById("toggle-sequential").addEventListener("change", (e) => {
+        stage.sequential = e.target.checked;
+        markDirty(true);
+      });
+
+      const container = document.getElementById("steps-container");
+      stage.steps.forEach((step, idx) => {
+        const isApproval = step.type === "HUMAN_APPROVAL";
+        const roles = isApproval ? HUMAN_ROLES : AGENT_ROLES;
+        if (!roles.includes(step.actor)) step.actor = roles[0];
+
+        const card = document.createElement("div");
+        card.className = `step-card${isApproval ? " is-approval" : ""}`;
+        card.innerHTML = `
+          <div class="step-top">
+            <span class="step-order">${idx + 1}.</span>
+            <input type="text" class="step-title-input" value="${step.title}" aria-label="Step title">
+            <div class="step-controls">
+              <button type="button" class="icon-btn" data-act="up" ${idx === 0 ? "disabled" : ""} title="Move up">↑</button>
+              <button type="button" class="icon-btn" data-act="down" ${idx === stage.steps.length - 1 ? "disabled" : ""} title="Move down">↓</button>
+              <button type="button" class="icon-btn danger" data-act="del" title="Remove step">×</button>
+            </div>
+          </div>
+          <div class="step-fields">
+            <div class="field">
+              <label>Activity Type</label>
+              <select data-field="type">
+                ${ACTIVITY_TYPES.map((t) => `<option value="${t.value}" ${t.value === step.type ? "selected" : ""}>${t.label}</option>`).join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label>${isApproval ? "Approval Authority (Human)" : "Assigned Agent"}</label>
+              <select data-field="actor">
+                ${roles.map((r) => `<option value="${r}" ${r === step.actor ? "selected" : ""}>${r}</option>`).join("")}
+              </select>
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label>Deliverable / Output Artifact</label>
+              <input type="text" data-field="artifact" value="${step.artifact}">
+            </div>
+          </div>
+          ${isApproval ? `
+            <div class="gate-banner">
+              <span><strong>Invariant:</strong> Agent cannot approve. Authenticated human decision required.</span>
+              <div class="decision-chips">
+                <span class="decision-chip">Adopt</span>
+                <span class="decision-chip">Modify</span>
+                <span class="decision-chip">Reject</span>
+                <span class="decision-chip">Defer</span>
+              </div>
+            </div>
+          ` : ""}
+        `;
+
+        card.querySelector(".step-title-input").addEventListener("input", (e) => {
+          step.title = e.target.value;
+          markDirty(true);
+        });
+        card.querySelector('[data-field="type"]').addEventListener("change", (e) => {
+          step.type = e.target.value;
+          markDirty(true);
+          render();
+        });
+        card.querySelector('[data-field="actor"]').addEventListener("change", (e) => {
+          step.actor = e.target.value;
+          markDirty(true);
+        });
+        card.querySelector('[data-field="artifact"]').addEventListener("input", (e) => {
+          step.artifact = e.target.value;
+          markDirty(true);
+        });
+        card.querySelector('[data-act="up"]').addEventListener("click", () => {
+          [stage.steps[idx - 1], stage.steps[idx]] = [stage.steps[idx], stage.steps[idx - 1]];
+          markDirty(true);
+          render();
+        });
+        card.querySelector('[data-act="down"]').addEventListener("click", () => {
+          [stage.steps[idx], stage.steps[idx + 1]] = [stage.steps[idx + 1], stage.steps[idx]];
+          markDirty(true);
+          render();
+        });
+        card.querySelector('[data-act="del"]').addEventListener("click", () => {
+          stage.steps.splice(idx, 1);
+          markDirty(true);
+          render();
+        });
+
+        container.appendChild(card);
+      });
+
+      document.getElementById("btn-add-step").addEventListener("click", () => {
+        stage.steps.push({
+          id: `${stage.id.toLowerCase()}-${Date.now()}`,
+          title: "New engineering step",
+          type: "PERFORM",
+          actor: "agent:architect",
+          artifact: "Deliverable artifact"
+        });
+        markDirty(true);
+        render();
+      });
+    }
+
+    function render() {
+      renderStageList();
+      renderEditor();
+    }
+
+    document.getElementById("btn-save").addEventListener("click", () => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stages));
+      markDirty(false);
+    });
+
+    const resetDialog = document.getElementById("reset-dialog");
+    document.getElementById("btn-reset").addEventListener("click", () => resetDialog.showModal());
+    document.getElementById("dialog-cancel").addEventListener("click", () => resetDialog.close());
+    document.getElementById("dialog-confirm").addEventListener("click", () => {
+      stages = structuredClone(CANONICAL_BASELINE);
+      localStorage.removeItem(STORAGE_KEY);
+      markDirty(false);
+      resetDialog.close();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

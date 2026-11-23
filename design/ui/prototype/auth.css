@@ -1,0 +1,175 @@
+/* Auth frame, shared by the app gate and the identity provider screen, so the
+   two cannot drift apart. Tokens and buttons come from chrome.css. */
+
+body:has(.auth-main) { min-height: 100dvh; display: flex; flex-direction: column; }
+
+.auth-main {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 24px; padding: 40px 24px 56px;
+}
+
+.auth-card {
+  width: min(420px, 100%); padding: 32px;
+  border: 1px solid var(--border); border-radius: 16px; background: var(--card);
+}
+@media (min-width: 640px) { .auth-card { padding: 36px; } }
+
+.auth-card h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.025em; }
+.auth-sub { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--muted-fg); }
+
+.auth-submit { width: 100%; margin-top: 24px; }
+.auth-submit[aria-busy="true"] { cursor: progress; }
+.auth-submit .spin {
+  display: none; width: 16px; height: 16px; flex: 0 0 auto;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+.auth-submit[aria-busy="true"] .spin { display: block; }
+.auth-submit[aria-busy="true"] .arrow { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .auth-submit .spin { animation-duration: 1600ms; }
+}
+
+/* Notice: one shape, two tones. Error is an alert, the rest is a status. */
+.notice {
+  display: flex; gap: 10px; margin-top: 20px; padding: 12px 14px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--secondary);
+  font-size: 13px; line-height: 1.5;
+}
+.notice[hidden] { display: none; }
+.notice svg { width: 16px; height: 16px; flex: 0 0 auto; margin-top: 1px; }
+.notice[data-tone="error"] {
+  border-color: var(--danger-line); background: var(--danger-soft); color: var(--danger);
+}
+.notice b { display: block; font-weight: 600; }
+.notice p { margin-top: 2px; color: var(--muted-fg); }
+.notice[data-tone="error"] p { color: var(--danger); opacity: 0.9; }
+.notice .ico-info { display: none; }
+.notice[data-tone="status"] .ico-err { display: none; }
+.notice[data-tone="status"] .ico-info { display: block; }
+
+.issuer {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  margin: 24px 0 0; padding-top: 16px; border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--muted-fg);
+}
+.issuer dd {
+  margin: 0; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 12.5px; color: var(--fg);
+}
+
+.auth-rule {
+  display: flex; align-items: center; gap: 8px; margin-top: 12px;
+  font-size: 13px; color: var(--muted-fg);
+}
+.auth-rule svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--gate); }
+
+.proto-note { margin-top: 20px; font-size: 12px; line-height: 1.5; color: var(--muted-fg); }
+
+.auth-foot {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12.5px; color: var(--muted-fg);
+}
+.auth-foot a { color: var(--muted-fg); text-decoration: none; }
+.auth-foot a:hover { color: var(--fg); }
+.auth-foot .sep { opacity: 0.5; }
+.auth-foot .mono { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+
+/* ==========================================================================
+   Fields, for the screen that actually collects a credential
+   ========================================================================== */
+
+.field { margin-top: 20px; }
+.field label {
+  display: block; margin-bottom: 6px;
+  font-size: 13px; font-weight: 500; color: var(--muted-fg);
+}
+.field input {
+  width: 100%; height: 44px; padding: 0 12px;
+  font: inherit; font-size: 15px; line-height: 1.4;
+  color: var(--fg); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 12px;
+  transition: border-color 120ms ease;
+}
+.field input:hover { border-color: var(--muted-fg); }
+.field input:focus { border-color: var(--ring); }
+.field input:user-invalid { border-color: var(--danger); }
+
+/* The reveal button sits inside the field, so the row keeps one height. */
+.field.with-action { position: relative; }
+.field.with-action input { padding-right: 68px; }
+.field.with-action .reveal {
+  position: absolute; right: 4px; bottom: 4px;
+  height: 36px; padding: 0 10px;
+  font: inherit; font-size: 12.5px; font-weight: 500;
+  color: var(--muted-fg); background: none; border: 0; border-radius: 8px;
+  cursor: pointer;
+}
+.field.with-action .reveal:hover { color: var(--fg); background: var(--secondary); }
+
+.field-aside { margin-top: 10px; text-align: right; font-size: 13px; }
+.field-aside a { color: var(--muted-fg); text-decoration: none; }
+.field-aside a:hover { color: var(--fg); text-decoration: underline; }
+
+/* One row under the password: to stay signed in, and the way out if the
+   password is gone. A person does not need both at once, so they share a line
+   rather than taking two and pushing the sign-in button down the card. */
+.auth-row {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 8px 16px; margin-top: 14px;
+}
+.auth-row .field-aside { margin-top: 0; }
+.check {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted-fg); cursor: pointer;
+}
+.check input {
+  width: 16px; height: 16px; margin: 0; flex: 0 0 auto;
+  accent-color: var(--primary); cursor: pointer;
+}
+.check:hover { color: var(--fg); }
+
+/* One rule between two ways in, with the word sitting on the line. */
+.or {
+  display: flex; align-items: center; gap: 12px; margin: 22px 0;
+  font-size: 12.5px; color: var(--muted-fg);
+}
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+/* The providers people already have, at the foot of the form: the account this
+   deployment gave is the first way in, and a reader without one scans down to
+   the badge they recognise. Both marks keep their own colours, because a
+   recoloured brand mark is a different logo and the shape is recognised before
+   the words are read. */
+.auth-providers { display: grid; gap: 8px; }
+.auth-provider {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; height: 44px; padding: 0 12px;
+  font: inherit; font-size: 14px; font-weight: 500; color: var(--fg);
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  cursor: pointer;
+}
+.auth-provider:hover { background: var(--secondary); }
+.auth-provider svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.auth-provider .brand-apple { color: var(--fg); }
+
+/* The other credential, under the form it is an alternative to. A hairline
+   separates them, so the passkey is not read as part of the email submit. */
+.auth-more { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+
+.auth-alt {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; height: 44px;
+  font: inherit; font-size: 14px; font-weight: 500;
+  color: var(--fg); background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  cursor: pointer;
+}
+.auth-alt:hover { background: var(--secondary); }
+.auth-alt svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--muted-fg); }
+
+.auth-card .foot-note {
+  margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--muted-fg); text-align: center;
+}
+

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sign in · avrig.ai</title>
+<meta name="description" content="Prototype of the avrig.ai sign-in page. One identity provider, no local password.">
+<link rel="icon" type="image/svg+xml" href="/avrig-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/chrome.css">
+<link rel="stylesheet" href="/auth.css">
+<script src="/theme-init.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap head-inner">
+      <div class="brand-wrap">
+        <a class="brand" href="/">
+          <svg class="brand-mark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true">
+            <rect width="32" height="32" rx="8" fill="currentColor" />
+            <path d="M10.4 21.6 16 10.2l5.6 11.4" fill="none" stroke="var(--bg)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12.6 17.9h6.8" fill="none" stroke="var(--gate)" stroke-width="1.9" stroke-linecap="round" />
+          </svg>
+          <b>avrig<span class="suffix">.ai</span></b>
+        </a>
+        <span class="version" title="Product version" data-version>v0.6.0</span>
+      </div>
+
+      <div class="head-end">
+        <button class="tg icon" type="button" id="theme-tg">
+          <span class="tg-icon" aria-hidden="true"></span>
+        </button>
+        <button class="tg text" type="button" id="lang-tg">
+          <span class="tg-icon" aria-hidden="true"></span>
+          <span class="tg-label">EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="auth-main">
+    <div class="auth-card">
+      <h1 data-i18n="login.title">Sign in</h1>
+      <p class="auth-sub" data-i18n="login.body">avrig-ai signs you in through the identity provider this deployment trusts. There is no separate password here.</p>
+
+      <div class="notice" id="notice" hidden>
+        <svg id="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>
+        <div>
+          <b id="notice-title"></b>
+          <p id="notice-body"></p>
+        </div>
+      </div>
+
+      <button class="btn-primary auth-submit" type="button" id="sso">
+        <span class="spin" aria-hidden="true"></span>
+        <span id="sso-label" data-i18n="login.sso">Continue with SSO</span>
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </button>
+
+      <dl class="issuer">
+        <dt data-i18n="login.issuer">Identity provider</dt>
+        <dd>iam.avrig.ai</dd>
+      </dl>
+
+      <p class="auth-rule">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3 5 6v6c0 4.4 3 8 7 9 4-1 7-4.6 7-9V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span data-i18n="login.rule">Only a human account can approve an artifact.</span>
+      </p>
+
+      <p class="proto-note" data-i18n="login.note">Prototype only: this button opens the identity provider screen instead of redirecting.</p>
+    </div>
+
+    <p class="auth-foot">
+      <a href="/" data-i18n="login.back">Back to avrig.ai</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="mono" data-version>v0.6.0</span>
+    </p>
+  </main>
+
+  <script>
+    window.PAGE_COPY = {
+      en: {
+        "login.title": "Sign in",
+        "login.body": "avrig-ai signs you in through the identity provider this deployment trusts. There is no separate password here.",
+        "login.sso": "Continue with SSO",
+        "login.waiting": "Waiting for the identity provider",
+        "login.issuer": "Identity provider",
+        "login.rule": "Only a human account can approve an artifact.",
+        "login.errorTitle": "The identity provider did not answer",
+        "login.errorBody": "Check that the provider is reachable, then try again.",
+        "login.expiredTitle": "Your session ended",
+        "login.expiredBody": "Sign in again to pick up where you left off.",
+        "login.declineTitle": "Sign-in was declined",
+        "login.declineBody": "The provider returned a request this deployment does not accept. Ask the person who runs it which account to use.",
+        "login.back": "Back to avrig.ai",
+        "login.note": "Prototype only: this button opens the identity provider screen instead of redirecting.",
+      },
+      id: {
+        "login.title": "Masuk",
+        "login.body": "avrig-ai memasukkan Anda melalui penyedia identitas yang dipercaya penerapan ini. Tidak ada kata sandi terpisah di sini.",
+        "login.sso": "Lanjutkan dengan SSO",
+        "login.waiting": "Menunggu penyedia identitas",
+        "login.issuer": "Penyedia identitas",
+        "login.rule": "Hanya akun manusia yang dapat menyetujui artefak.",
+        "login.errorTitle": "Penyedia identitas tidak menjawab",
+        "login.errorBody": "Pastikan penyedia dapat dijangkau, lalu coba lagi.",
+        "login.expiredTitle": "Sesi Anda berakhir",
+        "login.expiredBody": "Masuk lagi untuk melanjutkan pekerjaan Anda.",
+        "login.declineTitle": "Proses masuk ditolak",
+        "login.declineBody": "Penyedia mengembalikan permintaan yang tidak diterima penerapan ini. Tanyakan kepada pengelola akun mana yang sebaiknya dipakai.",
+        "login.back": "Kembali ke avrig.ai",
+        "login.note": "Hanya prototipe: tombol ini membuka layar penyedia identitas, bukan mengalihkan.",
+      },
+    };
+  </script>
+  <script src="/chrome.js"></script>
+  <script>
+    (function () {
+      var notice = document.getElementById("notice");
+      var noticeIcon = document.getElementById("notice-icon");
+      var noticeTitle = document.getElementById("notice-title");
+      var noticeBody = document.getElementById("notice-body");
+      var sso = document.getElementById("sso");
+      var ssoLabel = document.getElementById("sso-label");
+      var busy = false;
+      var timer = null;
+
+      // State variants are reachable for review without adding prototype
+      // controls to the screen: ?state=error, ?state=expired, ?state=declined.
+      var state = new URLSearchParams(window.location.search).get("state");
+      var STATES = {
+        error: { tone: "error", title: "login.errorTitle", body: "login.errorBody" },
+        expired: { tone: "info", title: "login.expiredTitle", body: "login.expiredBody" },
+        declined: { tone: "error", title: "login.declineTitle", body: "login.declineBody" },
+      };
+      var ICONS = {
+        error: '<path d="M12 4 3 20h18L12 4Z"/><path d="M12 10v4M12 17v.5"/>',
+        info: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/>',
+      };
+
+      function t(key) { return window.avrig.t(key); }
+
+      function setIdle() {
+        busy = false;
+        sso.disabled = false;
+        sso.removeAttribute("aria-busy");
+        ssoLabel.textContent = t("login.sso");
+      }
+
+      // The button below is the only action on this screen, so a failed
+      // attempt is retried by pressing it again, not by a second button.
+      function renderNotice() {
+        var config = STATES[state];
+        if (!config || busy) {
+          notice.hidden = true;
+          return;
+        }
+        notice.dataset.tone = config.tone;
+        notice.setAttribute("role", config.tone === "error" ? "alert" : "status");
+        noticeIcon.innerHTML = ICONS[config.tone];
+        noticeTitle.textContent = t(config.title);
+        noticeBody.textContent = t(config.body);
+        notice.hidden = false;
+      }
+
+      function startSignIn() {
+        if (busy) return;
+        busy = true;
+        renderNotice();
+        sso.disabled = true;
+        sso.setAttribute("aria-busy", "true");
+        ssoLabel.textContent = t("login.waiting");
+        timer = setTimeout(function () {
+          window.location.href = "/iam";
+        }, 1200);
+      }
+
+      sso.addEventListener("click", startSignIn);
+
+      document.addEventListener("avrig:copy", function () {
+        if (busy) ssoLabel.textContent = t("login.waiting");
+        else setIdle();
+        renderNotice();
+      });
+
+      window.addEventListener("pagehide", function () {
+        if (timer) clearTimeout(timer);
+      });
+
+      renderNotice();
+    })();
+  </script>
+</body>
+</html>

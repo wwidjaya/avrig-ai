@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sign in · iam.avrig.ai</title>
+<meta name="description" content="Prototype of the avrig.ai identity provider sign-in screen.">
+<link rel="icon" type="image/svg+xml" href="/avrig-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/chrome.css">
+<link rel="stylesheet" href="/auth.css">
+<script src="/theme-init.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap head-inner">
+      <div class="brand-wrap">
+        <a class="brand" href="/">
+          <svg class="brand-mark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true">
+            <rect width="32" height="32" rx="8" fill="currentColor" />
+            <path d="M10.4 21.6 16 10.2l5.6 11.4" fill="none" stroke="var(--bg)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12.6 17.9h6.8" fill="none" stroke="var(--gate)" stroke-width="1.9" stroke-linecap="round" />
+          </svg>
+          <b>avrig<span class="suffix">.ai</span></b>
+        </a>
+      </div>
+
+      <div class="head-end">
+        <button class="tg icon" type="button" id="theme-tg">
+          <span class="tg-icon" aria-hidden="true"></span>
+        </button>
+        <button class="tg text" type="button" id="lang-tg">
+          <span class="tg-icon" aria-hidden="true"></span>
+          <span class="tg-label">EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="auth-main">
+    <div class="auth-card">
+      <h1 data-i18n="iam.title">Sign in to avrig.ai</h1>
+      <p class="auth-sub" data-i18n="iam.body">Use the account this deployment gave you.</p>
+
+      <div class="notice" id="notice" role="alert" hidden>
+        <svg class="ico-err" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.6"/></svg>
+        <svg class="ico-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.6"/></svg>
+        <div>
+          <b id="notice-title"></b>
+          <p id="notice-body"></p>
+        </div>
+      </div>
+
+      <form id="form" action="/workspace" method="post">
+        <div class="field">
+          <label for="email" data-i18n="iam.email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="username"
+                 autocapitalize="none" spellcheck="false" required>
+        </div>
+
+        <div class="field with-action">
+          <label for="password" data-i18n="iam.password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button class="reveal" type="button" id="reveal" aria-pressed="false" aria-label="Show password">Show</button>
+        </div>
+
+        <div class="auth-row">
+          <label class="check">
+            <input type="checkbox" id="remember" name="remember" autocomplete="off">
+            <span data-i18n="iam.remember">Keep me signed in</span>
+          </label>
+          <p class="field-aside"><a href="#" id="forgot" data-i18n="iam.forgot">Forgot your password?</a></p>
+        </div>
+
+        <button class="btn-primary auth-submit" type="submit" id="submit">
+          <span class="spin" aria-hidden="true"></span>
+          <span id="submit-label" data-i18n="iam.submit">Sign in</span>
+        </button>
+      </form>
+
+      <div class="auth-more">
+        <button class="auth-alt" type="button" id="passkey">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="4"/><path d="m11 11 9 9M16.5 16.5l2 2M14 19l2 2"/></svg>
+          <span data-i18n="iam.passkey">Use a passkey</span>
+        </button>
+      </div>
+
+      <p class="or" data-i18n="iam.orProvider">or continue with</p>
+
+      <!-- The providers sit last, under the form and the passkey: an account
+           this deployment gave is the first way in, and a reader who has none
+           scans down to the badge they recognise. -->
+      <div class="auth-providers">
+        <button class="auth-provider" type="button" id="oauth-google">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M23.5 12.27c0-.85-.08-1.66-.22-2.45H12v4.64h6.45a5.52 5.52 0 0 1-2.39 3.62v3h3.86c2.26-2.08 3.58-5.15 3.58-8.81Z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.86-3c-1.07.72-2.44 1.15-4.09 1.15-3.14 0-5.8-2.12-6.75-4.97H1.26v3.09A12 12 0 0 0 12 24Z"/>
+            <path fill="#FBBC05" d="M5.25 14.27a7.2 7.2 0 0 1 0-4.54V6.64H1.26a12 12 0 0 0 0 10.72l3.99-3.09Z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.64l3.99 3.09C6.2 6.87 8.86 4.75 12 4.75Z"/>
+          </svg>
+          <span data-i18n="iam.google">Continue with Google</span>
+        </button>
+        <button class="auth-provider" type="button" id="oauth-apple">
+          <svg class="brand-apple" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M16.36 12.68c.02 2.4 2.1 3.2 2.13 3.21-.02.06-.33 1.14-1.1 2.26-.66.97-1.35 1.94-2.44 1.96-1.07.02-1.41-.63-2.63-.63-1.22 0-1.6.61-2.61.65-1.05.04-1.84-1.04-2.51-2-1.37-1.97-2.42-5.57-1.01-8 .7-1.22 1.94-2 3.3-2.02 1.02-.02 1.98.69 2.61.69.62 0 1.79-.85 3.01-.73.51.02 1.95.21 2.87 1.55-.07.05-1.71 1-1.69 2.99M14.7 6.6c.53-.64.89-1.53.79-2.42-.76.03-1.69.51-2.24 1.15-.49.56-.92 1.47-.8 2.34.85.07 1.72-.43 2.25-1.07"/>
+          </svg>
+          <span data-i18n="iam.apple">Continue with Apple</span>
+        </button>
+      </div>
+
+      <p class="proto-note" data-i18n="iam.note">Prototype only: this form checks nothing and opens the workspace.</p>
+    </div>
+
+    <p class="auth-foot">
+      <a href="/" data-i18n="iam.back">Back to avrig.ai</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="mono">iam.avrig.ai</span>
+    </p>
+  </main>
+
+  <script>
+    window.PAGE_COPY = {
+      en: {
+        "iam.title": "Sign in to avrig.ai",
+        "iam.body": "Use the account this deployment gave you.",
+        "iam.google": "Continue with Google",
+        "iam.apple": "Continue with Apple",
+        "iam.orProvider": "or continue with",
+        "iam.email": "Email",
+        "iam.password": "Password",
+        "iam.remember": "Keep me signed in",
+        "iam.show": "Show",
+        "iam.hide": "Hide",
+        "iam.showPw": "Show password",
+        "iam.hidePw": "Hide password",
+        "iam.forgot": "Forgot your password?",
+        "iam.submit": "Sign in",
+        "iam.busy": "Signing in",
+        "iam.passkey": "Use a passkey",
+        "iam.back": "Back to avrig.ai",
+        "iam.note": "Prototype only: this form checks nothing and opens the workspace.",
+        "iam.invalidTitle": "That did not work",
+        "iam.invalidBody": "The email or the password is wrong. Try again.",
+        "iam.lockedTitle": "This account is turned off",
+        "iam.lockedBody": "Ask the person who runs this deployment to turn it back on.",
+        "iam.ratelimitTitle": "Too many attempts",
+        "iam.ratelimitBody": "Wait a moment, then try again.",
+        "iam.expiredTitle": "Your session ended",
+        "iam.expiredBody": "Sign in again to pick up where you left off.",
+        "iam.passkeyNoteTitle": "Passkeys are not connected here",
+        "iam.passkeyNoteBody": "A passkey signs you in without a password. This prototype has none.",
+        "iam.googleNoteTitle": "Google sign-in is not connected here",
+        "iam.googleNoteBody": "A deployment with a Google client sends you to Google and back. This prototype has no client.",
+        "iam.appleNoteTitle": "Apple sign-in is not connected here",
+        "iam.appleNoteBody": "A deployment with an Apple client sends you to Apple and back. This prototype has no client.",
+        "iam.forgotNoteTitle": "A reset link goes to the account address",
+        "iam.forgotNoteBody": "This prototype sends no mail, so nothing arrives.",
+      },
+      id: {
+        "iam.title": "Masuk ke avrig.ai",
+        "iam.body": "Gunakan akun yang diberikan penerapan ini.",
+        "iam.google": "Lanjutkan dengan Google",
+        "iam.apple": "Lanjutkan dengan Apple",
+        "iam.orProvider": "atau lanjutkan dengan",
+        "iam.email": "Email",
+        "iam.password": "Kata sandi",
+        "iam.remember": "Tetap masuk",
+        "iam.show": "Tampilkan",
+        "iam.hide": "Sembunyikan",
+        "iam.showPw": "Tampilkan kata sandi",
+        "iam.hidePw": "Sembunyikan kata sandi",
+        "iam.forgot": "Lupa kata sandi Anda?",
+        "iam.submit": "Masuk",
+        "iam.busy": "Sedang masuk",
+        "iam.passkey": "Gunakan passkey",
+        "iam.back": "Kembali ke avrig.ai",
+        "iam.note": "Hanya prototipe: formulir ini tidak memeriksa apa pun dan membuka ruang kerja.",
+        "iam.invalidTitle": "Tidak berhasil",
+        "iam.invalidBody": "Email atau kata sandinya salah. Coba lagi.",
+        "iam.lockedTitle": "Akun ini dinonaktifkan",
+        "iam.lockedBody": "Minta pengelola penerapan ini menyalakannya kembali.",
+        "iam.ratelimitTitle": "Terlalu banyak percobaan",
+        "iam.ratelimitBody": "Tunggu sebentar, lalu coba lagi.",
+        "iam.expiredTitle": "Sesi Anda berakhir",
+        "iam.expiredBody": "Masuk lagi untuk melanjutkan pekerjaan Anda.",
+        "iam.passkeyNoteTitle": "Passkey belum tersambung di sini",
+        "iam.passkeyNoteBody": "Passkey memasukkan Anda tanpa kata sandi. Prototipe ini tidak punya.",
+        "iam.googleNoteTitle": "Masuk dengan Google belum tersambung di sini",
+        "iam.googleNoteBody": "Penerapan dengan klien Google mengirim Anda ke Google lalu kembali. Prototipe ini tidak punya klien.",
+        "iam.appleNoteTitle": "Masuk dengan Apple belum tersambung di sini",
+        "iam.appleNoteBody": "Penerapan dengan klien Apple mengirim Anda ke Apple lalu kembali. Prototipe ini tidak punya klien.",
+        "iam.forgotNoteTitle": "Tautan atur ulang dikirim ke alamat akun",
+        "iam.forgotNoteBody": "Prototipe ini tidak mengirim email, jadi tidak ada yang datang.",
+      },
+    };
+  </script>
+  <script src="/chrome.js"></script>
+  <script>
+    (function () {
+      var t = window.avrig.t;
+      var form = document.getElementById("form");
+      var email = document.getElementById("email");
+      var password = document.getElementById("password");
+      var reveal = document.getElementById("reveal");
+      var submit = document.getElementById("submit");
+      var submitLabel = document.getElementById("submit-label");
+      var notice = document.getElementById("notice");
+      var noticeTitle = document.getElementById("notice-title");
+      var noticeBody = document.getElementById("notice-body");
+      var busy = false;
+      var shown = { tone: null, title: null, body: null };
+      var state = new URLSearchParams(window.location.search).get("state");
+
+      function paintNotice() {
+        if (!shown.title) { notice.hidden = true; return; }
+        notice.dataset.tone = shown.tone;
+        noticeTitle.textContent = t(shown.title);
+        noticeBody.textContent = t(shown.body);
+        notice.hidden = false;
+      }
+
+      function show(tone, title, body) {
+        shown = { tone: tone, title: title, body: body };
+        paintNotice();
+      }
+
+      function renderReveal() {
+        var visible = password.type === "text";
+        reveal.textContent = t(visible ? "iam.hide" : "iam.show");
+        reveal.setAttribute("aria-label", t(visible ? "iam.hidePw" : "iam.showPw"));
+        reveal.setAttribute("aria-pressed", String(visible));
+      }
+
+      // The states exist so the failure paths can be reviewed without a server.
+      var states = {
+        invalid: ["error", "iam.invalidTitle", "iam.invalidBody"],
+        locked: ["error", "iam.lockedTitle", "iam.lockedBody"],
+        ratelimit: ["error", "iam.ratelimitTitle", "iam.ratelimitBody"],
+        expired: ["status", "iam.expiredTitle", "iam.expiredBody"],
+      };
+      if (states[state]) {
+        show.apply(null, states[state]);
+        if (state === "invalid") {
+          email.setAttribute("aria-invalid", "true");
+          password.setAttribute("aria-invalid", "true");
+        }
+      }
+
+      // Native validity drives the visual state through :user-invalid; keep the
+      // announced state on the same beat, and only after the person interacts.
+      [email, password].forEach(function (field) {
+        field.setAttribute("aria-invalid", field.getAttribute("aria-invalid") || "false");
+        ["blur", "input", "invalid"].forEach(function (type) {
+          field.addEventListener(type, function () {
+            field.setAttribute("aria-invalid", field.matches(":user-invalid") ? "true" : "false");
+          });
+        });
+      });
+
+      function clearRejected() {
+        if (state !== "invalid") return;
+        state = null;
+        shown = { tone: null, title: null, body: null };
+        paintNotice();
+      }
+      email.addEventListener("input", clearRejected);
+      password.addEventListener("input", clearRejected);
+
+      reveal.addEventListener("click", function () {
+        var visible = password.type === "password";
+        password.type = visible ? "text" : "password";
+        renderReveal();
+        password.focus();
+      });
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (busy) return;
+        busy = true;
+        submit.setAttribute("aria-busy", "true");
+        submit.disabled = true;
+        submitLabel.textContent = t("iam.busy");
+        window.setTimeout(function () { window.location.href = "/workspace"; }, 1100);
+      });
+
+      document.getElementById("passkey").addEventListener("click", function () {
+        show("status", "iam.passkeyNoteTitle", "iam.passkeyNoteBody");
+      });
+
+      // The providers are not wired to anything, so pressing one says so rather
+      // than pretending a hand-off happened and landing on the workspace.
+      [["oauth-google", "iam.googleNoteTitle", "iam.googleNoteBody"],
+       ["oauth-apple", "iam.appleNoteTitle", "iam.appleNoteBody"]].forEach(function (spec) {
+        document.getElementById(spec[0]).addEventListener("click", function () {
+          show("status", spec[1], spec[2]);
+        });
+      });
+
+      document.getElementById("forgot").addEventListener("click", function (event) {
+        event.preventDefault();
+        show("status", "iam.forgotNoteTitle", "iam.forgotNoteBody");
+      });
+
+      document.addEventListener("avrig:copy", function () {
+        renderReveal();
+        paintNotice();
+        if (busy) submitLabel.textContent = t("iam.busy");
+      });
+
+      renderReveal();
+    })();
+  </script>
+</body>
+</html>

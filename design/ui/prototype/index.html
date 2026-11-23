@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>avrig.ai · landing page prototype</title>
+<meta name="description" content="Prototype of the avrig.ai front page: the software engineering board as the hero, the systematic lifecycle, and the human approval record.">
+<link rel="icon" type="image/svg+xml" href="/avrig-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/chrome.css">
+<script src="/theme-init.js"></script>
+<style>
+  /* Page layout only. Tokens, header and controls live in chrome.css. */
+
+  /* Hero */
+  .hero { padding: 56px 0 64px; }
+  @media (min-width: 1024px) { .hero { padding: 80px 0 96px; } }
+  .hero-grid { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 1024px) {
+    .hero-grid { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); gap: 64px; }
+    .hero-copy { padding-right: 8px; }
+  }
+
+  .overline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted-fg); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gate); }
+
+  h1.hero-title {
+    margin: 20px 0 0;
+    font-size: clamp(2.4rem, 5vw, 3.9rem);
+    line-height: 1.02; font-weight: 600; letter-spacing: -0.035em;
+  }
+  .lede { margin: 24px 0 0; max-width: 46ch; font-size: 16.5px; line-height: 1.6; color: var(--muted-fg); }
+  .actions { margin: 32px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+  .facts {
+    margin: 48px 0 0; padding: 0; display: grid; gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  @media (min-width: 640px) { .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .fact { background: var(--card); padding: 14px 16px; }
+  .fact dt { font-size: 12px; color: var(--muted-fg); }
+  .fact dd { margin: 4px 0 0; font-size: 13px; font-weight: 500; line-height: 1.35; }
+
+  /* The board window */
+  .window {
+    border: 1px solid var(--border); border-radius: 16px; background: var(--card);
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  .window-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--border); }
+  .window-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .window-body { display: flex; }
+  /* A 360px screen leaves the bar 310px, which the project name has to itself
+     now that the bar carries no label of its own. */
+  @media (max-width: 400px) {
+    .window-bar { padding: 0 14px; gap: 6px; }
+  }
+
+  .rail { display: none; width: 152px; flex: 0 0 auto; flex-direction: column; gap: 2px; padding: 8px; border-right: 1px solid var(--border); }
+  @media (min-width: 640px) { .rail { display: flex; } }
+  .rail-item { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: 8px; font-size: 13px; color: var(--muted-fg); }
+  .rail-item svg { width: 15px; height: 15px; flex: 0 0 auto; }
+  .rail-item.active { background: var(--accent); color: var(--fg); font-weight: 500; }
+
+  .board { flex: 1; min-width: 0; padding: 16px; }
+  .board-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .board-head b { font-size: 13px; font-weight: 500; }
+  .board-head span { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--muted-fg); }
+
+  .board-row { position: relative; display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border-soft); }
+  .board-row:last-of-type { border-bottom: 0; }
+  .board-row .code { width: 24px; flex: 0 0 auto; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--muted-fg); }
+  .board-row .body { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .board-row .name { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .board-row .meta { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .board-row.await::before {
+    content: ""; position: absolute; left: -16px; top: 50%; transform: translateY(-50%);
+    width: 2px; height: 30px; border-radius: 999px; background: var(--gate);
+  }
+  .board-row.await .name { font-weight: 500; }
+
+  .chip { flex: 0 0 auto; border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; font-size: 12px; color: var(--muted-fg); white-space: nowrap; }
+  .chip.gate { border-color: var(--gate-line); background: var(--gate-soft); color: var(--gate); }
+
+  .board-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-fg); }
+  .board-foot .count { display: none; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+  @media (min-width: 640px) { .board-foot .count { display: block; } }
+
+  /* Sections */
+  .section { border-top: 1px solid var(--border); scroll-margin-top: 64px; }
+  .section.tint { background: var(--tint); }
+  .section-inner { padding: 64px 0; }
+  @media (min-width: 1024px) { .section-inner { padding: 80px 0; } }
+  .h2 { margin: 0; font-size: clamp(1.6rem, 2.6vw, 2.15rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.025em; }
+  .sub { margin-top: 12px; max-width: 54ch; font-size: 16px; line-height: 1.65; color: var(--muted-fg); }
+
+  /* Lifecycle */
+  .lifecycle { margin-top: 40px; display: grid; gap: 24px; }
+  @media (min-width: 1024px) { .lifecycle { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 40px; } }
+
+  .tablist { display: flex; flex-direction: column; gap: 4px; }
+  .stage-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px;
+    border: 1px solid transparent; border-radius: 12px; background: transparent;
+    text-align: left; cursor: pointer; transition: background-color 150ms, border-color 150ms;
+  }
+  .stage-btn:not([aria-selected="true"]):hover { background: color-mix(in srgb, var(--accent) 60%, transparent); }
+  .stage-btn[aria-selected="true"] { border-color: var(--border); background: var(--bg); }
+  .stage-code {
+    display: grid; place-items: center; width: 28px; height: 28px; flex: 0 0 auto;
+    border-radius: 8px; background: var(--secondary); color: var(--muted-fg);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px;
+  }
+  .stage-btn[aria-selected="true"] .stage-code { background: var(--fg); color: var(--bg); }
+  .stage-text { flex: 1; min-width: 0; }
+  .stage-name { display: block; font-size: 15px; font-weight: 500; }
+  .stage-owner { display: block; font-size: 12px; color: var(--muted-fg); }
+
+  .tabpanel { border: 1px solid var(--border); border-radius: 16px; background: var(--bg); padding: 24px; }
+  @media (min-width: 640px) { .tabpanel { padding: 32px; } }
+  .panel-head { display: flex; align-items: baseline; gap: 12px; }
+  .panel-count { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--muted-fg); }
+  .panel-title { margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -0.015em; }
+  .panel-dl { margin: 24px 0 0; }
+  .panel-dl > div { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .panel-dl > div:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  .panel-dl dt { font-size: 12px; color: var(--muted-fg); }
+  .panel-dl dd { margin: 6px 0 0; font-size: 15px; line-height: 1.6; }
+
+  /* Approval */
+  .gate-grid { display: grid; gap: 48px; }
+  @media (min-width: 1024px) { .gate-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; align-items: center; } }
+  .gate-body { margin-top: 16px; max-width: 52ch; font-size: 16px; line-height: 1.65; color: var(--muted-fg); }
+  .gate-note { margin-top: 24px; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--gate); }
+  .gate-note svg { width: 16px; height: 16px; flex: 0 0 auto; }
+
+  .record-outer { border: 1px solid var(--border); border-radius: 16px; background: var(--card); padding: 6px; }
+  .record { border: 1px solid var(--border-soft); border-radius: 12px; padding: 24px; }
+  .record-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .record-top > span:first-child { font-size: 13px; color: var(--muted-fg); }
+  .record dl { margin: 20px 0 0; font-size: 14px; }
+  .record dl > div { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--border); }
+  .record dt { color: var(--muted-fg); }
+  .record dd { margin: 0; text-align: right; font-weight: 500; }
+  .record dd small { display: block; font-weight: 400; color: var(--muted-fg); }
+  .agent-note {
+    display: flex; align-items: center; gap: 8px; margin-top: 24px; padding: 10px 12px;
+    border-radius: 8px; background: var(--secondary); font-size: 13px; color: var(--muted-fg);
+  }
+  .agent-note svg { width: 14px; height: 14px; flex: 0 0 auto; }
+
+  /* Surfaces */
+  .cards { display: grid; gap: 24px; margin-top: 40px; }
+  @media (min-width: 1024px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .card { border: 1px solid var(--border); border-radius: 16px; background: var(--bg); padding: 24px; }
+  .card h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  .card .desc { margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--muted-fg); }
+
+  .thread { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
+  .line { display: flex; gap: 12px; }
+  .avatar {
+    display: grid; place-items: center; width: 24px; height: 24px; flex: 0 0 auto; margin-top: 2px;
+    border-radius: 6px; background: var(--secondary); color: var(--muted-fg);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px;
+  }
+  .speaker { font-size: 12px; color: var(--muted-fg); }
+  .utter { font-size: 14px; line-height: 1.6; }
+  .utter.outcome { font-weight: 500; }
+  .example { margin: 0; padding-top: 4px; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--muted-fg); }
+
+  .results { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .result { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-soft); }
+  .result:last-of-type { border-bottom: 0; }
+  .bullet { width: 6px; height: 6px; flex: 0 0 auto; margin-top: 6px; border-radius: 50%; background: var(--muted-fg); opacity: 0.5; }
+  .bullet.on { background: var(--gate); opacity: 1; }
+  .result .text { flex: 1; min-width: 0; }
+  .result .text p:first-child { font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .result .text p + p { margin-top: 2px; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12px; color: var(--muted-fg); }
+
+  /* Closing and footer */
+  .closing { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: 64px 0; }
+  @media (min-width: 1024px) { .closing { flex-direction: row; align-items: center; justify-content: space-between; padding: 64px 0; } }
+  .closing h2 { margin: 0; font-size: clamp(1.5rem, 2.3vw, 1.9rem); font-weight: 600; letter-spacing: -0.025em; }
+  .closing p { margin-top: 8px; max-width: 60ch; font-size: 15px; line-height: 1.6; color: var(--muted-fg); }
+  .closing-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+  .site-foot { border-top: 1px solid var(--border); }
+  .foot-inner { display: flex; flex-direction: column; gap: 16px; padding: 32px 0; font-size: 13px; color: var(--muted-fg); }
+  @media (min-width: 640px) { .foot-inner { flex-direction: row; align-items: center; justify-content: space-between; } }
+  .foot-links { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+  .foot-links a { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+  .foot-links a:hover { color: var(--fg); }
+  .foot-links a svg { width: 11px; height: 11px; }
+  .ver-text { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+
+
+</style>
+
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+  <header class="site-head">
+    <div class="wrap head-inner">
+      <div class="brand-wrap">
+        <a class="brand" href="/">
+          <svg class="brand-mark" viewBox="0 0 32 32" width="20" height="20" aria-hidden="true">
+            <rect width="32" height="32" rx="8" fill="currentColor" />
+            <path d="M10.4 21.6 16 10.2l5.6 11.4" fill="none" stroke="var(--bg)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12.6 17.9h6.8" fill="none" stroke="var(--gate)" stroke-width="1.9" stroke-linecap="round" />
+          </svg>
+          <b>avrig<span class="suffix">.ai</span></b>
+        </a>
+      </div>
+
+      <nav class="top-nav" aria-label="Page sections">
+        <button class="navlink" type="button" data-goto="lifecycle" data-i18n="nav.lifecycle">Lifecycle</button>
+        <button class="navlink" type="button" data-goto="approval" data-i18n="nav.approval">Approval</button>
+        <button class="navlink" type="button" data-goto="surfaces" data-i18n="nav.surfaces">Surfaces</button>
+      </nav>
+
+      <div class="head-end">
+        <button class="tg icon" type="button" id="theme-tg">
+          <span class="tg-icon" aria-hidden="true"></span>
+        </button>
+        <button class="tg text" type="button" id="lang-tg">
+          <span class="tg-icon" aria-hidden="true"></span>
+          <span class="tg-label">EN</span>
+        </button>
+
+        <a class="btn-sm" href="/iam">
+          <span data-i18n="nav.workspace">Workspace</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="overline"><span class="dot" aria-hidden="true"></span><span data-i18n="overline">Agentic SDLC</span></p>
+          <h1 class="hero-title" data-i18n="title">Agents do the work. A person signs it off.</h1>
+          <p class="lede" data-i18n="subtitle">avrig-ai runs software engineering as one systematic lifecycle: requirements, architecture, development, tests. Every artifact keeps the version it was approved at, and an agent cannot approve its own work.</p>
+          <div class="actions">
+            <a class="btn-primary" href="/iam">
+              <span data-i18n="primary">Open the workspace</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+            </a>
+            <button class="btn-quiet" type="button" data-goto="lifecycle" data-i18n="secondary">See a lifecycle run</button>
+          </div>
+          <dl class="facts">
+            <div class="fact">
+              <dt data-i18n="facts.0.label">Lifecycle</dt>
+              <dd data-i18n="facts.0.value">Systematic, stages cannot be skipped</dd>
+            </div>
+            <div class="fact">
+              <dt data-i18n="facts.1.label">Ownership</dt>
+              <dd data-i18n="facts.1.value">Agent or human on every stage</dd>
+            </div>
+            <div class="fact">
+              <dt data-i18n="facts.2.label">Records</dt>
+              <dd data-i18n="facts.2.value">Version pinned on every artifact</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hero-visual">
+          <div class="window">
+            <div class="window-bar">
+              <span class="window-title" data-i18n="window.title">My Software Engineering project</span>
+            </div>
+            <div class="window-body">
+              <div class="rail" aria-hidden="true">
+                <div class="rail-item active">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                  <span>Overview</span>
+                </div>
+                <div class="rail-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 15a3 3 0 0 1-3 3H8l-4 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3Z"/></svg>
+                  <span>Chat</span>
+                </div>
+                <div class="rail-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v14M15 20V10h3a2 2 0 0 1 2 2v8M3 20h18M7 8h5M7 12h5M7 16h5"/></svg>
+                  <span>Office &amp; Org</span>
+                </div>
+              </div>
+
+              <div class="board">
+                <div class="board-head">
+                  <b>Software engineering board</b>
+                  <span data-i18n="board.stages">Requirements to deployment</span>
+                </div>
+
+                <div class="board-row">
+                  <span class="code">RE</span>
+                  <span class="body">
+                    <span class="name">Requirements</span>
+                    <span class="meta">baseline v3 · Founder</span>
+                  </span>
+                  <span class="chip gate" data-i18n="state.approved">Approved</span>
+                </div>
+                <div class="board-row">
+                  <span class="code">SA</span>
+                  <span class="body">
+                    <span class="name">Architecture</span>
+                    <span class="meta">baseline v7 · Founder</span>
+                  </span>
+                  <span class="chip gate" data-i18n="state.approved">Approved</span>
+                </div>
+                <div class="board-row await">
+                  <span class="code">DV</span>
+                  <span class="body">
+                    <span class="name">Development</span>
+                    <span class="meta">draft v12 · Agent</span>
+                  </span>
+                  <span class="chip gate" data-i18n="state.review">In review</span>
+                </div>
+                <div class="board-row">
+                  <span class="code">TE</span>
+                  <span class="body">
+                    <span class="name">Test and verification</span>
+                    <span class="meta">no artifact · Agent</span>
+                  </span>
+                  <span class="chip" data-i18n="state.notstarted">Not started</span>
+                </div>
+                <div class="board-row">
+                  <span class="code">DE</span>
+                  <span class="body">
+                    <span class="name">Deployment</span>
+                    <span class="meta">no release · Agent</span>
+                  </span>
+                  <span class="chip" data-i18n="state.notstarted">Not started</span>
+                </div>
+
+                <div class="board-foot">
+                  <span data-i18n="board.rule">An agent cannot approve its own work</span>
+                  <span class="count" data-i18n="board.awaiting">1 awaiting you</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tint" id="lifecycle">
+      <div class="wrap section-inner">
+        <div>
+          <h2 class="h2" data-i18n="lifecycle.title">One path through, no stage skipped</h2>
+          <p class="sub" data-i18n="lifecycle.subtitle">Each stage produces an artifact and a gate. A stage that is not approved holds every stage after it.</p>
+        </div>
+
+        <div class="lifecycle">
+          <div class="tablist" role="tablist" aria-orientation="vertical" aria-label="Lifecycle stages" id="tablist"></div>
+          <div class="tabpanel" role="tabpanel" id="stage-panel" tabindex="0">
+            <div class="panel-head">
+              <span class="panel-count" id="panel-count">01 / 5</span>
+              <h3 class="panel-title" id="panel-title">Requirements</h3>
+            </div>
+            <dl class="panel-dl">
+              <div>
+                <dt data-i18n="lifecycle.produces">Produces</dt>
+                <dd id="panel-produces"></dd>
+              </div>
+              <div>
+                <dt data-i18n="lifecycle.approves">Who approves</dt>
+                <dd id="panel-approves"></dd>
+              </div>
+              <div>
+                <dt data-i18n="lifecycle.blocks">What it gates</dt>
+                <dd id="panel-gates"></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="approval">
+      <div class="wrap section-inner">
+        <div class="gate-grid">
+          <div>
+            <h2 class="h2" data-i18n="gate.title">Approval is a human act</h2>
+            <p class="gate-body" data-i18n="gate.body">A candidate becomes an approved baseline only when a person with authority signs it. The interface offers no path for an agent to do this, and the record names who signed, at which version, and when.</p>
+            <p class="gate-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3 5 6v6c0 4.4 3 8 7 9 4-1 7-4.6 7-9V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span data-i18n="gate.note">An agent cannot approve its own work</span>
+            </p>
+          </div>
+
+          <div class="record-outer">
+            <div class="record">
+              <div class="record-top">
+                <span data-i18n="approval.cardTitle">Architecture baseline</span>
+                <span class="chip gate" data-i18n="state.approved">Approved</span>
+              </div>
+              <dl>
+                <div>
+                  <dt data-i18n="gate.signerLabel">Signed by</dt>
+                  <dd data-i18n="gate.signerValue">Founder, a human account</dd>
+                </div>
+                <div>
+                  <dt data-i18n="gate.recordLabel">Record</dt>
+                  <dd data-i18n="gate.recordValue">v7 · 20 November 2026 · 14:22</dd>
+                </div>
+                <div>
+                  <dt data-i18n="approval.basisLabel">Basis</dt>
+                  <dd>
+                    <span data-i18n="approval.basisValue">Architecture v7, deliberation 004</span>
+                    <small data-i18n="approval.basisSub">one dissent recorded</small>
+                  </dd>
+                </div>
+              </dl>
+              <div class="agent-note">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M9 10 4 15l5 5M4 15h11a5 5 0 0 0 0-10h-1"/></svg>
+                <span data-i18n="approval.agentNote">An agent request to approve returns an error, by design.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tint" id="surfaces">
+      <div class="wrap section-inner">
+        <div>
+          <h2 class="h2" data-i18n="surfaces.title">The rest of the company, visible</h2>
+          <p class="sub" data-i18n="surfaces.subtitle">Meetings, records and knowledge sit beside the board, so a decision can be traced without asking anyone.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <h3 data-i18n="surfaces.deliberationsTitle">Meetings keep their transcript</h3>
+            <p class="desc" data-i18n="surfaces.deliberationsBody">Departments argue a design in a room with quorum, and the outcome is recorded as an artifact like anything else.</p>
+
+            <div class="thread">
+              <div class="line">
+                <span class="avatar">AR</span>
+                <div>
+                  <p class="speaker">Architecture</p>
+                  <p class="utter">Retries live in the event bus, so the queue is not the record.</p>
+                </div>
+              </div>
+              <div class="line">
+                <span class="avatar">EN</span>
+                <div>
+                  <p class="speaker">Engineering</p>
+                  <p class="utter">Then the board reads the artifact version, not the queue depth.</p>
+                </div>
+              </div>
+              <div class="line">
+                <span class="avatar">FD</span>
+                <div>
+                  <p class="speaker">Founder</p>
+                  <p class="utter outcome">Approved at v7. Keep the security dissent in the transcript.</p>
+                </div>
+              </div>
+              <p class="example" data-i18n="example.transcript">Example record · transcript kept with the outcome</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3 data-i18n="surfaces.knowledgeTitle">Answers carry their source</h3>
+            <p class="desc" data-i18n="surfaces.knowledgeBody">Every statement is labelled, from an approved baseline to an agent's inference, and every link pins the version at both ends.</p>
+
+            <div class="results">
+              <div class="result">
+                <span class="bullet on" aria-hidden="true"></span>
+                <div class="text">
+                  <p>Client configuration is fetched at runtime</p>
+                  <p>architecture v7 · 2 links</p>
+                </div>
+                <span class="chip gate" data-i18n="state.approved">Approved</span>
+              </div>
+              <div class="result">
+                <span class="bullet" aria-hidden="true"></span>
+                <div class="text">
+                  <p>Sessions refresh every fifteen minutes</p>
+                  <p>no approved source · flagged for review</p>
+                </div>
+                <span class="chip" data-i18n="state.inference">Agent inference</span>
+              </div>
+              <p class="example" data-i18n="example.knowledge">Example record · unsourced answers are flagged, never merged</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap closing">
+        <div>
+          <h2 data-i18n="closing.title">Start with one project</h2>
+          <p data-i18n="closing.body">The workspace opens on your projects. Nothing is created until you add one.</p>
+        </div>
+        <div class="closing-actions">
+          <a class="btn-primary" href="/iam">
+            <span data-i18n="closing.primary">Open the workspace</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </a>
+          <button class="btn-quiet" type="button" data-goto="lifecycle" data-i18n="closing.secondary">Read the architecture</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap foot-inner">
+      <p data-i18n="footer.tagline">Software engineering, run as a company you can audit.</p>
+      <div class="foot-links">
+        <a href="#">
+          <span data-i18n="footer.docs">Documentation</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a href="#">
+          <span data-i18n="footer.source">Source</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <!-- Port note: this value comes from __APP_VERSION__, not from this file.
+             The footer is the only place the landing page states its build. -->
+        <span class="ver-text" data-version>v0.6.0</span>
+        <span data-i18n="footer.license">MIT license</span>
+        <span data-i18n="footer.rights">© 2026 avrig.ai</span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  window.PAGE_COPY = {
+    en: {
+      skip: "Skip to content",
+      "nav.lifecycle": "Lifecycle",
+      "nav.approval": "Approval",
+      "nav.surfaces": "Surfaces",
+      "theme.light": "Light",
+      "theme.dark": "Dark",
+      "theme.system": "System",
+      overline: "Agentic SDLC",
+      title: "Agents do the work. A person signs it off.",
+      subtitle:
+        "avrig-ai runs software engineering as one systematic lifecycle: requirements, architecture, development, tests. Every artifact keeps the version it was approved at, and an agent cannot approve its own work.",
+      primary: "Open the workspace",
+    "nav.workspace": "Workspace",
+      secondary: "See a lifecycle run",
+      "facts.0.label": "Lifecycle",
+      "facts.0.value": "Systematic, stages cannot be skipped",
+      "facts.1.label": "Ownership",
+      "facts.1.value": "Agent or human on every stage",
+      "facts.2.label": "Records",
+      "facts.2.value": "Version pinned on every artifact",
+      "window.title": "My Software Engineering project",
+      "board.stages": "Requirements to deployment",
+      "board.rule": "An agent cannot approve its own work",
+      "board.awaiting": "1 awaiting you",
+      "state.approved": "Approved",
+      "state.review": "In review",
+      "state.notstarted": "Not started",
+      "state.inference": "Agent inference",
+      "state.optional": "Optional",
+      "lifecycle.title": "One path through, no stage skipped",
+      "lifecycle.subtitle":
+        "Each stage produces an artifact and a gate. A stage that is not approved holds every stage after it.",
+      "lifecycle.produces": "Produces",
+      "lifecycle.approves": "Who approves",
+      "lifecycle.blocks": "What it gates",
+      "gate.title": "Approval is a human act",
+      "gate.body":
+        "A candidate becomes an approved baseline only when a person with authority signs it. The interface offers no path for an agent to do this, and the record names who signed, at which version, and when.",
+      "gate.note": "An agent cannot approve its own work",
+      "gate.signerLabel": "Signed by",
+      "gate.signerValue": "Founder, a human account",
+      "gate.recordLabel": "Record",
+      "gate.recordValue": "v7 · 20 November 2026 · 14:22",
+      "approval.cardTitle": "Architecture baseline",
+      "approval.basisLabel": "Basis",
+      "approval.basisValue": "Architecture v7, deliberation 004",
+      "approval.basisSub": "one dissent recorded",
+      "approval.agentNote": "An agent request to approve returns an error, by design.",
+      "example.transcript": "Example record · transcript kept with the outcome",
+      "example.knowledge": "Example record · unsourced answers are flagged, never merged",
+      "surfaces.title": "The rest of the company, visible",
+      "surfaces.subtitle":
+        "Meetings, records and knowledge sit beside the board, so a decision can be traced without asking anyone.",
+      "surfaces.deliberationsTitle": "Meetings keep their transcript",
+      "surfaces.deliberationsBody":
+        "Departments argue a design in a room with quorum, and the outcome is recorded as an artifact like anything else.",
+      "surfaces.knowledgeTitle": "Answers carry their source",
+      "surfaces.knowledgeBody":
+        "Every statement is labelled, from an approved baseline to an agent's inference, and every link pins the version at both ends.",
+      "closing.title": "Start with one project",
+      "closing.body": "The workspace opens on your projects. Nothing is created until you add one.",
+      "closing.primary": "Open the workspace",
+      "closing.secondary": "Read the architecture",
+      "footer.tagline": "Software engineering, run as a company you can audit.",
+      "footer.docs": "Documentation",
+      "footer.source": "Source",
+      "footer.license": "MIT license",
+      "footer.rights": "© 2026 avrig.ai",
+    },
+    id: {
+      skip: "Lewati ke konten",
+      "nav.lifecycle": "Siklus",
+      "nav.approval": "Persetujuan",
+      "nav.surfaces": "Antarmuka",
+      "theme.light": "Terang",
+      "theme.dark": "Gelap",
+      "theme.system": "Sistem",
+      overline: "Agentic SDLC",
+      title: "Agen mengerjakan. Manusia menyetujui.",
+      subtitle:
+        "avrig-ai menjalankan rekayasa perangkat lunak sebagai satu siklus sistematis: kebutuhan, arsitektur, pengembangan, pengujian. Setiap artefak menyimpan versi saat disetujui, dan agen tidak dapat menyetujui pekerjaannya sendiri.",
+      primary: "Buka ruang kerja",
+    "nav.workspace": "Ruang kerja",
+      secondary: "Lihat satu siklus",
+      "facts.0.label": "Siklus",
+      "facts.0.value": "Sistematis, tahap tidak dapat dilewati",
+      "facts.1.label": "Kepemilikan",
+      "facts.1.value": "Agen atau manusia di setiap tahap",
+      "facts.2.label": "Catatan",
+      "facts.2.value": "Versi terkunci pada setiap artefak",
+      "window.title": "My Software Engineering project",
+      "board.stages": "Requirements to deployment",
+      "board.rule": "Agen tidak dapat menyetujui pekerjaannya sendiri",
+      "board.awaiting": "1 menunggu Anda",
+      "state.approved": "Disetujui",
+      "state.review": "Ditinjau",
+      "state.notstarted": "Belum mulai",
+      "state.inference": "Inferensi agen",
+      "state.optional": "Opsional",
+      "lifecycle.title": "Satu jalur, tanpa tahap terlewat",
+      "lifecycle.subtitle":
+        "Setiap tahap menghasilkan artefak dan gerbang. Tahap yang belum disetujui menahan seluruh tahap sesudahnya.",
+      "lifecycle.produces": "Menghasilkan",
+      "lifecycle.approves": "Yang menyetujui",
+      "lifecycle.blocks": "Yang digerbangi",
+      "gate.title": "Persetujuan adalah tindakan manusia",
+      "gate.body":
+        "Kandidat menjadi baseline yang disetujui hanya ketika orang yang berwenang menandatanganinya. Antarmuka tidak menyediakan jalur bagi agen untuk melakukannya, dan catatan menyebut siapa yang menandatangani, pada versi mana, dan kapan.",
+      "gate.note": "Agen tidak dapat menyetujui pekerjaannya sendiri",
+      "gate.signerLabel": "Ditandatangani oleh",
+      "gate.signerValue": "Founder, akun manusia",
+      "gate.recordLabel": "Catatan",
+      "gate.recordValue": "v7 · 20 November 2026 · 14:22",
+      "approval.cardTitle": "Baseline arsitektur",
+      "approval.basisLabel": "Dasar",
+      "approval.basisValue": "Arsitektur v7, musyawarah 004",
+      "approval.basisSub": "satu perbedaan tercatat",
+      "approval.agentNote": "Permintaan persetujuan oleh agen mengembalikan galat, memang begitu rancangannya.",
+      "example.transcript": "Catatan contoh · transkrip disimpan bersama hasilnya",
+      "example.knowledge": "Catatan contoh · jawaban tanpa sumber ditandai, tidak pernah digabung",
+      "surfaces.title": "Sisa perusahaan, terlihat",
+      "surfaces.subtitle":
+        "Rapat, catatan, dan pengetahuan berada di samping papan, sehingga keputusan dapat ditelusuri tanpa bertanya kepada siapa pun.",
+      "surfaces.deliberationsTitle": "Rapat menyimpan transkripnya",
+      "surfaces.deliberationsBody":
+        "Departemen memperdebatkan rancangan dalam ruang dengan kuorum, dan hasilnya dicatat sebagai artefak seperti yang lain.",
+      "surfaces.knowledgeTitle": "Jawaban membawa sumbernya",
+      "surfaces.knowledgeBody":
+        "Setiap pernyataan diberi label, dari baseline yang disetujui hingga inferensi agen, dan setiap tautan mengunci versi di kedua ujungnya.",
+      "closing.title": "Mulai dari satu proyek",
+      "closing.body": "Ruang kerja terbuka pada daftar proyek Anda. Tidak ada yang dibuat sampai Anda menambahkan satu.",
+      "closing.primary": "Buka ruang kerja",
+      "closing.secondary": "Baca arsitektur",
+      "footer.tagline": "Rekayasa perangkat lunak, dijalankan sebagai perusahaan yang dapat diaudit.",
+      "footer.docs": "Dokumentasi",
+      "footer.source": "Sumber",
+      "footer.license": "Lisensi MIT",
+      "footer.rights": "© 2026 avrig.ai",
+    },
+  };
+
+  // Console vocabulary stays in English on purpose, matching the product:
+  // stage names, owners and artifact versions are not translated.
+  const stages = [
+    {
+      code: "RE",
+      name: "Requirements",
+      owner: "Founder approves",
+      state: "approved",
+      produces:
+        "A requirements baseline where every claim carries its status: requirement, baseline, or agent inference.",
+      approves: "The founder, before any design work is recorded.",
+      gates: "Every stage after it. Design cannot begin on an unapproved baseline.",
+    },
+    {
+      code: "SA",
+      name: "Architecture",
+      owner: "Founder approves",
+      state: "approved",
+      produces:
+        "An architecture baseline with component boundaries and the interface contracts between them.",
+      approves: "The founder, on the recommendation of the architecture deliberation.",
+      gates: "Development. Work does not start until the architecture is approved at a version.",
+    },
+    {
+      code: "DV",
+      name: "Development",
+      owner: "Agent produces",
+      state: "review",
+      produces: "Source that builds and passes the automated checks, attached to the baseline it implements.",
+      approves: "The agent produces the draft. A human approves the baseline; the agent cannot.",
+      gates: "Testing. The suite runs against the approved version, not against a working copy.",
+    },
+    {
+      code: "TE",
+      name: "Test and verification",
+      owner: "Founder verifies",
+      state: "notstarted",
+      produces:
+        "Test results attached to the artifacts they cover, with the version each result was run against.",
+      approves: "The founder verifies the result. A failing stage stays open rather than passing quietly.",
+      gates: "Release. Nothing ships from an unverified stage.",
+    },
+    {
+      code: "OP",
+      name: "Deployment",
+      owner: "Founder approves",
+      state: "optional",
+      produces: "A released version, pinned to the baseline that passed verification.",
+      approves: "The founder, and only where the approved baseline allows a deployment at all.",
+      gates: "Nothing after it. A lifecycle may end at verification by design.",
+    },
+  ];
+
+  let active = 0;
+
+  const t = (key) => window.avrig.t(key);
+
+  function renderStages() {
+    const list = document.getElementById("tablist");
+    list.replaceChildren();
+    stages.forEach((stage, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "stage-btn";
+      button.setAttribute("role", "tab");
+      button.id = `tab-${stage.code.toLowerCase()}`;
+      button.setAttribute("aria-controls", "stage-panel");
+      button.setAttribute("aria-selected", String(index === active));
+      button.tabIndex = index === active ? 0 : -1;
+
+      const code = document.createElement("span");
+      code.className = "stage-code";
+      code.textContent = stage.code;
+
+      const text = document.createElement("span");
+      text.className = "stage-text";
+      const name = document.createElement("span");
+      name.className = "stage-name";
+      name.textContent = stage.name;
+      const owner = document.createElement("span");
+      owner.className = "stage-owner";
+      owner.textContent = stage.owner;
+      text.append(name, owner);
+
+      const chip = document.createElement("span");
+      chip.className = stage.state === "approved" ? "chip gate" : "chip";
+      chip.textContent = t(`state.${stage.state}`);
+
+      button.append(code, text, chip);
+      button.addEventListener("click", () => selectStage(index, false));
+      list.append(button);
+    });
+    renderPanel();
+  }
+
+  function selectStage(index, focus) {
+    active = index;
+    for (const [i, button] of [...document.querySelectorAll(".stage-btn")].entries()) {
+      button.setAttribute("aria-selected", String(i === index));
+      button.tabIndex = i === index ? 0 : -1;
+    }
+    renderPanel();
+    if (focus) document.getElementById(`tab-${stages[index].code.toLowerCase()}`)?.focus();
+  }
+
+  function renderPanel() {
+    const stage = stages[active];
+    document.getElementById("panel-count").textContent =
+      `${String(active + 1).padStart(2, "0")} / ${stages.length}`;
+    document.getElementById("panel-title").textContent = stage.name;
+    document.getElementById("panel-produces").textContent = stage.produces;
+    document.getElementById("panel-approves").textContent = stage.approves;
+    document.getElementById("panel-gates").textContent = stage.gates;
+    document.getElementById("stage-panel").setAttribute("aria-labelledby", `tab-${stage.code.toLowerCase()}`);
+  }
+
+  // Arrow keys, Home and End move between stages.
+  document.addEventListener("keydown", (event) => {
+    if (!event.target.closest(".stage-btn")) return;
+    const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+    let next = null;
+    if (event.key in keys) next = (active + keys[event.key] + stages.length) % stages.length;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = stages.length - 1;
+    if (next === null) return;
+    event.preventDefault();
+    selectStage(next, true);
+  });
+
+  for (const node of document.querySelectorAll("[data-goto]")) {
+    node.addEventListener("click", () => {
+      document.getElementById(node.dataset.goto)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
+  // The chrome owns theme and language; the stage list re-renders whenever the
+  // copy changes, because the state chips are translated.
+  document.addEventListener("avrig:copy", renderStages);
+</script>
+<script src="/chrome.js" defer></script>
+</body>
+</html>

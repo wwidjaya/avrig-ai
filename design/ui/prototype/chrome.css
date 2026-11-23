@@ -1,0 +1,205 @@
+/* Shared chrome for every avrig surface: tokens, base type, header, toggles,
+   buttons. Page layout stays in each page. */
+
+:root {
+  --bg: hsl(210 14% 98%);
+  --fg: hsl(210 16% 9%);
+  --card: hsl(0 0% 100%);
+  --muted-fg: hsl(210 8% 42%);
+  --border: hsl(210 12% 89%);
+  --border-soft: hsl(210 12% 89% / 0.7);
+  --primary: #0b5cff;
+  --primary-fg: #ffffff;
+  --secondary: hsl(210 13% 94%);
+  --accent: hsl(210 13% 94%);
+  --ring: hsl(168 48% 30%);
+  --gate: #1c7a63;
+  --gate-fg: #ffffff;
+  --gate-soft: rgb(28 122 99 / 10%);
+  --gate-line: rgb(28 122 99 / 30%);
+  --danger: #b42318;
+  --danger-soft: rgb(180 35 24 / 8%);
+  --danger-line: rgb(180 35 24 / 28%);
+  --shadow: 0 1px 2px rgb(16 20 24 / 4%), 0 24px 48px -24px rgb(16 20 24 / 16%);
+  --tint: hsl(0 0% 100% / 0.6);
+  /* The quiet ground of the contribution calendar and of an unfilled beat in
+     the ownership lane. One neutral, so absence reads as absence. */
+  --track: hsl(210 12% 92%);
+}
+
+[data-theme="dark"] {
+  --bg: hsl(210 14% 7%);
+  --fg: hsl(210 10% 96%);
+  --card: hsl(210 12% 9%);
+  --muted-fg: hsl(210 7% 62%);
+  --border: hsl(210 9% 19%);
+  --border-soft: hsl(210 9% 19% / 0.75);
+  --primary: #6f9dff;
+  --primary-fg: #08101f;
+  --secondary: hsl(210 10% 14%);
+  --accent: hsl(210 10% 16%);
+  --ring: hsl(168 52% 58%);
+  --gate: #4fbfa1;
+  --gate-fg: #08101f;
+  --gate-soft: rgb(79 191 161 / 14%);
+  --gate-line: rgb(79 191 161 / 32%);
+  --danger: #f2776b;
+  --danger-soft: rgb(242 119 107 / 12%);
+  --danger-line: rgb(242 119 107 / 34%);
+  --shadow: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 32px 64px -32px rgb(0 0 0 / 60%);
+  --tint: hsl(210 12% 9% / 0.6);
+  --track: hsl(210 9% 17%);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3 { letter-spacing: -0.02em; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+::selection { background: var(--gate-soft); }
+img { display: block; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+.wrap { width: 100%; max-width: 72rem; margin-inline: auto; padding-inline: 24px; }
+@media (min-width: 1024px) { .wrap { padding-inline: 32px; } }
+
+.skip {
+  position: absolute; left: 16px; top: -60px; z-index: 60;
+  padding: 10px 16px; border-radius: 10px; background: var(--primary); color: var(--primary-fg);
+  text-decoration: none; font-size: 14px;
+}
+.skip:focus { top: 16px; }
+
+/* Header */
+.site-head {
+  position: sticky; top: 0; z-index: 40;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(12px);
+}
+.head-inner { display: flex; align-items: center; gap: 24px; height: 64px; }
+.brand-wrap { display: flex; align-items: center; gap: 10px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand b { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
+.brand .suffix { color: var(--muted-fg); }
+.brand .brand-mark { display: block; flex: 0 0 auto; }
+
+.top-nav { display: none; align-items: center; gap: 4px; }
+@media (min-width: 768px) { .top-nav { display: flex; } }
+.navlink {
+  padding: 6px 12px; border: 0; border-radius: 8px; background: transparent;
+  font-size: 14px; color: var(--muted-fg); cursor: pointer; transition: background-color 150ms, color 150ms;
+}
+.navlink:hover { background: var(--accent); color: var(--fg); }
+
+.head-end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* One button per control. The theme button shows the mode in force and moves
+   to the next one on click; the language button swaps EN and ID. Both change
+   their own content in place, so the header never grows a second row. */
+.tg {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 32px; padding: 0 11px 0 10px;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: transparent; color: var(--fg);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: background-color 150ms, border-color 150ms;
+}
+.tg:hover { background: var(--accent); }
+.tg:active { background: var(--secondary); }
+.tg svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--muted-fg); }
+.tg:hover svg { color: var(--fg); }
+.tg .tg-icon { display: inline-flex; }
+/* A fixed slot for the word, so "Light" and "System" occupy the same box and
+   the header does not shift when the choice changes. */
+.tg .tg-label { display: inline-block; text-align: left; width: 46px; }
+/* Theme: a mark only. The sun, monitor and moon are distinct at a glance, and
+   the word is in the label a screen reader reads, so no space is spent on it. */
+.tg.icon { width: 32px; padding: 0; justify-content: center; }
+/* Language: a globe and the code in force. EN and ID are the same length, so
+   the button measures the same in both and the header never shifts. */
+.tg.text { padding: 0 12px; }
+.tg.text .tg-label { width: 20px; text-align: center; }
+
+.version {
+  display: none; align-items: center; height: 24px; padding: 0 8px;
+  border: 1px solid var(--border); border-radius: 6px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 12px; color: var(--muted-fg);
+}
+@media (min-width: 560px) { .version { display: inline-flex; } }
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border: 0; border-radius: 12px;
+  background: var(--primary); color: var(--primary-fg);
+  font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 150ms;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary svg { width: 16px; height: 16px; }
+/* The approval action keeps the green, because it is the one act the product
+   exists to make a person perform. Every other filled button is the primary,
+   and the primary is electric blue. */
+.btn-gate {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border: 0; border-radius: 12px;
+  background: var(--gate); color: var(--gate-fg);
+  font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 150ms;
+}
+.btn-gate:hover { opacity: 0.9; }
+.btn-gate:disabled { cursor: not-allowed; opacity: 0.5; }
+.btn-gate svg { width: 16px; height: 16px; }
+@media (prefers-reduced-motion: reduce) { .btn-gate { transition: none; } }
+/* The one filled button. It was near-black until blue took over the default:
+   blue now marks every ordinary action, so a page no longer carries a second
+   loud colour beside it. Approval keeps the gate green, and destruction keeps
+   the red. A compact size drops it to 36px for a toolbar. */
+.btn-primary.compact { height: 36px; padding: 0 14px; border-radius: 10px; font-size: 13px; }
+.btn-quiet {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 44px; padding: 0 12px; border: 0; border-radius: 12px;
+  background: transparent; color: var(--fg); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background-color 150ms;
+}
+.btn-quiet:hover { background: var(--accent); }
+
+.btn-sm {
+  display: none; height: 36px; align-items: center; padding: 0 14px; margin-left: 6px;
+  border: 0; border-radius: 8px; background: var(--primary); color: var(--primary-fg);
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 150ms;
+}
+.btn-sm:hover { opacity: 0.9; }
+@media (min-width: 640px) { .btn-sm { display: inline-flex; } }
+
+/* Secondary action used by console and login: bordered, no fill. */
+.btn-line {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 36px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px;
+  background: transparent; color: var(--fg); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: background-color 150ms;
+}
+.btn-line:hover { background: var(--accent); }
+.btn-line:disabled, .btn-primary:disabled, .btn-gate:disabled { cursor: not-allowed; opacity: 0.5; }
+/* A label is one phrase, so it never breaks between its words. Narrow screens
+   stack the pair instead of squeezing the text. */
+.btn-line, .btn-primary, .btn-gate { white-space: nowrap; }
+.btn-line svg, .btn-sm svg { width: 15px; height: 15px; flex: 0 0 auto; }
+
+/* The same button classes are used on anchors, which are navigation. */
+a.btn-primary, a.btn-quiet, a.btn-sm, a.btn-line { text-decoration: none; }
