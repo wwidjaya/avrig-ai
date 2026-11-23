@@ -1270,6 +1270,10 @@
   .set-back:hover { background: var(--accent); color: var(--fg); }
   .set-back svg { width: 14px; height: 14px; }
   .set-empty { flex: 1 0 auto; padding-bottom: 24px; }
+  .set-col-note {
+    margin: 0; padding: 10px 12px; border-top: 1px solid var(--border-soft);
+    font-size: 11.5px; line-height: 1.45; color: var(--muted-fg);
+  }
   .set-empty h3, .set-blank h3 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
   .set-empty p, .set-blank p { margin: 8px 0 0; max-width: 56ch; font-size: 13px; line-height: 1.6; color: var(--muted-fg); }
   .set-empty .set-note {
@@ -2089,6 +2093,10 @@
             </button>
           </div>
           <div class="set-list" id="set-list"></div>
+          <!-- Four sections keep their records in the page and nowhere else, so
+               the column says so once rather than letting a saved row imply a
+               store behind it. -->
+          <p class="set-col-note" data-i18n="set.demo">Edits stay in this prototype and are lost on reload.</p>
         </div>
         <div class="set-detail" id="set-detail">
           <button class="set-back" type="button" id="set-back" hidden>
@@ -2670,7 +2678,7 @@
         "set.securityLead": "Your password, a second factor, or a passkey instead of one. This applies to the account that signs in.",
         "set.officeLead": "The office's working hours, the calendar it follows, and where its records are kept.",
         "set.orgLead": "Who belongs to the organization, the role each holds, and what each role may approve.",
-        "set.notBuilt": "Not designed in this build. The four sections above are.",
+        "set.notBuilt": "Not designed in this build.",
         "set.count": "{n} {thing}",
         "set.nProvider": "providers",
         "set.nModel": "models",
@@ -2679,6 +2687,7 @@
         "set.add": "Add",
         "set.none": "Nothing added yet.",
         "set.untitled": "Untitled",
+        "set.demo": "Edits stay in this prototype and are lost on reload.",
         "set.off": "Not offered",
         "set.pick": "Choose one from the list, or add one.",
         "set.back": "Back",
@@ -3001,7 +3010,7 @@
         "set.securityLead": "Kata sandi Anda, faktor kedua, atau passkey sebagai gantinya. Berlaku untuk akun yang masuk.",
         "set.officeLead": "Jam kerja kantor, kalender yang diikuti, dan tempat catatannya disimpan.",
         "set.orgLead": "Siapa yang tergabung dalam organisasi, peran masing-masing, dan apa yang boleh disetujui tiap peran.",
-        "set.notBuilt": "Belum dirancang di versi ini. Empat bagian di atas sudah.",
+        "set.notBuilt": "Belum dirancang di versi ini.",
         "set.count": "{n} {thing}",
         "set.nProvider": "penyedia",
         "set.nModel": "model",
@@ -3010,6 +3019,7 @@
         "set.add": "Tambah",
         "set.none": "Belum ada yang ditambahkan.",
         "set.untitled": "Tanpa nama",
+        "set.demo": "Perubahan bertahan di prototipe ini dan hilang saat dimuat ulang.",
         "set.off": "Tidak ditawarkan",
         "set.pick": "Pilih satu dari daftar, atau tambahkan.",
         "set.back": "Kembali",
