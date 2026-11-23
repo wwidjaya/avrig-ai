@@ -58,3 +58,9 @@ plans/_plan.db*
 # Default-deny so `git add -A` cannot sweep them into a release. A backup is a
 # recovery aid for an untracked file edit, never a committed artifact.
 *.bak-*
+
+# Design tool state and captured screenshots: the tool rewrites these on every run,
+# and the captures run to tens of megabytes. Commit a specific one with
+# git add -f when a design decision depends on it.
+.impeccable/
+design/ui/snapshots/**
