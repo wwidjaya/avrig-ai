@@ -9,6 +9,15 @@
   <script src="/theme-init.js"></script>
   <link rel="stylesheet" href="/chrome.css">
   <style>
+    /* Fine vertical scrollbars inherit smooth @property --sb-alpha animation from chrome.css */
+    .wf-resize-handle {
+      position: absolute; top: 0; bottom: 0; right: -3px; width: 6px; z-index: 15;
+      cursor: col-resize; background: transparent; transition: background-color 140ms;
+    }
+    .wf-resize-handle:hover,
+    .wf-resize-handle.is-dragging { background: var(--primary); opacity: 0.55; }
+    body.is-resizing { cursor: col-resize !important; user-select: none !important; }
+
     /* Scoped exclusively to Settings > Workflow prototype */
     .shell {
       display: grid;
@@ -87,14 +96,15 @@
     }
 
     .topbar {
-      height: 60px;
+      min-height: 60px;
       border-bottom: 1px solid var(--border);
       background: var(--card);
-      padding: 0 24px;
+      padding: 8px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      flex-wrap: wrap;
+      gap: 10px 14px;
       position: sticky;
       top: 0;
       z-index: 10;
@@ -102,7 +112,17 @@
     .topbar-left {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 10px;
+    }
+    .wf-subbar {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .topbar-title {
       font-size: 15px;
@@ -132,17 +152,25 @@
     /* Master-Detail Workflow Editor */
     .workflow-grid {
       display: grid;
-      grid-template-columns: 290px minmax(0, 1fr);
+      grid-template-columns: var(--wf-stage-w, 290px) minmax(0, 1fr);
       flex: 1;
       min-height: 0;
     }
 
     /* Stage List Pane */
     .stage-pane {
+      position: relative;
       border-right: 1px solid var(--border);
       background: var(--card);
       overflow-y: auto;
       padding: 16px 12px;
+    }
+    .pane-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px 10px;
+      gap: 8px;
     }
     .pane-label {
       font-size: 11px;
@@ -150,8 +178,63 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--muted-fg);
-      padding: 0 10px 10px;
       margin: 0;
+    }
+    .btn-add-stage {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .btn-add-stage:hover {
+      background: var(--accent);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .stage-edit-fields {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .stage-edit-fields input,
+    .stage-desc-input {
+      width: 100%;
+      padding: 6px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 13.5px;
+    }
+    .stage-edit-fields input.code-input {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .stage-edit-fields input.name-input {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .stage-desc-input {
+      font-size: 13px;
+      color: var(--muted-fg);
+    }
+    .stage-edit-fields input:focus,
+    .stage-desc-input:focus {
+      outline: 2px solid var(--ring);
+      outline-offset: 1px;
+      color: var(--fg);
     }
     .stage-list {
       list-style: none;
@@ -325,28 +408,95 @@
     .step-controls {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
     .icon-btn {
-      background: transparent;
+      background: var(--secondary);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--muted-fg);
-      width: 28px;
-      height: 28px;
+      border-radius: 7px;
+      color: var(--fg);
+      height: 32px;
+      min-width: 34px;
+      padding: 0 10px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 4px;
       cursor: pointer;
-      font-size: 12px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: background 120ms, border-color 120ms, color 120ms;
     }
     .icon-btn:hover:not(:disabled) {
       background: var(--accent);
-      color: var(--fg);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .icon-btn:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 1px;
     }
     .icon-btn:disabled {
       opacity: 0.35;
       cursor: not-allowed;
+    }
+    .stage-row-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 4px;
+    }
+    .stage-del-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted-fg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 120ms, color 120ms, border-color 120ms;
+    }
+    .stage-del-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .stage-del-icon:hover:not(:disabled) {
+      color: var(--danger);
+      background: var(--danger-soft);
+      border-color: var(--danger-line);
+    }
+    .stage-del-icon:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 1px;
+    }
+    .stage-del-icon:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+    .icon-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .icon-btn.danger {
+      background: transparent;
+      color: var(--muted-fg);
+      min-width: 32px;
+      padding: 0 8px;
+      font-size: 15px;
     }
     .icon-btn.danger:hover:not(:disabled) {
       color: var(--danger);
@@ -384,6 +534,78 @@
     .field input[type="text"]:focus {
       outline: 2px solid var(--ring);
       outline-offset: 1px;
+    }
+
+    .pic-banner {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--muted-fg);
+      padding: 7px 10px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pic-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 5px;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      white-space: nowrap;
+    }
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 10px;
+    }
+    .steps-bar-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted-fg);
+    }
+    .step-toggle {
+      width: 24px;
+      height: 24px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted-fg);
+      font-size: 12px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .step-toggle:hover {
+      background: var(--accent);
+      color: var(--fg);
+    }
+    .step-summary-badges {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .step-body[hidden] {
+      display: none;
+    }
+    .step-card.is-collapsed {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .step-card.is-collapsed .step-top {
+      margin-bottom: 0;
     }
 
     .gate-banner {
@@ -430,19 +652,35 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px 24px;
-      max-width: 420px;
+      width: min(440px, calc(100vw - 32px));
+      max-width: 440px;
       box-shadow: var(--shadow);
     }
     dialog::backdrop {
       background: rgb(0 0 0 / 50%);
     }
     dialog h3 { margin: 0 0 8px; font-size: 16px; }
-    dialog p { margin: 0 0 18px; font-size: 13.5px; color: var(--muted-fg); line-height: 1.5; }
+    dialog p { margin: 0 0 16px; font-size: 13.5px; color: var(--muted-fg); line-height: 1.5; }
+    .dialog-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .dialog-row {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 10px;
+    }
     .dialog-actions {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
     }
+
+    /* Embed mode when loaded inside workspace Settings dialog */
+    body.is-embedded .settings-nav { display: none; }
+    body.is-embedded .shell { grid-template-columns: 1fr; }
 
     @media (max-width: 960px) {
       .shell { grid-template-columns: 1fr; }
@@ -462,6 +700,22 @@
         <h1>Settings</h1>
         <a class="back-link" href="/workspace">← Workspace</a>
       </div>
+      <a class="nav-item" href="#menu">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Menu
+      </a>
+      <a class="nav-item" href="#role">
+        <svg viewBox="0 0 24 24"><rect width="18" height="14" x="3" y="5" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16a3 3 0 0 1 6 0M14 10h4M14 14h4"/></svg>
+        Role
+      </a>
+      <a class="nav-item" href="#user">
+        <svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        User
+      </a>
+      <a class="nav-item" href="#domain">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        Domain
+      </a>
       <a class="nav-item" href="#provider">
         <svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
         Provider
@@ -469,6 +723,18 @@
       <a class="nav-item" href="#model">
         <svg viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>
         Model
+      </a>
+      <a class="nav-item" href="#repository">
+        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M6 8.5v7M18 8.5a6.5 6.5 0 0 1-6.5 6.5H8.5"/></svg>
+        Repository
+      </a>
+      <a class="nav-item" href="#knowledge">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h8M8 11h6"/></svg>
+        Knowledge
+      </a>
+      <a class="nav-item" href="#document">
+        <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+        Document
       </a>
       <a class="nav-item" href="#tool">
         <svg viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>
@@ -482,13 +748,13 @@
         <svg viewBox="0 0 24 24"><rect width="18" height="10" x="3" y="11" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" x2="8" y1="16" y2="16"/><line x1="16" x2="16" y1="16" y2="16"/></svg>
         Agent
       </a>
+      <a class="nav-item" href="#deployment">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/></svg>
+        Deployment
+      </a>
       <a class="nav-item" href="/workflow" aria-current="page">
         <svg viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
         Workflow
-      </a>
-      <a class="nav-item" href="#office">
-        <svg viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>
-        Office
       </a>
       <a class="nav-item" href="#organization">
         <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -498,29 +764,34 @@
         <svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Employee
       </a>
-      <a class="nav-item" href="#security">
-        <svg viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Security
-      </a>
     </aside>
 
     <!-- Main Workflow Surface -->
     <div class="main-area">
       <header class="topbar">
         <div class="topbar-left">
-          <h2 class="topbar-title">Engineering Workflow</h2>
-          <span id="dirty-indicator" class="dirty-pill">Canonical baseline</span>
+          <div style="display:inline-flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted-fg);">Domain</span>
+            <div id="wf-domain-host" style="width:220px;"></div>
+          </div>
         </div>
         <div class="topbar-actions">
-          <button type="button" class="btn-outline" id="btn-reset">Reset to baseline</button>
-          <button type="button" class="btn-primary" id="btn-save">Save workflow</button>
+          <button type="button" class="btn-line" id="btn-reset">Reset to baseline</button>
+          <button type="button" class="btn-primary compact" id="btn-save">Save workflow</button>
         </div>
       </header>
+      <div class="wf-subbar">
+        <h2 class="topbar-title">Software Engineering Workflow</h2>
+        <span id="dirty-indicator" class="dirty-pill">Canonical baseline</span>
+      </div>
 
       <div class="workflow-grid">
         <!-- Master: Canonical Lifecycle Stages -->
         <section class="stage-pane" aria-label="Engineering lifecycle stages">
-          <p class="pane-label">Canonical Lifecycle (9 Stages)</p>
+          <div class="pane-head">
+            <p class="pane-label" id="stage-count-label">Canonical Lifecycle (9 Stages)</p>
+            <button type="button" class="btn-add-stage" id="btn-add-stage">+ Stage</button>
+          </div>
           <ul id="stage-list" class="stage-list" role="tablist" aria-orientation="vertical"></ul>
         </section>
 
@@ -532,17 +803,125 @@
     </div>
   </div>
 
+  <!-- Native Add Stage Dialog -->
+  <dialog id="add-stage-dialog">
+    <h3>Add Lifecycle Stage</h3>
+    <p>Define a new stage in the canonical lifecycle and choose where it sits in the sequence.</p>
+    <form id="add-stage-form" class="dialog-form">
+      <div class="dialog-row">
+        <div class="field">
+          <label for="new-stage-code">Stage Code</label>
+          <input type="text" id="new-stage-code" maxlength="4" required placeholder="SEC" style="text-transform:uppercase;font-family:ui-monospace,monospace;">
+        </div>
+        <div class="field">
+          <label for="new-stage-name">Stage Name</label>
+          <input type="text" id="new-stage-name" required placeholder="Security & Compliance">
+        </div>
+      </div>
+      <div class="field">
+        <label for="new-stage-desc">Description</label>
+        <input type="text" id="new-stage-desc" placeholder="What this stage produces and what it verifies.">
+      </div>
+      <div class="field">
+        <label>Insert Position</label>
+        <div id="new-stage-pos-host"></div>
+      </div>
+      <div class="stage-toggles" style="margin-top:4px;">
+        <label><input type="checkbox" id="new-stage-mandatory" checked> Mandatory stage</label>
+        <label><input type="checkbox" id="new-stage-gate" checked> Include Human Approval Gate</label>
+      </div>
+      <div class="dialog-actions" style="margin-top:6px;">
+        <button type="button" class="btn-line" id="add-stage-cancel">Cancel</button>
+        <button type="submit" class="btn-primary compact">Add stage</button>
+      </div>
+    </form>
+  </dialog>
+
   <!-- Native Reset Confirmation Dialog -->
   <dialog id="reset-dialog">
     <h3>Reset workflow to canonical baseline?</h3>
     <p>This restores all stages, step assignments, and human approval gates to the Vault default specification. Unsaved edits will be discarded.</p>
     <div class="dialog-actions">
-      <button type="button" class="btn-outline" id="dialog-cancel">Cancel</button>
-      <button type="button" class="btn-primary" id="dialog-confirm">Reset baseline</button>
+      <button type="button" class="btn-line" id="dialog-cancel">Cancel</button>
+      <button type="button" class="btn-primary compact" id="dialog-confirm">Reset baseline</button>
     </div>
   </dialog>
 
   <script>
+    if (new URLSearchParams(location.search).get("embed") === "1") {
+      document.body.classList.add("is-embedded");
+    }
+
+    const CHEV_SVG = `<svg class="ui-select-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+    const CHECK_SVG = `<svg class="ui-select-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>`;
+
+    function closeAllShadcnMenus(except) {
+      document.querySelectorAll('.ui-select[data-open="true"]').forEach((el) => {
+        if (el === except) return;
+        el.removeAttribute("data-open");
+        const m = el.querySelector(".ui-select-menu");
+        if (m) m.hidden = true;
+        const tr = el.querySelector(".ui-select-trigger");
+        if (tr) tr.setAttribute("aria-expanded", "false");
+      });
+    }
+    document.addEventListener("click", (e) => { if (!e.target.closest(".ui-select")) closeAllShadcnMenus(null); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAllShadcnMenus(null); });
+
+    function createShadcnSelect({ options, value, placeholder = "Select...", onChange }) {
+      const wrap = document.createElement("div");
+      wrap.className = "ui-select";
+      let currentVal = String(value);
+      const findOpt = (v) => options.find((o) => String(o.value) === String(v));
+      const initial = findOpt(currentVal);
+
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.className = "ui-select-trigger";
+      trigger.setAttribute("aria-haspopup", "listbox");
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.innerHTML = `<span class="ui-select-val">${initial ? initial.label : placeholder}</span>${CHEV_SVG}`;
+
+      const menu = document.createElement("div");
+      menu.className = "ui-select-menu";
+      menu.setAttribute("role", "listbox");
+      menu.hidden = true;
+
+      const paintMenu = () => {
+        menu.innerHTML = options.map((o) =>
+          `<button type="button" class="ui-select-item" role="option" data-val="${String(o.value)}" aria-selected="${String(String(o.value) === currentVal)}"><span>${o.label}</span>${CHECK_SVG}</button>`
+        ).join("");
+      };
+      paintMenu();
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = wrap.getAttribute("data-open") === "true";
+        closeAllShadcnMenus(open ? null : wrap);
+        if (!open) {
+          wrap.setAttribute("data-open", "true");
+          menu.hidden = false;
+          trigger.setAttribute("aria-expanded", "true");
+        }
+      });
+      menu.addEventListener("pointerdown", (e) => e.stopPropagation());
+      menu.addEventListener("click", (e) => {
+        const item = e.target.closest(".ui-select-item");
+        if (!item) return;
+        e.stopPropagation();
+        currentVal = item.dataset.val;
+        const hit = findOpt(currentVal);
+        trigger.querySelector(".ui-select-val").textContent = hit ? hit.label : currentVal;
+        paintMenu();
+        closeAllShadcnMenus(null);
+        if (onChange) setTimeout(() => onChange(currentVal), 0);
+      });
+
+      wrap.appendChild(trigger);
+      wrap.appendChild(menu);
+      return wrap;
+    }
+
     const ACTIVITY_TYPES = [
       { value: "RECOMMENDATION", label: "Recommendation (Agent proposal)" },
       { value: "PERFORM", label: "Perform (Agent execution)" },
@@ -565,13 +944,53 @@
       "agent:km"
     ];
 
-    const HUMAN_ROLES = [
-      "human:product_owner",
-      "human:lead_architect",
-      "human:design_authority",
-      "human:qa_lead",
-      "human:security_officer"
+    const DEFAULT_HUMAN_ROLES = [
+      { id: "human:product_owner", name: "Product Owner", canApprove: true },
+      { id: "human:lead_architect", name: "Lead Architect", canApprove: true },
+      { id: "human:design_authority", name: "Design Authority", canApprove: true },
+      { id: "human:qa_lead", name: "QA Lead", canApprove: true },
+      { id: "human:security_officer", name: "Security Officer", canApprove: true }
     ];
+
+    function getHumanRoles() {
+      try {
+        const raw = localStorage.getItem("avrig-human-roles-v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length) {
+            const eligible = parsed.filter((r) => r.canApprove !== false);
+            return eligible.length ? eligible : parsed;
+          }
+        }
+      } catch {}
+      return DEFAULT_HUMAN_ROLES;
+    }
+
+    function getEmployeesForAgent(agentId) {
+      try {
+        const raw = localStorage.getItem("avrig-employees-v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            return parsed.filter((e) => e.active !== false && e.agent === agentId);
+          }
+        }
+      } catch {}
+      return [];
+    }
+
+    function getUsersForRole(roleId) {
+      try {
+        const raw = localStorage.getItem("avrig-users-v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            return parsed.filter((u) => (Array.isArray(u.roleIds) ? u.roleIds.includes(roleId) : u.roleId === roleId));
+          }
+        }
+      } catch {}
+      return [];
+    }
 
     const CANONICAL_BASELINE = [
       {
@@ -685,17 +1104,161 @@
     ];
 
     const STORAGE_KEY = "avrig-workflow-prototype-v1";
-    let stages = loadState();
-    let activeStageId = stages[5].id; // Default to System & Tech Architecture
-    let isDirty = false;
+    let wfDomainFilter = "swe";
 
-    function loadState() {
+    const DOMAIN_WORKFLOW_BASELINES = {
+      swe: CANONICAL_BASELINE,
+      finops: [
+        {
+          id: "IN",
+          name: "Settlement Ingestion",
+          description: "Ingest daily bank, payment gateway, and clearinghouse settlement files from Shared Folder repositories.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: "fin-in-1", title: "Ingest & Validate Settlement Files", type: "PERFORM", actor: "agent:be", artifact: "Normalized Settlement Batch" },
+            { id: "fin-in-2", title: "Schema & Checksum Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "Ingestion Integrity Report" }
+          ]
+        },
+        {
+          id: "RC",
+          name: "Automated Reconciliation",
+          description: "Match incoming settlement transactions against general ledger entries and isolate variances.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: "fin-rc-1", title: "Ledger-to-Settlement Matching", type: "PERFORM", actor: "agent:edm", artifact: "Reconciliation Match Matrix" },
+            { id: "fin-rc-2", title: "Exception & Variance Triage", type: "RECOMMENDATION", actor: "agent:analyst", artifact: "Variance Resolution Proposal" }
+          ]
+        },
+        {
+          id: "AU",
+          name: "Compliance & Audit Check",
+          description: "Verify tax rules, internal controls, and obtain human finance approval before posting.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: "fin-au-1", title: "Regulatory & Policy Compliance Check", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "Compliance Attestation" },
+            { id: "fin-au-2", title: "Finance Controller Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Reconciliation Sign-off" }
+          ]
+        },
+        {
+          id: "CL",
+          name: "Period Close & Posting",
+          description: "Post approved journal adjustments and publish executive variance reports.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: "fin-cl-1", title: "Post Reconciled Journal Entries", type: "PERFORM", actor: "agent:be", artifact: "Posted Ledger Batch" },
+            { id: "fin-cl-2", title: "Publish Period Close Report", type: "PERFORM", actor: "agent:km", artifact: "Executive P&L & Variance Pack" }
+          ]
+        }
+      ],
+      product: [
+        {
+          id: "DS",
+          name: "Market & User Discovery",
+          description: "Synthesize customer interviews, funnel telemetry, and competitive benchmarks.",
+          mandatory: true,
+          sequential: false,
+          steps: [
+            { id: "prd-ds-1", title: "Synthesize Customer Research & Feedback", type: "PERFORM", actor: "agent:explore", artifact: "Discovery Insights Brief" },
+            { id: "prd-ds-2", title: "Opportunity & Impact Sizing", type: "RECOMMENDATION", actor: "agent:analyst", artifact: "Opportunity Tree & Sizing" }
+          ]
+        },
+        {
+          id: "ST",
+          name: "Strategy & Roadmap",
+          description: "Define quarterly product bets, measurable KPIs, and obtain leadership sign-off.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: "prd-st-1", title: "Draft Product Strategy & KPI Targets", type: "RECOMMENDATION", actor: "agent:plan", artifact: "Quarterly Roadmap Baseline" },
+            { id: "prd-st-2", title: "Product Leadership Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Product Roadmap" }
+          ]
+        },
+        {
+          id: "EX",
+          name: "Experimentation & Launch",
+          description: "Design A/B experiments, coordinate release messaging, and verify launch readiness.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: "prd-ex-1", title: "Design Experiment & Instrumentation Spec", type: "PERFORM", actor: "agent:designer", artifact: "Experiment Plan & Metrics" },
+            { id: "prd-ex-2", title: "Launch Readiness Audit", type: "AUDIT_GATE", actor: "agent:tester", artifact: "Go-To-Market Checklist" }
+          ]
+        },
+        {
+          id: "RV",
+          name: "Outcome Review",
+          description: "Evaluate post-launch adoption metrics and capture product lessons learned.",
+          mandatory: false,
+          sequential: true,
+          steps: [
+            { id: "prd-rv-1", title: "Post-Launch KPI & Cohort Retrospective", type: "PERFORM", actor: "agent:km", artifact: "Product Outcome Retrospective" }
+          ]
+        }
+      ]
+    };
+
+    function baselineForDomain(domainCode, domainName) {
+      if (DOMAIN_WORKFLOW_BASELINES[domainCode]) {
+        return structuredClone(DOMAIN_WORKFLOW_BASELINES[domainCode]);
+      }
+      const label = domainName || domainCode || "Domain";
+      return [
+        {
+          id: "IN",
+          name: `${label} Intake & Scope`,
+          description: `Capture objectives, constraints, and inputs for ${label} deliverables.`,
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: `${domainCode}-in-1`, title: `Formulate ${label} Scope & Plan`, type: "RECOMMENDATION", actor: "agent:plan", artifact: `${label} Scope Brief` },
+            { id: `${domainCode}-in-2`, title: "Scope Approval Gate", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Scope Baseline" }
+          ]
+        },
+        {
+          id: "EX",
+          name: `${label} Execution & Audit`,
+          description: `Execute core ${label} work items and verify quality standards.`,
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: `${domainCode}-ex-1`, title: `Execute ${label} Deliverables`, type: "PERFORM", actor: "agent:analyst", artifact: `${label} Output Package` },
+            { id: `${domainCode}-ex-2`, title: "Quality & Compliance Audit", type: "AUDIT_GATE", actor: "agent:tester", artifact: "Verification Report" }
+          ]
+        },
+        {
+          id: "AP",
+          name: "Final Sign-off & Knowledge Capture",
+          description: "Human authority approves final outputs and captures institutional lessons.",
+          mandatory: true,
+          sequential: true,
+          steps: [
+            { id: `${domainCode}-ap-1`, title: "Final Human Approval Gate", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Approved Delivery Baseline" },
+            { id: `${domainCode}-ap-2`, title: "Publish Lessons Learned", type: "PERFORM", actor: "agent:km", artifact: "Knowledge Vault Note" }
+          ]
+        }
+      ];
+    }
+
+    function storageKeyFor(domainCode) {
+      return `${STORAGE_KEY}:${domainCode || "swe"}`;
+    }
+
+    function loadState(domainCode, domainName) {
+      const code = domainCode || wfDomainFilter || "swe";
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(storageKeyFor(code)) || (code === "swe" ? localStorage.getItem(STORAGE_KEY) : null);
         if (raw) return JSON.parse(raw);
       } catch {}
-      return structuredClone(CANONICAL_BASELINE);
+      return baselineForDomain(code, domainName);
     }
+
+    let stages = loadState(wfDomainFilter, "Software Engineering");
+    let activeStageId = stages[5] ? stages[5].id : (stages[0]?.id || null);
+    let isDirty = false;
 
     function markDirty(dirty) {
       isDirty = dirty;
@@ -710,11 +1273,16 @@
     }
 
     function renderStageList() {
+      const countLabel = document.getElementById("stage-count-label");
+      countLabel.textContent = `Canonical Lifecycle (${stages.length} ${stages.length === 1 ? "Stage" : "Stages"})`;
+
       const list = document.getElementById("stage-list");
       list.innerHTML = "";
-      stages.forEach((stage) => {
+      stages.forEach((stage, stageIdx) => {
         const gateCount = stage.steps.filter((s) => s.type === "HUMAN_APPROVAL").length;
         const li = document.createElement("li");
+        li.className = "stage-row-wrap";
+
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "stage-btn";
@@ -730,24 +1298,58 @@
         `;
         btn.addEventListener("click", () => {
           activeStageId = stage.id;
-          render();
+          renderWfDomainFilter();
+    render();
         });
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "stage-del-icon";
+        delBtn.disabled = stages.length <= 1;
+        delBtn.title = `Delete ${stage.name}`;
+        delBtn.setAttribute("aria-label", `Delete ${stage.name}`);
+        delBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`;
+        delBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          stages.splice(stageIdx, 1);
+          if (activeStageId === stage.id) {
+            activeStageId = stages[Math.min(stageIdx, stages.length - 1)]?.id || null;
+          }
+          markDirty(true);
+          renderWfDomainFilter();
+    render();
+        });
+
         li.appendChild(btn);
+        li.appendChild(delBtn);
         list.appendChild(li);
       });
     }
 
     function renderEditor() {
       const pane = document.getElementById("editor-pane");
-      const stage = stages.find((s) => s.id === activeStageId);
-      if (!stage) return;
+      const stageIdx = stages.findIndex((s) => s.id === activeStageId);
+      const stage = stages[stageIdx];
+      if (!stage) {
+        pane.innerHTML = `<p style="color:var(--muted-fg)">No stages defined. Click <strong>+ Stage</strong> to add one.</p>`;
+        return;
+      }
 
       pane.innerHTML = `
         <div class="stage-header">
-          <div class="stage-header-top">
-            <h2>${stage.id} · ${stage.name}</h2>
+          <div class="stage-header-top" style="margin-bottom: 12px;">
+            <span class="pane-label" style="padding:0;">Stage ${stageIdx + 1} of ${stages.length}</span>
+            <div class="step-controls">
+              <button type="button" class="icon-btn" id="stage-up" ${stageIdx === 0 ? "disabled" : ""} title="Move stage up" aria-label="Move stage up">↑ Up</button>
+              <button type="button" class="icon-btn" id="stage-down" ${stageIdx === stages.length - 1 ? "disabled" : ""} title="Move stage down" aria-label="Move stage down">↓ Down</button>
+              <button type="button" class="icon-btn danger" id="stage-del" ${stages.length <= 1 ? "disabled" : ""} title="Delete stage" aria-label="Delete stage"><svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+            </div>
           </div>
-          <p>${stage.description}</p>
+          <div class="stage-edit-fields">
+            <input type="text" class="code-input" id="stage-code-input" value="${stage.id}" maxlength="4" aria-label="Stage code" placeholder="CODE">
+            <input type="text" class="name-input" id="stage-name-input" value="${stage.name}" aria-label="Stage name" placeholder="Stage name">
+          </div>
+          <input type="text" class="stage-desc-input" id="stage-desc-input" value="${stage.description}" aria-label="Stage description" placeholder="Describe the purpose of this stage">
           <div class="stage-toggles">
             <label>
               <input type="checkbox" id="toggle-mandatory" ${stage.mandatory ? "checked" : ""}>
@@ -759,11 +1361,55 @@
             </label>
           </div>
         </div>
+        <div class="steps-bar">
+          <span class="steps-bar-title">Worksteps (${stage.steps.length})</span>
+          <button type="button" class="icon-btn" id="btn-toggle-all-steps" style="height:26px;padding:0 10px;font-size:11.5px;">Expand all</button>
+        </div>
         <div class="steps-container" id="steps-container"></div>
         <div class="add-step-row">
-          <button type="button" class="btn-outline" id="btn-add-step">+ Add step to ${stage.name}</button>
+          <button type="button" class="btn-line" id="btn-add-step">+ Add step to ${stage.name}</button>
         </div>
       `;
+
+      document.getElementById("stage-code-input").addEventListener("input", (e) => {
+        const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        e.target.value = val;
+        if (val) {
+          stage.id = val;
+          activeStageId = val;
+          markDirty(true);
+          renderStageList();
+        }
+      });
+      document.getElementById("stage-name-input").addEventListener("input", (e) => {
+        stage.name = e.target.value;
+        document.getElementById("btn-add-step").textContent = `+ Add step to ${stage.name || "stage"}`;
+        markDirty(true);
+        renderStageList();
+      });
+      document.getElementById("stage-desc-input").addEventListener("input", (e) => {
+        stage.description = e.target.value;
+        markDirty(true);
+      });
+      document.getElementById("stage-up").addEventListener("click", () => {
+        [stages[stageIdx - 1], stages[stageIdx]] = [stages[stageIdx], stages[stageIdx - 1]];
+        markDirty(true);
+        renderWfDomainFilter();
+    render();
+      });
+      document.getElementById("stage-down").addEventListener("click", () => {
+        [stages[stageIdx], stages[stageIdx + 1]] = [stages[stageIdx + 1], stages[stageIdx]];
+        markDirty(true);
+        renderWfDomainFilter();
+    render();
+      });
+      document.getElementById("stage-del").addEventListener("click", () => {
+        stages.splice(stageIdx, 1);
+        activeStageId = stages[Math.min(stageIdx, stages.length - 1)]?.id || null;
+        markDirty(true);
+        renderWfDomainFilter();
+    render();
+      });
 
       document.getElementById("toggle-mandatory").addEventListener("change", (e) => {
         stage.mandatory = e.target.checked;
@@ -775,65 +1421,116 @@
       });
 
       const container = document.getElementById("steps-container");
+      const dynamicHumanRoles = getHumanRoles();
+      if (!window.__wfExpandedSteps) window.__wfExpandedSteps = new Set();
+      const expandedSteps = window.__wfExpandedSteps;
+
+      const allExpanded = stage.steps.length > 0 && stage.steps.every((s) => expandedSteps.has(s.id));
+      const toggleAllBtn = document.getElementById("btn-toggle-all-steps");
+      if (toggleAllBtn) {
+        toggleAllBtn.textContent = allExpanded ? "Collapse all" : "Expand all";
+        toggleAllBtn.addEventListener("click", () => {
+          if (allExpanded) {
+            stage.steps.forEach((s) => expandedSteps.delete(s.id));
+          } else {
+            stage.steps.forEach((s) => expandedSteps.add(s.id));
+          }
+          renderEditor();
+        });
+      }
+
       stage.steps.forEach((step, idx) => {
         const isApproval = step.type === "HUMAN_APPROVAL";
-        const roles = isApproval ? HUMAN_ROLES : AGENT_ROLES;
-        if (!roles.includes(step.actor)) step.actor = roles[0];
+        const isExpanded = expandedSteps.has(step.id);
+        const roleOptions = isApproval
+          ? dynamicHumanRoles.map((r) => ({ value: r.id, label: `${r.name} (${r.id})` }))
+          : AGENT_ROLES.map((r) => ({ value: r, label: r }));
+        if (!roleOptions.some((r) => r.value === step.actor)) {
+          step.actor = roleOptions[0] ? roleOptions[0].value : "human:lead_architect";
+        }
+        const attachedRole = isApproval ? dynamicHumanRoles.find((r) => r.id === step.actor) : null;
+        const approvers = isApproval ? getUsersForRole(step.actor) : [];
 
         const card = document.createElement("div");
-        card.className = `step-card${isApproval ? " is-approval" : ""}`;
+        card.className = `step-card${isApproval ? " is-approval" : ""}${isExpanded ? "" : " is-collapsed"}`;
         card.innerHTML = `
           <div class="step-top">
+            <button type="button" class="step-toggle" data-act="toggle" aria-expanded="${isExpanded}" title="${isExpanded ? "Collapse step" : "Expand step"}" aria-label="${isExpanded ? "Collapse step" : "Expand step"}">${isExpanded ? "▾" : "▸"}</button>
             <span class="step-order">${idx + 1}.</span>
             <input type="text" class="step-title-input" value="${step.title}" aria-label="Step title">
+            <div class="step-summary-badges">
+              <span class="pic-pill" style="${isApproval ? "border-color:var(--gate);color:var(--gate);" : ""}">${isApproval ? (attachedRole ? attachedRole.name : step.actor) : step.actor}</span>
+            </div>
             <div class="step-controls">
-              <button type="button" class="icon-btn" data-act="up" ${idx === 0 ? "disabled" : ""} title="Move up">↑</button>
-              <button type="button" class="icon-btn" data-act="down" ${idx === stage.steps.length - 1 ? "disabled" : ""} title="Move down">↓</button>
-              <button type="button" class="icon-btn danger" data-act="del" title="Remove step">×</button>
+              <button type="button" class="icon-btn" data-act="up" ${idx === 0 ? "disabled" : ""} title="Move step up" aria-label="Move step up">↑ Up</button>
+              <button type="button" class="icon-btn" data-act="down" ${idx === stage.steps.length - 1 ? "disabled" : ""} title="Move step down" aria-label="Move step down">↓ Down</button>
+              <button type="button" class="icon-btn danger" data-act="del" title="Remove step" aria-label="Remove step">×</button>
             </div>
           </div>
-          <div class="step-fields">
-            <div class="field">
-              <label>Activity Type</label>
-              <select data-field="type">
-                ${ACTIVITY_TYPES.map((t) => `<option value="${t.value}" ${t.value === step.type ? "selected" : ""}>${t.label}</option>`).join("")}
-              </select>
-            </div>
-            <div class="field">
-              <label>${isApproval ? "Approval Authority (Human)" : "Assigned Agent"}</label>
-              <select data-field="actor">
-                ${roles.map((r) => `<option value="${r}" ${r === step.actor ? "selected" : ""}>${r}</option>`).join("")}
-              </select>
-            </div>
-            <div class="field" style="grid-column: 1 / -1;">
-              <label>Deliverable / Output Artifact</label>
-              <input type="text" data-field="artifact" value="${step.artifact}">
-            </div>
-          </div>
-          ${isApproval ? `
-            <div class="gate-banner">
-              <span><strong>Invariant:</strong> Agent cannot approve. Authenticated human decision required.</span>
-              <div class="decision-chips">
-                <span class="decision-chip">Adopt</span>
-                <span class="decision-chip">Modify</span>
-                <span class="decision-chip">Reject</span>
-                <span class="decision-chip">Defer</span>
+          <div class="step-body" ${isExpanded ? "" : "hidden"}>
+            <div class="step-fields">
+              <div class="field">
+                <label>Activity Type</label>
+                <div data-field-host="type"></div>
+              </div>
+              <div class="field">
+                <label>${isApproval ? "Assigned Approval Role (Human)" : "PIC (Agent Type)"}</label>
+                <div data-field-host="actor"></div>
+              </div>
+              <div class="field" style="grid-column: 1 / -1;">
+                <label>Deliverable / Output Artifact</label>
+                <input type="text" data-field="artifact" value="${step.artifact}">
               </div>
             </div>
-          ` : ""}
+            ${isApproval ? `
+              <div class="gate-banner">
+                <span>
+                  <strong>Approval Role:</strong> ${attachedRole ? attachedRole.name : step.actor}
+                  ${approvers.length ? ` · <strong>Approvers:</strong> ${approvers.map((u) => u.name).join(", ")}` : " · <em>No user assigned to this role yet</em>"}
+                </span>
+                <div class="decision-chips">
+                  <span class="decision-chip">Adopt</span>
+                  <span class="decision-chip">Modify</span>
+                  <span class="decision-chip">Reject</span>
+                  <span class="decision-chip">Defer</span>
+                </div>
+              </div>
+            ` : `
+              <div class="pic-banner">
+                <span><strong>PIC Agent Type:</strong> ${step.actor}</span>
+                <span class="pic-pill">${step.actor}</span>
+              </div>
+            `}
+          </div>
         `;
 
+        card.querySelector('[data-act="toggle"]').addEventListener("click", () => {
+          if (expandedSteps.has(step.id)) expandedSteps.delete(step.id);
+          else expandedSteps.add(step.id);
+          renderEditor();
+        });
+        card.querySelector('[data-field-host="type"]').appendChild(createShadcnSelect({
+          options: ACTIVITY_TYPES,
+          value: step.type,
+          onChange: (val) => {
+            step.type = val;
+            markDirty(true);
+            renderWfDomainFilter();
+    render();
+          }
+        }));
+        card.querySelector('[data-field-host="actor"]').appendChild(createShadcnSelect({
+          options: roleOptions,
+          value: step.actor,
+          onChange: (val) => {
+            step.actor = val;
+            markDirty(true);
+            renderWfDomainFilter();
+    render();
+          }
+        }));
         card.querySelector(".step-title-input").addEventListener("input", (e) => {
           step.title = e.target.value;
-          markDirty(true);
-        });
-        card.querySelector('[data-field="type"]').addEventListener("change", (e) => {
-          step.type = e.target.value;
-          markDirty(true);
-          render();
-        });
-        card.querySelector('[data-field="actor"]').addEventListener("change", (e) => {
-          step.actor = e.target.value;
           markDirty(true);
         });
         card.querySelector('[data-field="artifact"]').addEventListener("input", (e) => {
@@ -843,31 +1540,37 @@
         card.querySelector('[data-act="up"]').addEventListener("click", () => {
           [stage.steps[idx - 1], stage.steps[idx]] = [stage.steps[idx], stage.steps[idx - 1]];
           markDirty(true);
-          render();
+          renderWfDomainFilter();
+    render();
         });
         card.querySelector('[data-act="down"]').addEventListener("click", () => {
           [stage.steps[idx], stage.steps[idx + 1]] = [stage.steps[idx + 1], stage.steps[idx]];
           markDirty(true);
-          render();
+          renderWfDomainFilter();
+    render();
         });
         card.querySelector('[data-act="del"]').addEventListener("click", () => {
           stage.steps.splice(idx, 1);
           markDirty(true);
-          render();
+          renderWfDomainFilter();
+    render();
         });
 
         container.appendChild(card);
       });
 
       document.getElementById("btn-add-step").addEventListener("click", () => {
+        const newId = `${stage.id.toLowerCase()}-${Date.now()}`;
         stage.steps.push({
-          id: `${stage.id.toLowerCase()}-${Date.now()}`,
+          id: newId,
           title: "New engineering step",
           type: "PERFORM",
           actor: "agent:architect",
           artifact: "Deliverable artifact"
         });
+        expandedSteps.add(newId);
         markDirty(true);
+        renderWfDomainFilter();
         render();
       });
     }
@@ -877,8 +1580,70 @@
       renderEditor();
     }
 
+    const addStageDialog = document.getElementById("add-stage-dialog");
+    const addStageForm = document.getElementById("add-stage-form");
+    const newStagePosHost = document.getElementById("new-stage-pos-host");
+    let newStagePosVal = "0";
+
+    document.getElementById("btn-add-stage").addEventListener("click", () => {
+      addStageForm.reset();
+      document.getElementById("new-stage-code").value = `S${stages.length + 1}`;
+      const posOpts = [
+        { value: "0", label: `At the beginning (before ${stages[0]?.id || "first"})` },
+        ...stages.map((s, i) => ({ value: String(i + 1), label: `After ${s.id} · ${s.name}` }))
+      ];
+      newStagePosVal = String(stages.length);
+      newStagePosHost.innerHTML = "";
+      newStagePosHost.appendChild(createShadcnSelect({
+        options: posOpts,
+        value: newStagePosVal,
+        onChange: (v) => { newStagePosVal = v; }
+      }));
+      addStageDialog.showModal();
+      document.getElementById("new-stage-name").focus();
+    });
+
+    document.getElementById("add-stage-cancel").addEventListener("click", () => addStageDialog.close());
+
+    addStageForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let code = document.getElementById("new-stage-code").value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const name = document.getElementById("new-stage-name").value.trim();
+      if (!code || !name) return;
+      if (stages.some((s) => s.id === code)) {
+        code = `${code.slice(0, 3)}${stages.length + 1}`;
+      }
+      const desc = document.getElementById("new-stage-desc").value.trim() || "Describe what this stage produces and who signs it off.";
+      const insertAt = Number(newStagePosVal);
+      const mandatory = document.getElementById("new-stage-mandatory").checked;
+      const includeGate = document.getElementById("new-stage-gate").checked;
+
+      const steps = [
+        { id: `${code.toLowerCase()}-1`, title: `${name} Execution`, type: "PERFORM", actor: "agent:architect", artifact: `${name} Deliverable` }
+      ];
+      if (includeGate) {
+        steps.push({ id: `${code.toLowerCase()}-2`, title: `${name} Sign-off`, type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: `Approved ${name} Baseline` });
+      }
+
+      stages.splice(insertAt, 0, {
+        id: code,
+        name,
+        description: desc,
+        mandatory,
+        sequential: true,
+        steps
+      });
+      activeStageId = code;
+      markDirty(true);
+      addStageDialog.close();
+      renderWfDomainFilter();
+    render();
+      const activeBtn = document.querySelector('#stage-list [aria-selected="true"]');
+      if (activeBtn) activeBtn.scrollIntoView({ block: "nearest" });
+    });
+
     document.getElementById("btn-save").addEventListener("click", () => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stages));
+      localStorage.setItem(storageKeyFor(wfDomainFilter), JSON.stringify(stages));
       markDirty(false);
     });
 
@@ -886,13 +1651,132 @@
     document.getElementById("btn-reset").addEventListener("click", () => resetDialog.showModal());
     document.getElementById("dialog-cancel").addEventListener("click", () => resetDialog.close());
     document.getElementById("dialog-confirm").addEventListener("click", () => {
-      stages = structuredClone(CANONICAL_BASELINE);
-      localStorage.removeItem(STORAGE_KEY);
+      const doms = loadDomains();
+      const activeDom = doms.find(d => d.code === wfDomainFilter);
+      stages = baselineForDomain(wfDomainFilter, activeDom ? activeDom.name : wfDomainFilter);
+      localStorage.removeItem(storageKeyFor(wfDomainFilter));
+      if (wfDomainFilter === "swe") localStorage.removeItem(STORAGE_KEY);
+      activeStageId = stages[0]?.id || null;
       markDirty(false);
       resetDialog.close();
+      renderWfDomainFilter();
       render();
     });
 
+    // Sync when Human Roles or Users change in Settings
+    window.addEventListener("message", (event) => {
+      if (event.data && event.data.type === "avrig-roles-updated") render();
+    });
+    function loadDomains() {
+      try {
+        const raw = localStorage.getItem("avrig-domains-v1");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length) return parsed;
+        }
+      } catch (e) {}
+      return [
+        { code: "swe", name: "Software Engineering" },
+        { code: "finops", name: "Finance & Operations" },
+        { code: "product", name: "Product & Growth" },
+      ];
+    }
+    function renderWfDomainFilter() {
+      const host = document.getElementById("wf-domain-host");
+      if (!host || typeof createShadcnSelect !== "function") return;
+      const doms = loadDomains();
+      if (!doms.some(d => d.code === wfDomainFilter)) wfDomainFilter = doms[0] ? doms[0].code : "swe";
+      const activeDom = doms.find(d => d.code === wfDomainFilter);
+      const titleEl = document.querySelector(".topbar-title");
+      if (titleEl && activeDom) titleEl.textContent = activeDom.name + " Workflow";
+      host.innerHTML = "";
+      host.appendChild(createShadcnSelect({
+        value: wfDomainFilter,
+        options: doms.map(d => ({ value: d.code, label: d.name })),
+        onChange: (v) => {
+          wfDomainFilter = v;
+          const nextDom = doms.find(d => d.code === v);
+          if (titleEl && nextDom) titleEl.textContent = nextDom.name + " Workflow";
+          stages = loadState(wfDomainFilter, nextDom ? nextDom.name : wfDomainFilter);
+          activeStageId = wfDomainFilter === "swe" && stages[5] ? stages[5].id : (stages[0]?.id || null);
+          if (window.__wfExpandedSteps) window.__wfExpandedSteps.clear();
+          const pill = document.getElementById("dirty-indicator");
+          if (pill) { pill.textContent = "Canonical baseline"; pill.classList.remove("is-dirty"); }
+          isDirty = false;
+          render();
+        },
+      }));
+    }
+
+    window.addEventListener("storage", (event) => {
+      if (event.key === "avrig-human-roles-v1" || event.key === "avrig-users-v1" || event.key === "avrig-employees-v1") render();
+      if (event.key === "avrig-domains-v1") renderWfDomainFilter();
+    });
+    window.addEventListener("message", (event) => {
+      if (event.data && event.data.type === "avrig-domains-updated") renderWfDomainFilter();
+    });
+
+    // Hover-reveal right-edge & active-scroll vertical scrollbars
+    let hotScrollEl = null;
+    const scrollTimers = new WeakMap();
+    document.addEventListener("mousemove", (event) => {
+      let el = event.target;
+      let found = null;
+      while (el && el !== document.body && el !== document.documentElement) {
+        if (el.scrollHeight > el.clientHeight + 2) {
+          const rect = el.getBoundingClientRect();
+          if (event.clientX >= rect.right - 28 && event.clientX <= rect.right + 4) {
+            found = el;
+            break;
+          }
+        }
+        el = el.parentElement;
+      }
+      if (hotScrollEl && hotScrollEl !== found) hotScrollEl.removeAttribute("data-sb-hot");
+      if (found) found.setAttribute("data-sb-hot", "true");
+      hotScrollEl = found;
+    }, { passive: true });
+    document.addEventListener("scroll", (event) => {
+      const target = event.target === document ? document.documentElement : event.target;
+      if (!target || target.nodeType !== 1 || target.scrollHeight <= target.clientHeight + 2) return;
+      target.setAttribute("data-sb-scrolling", "true");
+      const prev = scrollTimers.get(target);
+      if (prev) clearTimeout(prev);
+      scrollTimers.set(target, setTimeout(() => target.removeAttribute("data-sb-scrolling"), 850));
+    }, { capture: true, passive: true });
+    document.addEventListener("mouseleave", () => {
+      if (hotScrollEl) { hotScrollEl.removeAttribute("data-sb-hot"); hotScrollEl = null; }
+    });
+
+    // Resizable stage pane
+    const stagePane = document.querySelector(".stage-pane");
+    if (stagePane) {
+      const handle = document.createElement("div");
+      handle.className = "wf-resize-handle";
+      handle.title = "Drag to resize stages panel";
+      stagePane.appendChild(handle);
+      handle.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        const startX = event.clientX;
+        const startW = stagePane.getBoundingClientRect().width;
+        handle.classList.add("is-dragging");
+        document.body.classList.add("is-resizing");
+        const onMove = (ev) => {
+          const next = Math.max(210, Math.min(440, Math.round(startW + (ev.clientX - startX))));
+          document.documentElement.style.setProperty("--wf-stage-w", `${next}px`);
+        };
+        const onUp = () => {
+          handle.classList.remove("is-dragging");
+          document.body.classList.remove("is-resizing");
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("pointerup", onUp);
+        };
+        window.addEventListener("pointermove", onMove);
+        window.addEventListener("pointerup", onUp);
+      });
+    }
+
+    renderWfDomainFilter();
     render();
   </script>
 </body>

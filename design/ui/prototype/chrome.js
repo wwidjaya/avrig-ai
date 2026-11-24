@@ -168,4 +168,198 @@
 
   setTheme(theme, false);
   applyCopy();
+
+  // Shared fine vertical scrollbar reveal: hidden in static state, shown on scroll or right-edge hover
+  if (!window.__avrigSbInit) {
+    window.__avrigSbInit = true;
+    var hotEl = null;
+    var sbTimers = new WeakMap();
+    document.addEventListener("mousemove", function (event) {
+      var el = event.target;
+      var found = null;
+      while (el && el !== document.body && el !== document.documentElement) {
+        if (el.scrollHeight > el.clientHeight + 2) {
+          var rect = el.getBoundingClientRect();
+          if (event.clientX >= rect.right - 28 && event.clientX <= rect.right + 4) {
+            found = el;
+            break;
+          }
+        }
+        el = el.parentElement;
+      }
+      if (!found && document.documentElement.scrollHeight > document.documentElement.clientHeight + 2) {
+        if (event.clientX >= window.innerWidth - 28) found = document.documentElement;
+      }
+      if (hotEl && hotEl !== found) hotEl.removeAttribute("data-sb-hot");
+      if (found) found.setAttribute("data-sb-hot", "true");
+      hotEl = found;
+    }, { passive: true });
+    document.addEventListener("scroll", function (event) {
+      var target = event.target === document ? document.documentElement : event.target;
+      if (!target || target.nodeType !== 1 || target.scrollHeight <= target.clientHeight + 2) return;
+      target.setAttribute("data-sb-scrolling", "true");
+      var prev = sbTimers.get(target);
+      if (prev) clearTimeout(prev);
+      sbTimers.set(target, setTimeout(function () {
+        target.removeAttribute("data-sb-scrolling");
+      }, 850));
+    }, { capture: true, passive: true });
+    document.addEventListener("mouseleave", function () {
+      if (hotEl) { hotEl.removeAttribute("data-sb-hot"); hotEl = null; }
+    });
+
+    // Global viewport-bottom-pinned animated horizontal scrollbar across all pages
+    var hsbRail = document.createElement("div");
+    hsbRail.id = "avrig-hsb-rail";
+    hsbRail.className = "avrig-hsb-rail";
+    hsbRail.setAttribute("aria-hidden", "true");
+    hsbRail.innerHTML = '<div class="avrig-hsb-track"><div class="avrig-hsb-thumb"></div></div>';
+    document.body.appendChild(hsbRail);
+    var hsbTrack = hsbRail.querySelector(".avrig-hsb-track");
+    var hsbThumb = hsbRail.querySelector(".avrig-hsb-thumb");
+
+    var hsbTarget = null;
+    var hsbHideTimer = null;
+    var hsbHoverBottom = false;
+    var hsbScrolling = false;
+    var hsbDragging = false;
+
+    function isHScrollable(el) {
+      if (!el || el.nodeType !== 1) return false;
+      if (el.scrollWidth <= el.clientWidth + 2) return false;
+      var style = window.getComputedStyle(el);
+      var ox = style.overflowX;
+      if (el !== document.documentElement && ox !== "auto" && ox !== "scroll") return false;
+      var r = el.getBoundingClientRect();
+      return r.width > 40 && r.height > 20 && r.bottom > 0 && r.top < window.innerHeight;
+    }
+
+    function findActiveHTarget(fromEl) {
+      var cur = fromEl;
+      while (cur && cur !== document.body && cur !== document.documentElement) {
+        if (isHScrollable(cur)) return cur;
+        cur = cur.parentElement;
+      }
+      if (isHScrollable(document.documentElement)) return document.documentElement;
+      var candidates = document.querySelectorAll(".trello-board, .ana-table-wrap, .repo-code-body, .rf-wrap, [data-hscroll]");
+      var best = null;
+      var bestOverflow = 0;
+      for (var i = 0; i < candidates.length; i++) {
+        var c = candidates[i];
+        if (isHScrollable(c)) {
+          var ov = c.scrollWidth - c.clientWidth;
+          if (ov > bestOverflow) { bestOverflow = ov; best = c; }
+        }
+      }
+      return best;
+    }
+
+    function syncHsbGeometry() {
+      if (!hsbTarget || !isHScrollable(hsbTarget)) {
+        hsbTarget = findActiveHTarget(null);
+      }
+      if (!hsbTarget) {
+        hsbRail.classList.remove("is-visible");
+        return;
+      }
+      var isRoot = hsbTarget === document.documentElement;
+      var rect = isRoot ? { left: 8, width: window.innerWidth - 16 } : hsbTarget.getBoundingClientRect();
+      var left = Math.max(8, Math.round(rect.left));
+      var width = Math.min(window.innerWidth - left - 8, Math.round(rect.width));
+      if (width < 40) { hsbRail.classList.remove("is-visible"); return; }
+      hsbRail.style.left = left + "px";
+      hsbRail.style.width = width + "px";
+
+      var maxScroll = Math.max(1, hsbTarget.scrollWidth - hsbTarget.clientWidth);
+      var ratio = hsbTarget.clientWidth / hsbTarget.scrollWidth;
+      var thumbW = Math.max(40, Math.round(width * ratio));
+      var maxLeft = Math.max(0, width - thumbW);
+      var thumbX = Math.round((hsbTarget.scrollLeft / maxScroll) * maxLeft);
+      hsbThumb.style.width = thumbW + "px";
+      hsbThumb.style.transform = "translateX(" + thumbX + "px)";
+
+      if (hsbHoverBottom || hsbScrolling || hsbDragging) {
+        hsbRail.classList.add("is-visible");
+      } else {
+        hsbRail.classList.remove("is-visible");
+      }
+    }
+
+    function pulseHsb(el) {
+      if (el && isHScrollable(el)) hsbTarget = el;
+      hsbScrolling = true;
+      syncHsbGeometry();
+      if (hsbHideTimer) clearTimeout(hsbHideTimer);
+      hsbHideTimer = setTimeout(function () {
+        hsbScrolling = false;
+        syncHsbGeometry();
+      }, 900);
+    }
+
+    document.addEventListener("mousemove", function (event) {
+      if (hsbDragging) return;
+      var overRail = hsbRail.contains(event.target);
+      var nearBottom = event.clientY >= window.innerHeight - 44;
+      hsbHoverBottom = overRail || nearBottom;
+      if (hsbHoverBottom) {
+        var hit = overRail ? hsbTarget : findActiveHTarget(event.target);
+        if (hit) hsbTarget = hit;
+      }
+      syncHsbGeometry();
+    }, { passive: true });
+
+    document.addEventListener("scroll", function (event) {
+      var target = event.target === document ? document.documentElement : event.target;
+      if (isHScrollable(target)) {
+        pulseHsb(target);
+      } else if (hsbTarget && (hsbHoverBottom || hsbScrolling)) {
+        syncHsbGeometry();
+      }
+    }, { capture: true, passive: true });
+
+    document.addEventListener("mouseleave", function () {
+      if (!hsbDragging) {
+        hsbHoverBottom = false;
+        syncHsbGeometry();
+      }
+    });
+
+    window.addEventListener("resize", syncHsbGeometry, { passive: true });
+
+    hsbThumb.addEventListener("pointerdown", function (event) {
+      if (!hsbTarget) return;
+      event.preventDefault();
+      event.stopPropagation();
+      hsbDragging = true;
+      hsbRail.classList.add("is-dragging");
+      var startX = event.clientX;
+      var startScroll = hsbTarget.scrollLeft;
+      var railW = hsbTrack.getBoundingClientRect().width;
+      var thumbW = hsbThumb.getBoundingClientRect().width;
+      var maxLeft = Math.max(1, railW - thumbW);
+      var maxScroll = Math.max(1, hsbTarget.scrollWidth - hsbTarget.clientWidth);
+      function onMove(ev) {
+        var dx = ev.clientX - startX;
+        hsbTarget.scrollLeft = startScroll + (dx / maxLeft) * maxScroll;
+        syncHsbGeometry();
+      }
+      function onUp() {
+        hsbDragging = false;
+        hsbRail.classList.remove("is-dragging");
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        syncHsbGeometry();
+      }
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+    });
+
+    hsbTrack.addEventListener("click", function (event) {
+      if (!hsbTarget || event.target === hsbThumb) return;
+      var r = hsbTrack.getBoundingClientRect();
+      var pct = Math.max(0, Math.min(1, (event.clientX - r.left) / Math.max(1, r.width)));
+      hsbTarget.scrollLeft = pct * (hsbTarget.scrollWidth - hsbTarget.clientWidth);
+      pulseHsb(hsbTarget);
+    });
+  }
 })();
