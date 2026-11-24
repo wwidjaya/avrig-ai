@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Settings · Workflow · avrig.ai</title>
-  <meta name="description" content="Configure engineering lifecycle stages, steps, agent assignments, and human approval gates.">
+  <meta name="description" content="Configure engineering lifecycle stages, activities, agent assignments, and human approval gates.">
   <link rel="icon" type="image/svg+xml" href="/avrig-mark.svg">
   <script src="/theme-init.js"></script>
   <link rel="stylesheet" href="/chrome.css">
@@ -22,7 +22,8 @@
     .shell {
       display: grid;
       grid-template-columns: 248px minmax(0, 1fr);
-      min-height: 100dvh;
+      height: 100dvh;
+      overflow: hidden;
     }
 
     /* Left Settings Navigation (matches user screenshot) */
@@ -92,6 +93,8 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
+      min-height: 0;
+      overflow: hidden;
       background: var(--bg);
     }
 
@@ -116,13 +119,242 @@
       gap: 10px;
     }
     .wf-subbar {
-      padding: 12px 20px;
+      padding: 10px 20px;
       border-bottom: 1px solid var(--border);
       background: var(--bg);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
+    }
+    .wf-subbar-left, .wf-subbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    /* Trello-style horizontal Workflow Board */
+    .wf-board {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      padding: 16px 20px 26px;
+      align-items: flex-start;
+      background: var(--bg);
+      scrollbar-width: none;
+    }
+    .wf-col {
+      flex: 0 0 326px;
+      max-height: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--secondary);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .wf-col-head {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .wf-col-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .wf-col-code {
+      width: 48px;
+      height: 26px;
+      flex: 0 0 auto;
+      padding: 0 5px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--primary);
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .wf-col-name {
+      flex: 1;
+      min-width: 0;
+      min-height: 26px;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--fg);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+      resize: none;
+      overflow: hidden;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .wf-col-name:hover, .wf-col-name:focus {
+      border-color: var(--border);
+      background: var(--bg);
+      outline: none;
+    }
+    .wf-col-desc {
+      width: 100%;
+      height: 26px;
+      padding: 0 7px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted-fg);
+      font: inherit;
+      font-size: 11.5px;
+    }
+    .wf-col-desc:hover, .wf-col-desc:focus {
+      border-color: var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      outline: none;
+    }
+    .wf-col-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted-fg);
+    }
+    .wf-col-meta label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .wf-col-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior-y: contain;
+      padding: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wf-step-card {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--card);
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .wf-step-card.is-approval {
+      border-left: 3px solid var(--gate);
+      background: color-mix(in srgb, var(--gate-soft) 55%, var(--card));
+    }
+    .wf-step-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .wf-step-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .wf-step-title-txt {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.35;
+    }
+    .wf-step-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .wf-fallback-pill {
+      font-size: 10.5px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 5px;
+      border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border));
+      background: var(--danger-soft);
+      color: var(--danger);
+      line-height: 1.2;
+    }
+    .wf-step-body {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-soft);
+    }
+    .wf-step-body[hidden] { display: none; }
+    .wf-step-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding-top: 4px;
+    }
+    .wf-col-foot {
+      padding: 0 9px 9px;
+    }
+    .wf-col-foot button {
+      width: 100%;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px dashed var(--border);
+      background: transparent;
+      color: var(--muted-fg);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .wf-col-foot button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--card);
+    }
+    .wf-add-col {
+      flex: 0 0 240px;
+      height: 92px;
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+      background: transparent;
+      color: var(--muted-fg);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .wf-add-col:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--card);
     }
     .topbar-title {
       font-size: 15px;
@@ -781,25 +1013,18 @@
         </div>
       </header>
       <div class="wf-subbar">
-        <h2 class="topbar-title">Software Engineering Workflow</h2>
-        <span id="dirty-indicator" class="dirty-pill">Canonical baseline</span>
+        <div class="wf-subbar-left">
+          <h2 class="topbar-title">Software Engineering Workflow</h2>
+          <span id="dirty-indicator" class="dirty-pill">Canonical baseline</span>
+          <span class="pane-label" id="stage-count-label">9 Stages</span>
+        </div>
+        <div class="wf-subbar-right">
+          <button type="button" class="btn-add-stage" id="btn-toggle-all-steps">Expand all</button>
+          <button type="button" class="btn-add-stage" id="btn-add-stage">+ Stage</button>
+        </div>
       </div>
 
-      <div class="workflow-grid">
-        <!-- Master: Canonical Lifecycle Stages -->
-        <section class="stage-pane" aria-label="Engineering lifecycle stages">
-          <div class="pane-head">
-            <p class="pane-label" id="stage-count-label">Canonical Lifecycle (9 Stages)</p>
-            <button type="button" class="btn-add-stage" id="btn-add-stage">+ Stage</button>
-          </div>
-          <ul id="stage-list" class="stage-list" role="tablist" aria-orientation="vertical"></ul>
-        </section>
-
-        <!-- Detail: Steps & Responsibilities -->
-        <main class="editor-pane" id="editor-pane" aria-live="polite">
-          <!-- Rendered by script -->
-        </main>
-      </div>
+      <main class="wf-board" id="wf-board" data-hscroll aria-label="Workflow stages Trello board"></main>
     </div>
   </div>
 
@@ -840,7 +1065,7 @@
   <!-- Native Reset Confirmation Dialog -->
   <dialog id="reset-dialog">
     <h3>Reset workflow to canonical baseline?</h3>
-    <p>This restores all stages, step assignments, and human approval gates to the Vault default specification. Unsaved edits will be discarded.</p>
+    <p>This restores all stages, activity assignments, and human approval gates to the Vault default specification. Unsaved edits will be discarded.</p>
     <div class="dialog-actions">
       <button type="button" class="btn-line" id="dialog-cancel">Cancel</button>
       <button type="button" class="btn-primary compact" id="dialog-confirm">Reset baseline</button>
@@ -902,6 +1127,16 @@
           wrap.setAttribute("data-open", "true");
           menu.hidden = false;
           trigger.setAttribute("aria-expanded", "true");
+          const rect = trigger.getBoundingClientRect();
+          const menuH = Math.min(240, menu.scrollHeight || 180);
+          const spaceBelow = window.innerHeight - rect.bottom - 12;
+          const placeAbove = spaceBelow < menuH && rect.top > spaceBelow;
+          menu.style.position = "fixed";
+          menu.style.left = `${Math.max(8, Math.min(window.innerWidth - rect.width - 8, rect.left))}px`;
+          menu.style.width = `${rect.width}px`;
+          menu.style.minWidth = `${rect.width}px`;
+          menu.style.top = placeAbove ? `${Math.max(8, rect.top - menuH - 4)}px` : `${rect.bottom + 4}px`;
+          menu.style.zIndex = "120";
         }
       });
       menu.addEventListener("pointerdown", (e) => e.stopPropagation());
@@ -1005,13 +1240,13 @@
         ]
       },
       {
-        id: "BP",
-        name: "Business Process",
-        description: "Model business capabilities, processes, and decompose into executable activities.",
+        id: "BA",
+        name: "Business Architecture",
+        description: "Model business capabilities, value streams, and organizational alignment into executable activities.",
         mandatory: true,
         sequential: true,
         steps: [
-          { id: "bp-1", title: "Process & Activity Decomposition", type: "PERFORM", actor: "agent:plan", artifact: "Business Process Map" }
+          { id: "ba-1", title: "Capability & Value Stream Modeling", type: "PERFORM", actor: "agent:plan", artifact: "Business Architecture Blueprint" }
         ]
       },
       {
@@ -1048,7 +1283,7 @@
         steps: [
           { id: "dm-1", title: "Entity & Schema Modeling", type: "PERFORM", actor: "agent:edm", artifact: "Schema DDL & ERD" },
           { id: "dm-2", title: "Data Integrity & Impact Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "DMC-03 Validation Result" },
-          { id: "dm-3", title: "Data Baseline Gate", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Approved Data Baseline" }
+          { id: "dm-3", title: "Data Baseline Gate", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Approved Data Baseline", onFailReturnTo: "dm-1" }
         ]
       },
       {
@@ -1061,7 +1296,7 @@
           { id: "sa-1", title: "Graphify Codebase Exploration", type: "PERFORM", actor: "agent:explore", artifact: "Symbol & Dependency Graph" },
           { id: "sa-2", title: "Architecture & Plan Formulation", type: "RECOMMENDATION", actor: "agent:architect", artifact: "plans/YYYY-MM-DD-<task>.md" },
           { id: "sa-3", title: "Pre-Implementation Test Matrix", type: "AUDIT_GATE", actor: "agent:tester", artifact: "Test Specification Matrix" },
-          { id: "sa-4", title: "Architecture Baseline Sign-off", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Authorized Implementation Plan" }
+          { id: "sa-4", title: "Architecture Baseline Sign-off", type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: "Authorized Implementation Plan", onFailReturnTo: "sa-2" }
         ]
       },
       {
@@ -1085,7 +1320,7 @@
         steps: [
           { id: "te-1", title: "Automated Playwright & API Suites", type: "PERFORM", actor: "agent:tester", artifact: "Test Execution Evidence" },
           { id: "te-2", title: "Goal Achievement Audit", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "Plan Review Findings" },
-          { id: "te-3", title: "Release Candidate Gate", type: "HUMAN_APPROVAL", actor: "human:qa_lead", artifact: "Approved Candidate Tag" }
+          { id: "te-3", title: "Release Candidate Gate", type: "HUMAN_APPROVAL", actor: "human:qa_lead", artifact: "Approved Candidate Tag", onFailReturnTo: "dv-1" }
         ]
       },
       {
@@ -1139,7 +1374,7 @@
           sequential: true,
           steps: [
             { id: "fin-au-1", title: "Regulatory & Policy Compliance Check", type: "AUDIT_GATE", actor: "agent:analyst", artifact: "Compliance Attestation" },
-            { id: "fin-au-2", title: "Finance Controller Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Reconciliation Sign-off" }
+            { id: "fin-au-2", title: "Finance Controller Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Reconciliation Sign-off", onFailReturnTo: "fin-rc-2" }
           ]
         },
         {
@@ -1174,7 +1409,7 @@
           sequential: true,
           steps: [
             { id: "prd-st-1", title: "Draft Product Strategy & KPI Targets", type: "RECOMMENDATION", actor: "agent:plan", artifact: "Quarterly Roadmap Baseline" },
-            { id: "prd-st-2", title: "Product Leadership Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Product Roadmap" }
+            { id: "prd-st-2", title: "Product Leadership Sign-off", type: "HUMAN_APPROVAL", actor: "human:product_owner", artifact: "Approved Product Roadmap", onFailReturnTo: "prd-ds-2" }
           ]
         },
         {
@@ -1272,203 +1507,215 @@
       }
     }
 
-    function renderStageList() {
-      const countLabel = document.getElementById("stage-count-label");
-      countLabel.textContent = `Canonical Lifecycle (${stages.length} ${stages.length === 1 ? "Stage" : "Stages"})`;
-
-      const list = document.getElementById("stage-list");
-      list.innerHTML = "";
-      stages.forEach((stage, stageIdx) => {
-        const gateCount = stage.steps.filter((s) => s.type === "HUMAN_APPROVAL").length;
-        const li = document.createElement("li");
-        li.className = "stage-row-wrap";
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "stage-btn";
-        btn.setAttribute("role", "tab");
-        btn.setAttribute("aria-selected", String(stage.id === activeStageId));
-        btn.innerHTML = `
-          <span class="stage-code">${stage.id}</span>
-          <span class="stage-meta">
-            <strong>${stage.name}</strong>
-            <span>${stage.steps.length} ${stage.steps.length === 1 ? "step" : "steps"}</span>
-          </span>
-          ${gateCount > 0 ? `<span class="gate-dot">GATE</span>` : ""}
-        `;
-        btn.addEventListener("click", () => {
-          activeStageId = stage.id;
-          renderWfDomainFilter();
-    render();
-        });
-
-        const delBtn = document.createElement("button");
-        delBtn.type = "button";
-        delBtn.className = "stage-del-icon";
-        delBtn.disabled = stages.length <= 1;
-        delBtn.title = `Delete ${stage.name}`;
-        delBtn.setAttribute("aria-label", `Delete ${stage.name}`);
-        delBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`;
-        delBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          stages.splice(stageIdx, 1);
-          if (activeStageId === stage.id) {
-            activeStageId = stages[Math.min(stageIdx, stages.length - 1)]?.id || null;
-          }
-          markDirty(true);
-          renderWfDomainFilter();
-    render();
-        });
-
-        li.appendChild(btn);
-        li.appendChild(delBtn);
-        list.appendChild(li);
-      });
+    function escapeAttr(str) {
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
     }
 
-    function renderEditor() {
-      const pane = document.getElementById("editor-pane");
-      const stageIdx = stages.findIndex((s) => s.id === activeStageId);
-      const stage = stages[stageIdx];
-      if (!stage) {
-        pane.innerHTML = `<p style="color:var(--muted-fg)">No stages defined. Click <strong>+ Stage</strong> to add one.</p>`;
-        return;
+    function escapeHtml(str) {
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function findStepRef(stepId) {
+      if (!stepId) return null;
+      for (let sIdx = 0; sIdx < stages.length; sIdx++) {
+        const st = stages[sIdx];
+        for (let i = 0; i < st.steps.length; i++) {
+          if (st.steps[i].id === stepId) {
+            return { stageIdx: sIdx, stageId: st.id, stageName: st.name, stepIdx: i, step: st.steps[i] };
+          }
+        }
+      }
+      return null;
+    }
+
+    function getPriorStepOptions(stageIdx, stepIdx) {
+      const opts = [];
+      for (let s = 0; s < stageIdx; s++) {
+        const st = stages[s];
+        st.steps.forEach((pStep, pIdx) => {
+          opts.push({ value: pStep.id, label: `${st.id} · ${pIdx + 1}. ${pStep.title}` });
+        });
+      }
+      const curStage = stages[stageIdx];
+      if (curStage) {
+        for (let pIdx = 0; pIdx < stepIdx; pIdx++) {
+          const pStep = curStage.steps[pIdx];
+          opts.push({ value: pStep.id, label: `${curStage.id} · ${pIdx + 1}. ${pStep.title}` });
+        }
+      }
+      if (opts.length === 0) {
+        return [{ value: "", label: "None (First activity in workflow)" }];
+      }
+      return [{ value: "", label: "None (Halt stage on rejection)" }, ...opts];
+    }
+
+    function renderTrelloWorkflow() {
+      const countLabel = document.getElementById("stage-count-label");
+      const totalSteps = stages.reduce((acc, s) => acc + s.steps.length, 0);
+      if (countLabel) {
+        countLabel.textContent = `${stages.length} ${stages.length === 1 ? "Stage" : "Stages"} · ${totalSteps} ${totalSteps === 1 ? "Activity" : "Activities"}`;
       }
 
-      pane.innerHTML = `
-        <div class="stage-header">
-          <div class="stage-header-top" style="margin-bottom: 12px;">
-            <span class="pane-label" style="padding:0;">Stage ${stageIdx + 1} of ${stages.length}</span>
-            <div class="step-controls">
-              <button type="button" class="icon-btn" id="stage-up" ${stageIdx === 0 ? "disabled" : ""} title="Move stage up" aria-label="Move stage up">↑ Up</button>
-              <button type="button" class="icon-btn" id="stage-down" ${stageIdx === stages.length - 1 ? "disabled" : ""} title="Move stage down" aria-label="Move stage down">↓ Down</button>
-              <button type="button" class="icon-btn danger" id="stage-del" ${stages.length <= 1 ? "disabled" : ""} title="Delete stage" aria-label="Delete stage"><svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
-            </div>
-          </div>
-          <div class="stage-edit-fields">
-            <input type="text" class="code-input" id="stage-code-input" value="${stage.id}" maxlength="4" aria-label="Stage code" placeholder="CODE">
-            <input type="text" class="name-input" id="stage-name-input" value="${stage.name}" aria-label="Stage name" placeholder="Stage name">
-          </div>
-          <input type="text" class="stage-desc-input" id="stage-desc-input" value="${stage.description}" aria-label="Stage description" placeholder="Describe the purpose of this stage">
-          <div class="stage-toggles">
-            <label>
-              <input type="checkbox" id="toggle-mandatory" ${stage.mandatory ? "checked" : ""}>
-              Mandatory stage
-            </label>
-            <label>
-              <input type="checkbox" id="toggle-sequential" ${stage.sequential ? "checked" : ""}>
-              Enforce sequential step execution
-            </label>
-          </div>
-        </div>
-        <div class="steps-bar">
-          <span class="steps-bar-title">Worksteps (${stage.steps.length})</span>
-          <button type="button" class="icon-btn" id="btn-toggle-all-steps" style="height:26px;padding:0 10px;font-size:11.5px;">Expand all</button>
-        </div>
-        <div class="steps-container" id="steps-container"></div>
-        <div class="add-step-row">
-          <button type="button" class="btn-line" id="btn-add-step">+ Add step to ${stage.name}</button>
-        </div>
-      `;
-
-      document.getElementById("stage-code-input").addEventListener("input", (e) => {
-        const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-        e.target.value = val;
-        if (val) {
-          stage.id = val;
-          activeStageId = val;
-          markDirty(true);
-          renderStageList();
-        }
-      });
-      document.getElementById("stage-name-input").addEventListener("input", (e) => {
-        stage.name = e.target.value;
-        document.getElementById("btn-add-step").textContent = `+ Add step to ${stage.name || "stage"}`;
-        markDirty(true);
-        renderStageList();
-      });
-      document.getElementById("stage-desc-input").addEventListener("input", (e) => {
-        stage.description = e.target.value;
-        markDirty(true);
-      });
-      document.getElementById("stage-up").addEventListener("click", () => {
-        [stages[stageIdx - 1], stages[stageIdx]] = [stages[stageIdx], stages[stageIdx - 1]];
-        markDirty(true);
-        renderWfDomainFilter();
-    render();
-      });
-      document.getElementById("stage-down").addEventListener("click", () => {
-        [stages[stageIdx], stages[stageIdx + 1]] = [stages[stageIdx + 1], stages[stageIdx]];
-        markDirty(true);
-        renderWfDomainFilter();
-    render();
-      });
-      document.getElementById("stage-del").addEventListener("click", () => {
-        stages.splice(stageIdx, 1);
-        activeStageId = stages[Math.min(stageIdx, stages.length - 1)]?.id || null;
-        markDirty(true);
-        renderWfDomainFilter();
-    render();
-      });
-
-      document.getElementById("toggle-mandatory").addEventListener("change", (e) => {
-        stage.mandatory = e.target.checked;
-        markDirty(true);
-      });
-      document.getElementById("toggle-sequential").addEventListener("change", (e) => {
-        stage.sequential = e.target.checked;
-        markDirty(true);
-      });
-
-      const container = document.getElementById("steps-container");
-      const dynamicHumanRoles = getHumanRoles();
       if (!window.__wfExpandedSteps) window.__wfExpandedSteps = new Set();
       const expandedSteps = window.__wfExpandedSteps;
 
-      const allExpanded = stage.steps.length > 0 && stage.steps.every((s) => expandedSteps.has(s.id));
+      const allStepIds = stages.flatMap((s) => s.steps.map((st) => st.id));
+      const allExpanded = allStepIds.length > 0 && allStepIds.every((id) => expandedSteps.has(id));
       const toggleAllBtn = document.getElementById("btn-toggle-all-steps");
       if (toggleAllBtn) {
         toggleAllBtn.textContent = allExpanded ? "Collapse all" : "Expand all";
-        toggleAllBtn.addEventListener("click", () => {
+        toggleAllBtn.onclick = () => {
           if (allExpanded) {
-            stage.steps.forEach((s) => expandedSteps.delete(s.id));
+            allStepIds.forEach((id) => expandedSteps.delete(id));
           } else {
-            stage.steps.forEach((s) => expandedSteps.add(s.id));
+            allStepIds.forEach((id) => expandedSteps.add(id));
           }
-          renderEditor();
-        });
+          renderTrelloWorkflow();
+        };
       }
 
-      stage.steps.forEach((step, idx) => {
-        const isApproval = step.type === "HUMAN_APPROVAL";
-        const isExpanded = expandedSteps.has(step.id);
-        const roleOptions = isApproval
-          ? dynamicHumanRoles.map((r) => ({ value: r.id, label: `${r.name} (${r.id})` }))
-          : AGENT_ROLES.map((r) => ({ value: r, label: r }));
-        if (!roleOptions.some((r) => r.value === step.actor)) {
-          step.actor = roleOptions[0] ? roleOptions[0].value : "human:lead_architect";
-        }
-        const attachedRole = isApproval ? dynamicHumanRoles.find((r) => r.id === step.actor) : null;
-        const approvers = isApproval ? getUsersForRole(step.actor) : [];
+      const board = document.getElementById("wf-board");
+      if (!board) return;
+      const prevScrollLeft = board.scrollLeft;
+      const prevColScrolls = new Map();
+      board.querySelectorAll(".wf-col").forEach((c) => {
+        const b = c.querySelector(".wf-col-body");
+        if (b && c.dataset.stageId) prevColScrolls.set(c.dataset.stageId, b.scrollTop);
+      });
+      board.innerHTML = "";
 
-        const card = document.createElement("div");
-        card.className = `step-card${isApproval ? " is-approval" : ""}${isExpanded ? "" : " is-collapsed"}`;
-        card.innerHTML = `
-          <div class="step-top">
-            <button type="button" class="step-toggle" data-act="toggle" aria-expanded="${isExpanded}" title="${isExpanded ? "Collapse step" : "Expand step"}" aria-label="${isExpanded ? "Collapse step" : "Expand step"}">${isExpanded ? "▾" : "▸"}</button>
-            <span class="step-order">${idx + 1}.</span>
-            <input type="text" class="step-title-input" value="${step.title}" aria-label="Step title">
-            <div class="step-summary-badges">
-              <span class="pic-pill" style="${isApproval ? "border-color:var(--gate);color:var(--gate);" : ""}">${isApproval ? (attachedRole ? attachedRole.name : step.actor) : step.actor}</span>
-            </div>
+      const dynamicHumanRoles = getHumanRoles();
+
+      stages.forEach((stage, stageIdx) => {
+        const col = document.createElement("section");
+        col.className = "wf-col";
+        col.dataset.stageId = stage.id;
+        col.setAttribute("aria-label", `${stage.id} ${stage.name}`);
+
+        const head = document.createElement("div");
+        head.className = "wf-col-head";
+        head.innerHTML = `
+          <div class="wf-col-top">
+            <input type="text" class="wf-col-code" value="${escapeAttr(stage.id)}" maxlength="4" aria-label="Stage code" title="Stage code">
+            <textarea class="wf-col-name" rows="1" aria-label="Stage name" placeholder="Stage name">${escapeHtml(stage.name)}</textarea>
             <div class="step-controls">
-              <button type="button" class="icon-btn" data-act="up" ${idx === 0 ? "disabled" : ""} title="Move step up" aria-label="Move step up">↑ Up</button>
-              <button type="button" class="icon-btn" data-act="down" ${idx === stage.steps.length - 1 ? "disabled" : ""} title="Move step down" aria-label="Move step down">↓ Down</button>
-              <button type="button" class="icon-btn danger" data-act="del" title="Remove step" aria-label="Remove step">×</button>
+              <button type="button" class="icon-btn" data-col-act="left" ${stageIdx === 0 ? "disabled" : ""} title="Move stage left" aria-label="Move stage left">←</button>
+              <button type="button" class="icon-btn" data-col-act="right" ${stageIdx === stages.length - 1 ? "disabled" : ""} title="Move stage right" aria-label="Move stage right">→</button>
+              <button type="button" class="icon-btn danger" data-col-act="del" ${stages.length <= 1 ? "disabled" : ""} title="Delete stage" aria-label="Delete stage">×</button>
             </div>
           </div>
-          <div class="step-body" ${isExpanded ? "" : "hidden"}>
-            <div class="step-fields">
+          <input type="text" class="wf-col-desc" value="${escapeAttr(stage.description)}" aria-label="Stage description" placeholder="Describe this stage">
+          <div class="wf-col-meta">
+            <div style="display:inline-flex;align-items:center;gap:10px;">
+              <label><input type="checkbox" data-col-flag="mandatory" ${stage.mandatory ? "checked" : ""}> Mandatory</label>
+              <label><input type="checkbox" data-col-flag="sequential" ${stage.sequential ? "checked" : ""}> Sequential</label>
+            </div>
+            <span>${stage.steps.length} ${stage.steps.length === 1 ? "activity" : "activities"}</span>
+          </div>
+        `;
+
+        head.querySelector(".wf-col-code").addEventListener("input", (e) => {
+          const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+          e.target.value = val;
+          if (val) {
+            stage.id = val;
+            col.dataset.stageId = val;
+            markDirty(true);
+          }
+        });
+        const colNameEl = head.querySelector(".wf-col-name");
+        const autoSizeColName = () => {
+          colNameEl.style.height = "auto";
+          colNameEl.style.height = `${Math.max(26, colNameEl.scrollHeight)}px`;
+        };
+        colNameEl.addEventListener("input", (e) => {
+          stage.name = e.target.value.replace(/\r?\n/g, " ");
+          if (e.target.value !== stage.name) e.target.value = stage.name;
+          autoSizeColName();
+          markDirty(true);
+        });
+        colNameEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            colNameEl.blur();
+          }
+        });
+        requestAnimationFrame(autoSizeColName);
+        head.querySelector(".wf-col-desc").addEventListener("input", (e) => {
+          stage.description = e.target.value;
+          markDirty(true);
+        });
+        head.querySelector('[data-col-flag="mandatory"]').addEventListener("change", (e) => {
+          stage.mandatory = e.target.checked;
+          markDirty(true);
+        });
+        head.querySelector('[data-col-flag="sequential"]').addEventListener("change", (e) => {
+          stage.sequential = e.target.checked;
+          markDirty(true);
+        });
+        head.querySelector('[data-col-act="left"]').addEventListener("click", () => {
+          [stages[stageIdx - 1], stages[stageIdx]] = [stages[stageIdx], stages[stageIdx - 1]];
+          markDirty(true);
+          render();
+        });
+        head.querySelector('[data-col-act="right"]').addEventListener("click", () => {
+          [stages[stageIdx], stages[stageIdx + 1]] = [stages[stageIdx + 1], stages[stageIdx]];
+          markDirty(true);
+          render();
+        });
+        head.querySelector('[data-col-act="del"]').addEventListener("click", () => {
+          stages.splice(stageIdx, 1);
+          markDirty(true);
+          render();
+        });
+        col.appendChild(head);
+
+        const body = document.createElement("div");
+        body.className = "wf-col-body";
+
+        stage.steps.forEach((step, idx) => {
+          const isApproval = step.type === "HUMAN_APPROVAL";
+          const isExpanded = expandedSteps.has(step.id);
+          const roleOptions = isApproval
+            ? dynamicHumanRoles.map((r) => ({ value: r.id, label: `${r.name} (${r.id})` }))
+            : AGENT_ROLES.map((r) => ({ value: r, label: r }));
+          if (!roleOptions.some((r) => r.value === step.actor)) {
+            step.actor = roleOptions[0] ? roleOptions[0].value : "human:lead_architect";
+          }
+          const attachedRole = isApproval ? dynamicHumanRoles.find((r) => r.id === step.actor) : null;
+          const approvers = isApproval ? getUsersForRole(step.actor) : [];
+
+          const priorOptions = getPriorStepOptions(stageIdx, idx);
+          if (step.onFailReturnTo && !priorOptions.some((o) => o.value === step.onFailReturnTo)) {
+            step.onFailReturnTo = "";
+          }
+          const failRef = step.onFailReturnTo ? findStepRef(step.onFailReturnTo) : null;
+
+          const card = document.createElement("article");
+          card.className = `wf-step-card${isApproval ? " is-approval" : ""}${isExpanded ? " is-expanded" : ""}`;
+          card.innerHTML = `
+            <div class="wf-step-head" data-act="toggle" role="button" tabindex="0" aria-expanded="${isExpanded}">
+              <button type="button" class="step-toggle" tabindex="-1" aria-hidden="true">${isExpanded ? "▾" : "▸"}</button>
+              <div class="wf-step-main">
+                <div class="wf-step-title-txt">${idx + 1}. ${escapeHtml(step.title)}</div>
+                <div class="wf-step-pills">
+                  <span class="pic-pill" style="${isApproval ? "border-color:var(--gate);color:var(--gate);" : ""}">${escapeHtml(isApproval ? (attachedRole ? attachedRole.name : step.actor) : step.actor)}</span>
+                  ${failRef ? `<span class="wf-fallback-pill" title="If human approval fails, return to ${escapeAttr(failRef.stageId + " · " + (failRef.stepIdx + 1) + ". " + failRef.step.title)}">↩ ${escapeHtml(failRef.stageId)} · ${failRef.stepIdx + 1}. ${escapeHtml(failRef.step.title)}</span>` : ""}
+                </div>
+              </div>
+            </div>
+            <div class="wf-step-body" ${isExpanded ? "" : "hidden"}>
+              <div class="field">
+                <label>Activity Title</label>
+                <input type="text" data-field="title" value="${escapeAttr(step.title)}" aria-label="Activity title">
+              </div>
               <div class="field">
                 <label>Activity Type</label>
                 <div data-field-host="type"></div>
@@ -1477,107 +1724,170 @@
                 <label>${isApproval ? "Assigned Approval Role (Human)" : "PIC (Agent Type)"}</label>
                 <div data-field-host="actor"></div>
               </div>
-              <div class="field" style="grid-column: 1 / -1;">
+              <div class="field">
                 <label>Deliverable / Output Artifact</label>
-                <input type="text" data-field="artifact" value="${step.artifact}">
+                <input type="text" data-field="artifact" value="${escapeAttr(step.artifact)}">
+              </div>
+              <div class="field">
+                <label>On Approval Failure → Return to Activity</label>
+                <div data-field-host="onFailReturnTo"></div>
+              </div>
+              ${isApproval ? `
+                <div class="gate-banner" style="padding:7px 9px;font-size:11.5px;">
+                  <span>
+                    <strong>Approvers:</strong> ${approvers.length ? escapeHtml(approvers.map((u) => u.name).join(", ")) : "<em>No user assigned</em>"}
+                  </span>
+                  <div class="decision-chips">
+                    <span class="decision-chip">Adopt</span>
+                    <span class="decision-chip">Modify</span>
+                    <span class="decision-chip">Reject</span>
+                    <span class="decision-chip">Defer</span>
+                  </div>
+                </div>
+              ` : ""}
+              <div class="wf-step-foot">
+                <div class="step-controls">
+                  <button type="button" class="icon-btn" data-act="up" ${idx === 0 ? "disabled" : ""} title="Move activity up">↑ Up</button>
+                  <button type="button" class="icon-btn" data-act="down" ${idx === stage.steps.length - 1 ? "disabled" : ""} title="Move activity down">↓ Down</button>
+                </div>
+                <button type="button" class="icon-btn danger" data-act="del" title="Remove activity">Remove</button>
               </div>
             </div>
-            ${isApproval ? `
-              <div class="gate-banner">
-                <span>
-                  <strong>Approval Role:</strong> ${attachedRole ? attachedRole.name : step.actor}
-                  ${approvers.length ? ` · <strong>Approvers:</strong> ${approvers.map((u) => u.name).join(", ")}` : " · <em>No user assigned to this role yet</em>"}
-                </span>
-                <div class="decision-chips">
-                  <span class="decision-chip">Adopt</span>
-                  <span class="decision-chip">Modify</span>
-                  <span class="decision-chip">Reject</span>
-                  <span class="decision-chip">Defer</span>
-                </div>
-              </div>
-            ` : `
-              <div class="pic-banner">
-                <span><strong>PIC Agent Type:</strong> ${step.actor}</span>
-                <span class="pic-pill">${step.actor}</span>
-              </div>
-            `}
-          </div>
-        `;
+          `;
 
-        card.querySelector('[data-act="toggle"]').addEventListener("click", () => {
-          if (expandedSteps.has(step.id)) expandedSteps.delete(step.id);
-          else expandedSteps.add(step.id);
-          renderEditor();
-        });
-        card.querySelector('[data-field-host="type"]').appendChild(createShadcnSelect({
-          options: ACTIVITY_TYPES,
-          value: step.type,
-          onChange: (val) => {
-            step.type = val;
-            markDirty(true);
-            renderWfDomainFilter();
-    render();
-          }
-        }));
-        card.querySelector('[data-field-host="actor"]').appendChild(createShadcnSelect({
-          options: roleOptions,
-          value: step.actor,
-          onChange: (val) => {
-            step.actor = val;
-            markDirty(true);
-            renderWfDomainFilter();
-    render();
-          }
-        }));
-        card.querySelector(".step-title-input").addEventListener("input", (e) => {
-          step.title = e.target.value;
-          markDirty(true);
-        });
-        card.querySelector('[data-field="artifact"]').addEventListener("input", (e) => {
-          step.artifact = e.target.value;
-          markDirty(true);
-        });
-        card.querySelector('[data-act="up"]').addEventListener("click", () => {
-          [stage.steps[idx - 1], stage.steps[idx]] = [stage.steps[idx], stage.steps[idx - 1]];
-          markDirty(true);
-          renderWfDomainFilter();
-    render();
-        });
-        card.querySelector('[data-act="down"]').addEventListener("click", () => {
-          [stage.steps[idx], stage.steps[idx + 1]] = [stage.steps[idx + 1], stage.steps[idx]];
-          markDirty(true);
-          renderWfDomainFilter();
-    render();
-        });
-        card.querySelector('[data-act="del"]').addEventListener("click", () => {
-          stage.steps.splice(idx, 1);
-          markDirty(true);
-          renderWfDomainFilter();
-    render();
-        });
+          const headEl = card.querySelector('[data-act="toggle"]');
+          const toggleStep = () => {
+            if (expandedSteps.has(step.id)) expandedSteps.delete(step.id);
+            else expandedSteps.add(step.id);
+            renderTrelloWorkflow();
+          };
+          headEl.addEventListener("click", toggleStep);
+          headEl.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleStep();
+            }
+          });
 
-        container.appendChild(card);
+          card.querySelector('[data-field="title"]').addEventListener("input", (e) => {
+            step.title = e.target.value;
+            card.querySelector(".wf-step-title-txt").textContent = `${idx + 1}. ${step.title}`;
+            markDirty(true);
+          });
+          card.querySelector('[data-field-host="type"]').appendChild(createShadcnSelect({
+            options: ACTIVITY_TYPES,
+            value: step.type,
+            onChange: (val) => {
+              step.type = val;
+              markDirty(true);
+              renderTrelloWorkflow();
+            }
+          }));
+          card.querySelector('[data-field-host="actor"]').appendChild(createShadcnSelect({
+            options: roleOptions,
+            value: step.actor,
+            onChange: (val) => {
+              step.actor = val;
+              markDirty(true);
+              renderTrelloWorkflow();
+            }
+          }));
+          card.querySelector('[data-field="artifact"]').addEventListener("input", (e) => {
+            step.artifact = e.target.value;
+            markDirty(true);
+          });
+          card.querySelector('[data-field-host="onFailReturnTo"]').appendChild(createShadcnSelect({
+            options: priorOptions,
+            value: step.onFailReturnTo || "",
+            onChange: (val) => {
+              step.onFailReturnTo = val || "";
+              markDirty(true);
+              renderTrelloWorkflow();
+            }
+          }));
+          card.querySelector('[data-act="up"]').addEventListener("click", () => {
+            [stage.steps[idx - 1], stage.steps[idx]] = [stage.steps[idx], stage.steps[idx - 1]];
+            markDirty(true);
+            renderTrelloWorkflow();
+          });
+          card.querySelector('[data-act="down"]').addEventListener("click", () => {
+            [stage.steps[idx], stage.steps[idx + 1]] = [stage.steps[idx + 1], stage.steps[idx]];
+            markDirty(true);
+            renderTrelloWorkflow();
+          });
+          card.querySelector('[data-act="del"]').addEventListener("click", () => {
+            stage.steps.splice(idx, 1);
+            markDirty(true);
+            renderTrelloWorkflow();
+          });
+
+          body.appendChild(card);
+        });
+        col.appendChild(body);
+
+        const foot = document.createElement("div");
+        foot.className = "wf-col-foot";
+        const addStepBtn = document.createElement("button");
+        addStepBtn.type = "button";
+        addStepBtn.textContent = "+ Add activity";
+        addStepBtn.addEventListener("click", () => {
+          const newId = `${stage.id.toLowerCase()}-${Date.now()}`;
+          stage.steps.push({
+            id: newId,
+            title: "New activity",
+            type: "PERFORM",
+            actor: "agent:architect",
+            artifact: "Deliverable artifact",
+            onFailReturnTo: ""
+          });
+          expandedSteps.add(newId);
+          markDirty(true);
+          renderTrelloWorkflow();
+        });
+        foot.appendChild(addStepBtn);
+        col.appendChild(foot);
+
+        board.appendChild(col);
+        if (prevColScrolls.has(stage.id)) {
+          body.scrollTop = prevColScrolls.get(stage.id);
+        }
       });
 
-      document.getElementById("btn-add-step").addEventListener("click", () => {
-        const newId = `${stage.id.toLowerCase()}-${Date.now()}`;
-        stage.steps.push({
-          id: newId,
-          title: "New engineering step",
-          type: "PERFORM",
-          actor: "agent:architect",
-          artifact: "Deliverable artifact"
-        });
-        expandedSteps.add(newId);
-        markDirty(true);
-        renderWfDomainFilter();
-        render();
+      const addColBtn = document.createElement("button");
+      addColBtn.type = "button";
+      addColBtn.className = "wf-add-col";
+      addColBtn.textContent = "+ Add Stage";
+      addColBtn.addEventListener("click", () => {
+        const trigger = document.getElementById("btn-add-stage");
+        if (trigger) trigger.click();
       });
+      board.appendChild(addColBtn);
+
+      board.scrollLeft = prevScrollLeft;
+    }
+
+    // Allow vertical mouse-wheel scrolling inside an overflowing activity viewport (.wf-col-body);
+    // otherwise convert vertical wheel motion into horizontal Trello board scrolling.
+    const wfBoardEl = document.getElementById("wf-board");
+    if (wfBoardEl) {
+      wfBoardEl.addEventListener("wheel", (e) => {
+        if (e.target && e.target.closest && e.target.closest(".ui-select-menu")) return;
+        const colBody = e.target && e.target.closest ? e.target.closest(".wf-col-body") : null;
+        if (colBody && colBody.scrollHeight > colBody.clientHeight + 2) {
+          return;
+        }
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && wfBoardEl.scrollWidth > wfBoardEl.clientWidth) {
+          wfBoardEl.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      }, { passive: false });
+      wfBoardEl.addEventListener("scroll", (e) => {
+        if (!e.target || !e.target.closest || !e.target.closest(".ui-select-menu")) closeAllShadcnMenus(null);
+      }, { capture: true, passive: true });
     }
 
     function render() {
-      renderStageList();
-      renderEditor();
+      renderTrelloWorkflow();
     }
 
     const addStageDialog = document.getElementById("add-stage-dialog");
@@ -1619,10 +1929,10 @@
       const includeGate = document.getElementById("new-stage-gate").checked;
 
       const steps = [
-        { id: `${code.toLowerCase()}-1`, title: `${name} Execution`, type: "PERFORM", actor: "agent:architect", artifact: `${name} Deliverable` }
+        { id: `${code.toLowerCase()}-1`, title: `${name} Execution`, type: "PERFORM", actor: "agent:architect", artifact: `${name} Deliverable`, onFailReturnTo: "" }
       ];
       if (includeGate) {
-        steps.push({ id: `${code.toLowerCase()}-2`, title: `${name} Sign-off`, type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: `Approved ${name} Baseline` });
+        steps.push({ id: `${code.toLowerCase()}-2`, title: `${name} Sign-off`, type: "HUMAN_APPROVAL", actor: "human:lead_architect", artifact: `Approved ${name} Baseline`, onFailReturnTo: `${code.toLowerCase()}-1` });
       }
 
       stages.splice(insertAt, 0, {
@@ -1637,9 +1947,9 @@
       markDirty(true);
       addStageDialog.close();
       renderWfDomainFilter();
-    render();
-      const activeBtn = document.querySelector('#stage-list [aria-selected="true"]');
-      if (activeBtn) activeBtn.scrollIntoView({ block: "nearest" });
+      render();
+      const addedCol = document.querySelector(`.wf-col[data-stage-id="${code}"]`);
+      if (addedCol) addedCol.scrollIntoView({ inline: "center", behavior: "smooth" });
     });
 
     document.getElementById("btn-save").addEventListener("click", () => {
@@ -1716,68 +2026,9 @@
       if (event.data && event.data.type === "avrig-domains-updated") renderWfDomainFilter();
     });
 
-    // Hover-reveal right-edge & active-scroll vertical scrollbars
-    let hotScrollEl = null;
-    const scrollTimers = new WeakMap();
-    document.addEventListener("mousemove", (event) => {
-      let el = event.target;
-      let found = null;
-      while (el && el !== document.body && el !== document.documentElement) {
-        if (el.scrollHeight > el.clientHeight + 2) {
-          const rect = el.getBoundingClientRect();
-          if (event.clientX >= rect.right - 28 && event.clientX <= rect.right + 4) {
-            found = el;
-            break;
-          }
-        }
-        el = el.parentElement;
-      }
-      if (hotScrollEl && hotScrollEl !== found) hotScrollEl.removeAttribute("data-sb-hot");
-      if (found) found.setAttribute("data-sb-hot", "true");
-      hotScrollEl = found;
-    }, { passive: true });
-    document.addEventListener("scroll", (event) => {
-      const target = event.target === document ? document.documentElement : event.target;
-      if (!target || target.nodeType !== 1 || target.scrollHeight <= target.clientHeight + 2) return;
-      target.setAttribute("data-sb-scrolling", "true");
-      const prev = scrollTimers.get(target);
-      if (prev) clearTimeout(prev);
-      scrollTimers.set(target, setTimeout(() => target.removeAttribute("data-sb-scrolling"), 850));
-    }, { capture: true, passive: true });
-    document.addEventListener("mouseleave", () => {
-      if (hotScrollEl) { hotScrollEl.removeAttribute("data-sb-hot"); hotScrollEl = null; }
-    });
-
-    // Resizable stage pane
-    const stagePane = document.querySelector(".stage-pane");
-    if (stagePane) {
-      const handle = document.createElement("div");
-      handle.className = "wf-resize-handle";
-      handle.title = "Drag to resize stages panel";
-      stagePane.appendChild(handle);
-      handle.addEventListener("pointerdown", (event) => {
-        event.preventDefault();
-        const startX = event.clientX;
-        const startW = stagePane.getBoundingClientRect().width;
-        handle.classList.add("is-dragging");
-        document.body.classList.add("is-resizing");
-        const onMove = (ev) => {
-          const next = Math.max(210, Math.min(440, Math.round(startW + (ev.clientX - startX))));
-          document.documentElement.style.setProperty("--wf-stage-w", `${next}px`);
-        };
-        const onUp = () => {
-          handle.classList.remove("is-dragging");
-          document.body.classList.remove("is-resizing");
-          window.removeEventListener("pointermove", onMove);
-          window.removeEventListener("pointerup", onUp);
-        };
-        window.addEventListener("pointermove", onMove);
-        window.addEventListener("pointerup", onUp);
-      });
-    }
-
     renderWfDomainFilter();
     render();
   </script>
+  <script src="/chrome.js"></script>
 </body>
 </html>
